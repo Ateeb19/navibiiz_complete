@@ -1,0 +1,40 @@
+.company-outter-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.company-list{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+/* 
+.company-btn{
+    width: 100%;
+    background-color: cyan;
+    font-size: 1.5rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 1rem;
+    text-align: left;
+    padding: 10px;
+    margin: 10px 0 10px 0;
+}
+
+.company-btn:hover{
+    background-color: #00ffff95;
+    border-radius: 1.2rem;
+    cursor: default;
+} */
+
+.company_info-div{
+    background-color: #c8c8c89e;
+    height: auto;
+}
+
+@media (max-width: 900px){
+    .company-list{
+        width: 100%;
+    }
+}

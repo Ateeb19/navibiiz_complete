@@ -1,0 +1,59 @@
+.regester-company{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top:20px;
+    min-width: 350px;
+    max-width: 700px;
+    background: #cc85ff;
+    padding: 0 5px 10px 10px;
+    gap: 5px;
+}
+
+.Rheader{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* gap: 9px; */
+    width: 100%;
+    margin-top:10px;
+}
+
+.text{
+    color: #09203F;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.Runderline{
+    width: 40%;
+    height: 6px;
+    background: #09203F;
+    border-radius: 9px;
+}
+.PhoneInputInput{
+    font-size: 1rem;
+    padding: 10px;
+}
+.Rinput-div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.Rbutton{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.Rbtn{
+    justify-content: center;
+    padding: 10px 20px;
+    color: #fff;
+    background: #00813ea3;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: default;
+}

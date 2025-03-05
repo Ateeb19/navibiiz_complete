@@ -1,0 +1,160 @@
+.App {
+  text-align: center;
+}
+
+  
+  /* Navbar for larger screens */
+  .navbar {
+    background: #333;
+    color: white;
+    padding: 1rem;
+  }
+  
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar li {
+    cursor: pointer;
+  }
+  
+  /* Sidebar for smaller screens */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: auto;
+    width: 250px;
+    background: #000000d3;
+    color: white;
+    overflow: hidden;
+    transition: left 0.3s;
+    padding: 1rem;
+    z-index: 1050;
+  }
+  
+  .sidebar.visible {
+    left: 0;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 4rem 0 4rem 0 ;
+  }
+  
+  .link{
+    text-decoration: none;
+    color: black;
+    font-size: 1.3rem;
+  }
+
+  .sidebar li {
+    margin: 1rem 0;
+    cursor: pointer;
+    color: white;
+  }
+  /* Toggle Button */
+  .toggle-btn {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .nav-outer-div{
+    width: 100%;
+  }
+
+
+  .PhoneInputCountrySelect{
+    width: 8rem !important;
+  }
+
+  .PhoneInputCountryIconImg{
+    width: 2rem;
+  } 
+
+
+  .animated-text {
+    font-size: 2rem;
+    font-family: monospace;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typing 4s steps(100, end) infinite, blink 0.7s step-end infinite;
+}
+
+/* Typing effect */
+@keyframes typing {
+    0% {
+        width: 0;
+    }
+    50% {
+        width: 100%;
+    }
+    100% {
+        width: 0; /* Reset to start typing again */
+    }
+}
+
+/* Blinking cursor effect */
+@keyframes blink {
+    from, to {
+        border-color: transparent;
+    }
+    50% {
+        border-color: black;
+    }
+}
+
+
+
+
+@keyframes fadeIn {
+  from {
+    bottom: 30rem;
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    bottom: -100;
+  }
+  to {
+    bottom: 5rem;
+    transform: translate(-50%, 5%);
+  }
+}
+
+
+
+/* Target slick dots and modify them to dashes */
+ul.slick-dots li button:before {
+  content: '';
+  width: 1rem;                /* Dash length */
+  height: 4px;                /* Dash thickness */
+  background-color: gray;  /* Bootstrap blue */
+  border-radius: 2px;         /* Rounded edges */
+  display: block;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+/* Make the active dash fully visible */
+ul.slick-dots li.slick-active button:before {
+  background-color: #007bff;
+  opacity: 1;
+}

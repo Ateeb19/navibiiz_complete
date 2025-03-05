@@ -1,0 +1,55 @@
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const db = require('./Db_Connection.js')
+const cors = require('cors');
+require('dotenv').config({path: './.env'});
+
+app.use(express.json());
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    // origin: 'https://wvxjcrpt-3000.inc1.devtunnels.ms',
+    methods: ["POST", "GET", 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 1
+    }
+}));
+
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+db.connect((err) => {
+    if(err){
+        console.log('database not connected');
+    }else{
+        console.log('database connected');
+    }
+})
+
+app.use('/hello', (req, res) => {
+    res.json({message: 'hello world'});
+})
+
+
+app.use('/user', require('./Routers/User_route.js'));
+app.use('/company', require('./Routers/Company_route.js'));
+app.use('/admin', require('./Routers/Admin_route.js'));
+app.use('/s_admin', require('./Routers/S_Admin_route.js'));
+app.use('/send_groupage', require('./Routers/Send_Groupage_router.js'));
+
+
+app.listen((4000), ()=> {
+    console.log('server is listing on -: http://localhost:4000')
+})
