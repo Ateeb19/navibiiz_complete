@@ -3,29 +3,21 @@ import { Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
-import { MdDashboard } from "react-icons/md";
-import { BsBuildingsFill } from "react-icons/bs";
-import { FaUsers } from "react-icons/fa6";
-import { FaUserGear } from "react-icons/fa6";
-import { FaUserTie } from "react-icons/fa6";
+import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber } from "react-icons/md";
+import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag } from "react-icons/fa6";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaSearch, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle } from "react-icons/fa";
 import { PiShippingContainerDuotone } from "react-icons/pi";
-import { BsCarFrontFill } from "react-icons/bs";
-import { FaTruckLoading } from "react-icons/fa";
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { FaSearch } from "react-icons/fa";
+import { BsCarFrontFill, BsFillInfoCircleFill, BsBuildingsFill } from "react-icons/bs";
+import { IoIosAddCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
 import Countries_selector from "./Countries_selector";
-import { FaPhoneAlt } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-import { FaLocationDot } from "react-icons/fa6";
-import { IoStar } from "react-icons/io5";
-import { RiPencilFill } from "react-icons/ri";
-import { FaCity } from "react-icons/fa6";
-import { BsFillInfoCircleFill } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
-import { RiSecurePaymentFill } from "react-icons/ri";
-
+import { IoStar, IoCall } from "react-icons/io5";
+import { RiPencilFill, RiSecurePaymentFill, RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
+import { SiAnytype } from "react-icons/si";
+import { DateRange } from 'react-date-range';
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import { format } from "date-fns";
 import Registration from "./Registration";
 
 
@@ -37,7 +29,10 @@ const Dashboard = () => {
   // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const [userInfo, setUserInfo] = useState('');
   useEffect(() => {
-    if (userRole !== 'admin' && userRole !== 'Sadmin') {
+    if (!token) {
+      navigate('/');
+    }
+    if (userRole !== 'admin' && userRole !== 'Sadmin' && userRole !== 'user') {
       navigate('/');
     } else {
       axios.get(`${port}/user/display_profile`, {
@@ -202,6 +197,9 @@ const Dashboard = () => {
     window.addEventListener("resize", handleResize);
     featchCompanydata();
     featchAllUsers();
+    displayGroupageUser();
+    offersForUser();
+    displayallOffers();
     // user_requests();
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -530,9 +528,134 @@ const Dashboard = () => {
       targetDiv.scrollIntoView({ behavior: "smooth" }); // Smooth scrolling to the div
     }
   };
-  // console.log(filter_companyName, filter_selectedCountry, filter_selectedService);
-  // console.log(companyData);
-  console.log(filteredCompanies);
+
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [state, setState] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: 'selection'
+    }
+  ]);
+  // Ensure endDate is not null before formatting
+  const startDateFormatted = format(state[0].startDate, "dd/MM/yyyy");
+  const endDateFormatted = state[0].endDate ? format(state[0].endDate, "dd/MM/yyyy") : "Select End Date";
+  const picking_period = `${startDateFormatted} - ${endDateFormatted}`;
+
+  //display groupage user
+  const [groupageUser, setGroupageUser] = useState([]);
+  const displayGroupageUser = () => {
+    axios.get(`${port}/send_groupage/display_user_dashboard`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      setGroupageUser(response.data.message);
+    }).catch((err) => { console.log(err); });
+  }
+
+  const [selected_groupage, setSelected_groupage] = useState(null);
+  const handle_show_groupage_details = (item) => {
+    setSelected_groupage(item);
+  }
+  const handle_show_groupage_delete = (item) => {
+    const confirmed = window.confirm(`Are you sure you want to delete ${item.name}?`);
+    if (confirmed) {
+      axios.delete(`${port}/send_groupage/delete_groupage/${item.id}`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        console.log(response.data);
+        alert(response.data.message);
+        window.location.reload();
+      }).catch((err) => { console.log(err); });
+    } else {
+      alert("Delete canceled.");
+    }
+  }
+  const [offers, setOffers] = useState([]);
+  const offersForUser = () => {
+    axios.get(`${port}/send_groupage/show_offer_user`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      setOffers(response.data.message);
+    }).catch((err) => { console.log(err); });
+  }
+
+  const [selected_offer, setSelected_offer] = useState(null);
+  const handleShowOffer = (item) => {
+    axios.get(`${port}/send_groupage/groupage_info/${item.order_id}`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      setSelected_offer({ ...response.data.message, ...item });
+    }).catch((err) => { console.log(err); });
+  }
+  const handleDeleteoffer = (item) => {
+    const confirmed = window.confirm(`Are you sure you want to delete?`);
+    if (confirmed) {
+      axios.delete(`${port}/send_groupage/delete_offer_user/${item}`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        alert(response.data.message);
+        window.location.reload();
+      }).catch((err) => { console.log(err); });
+    } else {
+      alert("Delete canceled.");
+    }
+  }
+
+  const duration_calculate = (departure_date, pickup_date) => {
+    const firstPickupDate = pickup_date.split(" - ")[0];
+
+    const departureDateObj = new Date(departure_date);
+    const pickupDateObj = new Date(firstPickupDate.split("/").reverse().join("-")); // Convert DD/MM/YYYY to YYYY-MM-DD
+
+    const diffInTime = departureDateObj - pickupDateObj;
+
+    const durationInDays = diffInTime / (1000 * 60 * 60 * 24);
+
+    const duration =
+      durationInDays >= 30
+        ? `${Math.floor(durationInDays / 30)} month(s)`
+        : `${durationInDays} day(s)`;
+    return duration;
+  }
+
+  const handleAcceptOffer = (item) => {
+    axios.get(`${port}/send_groupage/update_offer_status/${item.offer_id}`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      alert(response.data.message);
+      window.location.reload();
+    }).catch((err) => { console.log(err); });
+  }
+
+  const [allOffers, setAllOffers] = useState([]);
+  const displayallOffers = () => {
+    axios.get(`${port}/s_admin/show_all_offers`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      // console.log(response.data);
+      setAllOffers(response.data.data);
+    }).catch((err) => { console.log(err); });
+  }
+
+  const [showOfferDetails, setShowOfferDetails] = useState(null);
+  const show_offer_details = (item) => {
+    setShowOfferDetails(item);
+  }
+  console.log(showOfferDetails);
   return (
     <div className="vh-100">
 
@@ -544,106 +667,920 @@ const Dashboard = () => {
           <div className="d-flex align-items-start justify-content-start w-100 mt-5">
             <ul className="nav flex-column mt-4 fs-4 w-100">
               <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("dashboard"); setSelectedCompany(''); setShowRegisterPopup(false) }}>
+                <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("dashboard"); setSelectedCompany(''); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                   <MdDashboard /> Dashboard
                 </Link>
               </li>
-              <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("companies"); setSelectedCompany(''); setShowRegisterPopup(false) }}>
-                  <BsBuildingsFill /> Companies
-                </Link>
-              </li>
-              <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("offers"); setSelectedCompany(''); setShowRegisterPopup(false) }}>
-                  <FaUsers /> Offers
-                </Link>
-              </li>
-              <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("payments"); setSelectedCompany(''); setShowRegisterPopup(false) }}>
-                  <RiSecurePaymentFill /> Payments
-                </Link>
-              </li>
-              {userData.length > 0 && (
-                <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                  <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("users"); setSelectedCompany(''); setShowRegisterPopup(false) }}>
-                    <FaUserGear /> Roles & Permissions
-                  </Link>
-                </li>
+
+              {userRole === 'Sadmin' || userRole === 'admin' ? (
+                <>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                      <BsBuildingsFill /> Companies
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("offers"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                      <FaUsers /> Offers
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("payments"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                      <RiSecurePaymentFill /> Payments
+                    </Link>
+                  </li>
+                  {userData.length > 0 && (
+                    <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                      <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("users"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                        <FaUserGear /> Roles & Permissions
+                      </Link>
+                    </li>
+                  )}
+                </>
+              ) : (
+                <>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                      <FaBoxOpen /> Orders
+                    </Link>
+                  </li>
+
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                      <MdPayment /> Offers
+                    </Link>
+                  </li>
+
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                      <MdPayment /> Payment History
+                    </Link>
+                  </li>
+                </>
               )}
+
             </ul>
           </div>
         </div>
 
         {activeSection === "dashboard" && (
-          <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
-            <div className=" d-flex justify-content-end mt-2">
-              <div className="p-3 pe-5">
-                <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-              </div>
-              <div className="border-start p-2 border-3 border-dark">
-                <Dropdown style={{ width: '13rem' }}>
-                  <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                    <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu style={{ width: '13rem' }}>
-                    <div className="d-flex flex-column justify-content-center align-items-center">
-                      <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                      <label><strong>Email-:</strong> {userInfo.email}</label>
-                      <label><button className="btn btn-secondary btn-sm">Edit Name</button> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                      <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+          <>
+            {userRole === 'Sadmin' || userRole === 'admin' ? (
+              <>
+                <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+                  <div className=" d-flex justify-content-end mt-2">
+                    <div className="p-3 pe-5">
+                      <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
                     </div>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            </div>
+                    <div className="border-start p-2 border-3 border-dark">
+                      <Dropdown style={{ width: '13rem' }}>
+                        <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                          <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu style={{ width: '13rem' }}>
+                          <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                            <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                            <label><strong>Email-:</strong> {userInfo.email}</label>
+                            <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                            <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                            <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                          </div>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  </div>
 
-            <div className="d-flex justify-content-start align-items-center mt-2 rounded-1" style={{ backgroundColor: 'rgb(177, 177, 177)' }}>
-              <div className="d-flex ps-4 w-50 justify-content-start">
-                <label className="fs-3">Hi,<strong>Joel</strong></label>
-              </div>
-              <div className="w-50 pe-3 d-flex justify-content-end">
-                <label className="text-success fs-5">Updated 2 min ago</label>
-              </div>
-            </div>
+                  <div className="d-flex justify-content-start align-items-center mt-2 rounded-1" style={{ backgroundColor: 'rgb(177, 177, 177)' }}>
+                    <div className="d-flex ps-4 w-50 justify-content-start">
+                      <label className="fs-3">Hi, <strong>{userInfo.name}</strong></label>
+                    </div>
+                    <div className="w-50 pe-3 d-flex justify-content-end">
+                      <label className="text-success fs-5">Updated 2 min ago</label>
+                    </div>
+                  </div>
 
-            <div className="d-flex mt-5 flex-row justify-content-center align-items-center">
-              <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><PiShippingContainerDuotone /></div>
-                <strong className="mt-3">20</strong>
-                <label className="text-success fs-6">+5% Last Month</label>
-                <label className="fs-4">Total Containers</label>
-              </div>
-              <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><BsCarFrontFill /></div>
-                <strong className="mt-3">15</strong>
-                <label className="text-danger fs-6">-2% Last Month</label>
-                <label className="fs-4">Total Cars</label>
-              </div>
-              <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaTruckLoading /></div>
-                <strong className="mt-3">25</strong>
-                <label className="text-success fs-6">+10% Last Month</label>
-                <label className="fs-4">Total Groupage</label>
-              </div>
-            </div>
+                  <div className="d-flex mt-5 flex-row justify-content-center align-items-center">
+                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><PiShippingContainerDuotone /></div>
+                      <strong className="mt-3">20</strong>
+                      <label className="text-success fs-6">+5% Last Month</label>
+                      <label className="fs-4">Total Containers</label>
+                    </div>
+                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><BsCarFrontFill /></div>
+                      <strong className="mt-3">15</strong>
+                      <label className="text-danger fs-6">-2% Last Month</label>
+                      <label className="fs-4">Total Cars</label>
+                    </div>
+                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaTruckLoading /></div>
+                      <strong className="mt-3">25</strong>
+                      <label className="text-success fs-6">+10% Last Month</label>
+                      <label className="fs-4">Total Groupage</label>
+                    </div>
+                  </div>
 
-            <div className="d-flex mt-5 flex-row justify-content-center align-items-center">
-              <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '45%' }}>
-                <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><BsBuildingsFill /></div>
-                <strong className="mt-3">06</strong>
-                <label className="text-success fs-6">+7% Last Month</label>
-                <label className="fs-4">Companies Regestered</label>
-              </div>
-              <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '45%' }}>
-                <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUsers /></div>
-                <strong className="mt-3">40</strong>
-                <label className="text-danger fs-6">+2% Last Month</label>
-                <label className="fs-4">Customers Regestered</label>
-              </div>
-            </div>
-          </div>
+                  <div className="d-flex mt-5 flex-row justify-content-center align-items-center">
+                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '45%' }}>
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><BsBuildingsFill /></div>
+                      <strong className="mt-3">06</strong>
+                      <label className="text-success fs-6">+7% Last Month</label>
+                      <label className="fs-4">Companies Regestered</label>
+                    </div>
+                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '45%' }}>
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUsers /></div>
+                      <strong className="mt-3">40</strong>
+                      <label className="text-danger fs-6">+2% Last Month</label>
+                      <label className="fs-4">Customers Regestered</label>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+                  <div className=" d-flex justify-content-end mt-2">
+                    <div className="p-2">
+                      <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+                    </div>
+                    <div className="p-3 pe-5">
+                      <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                    </div>
+                    <div className="border-start p-2 border-3 border-dark">
+                      <Dropdown style={{ width: '13rem' }}>
+                        <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                          <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu style={{ width: '13rem' }}>
+                          <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                            <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                            <label><strong>Email-:</strong> {userInfo.email}</label>
+                            <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                            <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                            <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                          </div>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  </div>
+
+                  <div className="d-flex justify-content-start align-items-center mt-2 rounded-1" >
+                    <div className="d-flex ps-4 w-50 justify-content-start">
+                      <label className="fs-3">Hi, <strong>{userInfo.name}</strong></label>
+                    </div>
+                    <div className="w-50 pe-3 d-flex justify-content-end">
+                      <label className="text-success fs-5">Updated 2 min ago</label>
+                    </div>
+                  </div>
+
+                  <div className="d-flex mt-5 flex-row justify-content-center align-items-center">
+                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><PiShippingContainerDuotone /></div>
+                      <strong className="mt-3">20</strong>
+                      <label className="text-success fs-6">+5% Last Month</label>
+                      <label className="fs-4">Total Orders</label>
+                    </div>
+                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><BsCarFrontFill /></div>
+                      <strong className="mt-3">15</strong>
+                      <label className="text-danger fs-6">-2% Last Month</label>
+                      <label className="fs-4">Upcoming Pick up</label>
+                    </div>
+                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaTruckLoading /></div>
+                      <strong className="mt-3">25</strong>
+                      <label className="text-success fs-6">+10% Last Month</label>
+                      <label className="fs-4">Total Spending</label>
+                    </div>
+                  </div>
+
+                </div>
+              </>
+            )}
+          </>
+
         )}
 
+        {activeSection === 'orders' && (
+          <>
+            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+              <div className=" d-flex justify-content-end mt-2">
+                <div className="p-2">
+                  <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+                </div>
+                <div className="p-3 pe-5">
+                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                </div>
+                <div className="border-start p-2 border-3 border-dark">
+                  <Dropdown style={{ width: '13rem' }}>
+                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu style={{ width: '13rem' }}>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                        <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                        <label><strong>Email-:</strong> {userInfo.email}</label>
+                        <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                        <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                      </div>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+              </div>
+
+              <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                <div className="d-flex ps-4 w-100 justify-content-start">
+                  <label className="fs-3"><strong>Order List</strong></label>
+                </div>
+              </div>
+
+              <div className="d-flex mt-4 p-1 flex-column justify-content-start align-items-start m-5 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+                <div className="d-flex flex-row justify-contentt start align-items-start border-bottom bordre-dark w-100 mb-3">
+                  <div className="p-3 border-end">
+                    <span className="">All</span>
+                  </div>
+                  <div className="p-3 border-end">
+                    <span className="">Unpaid</span>
+                  </div>
+                  <div className="p-3 border-end">
+                    <span className="">Paid</span>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3">
+                  <h5>Filter By:</h5>
+                  <div className="d-flex flex-row align-items-between justify-content-start pe-5">
+                    <div className="w-25">
+                      <input type="text" placeholder="Search by product name or order id" className="form-control"></input>
+                    </div>
+                    <div className="w-25">
+                      <Countries_selector label="Pick Up Country" bgcolor="white" />
+                    </div>
+                    <div className="w-25">
+                      <Countries_selector label="Destination Country" bgcolor="white" />
+                    </div>
+                    <div className="w-25">
+                      <div style={{ position: "relative", width: "100%" }}>
+                        <input
+                          type="text"
+                          readOnly
+                          className="form-control"
+                          value={
+                            state[0].endDate
+                              ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
+                              : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
+                          }
+                          onClick={() => setShowCalendar(!showCalendar)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        {showCalendar && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "40px",
+                              zIndex: 1000,
+                              background: "#fff",
+                              borderRadius: "8px",
+                              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+                            }}
+                          >
+                            <DateRange
+                              editableDateInputs={true}
+                              onChange={item => setState([item.selection])}
+                              moveRangeOnFirstSelection={false}
+                              ranges={state}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col"><h6>Order Id</h6></th>
+                      <th scope="col"><h6>Product Name</h6></th>
+                      <th scope="col"><h6>Pick up</h6></th>
+                      <th scope="col"><h6>Delivery</h6></th>
+                      <th scope="col"><h6>Pick up Date</h6></th>
+                      <th scope="col"><h6>Payment Status</h6></th>
+                      <th scope="col"><h6>Actions</h6></th>
+                    </tr>
+                  </thead>
+                  {groupageUser ? (
+                    <tbody >
+                      {groupageUser.map((item, index) => (
+                        <tr key={index}>
+                          <td className="text-primary">#{item.id}</td>
+                          <td className="text-secondary">{item.product_name}</td>
+                          <td className="text-secondary">{item.sender_country}</td>
+                          <td className="text-secondary">{item.receiver_country}</td>
+                          <td className="text-secondary">    {item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</td>
+                          <td className="text-secondary"><span className="p-2 fw-bold" style={{ backgroundColor: item.payment_status === 'unpaid' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)', color: item.payment_status === 'unpaid' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)' }}>{item.payment_status === 'unpaid' ? ('Unpaid') : ('Paid')}</span></td>
+                          <td className="text-secondary"><button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}><FaEye /></button><button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handle_show_groupage_delete(item)} style={{ fontSize: '1.5rem' }}><MdDelete /></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  ) : (
+                    <tbody>
+                      <tr>
+                        <td colSpan='4' className="text-secondary">No Data</td>
+                      </tr>
+                    </tbody>
+                  )}
+                </table>
+              </div>
+            </div>
+          </>
+        )}
+
+        {selected_groupage && (
+          <>
+            <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: '78%', height: '100vh', overflow: 'auto' }}>
+              <div className=" d-flex justify-content-end mt-2">
+                <div className="p-2">
+                  <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+                </div>
+                <div className="p-3 pe-5">
+                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                </div>
+                <div className="border-start p-2 border-3 border-dark">
+                  <Dropdown style={{ width: '13rem' }}>
+                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu style={{ width: '13rem' }}>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                        <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                        <label><strong>Email-:</strong> {userInfo.email}</label>
+                        <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                        <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                      </div>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+              </div>
+
+              <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                <div className="d-flex ps-4 w-100 justify-content-start">
+                  <label className="fs-3"><strong>Order Details</strong></label>
+                </div>
+              </div>
+
+              <div className="d-flex mt-4 p-1 ps-3 pb-5 mb-5 flex-column justify-content-start align-items-start m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+                <div className="d-flex flex-row justify-content-start align-items-center">
+                  <div className="m-2 w-25 border border-3 border-secondary rounded-1">
+                    <img src={selected_groupage.img01} alt="product image" style={{ width: '100%', height: '100%' }} />
+                  </div>
+                  <div className="ms-5 d-flex flex-column align-items-start justify-content-start">
+                    <strong className="fs-4">{selected_groupage.product_name}</strong>
+                    <span className="text-secondary">ID: #{selected_groupage.id}</span>
+                  </div>
+                </div>
+                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                  <strong className="fs-5">Product Information</strong>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Product Type</span>
+                        <h6>{selected_groupage.product_type}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Weight</span>
+                        <h6>{selected_groupage.p_weight} Kg</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Height</span>
+                        <h6>{selected_groupage.p_height} Cm</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaRuler /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Length</span>
+                        <h6>{selected_groupage.p_length} Cm</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandWidthFill /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Width</span>
+                        <h6>{selected_groupage.p_width} Cm</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                  <strong className="fs-5">Pick Up Information</strong>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUser /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Full Name</span>
+                        <h6>{selected_groupage.sender_name}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><IoCall /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Contact Number</span>
+                        <h6>{selected_groupage.sender_contact}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdAttachEmail /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Email Address</span>
+                        <h6>{selected_groupage.sender_email}</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaFlag /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Country</span>
+                        <h6>{selected_groupage.sender_country}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaBuildingFlag /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">State</span>
+                        <h6>{selected_groupage.sender_state}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCity /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">City</span>
+                        <h6>{selected_groupage.sender_city}</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaMapPin /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Street Address</span>
+                        <h6>{selected_groupage.sender_address}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdConfirmationNumber /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Zip Code</span>
+                        <h6>{selected_groupage.sender_zipcode}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCalendarCheck /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Pick Up Date</span>
+                        <h6>{selected_groupage.pickup_date.includes('Select End Date') ? `${selected_groupage.pickup_date.split(' - ')[0]} -` : selected_groupage.pickup_date}</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-3" style={{ width: '100%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaInfoCircle /></div>
+                      <div className="d-flex flex-column align-items-start">
+                        <span className="text-secondary">Pick Up Notes</span>
+                        <p className="text-start"><h6>{selected_groupage.sender_description}</h6></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                  <strong className="fs-5">Delivery Information</strong>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUser /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Full Name</span>
+                        <h6>{selected_groupage.receiver_name}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><IoCall /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Contact Number</span>
+                        <h6>{selected_groupage.receiver_contact}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdAttachEmail /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Email Address</span>
+                        <h6>{selected_groupage.receiver_email}</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaFlag /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Country</span>
+                        <h6>{selected_groupage.receiver_country}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaBuildingFlag /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">State</span>
+                        <h6>{selected_groupage.receiver_state}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCity /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">City</span>
+                        <h6>{selected_groupage.receiver_city}</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaMapPin /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Street Address</span>
+                        <h6>{selected_groupage.receiver_address}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdConfirmationNumber /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Zip Code</span>
+                        <h6>{selected_groupage.receiver_zipcode}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCalendarCheck /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Preferred Delivery Date</span>
+                        <h6>{selected_groupage.departure_date}</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaInfoCircle /></div>
+                      <div className="d-flex flex-column align-items-start gap-2">
+                        <span className="text-secondary">Delivery Notes</span>
+                        <p className="text-start"><h6>{selected_groupage.receiver_description}</h6></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </>
+        )}
+
+        {activeSection === 'payment_history' && (
+          <>
+            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+              <div className=" d-flex justify-content-end mt-2">
+                <div className="p-2">
+                  <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+                </div>
+                <div className="p-3 pe-5">
+                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                </div>
+                <div className="border-start p-2 border-3 border-dark">
+                  <Dropdown style={{ width: '13rem' }}>
+                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu style={{ width: '13rem' }}>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                        <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                        <label><strong>Email-:</strong> {userInfo.email}</label>
+                        <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                        <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                      </div>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+              </div>
+
+            </div>
+          </>
+        )}
+
+        {activeSection === 'user_offers' && (
+          <>
+            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+              <div className=" d-flex justify-content-end mt-2">
+                <div className="p-2">
+                  <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+                </div>
+                <div className="p-3 pe-5">
+                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                </div>
+                <div className="border-start p-2 border-3 border-dark">
+                  <Dropdown style={{ width: '13rem' }}>
+                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu style={{ width: '13rem' }}>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                        <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                        <label><strong>Email-:</strong> {userInfo.email}</label>
+                        <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                        <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                      </div>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+              </div>
+
+              <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                <div className="d-flex ps-4 w-100 justify-content-start">
+                  <label className="fs-3"><strong>Offers List</strong></label>
+                </div>
+              </div>
+
+              <div className="d-flex mt-4 p-1 flex-column justify-content-start align-items-start m-5 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+                <div className="d-flex flex-row justify-contentt start align-items-start border-bottom bordre-dark w-100 mb-3">
+                  <div className="p-2">
+                    <strong className="fs-5">Latest Offers</strong>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3">
+                  <h5>Filter By:</h5>
+                  <div className="d-flex flex-row align-items-between justify-content-start pe-5">
+                    <div className="w-25">
+                      <input type="text" placeholder="Search by product name or order id" className="form-control"></input>
+                    </div>
+                    <div className="w-25">
+                      <Countries_selector label="Pick Up Country" bgcolor="white" />
+                    </div>
+                    <div className="w-25">
+                      <Countries_selector label="Destination Country" bgcolor="white" />
+                    </div>
+                    <div className="w-25">
+                      <div style={{ position: "relative", width: "100%" }}>
+                        <input
+                          type="text"
+                          readOnly
+                          className="form-control"
+                          value={
+                            state[0].endDate
+                              ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
+                              : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
+                          }
+                          onClick={() => setShowCalendar(!showCalendar)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        {showCalendar && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "40px",
+                              zIndex: 1000,
+                              background: "#fff",
+                              borderRadius: "8px",
+                              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+                            }}
+                          >
+                            <DateRange
+                              editableDateInputs={true}
+                              onChange={item => setState([item.selection])}
+                              moveRangeOnFirstSelection={false}
+                              ranges={state}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col"><h6>Order Id</h6></th>
+                      <th scope="col"><h6>Product Name</h6></th>
+                      <th scope="col"><h6>Offer From</h6></th>
+                      <th scope="col"><h6>Price ($)</h6></th>
+                      <th scope="col"><h6>Delivery Duration</h6></th>
+                      <th scope="col"><h6>Actions</h6></th>
+                    </tr>
+                  </thead>
+                  {offers ? (
+                    <tbody >
+                      {offers.map((item, index) => (
+                        <tr>
+                          <td className="text-primary">#{item.order_id}</td>
+                          <td className="text-secondary">{item.product_name}</td>
+                          <td className="text-secondary">XXXXX-XXX</td>
+                          <td className="text-secondary">{item.price}</td>
+                          <td className="text-secondary">{item.delivery_duration}</td>
+                          <td className="text-secondary"><button className="btn btn-sm btn-success text-light pt-0 pb-0 me-1" onClick={() => handleShowOffer(item)}>Accept</button><button className="btn btn-sm btn-danger text-light pt-0 pb-0 ms-1" onClick={() => handleDeleteoffer(item.offer_id)}>Reject</button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  ) : (
+                    <tbody>
+                      <tr>
+                        <td colSpan='4' className="text-secondary">No Data</td>
+                      </tr>
+                    </tbody>
+                  )}
+                </table>
+              </div>
+
+            </div>
+          </>
+        )}
+
+        {selected_offer && (
+          <>
+            <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                zIndex: 9999
+              }}
+            >
+              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+                style={{
+                  width: '50%',
+                  height: '90vh',
+                  overflowY: 'auto'
+                }}
+              >
+                <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                  <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
+                    ✕
+                  </button>
+
+                  <strong className="fs-4">Offer Details</strong>
+
+                  <h5 className="mt-3">Product Information</h5>
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2">
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Product ID : </span>
+                      <span>{selected_offer.id}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Product Name : </span>
+                      <span>{selected_offer.product_name}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Weight : </span>
+                      <span>{selected_offer.p_weight}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Height :  </span>
+                      <span>{selected_offer.p_height}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Length : </span>
+                      <span>{selected_offer.p_length}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Width : </span>
+                      <span>{selected_offer.p_width}</span>
+                    </div>
+                  </div>
+
+                  <h5 className="mt-3">Company Information</h5>
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2">
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Company Name : </span>
+                      <span>XXXX-XX</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Price Offered : </span>
+                      <span className="fw-bold">${selected_offer.price}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Offer Received Date : </span>
+                      <span>{selected_offer.created_at.split("T")[0]}</span>
+                    </div>
+                  </div>
+
+                  <h5 className="mt-3">Pick Up Information</h5>
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2">
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Full Name : </span>
+                      <span>{selected_offer.sender_name}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Contact Number : </span>
+                      <span>{selected_offer.sender_contact}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Email ID : </span>
+                      <span>{selected_offer.sender_email}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Country : </span>
+                      <span>{selected_offer.sender_country}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">State : </span>
+                      <span>{selected_offer.sender_state}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">City : </span>
+                      <span>{selected_offer.sender_city}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Street Address : </span>
+                      <span>{selected_offer.sender_address}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Zip Code : </span>
+                      <span>{selected_offer.sender_zipcode}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Pick Up Date : </span>
+                      <span>{selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date}</span>
+                    </div>
+                  </div>
+
+                  <h5 className="mt-3">Delivery Information</h5>
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2">
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Full Name : </span>
+                      <span>{selected_offer.receiver_name}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Contact Number : </span>
+                      <span>{selected_offer.receiver_contact}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Email ID : </span>
+                      <span>{selected_offer.receiver_email}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Country : </span>
+                      <span>{selected_offer.receiver_country}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">State : </span>
+                      <span>{selected_offer.receiver_state}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">City : </span>
+                      <span>{selected_offer.receiver_city}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Street Address : </span>
+                      <span>{selected_offer.receiver_address}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Zip Code : </span>
+                      <span>{selected_offer.receiver_zipcode}</span>
+                    </div>
+                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Delivery Duration : </span>
+                      <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-column w-100 justify-content-center align-items-center">
+                    <button className="btn btn-success mt-3 w-100" onClick={() => handleAcceptOffer(selected_offer)}>Accept</button>
+                    <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         {activeSection === "companies" && (
           <>
@@ -971,17 +1908,379 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td className="text-primary">#1827</td>
-                      <td className="text-secondary">Television</td>
-                      <td className="text-secondary">Alex Smith</td>
-                      <td className="text-dark"><b>450</b></td>
-                      <td className="text-secondary">Test Company</td>
-                      <td className="text-secondary"><span className="p-2 pe-4 ps-4 text-success fw-bold" style={{ backgroundColor: 'rgb(145, 255, 128)' }}>Paid</span></td>
-                    </tr>
+                    {allOffers ? (
+                      <>
+                        {allOffers.map((item, index) => (
+
+                          <tr key={index}>
+                            <td className="text-primary" onClick={() => show_offer_details(item)}>#{item.offer_id}</td>
+                            <td className="text-secondary">{item.product_name}</td>
+                            <td className="text-secondary">{item.created_by}</td>
+                            <td className="text-dark"><b>{item.amount}</b></td>
+                            <td className="text-secondary">{item.created_by_email}</td>
+                            <td className="text-secondary"><span
+                              className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : 'text-success'}`}
+                              style={{ backgroundColor: item.status === 'pending' ? 'rgb(255, 242, 128)' : 'rgb(145, 255, 128)' }}
+                            >
+                              {item.status === 'pending' ? 'Pending' : 'Success'}
+                            </span></td>
+                          </tr>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <tr>
+                          <td> No Data </td>
+                        </tr>
+                      </>
+                    )}
                   </tbody>
                 </table>
               </div>
+            </div>
+          </>
+        )}
+
+        {showOfferDetails && (
+          <>
+            <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: '79%', height: '100vh', overflow: 'auto' }}>
+              <div className=" d-flex justify-content-end mt-2">
+                <div className="p-2">
+                  <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+                </div>
+                <div className="p-3 pe-5">
+                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                </div>
+                <div className="border-start p-2 border-3 border-dark">
+                  <Dropdown style={{ width: '13rem' }}>
+                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu style={{ width: '13rem' }}>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                        <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                        <label><strong>Email-:</strong> {userInfo.email}</label>
+                        <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                        <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                      </div>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+              </div>
+
+              <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                <div className="d-flex ps-4 w-100 justify-content-start">
+                  <label className="fs-3"><strong>Offer Details</strong></label>
+                </div>
+              </div>
+
+              <div className="d-flex mt-4 p-1 ps-3 pb-5 mb-5 flex-column justify-content-start align-items-start m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+                <div className="d-flex flex-row justify-content-start align-items-center">
+                  <div className="m-2 w-25 border border-3 border-secondary rounded-1">
+                    <img src={showOfferDetails.img01} alt="product image" style={{ width: '100%', height: '100%' }} />
+                  </div>
+                  <div className="ms-5 d-flex flex-column align-items-start justify-content-start">
+                    <strong className="fs-4">{showOfferDetails.product_name}</strong>
+                    <span className="text-secondary">Offer ID: #{showOfferDetails.offer_id}</span>
+                  </div>
+                </div>
+                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                <strong className="fs-5">Payment Inforamtion</strong>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Amount Received</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Commission Earned</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Payment Status</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Paid By</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Paypal ID</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Offers Received</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Company Name</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Contact Number</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Company Email ID</span>
+                        <h6>Testing</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <strong className="fs-5">Product Information</strong>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Product Type</span>
+                        <h6>{showOfferDetails.product_type}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Weight</span>
+                        <h6>{showOfferDetails.p_weight} Kg</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Height</span>
+                        <h6>{showOfferDetails.p_height} Cm</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaRuler /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Length</span>
+                        <h6>{showOfferDetails.p_length} Cm</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandWidthFill /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Width</span>
+                        <h6>{showOfferDetails.p_width} Cm</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                  <strong className="fs-5">Pick Up Information</strong>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUser /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Full Name</span>
+                        <h6>{showOfferDetails.sender_name}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><IoCall /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Contact Number</span>
+                        <h6>{showOfferDetails.sender_contact}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdAttachEmail /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Email Address</span>
+                        <h6>{showOfferDetails.sender_email}</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaFlag /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Country</span>
+                        <h6>{showOfferDetails.sender_country}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaBuildingFlag /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">State</span>
+                        <h6>{showOfferDetails.sender_state}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCity /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">City</span>
+                        <h6>{showOfferDetails.sender_city}</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaMapPin /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Street Address</span>
+                        <h6>{showOfferDetails.sender_address}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdConfirmationNumber /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Zip Code</span>
+                        <h6>{showOfferDetails.sender_zipcode}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCalendarCheck /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Pick Up Date</span>
+                        <h6>{showOfferDetails.pickup_date.includes('Select End Date') ? `${showOfferDetails.pickup_date.split(' - ')[0]} -` : showOfferDetails.pickup_date}</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-3" style={{ width: '100%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaInfoCircle /></div>
+                      <div className="d-flex flex-column align-items-start">
+                        <span className="text-secondary">Pick Up Notes</span>
+                        <p className="text-start"><h6>{showOfferDetails.sender_description}</h6></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                  <strong className="fs-5">Delivery Information</strong>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUser /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Full Name</span>
+                        <h6>{showOfferDetails.receiver_name}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><IoCall /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Contact Number</span>
+                        <h6>{showOfferDetails.receiver_contact}</h6>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdAttachEmail /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Email Address</span>
+                        <h6>{showOfferDetails.receiver_email}</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaFlag /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Country</span>
+                        <h6>{showOfferDetails.receiver_country}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaBuildingFlag /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">State</span>
+                        <h6>{showOfferDetails.receiver_state}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCity /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">City</span>
+                        <h6>{showOfferDetails.receiver_city}</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaMapPin /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Street Address</span>
+                        <h6>{showOfferDetails.receiver_address}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdConfirmationNumber /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Zip Code</span>
+                        <h6>{showOfferDetails.receiver_zipcode}</h6>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCalendarCheck /></div>
+                      <div className="d-flex flex-column align-items-center gap-2">
+                        <span className="text-secondary">Preferred Delivery Date</span>
+                        <h6>{showOfferDetails.departure_date}</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%' }}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaInfoCircle /></div>
+                      <div className="d-flex flex-column align-items-start gap-2">
+                        <span className="text-secondary">Delivery Notes</span>
+                        <p className="text-start"><h6>{showOfferDetails.receiver_description}</h6></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </>
         )}

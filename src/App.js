@@ -22,6 +22,7 @@ import Regesteration from './Components/Dashboard/Check ';
 import axios from 'axios';
 import CompaniesList from './Components/New_update/CompaniesList';
 import send_groupage from './Components/send_groupage/Send_groupage';
+import Offers from './Components/New_update/Offers';
 
 
 
@@ -88,7 +89,6 @@ const App = () => {
   const displayCompany = () => {
     axios.get(`${port}/company/display_company`)
     .then((response) => {
-        console.log('this is the app.js', response.data.message);
         localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
     }).catch((err) => {console.log('error', err)});
 }
@@ -109,8 +109,8 @@ useEffect(() => {
           </div> */}
           <Routes>
             <Route Component={CompleateDashbboard} path='/dashboard'></Route>
-            {/* <Route Component={Regesteration} path='/regg'></Route> */}
             <Route Component={Home} path='/'></Route>
+            <Route Component={Offers} path='/offers'></Route>
             <Route Component={CompaniesList} path='/companies_list'></Route>
             <Route Component={send_groupage} path='/send_groupage'></Route>
             <Route Component={Containers} path='/container'></Route>

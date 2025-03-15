@@ -214,67 +214,14 @@ const Send_groupage = () => {
                 }
             );
             console.log("Success:", response.data);
-            if(response.data.status === true){
+            if (response.data.status === true) {
                 alert('data submited');
-                window.location.reload();
+                // window.location.reload();
                 navigate('/');
             }
         } catch (error) {
             console.error("Error:", error);
         }
-        // const data = {
-        //     productInfo: {
-        //         productName,
-        //         productType,
-        //         dimensions: {
-        //             weight: Pweight,
-        //             height: Pheight,
-        //             length: Plength,
-        //             width: Pwidth,
-        //         },
-        //         images: selectedFiles.map(file => file.preview),
-        //     },
-        //     pickUpInfo: {
-        //         userName,
-        //         userNumber,
-        //         userEmail,
-        //         userCountry,
-        //         userState,
-        //         userCity,
-        //         streetAddress,
-        //         zipCode,
-        //         picking_period: picking_period,
-        //         userDescription: userDescription
-
-        //     },
-        //     deliveryInfo: {
-        //         senderName,
-        //         senderNumber,
-        //         senderEmail,
-        //         senderCountry,
-        //         senderState,
-        //         senderCity,
-        //         senderStreetAddress,
-        //         senderZipCode,
-        //         departureDate: departure_date,
-        //         senderDescription: senderDescription
-
-        //     },
-        //     additionalInfo: {
-        //         document: document[0],
-        //     }
-        // };
-
-        // try {
-        //     const response = await axios.post('http://localhost:4000/send_groupage/send_groupage_submit', data, {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //     });
-        //     console.log('Success:', response.data);
-        // } catch (error) {
-        //     console.error('Error:', error);
-        // }
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
@@ -350,10 +297,13 @@ const Send_groupage = () => {
                                                     <div className="pe-1 ps-1" style={{ width: '24%' }}>
                                                         <label className="form-label text-start w-100">Weight <span className="text-secondary"> (kg)</span></label>
                                                         <input
+                                                            type="text"
+                                                            onChange={(e) => {
+                                                                const value = e.target.value.replace(/[^0-9.]/g, "");
+                                                                setPweight(value);
+                                                            }}
                                                             className="form-control"
-                                                            type="number"
                                                             value={Pweight}
-                                                            onChange={(e) => setPweight(e.target.value)}
                                                             placeholder="Eg : 0"
                                                             style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
                                                     </div>
@@ -361,9 +311,12 @@ const Send_groupage = () => {
                                                         <label className="form-label text-start w-100">Height <span className="text-secondary"> (cm)</span></label>
                                                         <input
                                                             className="form-control"
-                                                            type="number"
+                                                            type="text"
+                                                            onChange={(e) => {
+                                                                const value = e.target.value.replace(/[^0-9.]/g, "");
+                                                                setPheight(value);
+                                                            }}
                                                             value={Pheight}
-                                                            onChange={(e) => setPheight(e.target.value)}
                                                             placeholder="Eg : 0"
                                                             style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
                                                     </div>
@@ -371,9 +324,12 @@ const Send_groupage = () => {
                                                         <label className="form-label text-start w-100">Length <span className="text-secondary"> (cm)</span></label>
                                                         <input
                                                             className="form-control"
-                                                            type="number"
+                                                            type="text"
+                                                            onChange={(e) => {
+                                                                const value = e.target.value.replace(/[^0-9.]/g, "");
+                                                                setPlength(value);
+                                                            }}
                                                             value={Plength}
-                                                            onChange={(e) => setPlength(e.target.value)}
                                                             placeholder="Eg : 0"
                                                             style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
                                                     </div>
@@ -381,15 +337,16 @@ const Send_groupage = () => {
                                                         <label className="form-label text-start w-100">Width <span className="text-secondary"> (cm)</span></label>
                                                         <input
                                                             className="form-control"
-                                                            type="number"
+                                                            type="text"
+                                                            onChange={(e) => {
+                                                                const value = e.target.value.replace(/[^0-9.]/g, "");
+                                                                setPwidth(value);
+                                                            }}
                                                             value={Pwidth}
-                                                            onChange={(e) => setPwidth(e.target.value)}
                                                             placeholder="Eg : 0"
                                                             style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
                                                     </div>
-
                                                 </div>
-
                                             </>
                                         </div>
                                     </div>
@@ -487,29 +444,7 @@ const Send_groupage = () => {
                                     </div>
                                     <div className="pe-1 ps-1" style={{ width: '30%' }}>
                                         <label className="form-label text-start w-100">Picking Period<span className="text-danger">*</span></label>
-                                        {/* <input className="form-control"
-                                            type="date"
-                                            value={pick_up_date}
-                                            onChange={(e) => setPick_up_date(e.target.value)}
-                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            min={new Date().toISOString().split("T")[0]}
-                                            required /> */}
-
-                                        {/* <div>
-                                            <h3>Selected Date: {selectedDate.toDateString()}</h3>
-                                            {calendarElement}
-                                        </div> */}
-
-                                        {/* <DateRange
-                                            editableDateInputs={true}
-                                            onChange={item => setState([item.selection])}
-                                            moveRangeOnFirstSelection={false}
-                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            ranges={state}
-                                        /> */}
-
                                         <div style={{ position: "relative", width: "100%" }}>
-                                            {/* Input Field */}
                                             <input
                                                 type="text"
                                                 readOnly

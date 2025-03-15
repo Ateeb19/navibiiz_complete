@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 // import { FaUser } from "react-icons/fa";
 import { BsSendFill } from "react-icons/bs";
 import { MdDashboardCustomize } from "react-icons/md";
@@ -7,10 +7,39 @@ import { FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 
 import Registration from "../Dashboard/Registration";
+import axios from "axios";
 
 const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
   const token = localStorage.getItem('token');
+  const port = process.env.REACT_APP_SECRET;
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const fetchToken = () => {
+      axios
+        .get(`${port}/user/check_token`, {
+          headers: {
+            Authorization: token,
+          },
+        }).then((response) => {
+          if(response.data.status === false){
+            localStorage.removeItem('token');
+            window.location.reload();
+            navigate('/login');
+          }
+          if(response.data.status === true){
+            localStorage.setItem('userRole', response.data.message);
+          }
+          }).catch((err) => {
+          console.log(err);
+        });
+    };
+    fetchToken();
+  }, [token]);
+
+
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const handleClose = () => setIsVisible(false);
@@ -43,7 +72,7 @@ const Navbar = () => {
       <div className="d-none d-lg-flex justify-content-center align-items-center gap-4 flex-grow-1">
         <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>About Us</Link>
         <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Companies</Link>
-        <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Offers</Link>
+        <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Offers</Link>
         <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Contact Us</Link>
       </div>
 
@@ -60,18 +89,13 @@ const Navbar = () => {
                 Register Your Company
               </button>
             </Link>
-            {(userRole === "admin" || userRole === "Sadmin") && (
+            {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
               <Link to="/dashboard">
                 <button className="btn btn-light m-1" style={{ fontSize: "1rem", color: "tomato" }}>
                   <MdDashboardCustomize />
                 </button>
               </Link>
             )}
-             <Link to="">
-                <button onClick={logout} className="btn btn-light m-1" style={{ fontSize: "1rem", color: "tomato" }}>
-                  <IoLogOut />
-                </button>
-              </Link>
           </>
         ) : (
           <>
@@ -100,7 +124,7 @@ const Navbar = () => {
           <div className="d-flex flex-column text-center py-4 text-light">
             <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>About Us</Link>
             <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Companies</Link>
-            <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Offers</Link>
+            <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Offers</Link>
             <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Contact Us</Link>
 
             {token ? (
@@ -115,7 +139,7 @@ const Navbar = () => {
                     Register Your Company
                   </button>
                 </Link>
-                {(userRole === "admin" || userRole === "Sadmin") && (
+                {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                   <Link to="/dashboard">
                     <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "tomato" }}>
                       <MdDashboardCustomize />
@@ -148,10 +172,10 @@ const Navbar = () => {
               className="btn-close position-absolute top-0 end-0 m-2"
               onClick={handleClose}
             ></button>
-            
-          <div>
-            <Registration />
-          </div>
+
+            <div>
+              <Registration />
+            </div>
 
           </div>
         </div>

@@ -2,6 +2,18 @@ const db = require('../Db_Connection');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+
+const token_check = (req, res) => {
+    if(req.user.role === 'user'){
+        res.json({message: 'user', status: true});
+    }else if(req.user.role === 'admin'){
+        res.json({message: 'admin', status: true});
+    }else if(req.user.role === 'Sadmin'){
+        res.json({message: 'Sadmin', status: true});
+    }else{
+        res.json({message: 'Login again to continue', status: false})
+    }
+}
 const Register = (req, res) => {
     const { name, email, password } = req.body;
     db.query("SELECT email FROM users WHERE email = ?", [email], async (err, result) => {
@@ -115,4 +127,5 @@ const update_user_password = (req, res) => {
 }
 
 
-module.exports = { Register, login, update_user_name, update_user_password, display_profile };
+
+module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check };

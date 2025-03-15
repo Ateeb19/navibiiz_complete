@@ -107,10 +107,33 @@ const Delete_user = (req, res) => {
     }
 }
 
+
+//show all offers
+const show_all_offers = (req, res) => {
+    if (req.user.role === "Sadmin") {
+        const query = `
+            SELECT o.*, g.*
+            FROM offers o
+            LEFT JOIN groupage g ON o.groupage_id = g.id
+        `;
+
+        db.query(query, (err, result) => {
+            if (err) {
+                console.error("Database query error:", err);
+                return res.status(500).json({ message: "Internal Server Error" });
+            }
+            res.json({ message: "All offers with groupage details", data: result });
+        });
+    } else {
+        res.status(403).json({ message: "You are not authorized" });
+    }
+};
+
 module.exports = {
     Display_All_company,
     Delete_any_company,
     Show_all_User,
     Update_User_role,
     Delete_user,
+    show_all_offers
 };

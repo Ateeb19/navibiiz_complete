@@ -4,6 +4,31 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../Db_Connection');
 require('dotenv').config({ path: './.env' });
+const nodemailer = require('nodemailer');
+
+
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.ionos.de",
+    port: 587, // Use 587 instead of 465
+    secure: false, // Important! 587 does NOT use implicit TLS
+    auth: {
+      user: "info@novibiz.com",
+      pass: "Novibiz*2025",
+    },
+    tls: {
+      rejectUnauthorized: false, // Prevents strict TLS rejection
+    },
+  });
+
+  transporter.verify((error, success) => {
+    if (error) {
+      console.log('SMTP Connection Error:', error);
+    } else {
+      console.log('SMTP Server is ready to send emails.');
+    }
+  });
+  
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -101,7 +126,7 @@ const send_groupage_submit = (req, res) => {
                         length: data.Plength,
                         width: data.Pwidth,
                     },
-                    images: imageUrls, 
+                    images: imageUrls,
                 },
                 pickUpInfo: {
                     userName: data.userName,
@@ -128,56 +153,56 @@ const send_groupage_submit = (req, res) => {
                     senderDescription: data.senderDescription,
                 },
                 additionalInfo: {
-                    document: documentUrl, 
+                    document: documentUrl,
                 },
             };
             const safeImage = (image) => (image !== undefined ? image : '');
-            const safeNumber = (num) => (num === undefined && num === null && num === '' ? num : 0);
+            const safeNumber = (num) => (num ? num : 0);
 
             db.query('INSERT INTO groupage SET ?', {
-                created_by: req.user.useremail, 
-                product_name: responseData.productInfo.productName, 
-                product_type: responseData.productInfo.productType, 
-                p_weight: safeNumber(responseData.productInfo.dimensions.weight), 
-                p_height: safeNumber(responseData.productInfo.dimensions.height), 
-                p_length: safeNumber(responseData.productInfo.dimensions.length), 
-                p_width: safeNumber(responseData.productInfo.dimensions.width), 
-                sender_name: responseData.pickUpInfo.userName, 
-                sender_contact: responseData.pickUpInfo.userNumber, 
-                sender_email: responseData.pickUpInfo.userEmail, 
-                sender_country: responseData.pickUpInfo.userCountry, 
-                sender_state: responseData.pickUpInfo.userState, 
-                sender_city: responseData.pickUpInfo.userCity, 
-                sender_address: responseData.pickUpInfo.streetAddress, 
-                sender_zipcode: responseData.pickUpInfo.zipCode, 
-                sender_description: responseData.pickUpInfo.userDescription, 
-                pickup_date: responseData.pickUpInfo.picking_period, 
-                receiver_name: responseData.deliveryInfo.senderName, 
-                receiver_contact: responseData.deliveryInfo.senderNumber, 
-                receiver_email: responseData.deliveryInfo.senderEmail, 
-                receiver_country: responseData.deliveryInfo.senderCountry, 
-                receiver_state: responseData.deliveryInfo.senderState, 
-                receiver_city: responseData.deliveryInfo.senderCity, 
-                receiver_address: responseData.deliveryInfo.senderStreetAddress, 
-                receiver_zipcode: responseData.deliveryInfo.senderZipCode, 
-                receiver_description: responseData.deliveryInfo.senderDescription, 
-                departure_date: responseData.deliveryInfo.departureDate, 
-                img01: safeImage(responseData.productInfo.images[0]), 
-                img02: safeImage(responseData.productInfo.images[1] ), 
-                img03: safeImage(responseData.productInfo.images[2] ), 
-                img04: safeImage(responseData.productInfo.images[3] ), 
-                img05: safeImage(responseData.productInfo.images[4] ), 
-                img06: safeImage(responseData.productInfo.images[5] ), 
-                img07: safeImage(responseData.productInfo.images[6] ), 
-                img08: safeImage(responseData.productInfo.images[7] ), 
-                img09: safeImage(responseData.productInfo.images[8] ), 
-                img10: safeImage(responseData.productInfo.images[9] ), 
+                created_by: req.user.useremail,
+                product_name: responseData.productInfo.productName,
+                product_type: responseData.productInfo.productType,
+                p_weight: safeNumber(responseData.productInfo.dimensions.weight),
+                p_height: safeNumber(responseData.productInfo.dimensions.height),
+                p_length: safeNumber(responseData.productInfo.dimensions.length),
+                p_width: safeNumber(responseData.productInfo.dimensions.width),
+                sender_name: responseData.pickUpInfo.userName,
+                sender_contact: responseData.pickUpInfo.userNumber,
+                sender_email: responseData.pickUpInfo.userEmail,
+                sender_country: responseData.pickUpInfo.userCountry,
+                sender_state: responseData.pickUpInfo.userState,
+                sender_city: responseData.pickUpInfo.userCity,
+                sender_address: responseData.pickUpInfo.streetAddress,
+                sender_zipcode: responseData.pickUpInfo.zipCode,
+                sender_description: responseData.pickUpInfo.userDescription,
+                pickup_date: responseData.pickUpInfo.picking_period,
+                receiver_name: responseData.deliveryInfo.senderName,
+                receiver_contact: responseData.deliveryInfo.senderNumber,
+                receiver_email: responseData.deliveryInfo.senderEmail,
+                receiver_country: responseData.deliveryInfo.senderCountry,
+                receiver_state: responseData.deliveryInfo.senderState,
+                receiver_city: responseData.deliveryInfo.senderCity,
+                receiver_address: responseData.deliveryInfo.senderStreetAddress,
+                receiver_zipcode: responseData.deliveryInfo.senderZipCode,
+                receiver_description: responseData.deliveryInfo.senderDescription,
+                departure_date: responseData.deliveryInfo.departureDate,
+                img01: safeImage(responseData.productInfo.images[0]),
+                img02: safeImage(responseData.productInfo.images[1]),
+                img03: safeImage(responseData.productInfo.images[2]),
+                img04: safeImage(responseData.productInfo.images[3]),
+                img05: safeImage(responseData.productInfo.images[4]),
+                img06: safeImage(responseData.productInfo.images[5]),
+                img07: safeImage(responseData.productInfo.images[6]),
+                img08: safeImage(responseData.productInfo.images[7]),
+                img09: safeImage(responseData.productInfo.images[8]),
+                img10: safeImage(responseData.productInfo.images[9]),
                 document: safeImage(responseData.additionalInfo.document)
             }, (err, result) => {
-                if(err){
-                    res.json({message: 'error in database', status: false});
+                if (err) {
+                    res.json({ message: 'error in database', status: false });
                     console.log(err);
-                }else{
+                } else {
                     res.json({ message: 'Data inserted successfully', status: true });
                 }
             });
@@ -192,13 +217,174 @@ const send_groupage_submit = (req, res) => {
     });
 }
 
-const send_transport_display = (req, res) => {
-    db.query('SELECT * FROM send_transport', (err, result) => {
+//display to the user dashboard
+const display_user_dashboard = (req, res) => {
+    if (req.user.useremail) {
+        db.query('SELECT * FROM groupage WHERE created_by = ?', [req.user.useremail], (err, result) => {
+            if (err) {
+                res.json({ message: "error in database", status: false });
+            } else {
+                res.json({ message: result, status: true });
+            }
+        })
+    } else {
+        res.json({ message: 'User not found Login again', status: false });
+    }
+}
+
+//delete for the user
+const delete_groupage = (req, res) => {
+    if (req.user.useremail) {
+        const id = req.params.id;
+        db.query('DELETE FROM groupage WHERE id = ?', id, (err, result) => {
+            if (err) {
+                res.json({ message: 'error in database', status: false });
+            } else {
+                res.json({ message: 'Deleted successfully', status: true });
+            }
+        });
+    } else {
+        res.json({ message: 'User not found Login again', status: false });
+    }
+}
+
+//show all groupage user
+const show_all_groupage = (req, res) => {
+    db.query('SELECT id, product_name, product_type, p_weight, p_height, p_length, p_width, sender_country, sender_description, receiver_country, img01, created_at, pickup_date FROM groupage', (err, result) => {
         if (err) {
             res.json({ message: 'error in database', status: false });
         } else {
             res.json({ message: result, status: true });
         }
-    })
+    });
 }
-module.exports = { send_transport_display, send_groupage_submit }
+
+
+//create the offer
+const create_offer = (req, res) => {
+    const data = req.body;
+    db.query('SELECT * FROM offers WHERE created_by_id = ? AND groupage_id = ?', [req.user.userid, data.offer_id], (err, result) => {
+        if (err) {
+            console.log(err, '1')
+            res.json({ message: 'error in database', status: false });
+        } else {
+            if (result.length === 0) {
+                db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, expeted_date: data.expected_date,accepted: 0, status: 'pending' }, (err, result) => {
+                    if (err) {
+                        console.log(err, '12')
+                        res.json({ message: 'error in database', status: false });
+                    } else {
+                        db.query('SELECT created_by FROM groupage WHERE id = ?', [data.offer_id], (err, result) => {
+                            if (err) {
+                                console.log(err, '123')
+                                res.json({ message: 'error in database', status: false });
+                            }
+                            else {
+                                res.json({ message: 'Data inserted successfully', status: true });
+                                transporter.sendMail({
+                                    from: '"Novibiz" ateebhaque@webloon.de',
+                                    to: result[0].created_by,
+                                    subject: "Offer received from a company",
+                                    html: "<h3>There is a new offer from a company.</h3><br><br><br><h4>Details-:</h4><p>Amount: " + data.offer_amount + "</p><p>Expected Date: " + data.expected_date + "</p>",
+                                }).then(info => {
+                                    console.log({ info });
+                                }).catch(console.error);
+                            }
+                        });
+                    }
+                });
+            } else {
+                db.query('UPDATE offers SET amount = ?, expeted_date = ? WHERE groupage_id = ? AND created_by_id = ?', [data.offer_amount, data.expected_date, data.offer_id, req.user.userid], (err, result) => {
+                    if (err) {
+                        console.log(err, '123')
+                        res.json({ message: 'error in database', status: false });
+                    } else {
+                        res.json({ message: 'Data inserted successfully Update', status: true });
+                    }
+                });
+            }
+        }
+    });
+
+}
+
+//show offers to the user
+const show_offers_user = (req, res) => {
+    const userEmail = req.user.useremail;
+
+    // Get groupage data for the user
+    db.query('SELECT * FROM groupage WHERE created_by = ?', [userEmail], (err, groupageResults) => {
+        if (err) {
+            console.log(err);
+            return res.json({ message: 'Database error', status: false });
+        }
+
+        if (groupageResults.length === 0) {
+            return res.json({ message: 'No data found', status: false });
+        }
+
+        // Extract groupage IDs
+        const groupageIds = groupageResults.map(g => g.id);
+
+        // Get offers that match the groupage IDs
+        db.query('SELECT * FROM offers WHERE groupage_id IN (?)', [groupageIds], (err, offerResults) => {
+            if (err) {
+                console.log(err);
+                return res.json({ message: 'Database error', status: false });
+            }
+
+            // Merge groupage and offers based on groupage_id
+            const mergedData = offerResults.map(offer => {
+                const groupage = groupageResults.find(g => g.id === offer.groupage_id);
+                return {
+                    order_id: groupage.id,
+                    product_name: groupage.product_name || "N/A",
+                    offer_id: offer.offer_id,
+                    created_date: offer.created_at,
+                    price: offer.amount,
+                    delivery_duration: offer.expeted_date,
+                };
+            });
+
+            res.json({ message: mergedData, status: true });
+        });
+    }); 
+}
+
+//delete the offer of the user
+const delete_offer_user = (req, res) => {
+    const id = req.params.id;
+    db.query('DELETE FROM offers WHERE offer_id = ?', id, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: 'Deleted successfully', status: true });
+        }
+    });
+}
+
+//return the groupage data info
+const groupage_info = (req, res) => {   
+    const id = req.params.id;
+    db.query('SELECT * FROM groupage WHERE id = ?', id, (err, result) => {
+        if (err) {
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: result[0], status: true });
+        }
+    });
+}
+
+//update status
+const update_stats_offer = (req, res) => {
+    const id = req.params.id;
+    db.query('UPDATE offers SET accepted = ? WHERE offer_id = ?', [1, id], (err, result) => {
+        if (err) {
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: 'Updated successfully', status: true });
+        }
+    });
+}
+module.exports = { send_groupage_submit, display_user_dashboard, delete_groupage, show_all_groupage, create_offer, show_offers_user, delete_offer_user, groupage_info, update_stats_offer };

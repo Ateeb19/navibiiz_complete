@@ -1,9 +1,10 @@
 const express = require('express');
 const Routers = express.Router();
 const AuthenticateToken = require('../Middleware/Authenticate.js');
-const { Register, login, update_user_name, update_user_password, display_profile } = require('../Controllers/User_controller.js');
+const { Register, login, update_user_name, update_user_password, display_profile, token_check } = require('../Controllers/User_controller.js');
 
 
+Routers.route('/check_token').get(AuthenticateToken,token_check);
 Routers.route('/regester').post(Register);
 Routers.route('/login').post(login);
 Routers.route('/display_profile').get(AuthenticateToken, display_profile);

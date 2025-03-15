@@ -375,7 +375,8 @@ const Registration = () => {
                                                 Country<span className="text-danger">*</span>
                                             </label>
                                             <Countries_selector
-                                                onSelectCountry={(value) => handlecountry(value, index)} // Pass index
+                                                onSelectCountry={(value) => handlecountry(value, index)}
+                                                label="Select the country"
                                                 value={location.country}
                                                 required
                                             />
@@ -485,7 +486,7 @@ const Registration = () => {
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
                                                     <label>Countries we ship Container to<span className="text-danger">*</span></label>
-                                                    <Countries_selector onSelectCountry={(value) => handleContainerCountry(value)} className="w-100" />
+                                                    <Countries_selector onSelectCountry={(value) => handleContainerCountry(value)} lable="Select the Country" className="w-100" />
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
@@ -541,7 +542,7 @@ const Registration = () => {
                                         <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                             <div className="d-flex w-100 flex-column align-items-start gap-2">
                                                 <label>Countries we ship Car to<span className="text-danger">*</span></label>
-                                                <Countries_selector onSelectCountry={(value) => handleCarCountry(value)} className="w-100" />
+                                                <Countries_selector onSelectCountry={(value) => handleCarCountry(value)} label='Select the Country' className="w-100" />
                                             </div>
                                             <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                 <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
@@ -596,7 +597,7 @@ const Registration = () => {
                                         <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                             <div className="d-flex w-100 flex-column align-items-start gap-2">
                                                 <label>Countries we ship Groupage to<span className="text-danger">*</span></label>
-                                                <Countries_selector onSelectCountry={(value) => handleGroupageCountry(value)} className="w-100" />
+                                                <Countries_selector onSelectCountry={(value) => handleGroupageCountry(value)} label="Select the Country" className="w-100" />
                                             </div>
                                             <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                 <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">

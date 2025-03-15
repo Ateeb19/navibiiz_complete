@@ -10,7 +10,6 @@ import { Rating } from 'react-simple-star-rating';
 const CompaniesList = () => {
 
     const companies = JSON.parse(localStorage.getItem('companyInfo'));
-    console.log(companies);
 
     const [selectedServices, setSelectedServices] = useState([]);
     const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
