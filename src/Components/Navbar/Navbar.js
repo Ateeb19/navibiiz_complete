@@ -24,15 +24,15 @@ const Navbar = () => {
             Authorization: token,
           },
         }).then((response) => {
-          if(response.data.status === false){
+          if (response.data.status === false) {
             localStorage.removeItem('token');
             window.location.reload();
             navigate('/login');
           }
-          if(response.data.status === true){
+          if (response.data.status === true) {
             localStorage.setItem('userRole', response.data.message);
           }
-          }).catch((err) => {
+        }).catch((err) => {
           console.log(err);
         });
     };
@@ -57,11 +57,26 @@ const Navbar = () => {
     <nav className="d-flex justify-content-between align-items-center w-100 px-3 py-2"
       style={navStyle}>
 
-      <div className="d-flex justify-content-start align-items-center">
+      <div className="d-flex justify-content-start align-items-center ms-5">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="fw-bolder text-light" style={{ fontSize: "2.5rem" }}>NaviBiiz</span>
+          <div
+            className="d-flex justify-content-center align-items-center rounded-circle"
+            style={{
+              width: "100%",
+              height: "100px",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src="/Images/novibiz/fulllogo_transparent.png"
+              alt="logo"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+          </div>
         </Link>
       </div>
+
+
 
       <div className="d-lg-none">
         <button className="btn text-light" onClick={() => setIsOpen(!isOpen)}>
