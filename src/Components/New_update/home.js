@@ -39,7 +39,7 @@ const Home = () => {
         companies();
     }, [])
     const last_companies = company_info.slice(-4);
-    console.log(last_companies);
+    // console.log(last_companies);
     const navigate = useNavigate();
 
     const settings = {

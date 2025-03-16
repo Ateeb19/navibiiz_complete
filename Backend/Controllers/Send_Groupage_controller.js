@@ -28,7 +28,6 @@ const transporter = nodemailer.createTransport({
       console.log('SMTP Server is ready to send emails.');
     }
   });
-  
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -157,10 +156,11 @@ const send_groupage_submit = (req, res) => {
                 },
             };
             const safeImage = (image) => (image !== undefined ? image : '');
-            const safeNumber = (num) => (num ? num : 0);
+            const safeNumber = (num) => (num == '' || num === 'null' ? 0 : num);
 
             db.query('INSERT INTO groupage SET ?', {
                 created_by: req.user.useremail,
+                payment_status: 'panding',
                 product_name: responseData.productInfo.productName,
                 product_type: responseData.productInfo.productType,
                 p_weight: safeNumber(responseData.productInfo.dimensions.weight),
@@ -281,11 +281,12 @@ const create_offer = (req, res) => {
                             }
                             else {
                                 res.json({ message: 'Data inserted successfully', status: true });
+                                console.log('email',result[0].created_by)
                                 transporter.sendMail({
-                                    from: '"Novibiz" ateebhaque@webloon.de',
+                                    from: '"Novibiz" info@novibiz.com',
                                     to: result[0].created_by,
                                     subject: "Offer received from a company",
-                                    html: "<h3>There is a new offer from a company.</h3><br><br><br><h4>Details-:</h4><p>Amount: " + data.offer_amount + "</p><p>Expected Date: " + data.expected_date + "</p>",
+                                    html: "<h3>There is a new offer from a company.</h3><br><br><br><h4>Details-:</h4><p>Amount: $" + data.offer_amount + "</p><p>Expected Date: " + data.expected_date + "</p>",
                                 }).then(info => {
                                     console.log({ info });
                                 }).catch(console.error);
