@@ -2,6 +2,36 @@
   text-align: center;
 }
 
+@media (max-width: 480px) {
+  body{
+    font-size: 0.8rem !important;
+  }
+  h1{
+    font-size: 1rem !important;
+  }
+  
+  h2{
+    font-size: 1rem !important;
+  }
+  
+  h3{
+    font-size: 1rem !important;
+  }
+  
+  h4{
+    font-size: 1rem !important;
+  }
+  
+  h5{
+    font-size: 1rem !important;
+  }
+  a{
+    font-size: 0.8rem !important;
+  }
+  span{
+    font-size: 0.8rem !important;
+  }
+}
   
   /* Navbar for larger screens */
   .navbar {
@@ -158,3 +188,4 @@ ul.slick-dots li.slick-active button:before {
   background-color: #007bff;
   opacity: 1;
 }
+

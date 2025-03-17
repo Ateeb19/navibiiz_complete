@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
-import Footer from "../../Footer/Footer";
+import Footer from "../Footer/Footer";
 import { FaLocationDot, FaMapLocationDot, FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
 import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "react-icons/fa";
 import { HiBadgeCheck } from "react-icons/hi";
@@ -83,11 +83,11 @@ const CompaniesList = () => {
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center text-light px-3" style={{
                 width: "100%",
-                minHeight: "40vh", // Adjusts dynamically
+                minHeight: "40vh", 
                 borderRadius: "0% 0% 2% 2% / 28% 28% 20% 20%",
                 backgroundColor: "#0044BC",
-                position: "relative", // Changed from fixed
-                zIndex: -1, // Ensures visibility
+                position: "relative", 
+                zIndex: -1, 
             }}>
                 <div className="text-center mt-3 w-100">
                     <strong className="fs-3 d-block mb-2">Ship Your Goods Worldwide with Reliable and Trusted Logistics Partners</strong>
@@ -143,7 +143,7 @@ const CompaniesList = () => {
                         </div>
                     </div>
                 </div>
-                <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-3">
+                <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-3" style={{height: '100vh', overflowY: 'auto'}}>
                     <strong className="fs-3">Search Results </strong>
                     {companies ? (
                         <>
@@ -185,111 +185,158 @@ const CompaniesList = () => {
                     ) : (
                         <strong className="fs-4 w-100 mt-5">No Data</strong>
                     )}
-
-
-
                     {company_detail && (
-                        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                        <div
+                            className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
                             style={{
-                                backgroundColor: 'rgba(0, 0, 0, 0.7)', // Adds a transparent dark background
-                                zIndex: 9999
+                                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                                zIndex: 9999,
                             }}
                         >
-                            <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+                            <div
+                                className="bg-light rounded shadow p-4 position-relative border border-2 border-dark container"
                                 style={{
-                                    width: '90%',
-                                    // maxWidth: '600px', // Adjust for responsiveness
-                                    height: '80vh',
-                                    // maxHeight: '90vh',
-                                    overflowY: 'auto'
+                                    maxWidth: "90%",
+                                    height: "80vh",
+                                    overflowY: "auto",
                                 }}
                             >
-                                <div className="d-flex flex-row align-items-start justify-content-start w-100">
-                                    <div className="w-75% border-end border-2">
-                                        <div className="d-flex align-items-center justify-content-start gap-5 p-3 w-100">
-                                            <div className="rounded-circle overflow-hidden" style={{ width: '80px', maxWidth: '110px', aspectRatio: '1/1' }}>
+                                <div className="row">
+                                    {/* Left Section */}
+                                    <div className="col-md-8 border-end border-2 text-start">
+                                        <div className="d-flex align-items-center gap-4 p-3">
+                                            <div
+                                                className="rounded-circle overflow-hidden"
+                                                style={{ width: "80px", aspectRatio: "1/1" }}
+                                            >
                                                 <img
-                                                    src={company_detail.logo ? company_detail.logo : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
+                                                    src={
+                                                        company_detail.logo
+                                                            ? company_detail.logo
+                                                            : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"
+                                                    }
                                                     alt="Profile"
                                                     className="w-100 h-100 object-fit-cover"
                                                 />
                                             </div>
-                                            <div className="d-flex flex-column align-items-start">
-                                                <strong className="fs-2">{company_detail.company_name}<span className="text-primary fs-4"><HiBadgeCheck /></span></strong>
-                                                <span><FaStar className="text-warning" /> <span className="text-secondary">4.85 <span className="text-primary">(<u>20 Reviews</u>)</span></span></span>
+                                            <div>
+                                                <strong className="fs-4">
+                                                    {company_detail.company_name}
+                                                    <span className="text-primary fs-5">
+                                                        <HiBadgeCheck />
+                                                    </span>
+                                                </strong>
+                                                <span>
+                                                    <FaStar className="text-warning" />{" "}
+                                                    <span className="text-secondary">
+                                                        4.85{" "}
+                                                        <span className="text-primary">
+                                                            (<u>20 Reviews</u>)
+                                                        </span>
+                                                    </span>
+                                                </span>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-column align-items-start w-100 mt-4 p-3">
+                                        {/* Company Overview */}
+                                        <div className="p-3">
                                             <h4>Company Overview</h4>
-                                            <p className="text-start text-secondary ps-4 w-75">{company_detail.description}</p>
+                                            <p className="text-secondary">{company_detail.description}</p>
                                         </div>
 
-                                        <div className="d-flex flex-column align-items-start w-100 gap-4 mt-3 p-3">
+                                        {/* Company Information */}
+                                        <div className="p-3">
                                             <h5>Company Information</h5>
-                                            <span className="text-secondary ps-4"><FaUserEdit className='fs-4' style={{ color: 'tomato' }} /> Completed 10k+ Orders</span>
-                                            <span className="text-secondary ps-4"><FaLocationDot className='fs-4' style={{ color: 'tomato' }} /> Based in {company_detail.location1}</span>
-                                            <span className="text-secondary ps-4"><FaTruckMoving className='fs-4' style={{ color: 'tomato' }} /> <span className="text-secondary">Offers {company_detail.container_service ? 'Containers' : ''}{company_detail.car_service ? ' & Cars' : ''}</span></span>
-                                            <span className="text-secondary ps-4 w-75 text-start"><FaMapLocationDot className='fs-4' style={{ color: 'tomato' }} /> Ship to -: {company_detail.Countries.map((item, index) => (
-                                                <>
+                                            <span className="text-secondary d-block">
+                                                <FaUserEdit className="fs-5 text-danger" /> Completed 10k+ Orders
+                                            </span>
+                                            <span className="text-secondary d-block">
+                                                <FaLocationDot className="fs-5 text-danger" /> Based in{" "}
+                                                {company_detail.location1}
+                                            </span>
+                                            <span className="text-secondary d-block">
+                                                <FaTruckMoving className="fs-5 text-danger" /> Offers{" "}
+                                                {company_detail.container_service ? "Containers" : ""}
+                                                {company_detail.car_service ? " & Cars" : ""}
+                                            </span>
+                                            <span className="text-secondary d-block">
+                                                <FaMapLocationDot className="fs-5 text-danger" /> Ship to -{" "}
+                                                {company_detail.Countries.map((item, index) => (
                                                     <span key={index}>{item.countries}, </span>
-                                                </>
-                                            ))}</span>
+                                                ))}
+                                            </span>
                                         </div>
 
-                                        <div className="d-flex flex-column mt-4 gap-2 align-items-start">
+                                        {/* Ratings & Reviews */}
+                                        <div className="p-3">
                                             <h4>Ratings & Reviews</h4>
                                             <span className="text-primary">20 Reviews</span>
-
-                                            <div className="d-flex flex-column align-items-start w-75 border border-2 gap-4 p-3">
-                                                <Rating
-                                                    initialValue={4.5}
-                                                    readonly
-                                                    allowFraction
-                                                    size={25}
-                                                />
-                                                <p className="text-start text-secondary w-75">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                <div className="d-flex justify-content-start align-items-center gap-5">
-                                                    <div className="rounded-circle overflow-hidden" style={{ width: '80px', maxWidth: '110px', aspectRatio: '1/1' }}>
+                                            <div className="border rounded p-3 mt-3">
+                                                <Rating initialValue={4.5} readonly allowFraction size={25} />
+                                                <p className="text-secondary mt-2">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                                </p>
+                                                <div className="d-flex align-items-center gap-3">
+                                                    <div
+                                                        className="rounded-circle overflow-hidden"
+                                                        style={{ width: "60px", aspectRatio: "1/1" }}
+                                                    >
                                                         <img
                                                             src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
                                                             alt="Profile"
                                                             className="w-100 h-100 object-fit-cover"
                                                         />
                                                     </div>
-                                                    <strong className="fs-4">Micheal Wilson</strong>
+                                                    <strong className="fs-5">Micheal Wilson</strong>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className=" d-flex flex-column" style={{ width: '25%' }}>
-                                        <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setCompany_detail(null)}>
+                                    {/* Right Section */}
+                                    <div className="col-md-4 text-start">
+                                        <button
+                                            className="btn btn-danger position-absolute top-0 end-0 m-2"
+                                            onClick={() => setCompany_detail(null)}
+                                        >
                                             ✕
                                         </button>
-                                        <div className="d-flex flex-column align-items-center  w-100 mt-5 m-2 " >
-                                            <div className="d-flex flex-column align-items-center justify-content-center gap-3 p-3 border border-4" style={{ backgroundColor: 'rgb(174, 237, 252)' }}>
-                                                {(company_detail.financialDocument && company_detail.passport_CEO_MD && company_detail.registrationDocument) ?
-                                                    (<>
+
+                                        <div className="d-flex flex-column align-items-start mt-5">
+                                            <div
+                                                className="d-flex flex-column align-items-start gap-3 p-3 border border-4 rounded"
+                                                style={{ backgroundColor: "rgb(174, 237, 252)" }}
+                                            >
+                                                {company_detail.financialDocument &&
+                                                    company_detail.passport_CEO_MD &&
+                                                    company_detail.registrationDocument ? (
+                                                    <>
                                                         <FaCircleCheck className="text-success fs-1" />
                                                         <h6>Company background is verified</h6>
-                                                        <span className="text-secondary">(All documents submitted)</span>
-                                                    </>) : (<>
+                                                        <span className="text-secondary">
+                                                            (All documents submitted)
+                                                        </span>
+                                                    </>
+                                                ) : (
+                                                    <>
                                                         <FaCircleXmark className="text-danger fs-1" />
                                                         <h6>Company background not verified</h6>
-                                                        <span className="text-secondary">(Documents are not submitted)</span>
-                                                    </>)
-                                                }
+                                                        <span className="text-secondary">
+                                                            (Documents are not submitted)
+                                                        </span>
+                                                    </>
+                                                )}
                                             </div>
-                                            <button className="btn w-100 text-light mt-4" style={{backgroundColor: 'tomato'}}>Contact Company</button>
+                                            <button className="btn w-100 text-light mt-4" style={{ backgroundColor: "tomato" }}>
+                                                Contact Company
+                                            </button>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     )}
-
                 </div>
             </div>
             <div className="d-flex flex-column align-items-center mt-4 mt-md-5 text-white p-3 p-md-5 w-100" style={{ backgroundColor: "#0044BC" }}>

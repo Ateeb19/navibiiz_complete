@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
-import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber } from "react-icons/md";
+import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown } from "react-icons/md";
 import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag } from "react-icons/fa6";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FaBell, FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaSearch, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle } from "react-icons/fa";
@@ -19,6 +19,8 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import Registration from "./Registration";
+
+
 
 
 const Dashboard = () => {
@@ -72,7 +74,7 @@ const Dashboard = () => {
   }
 
   const [activeSection, setActiveSection] = useState("dashboard");
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 700);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 800);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [editCompany, setEditCompany] = useState(null);
   const [showRegisterPopup, setShowRegisterPopup] = useState(false);
@@ -89,6 +91,15 @@ const Dashboard = () => {
   const [change_date, setChange_date] = useState('');
   const [new_change_date, setNew_change_date] = useState('');
   const [request_user, setRequest_user] = useState([]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 800);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handel_logout = () => {
     localStorage.setItem('userRole', 'user');
     localStorage.setItem('token', '');
@@ -190,21 +201,14 @@ const Dashboard = () => {
     }
   }
   useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 700);
-    };
-
-    window.addEventListener("resize", handleResize);
     featchCompanydata();
     featchAllUsers();
     displayGroupageUser();
     offersForUser();
     displayallOffers();
     // user_requests();
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
+
 
   const handleViewClick = (company) => {
     setSelectedCompany(company);
@@ -655,19 +659,31 @@ const Dashboard = () => {
   const show_offer_details = (item) => {
     setShowOfferDetails(item);
   }
-  console.log(showOfferDetails);
-  return (
-    <div className="vh-100">
+  // console.log(showOfferDetails);
 
-      <div className=" d-flex justify-content-end ">
-        <Navbar />
-      </div>
-      <div className="d-flex flex-row align-items-center justify-content-end vh-100 bg-light">
-        <div className="d-flex flex-column align-items-center" style={{ backgroundColor: '#010037', width: "100%", maxWidth: "20%", height: '100vh' }}>
-          <div className="d-flex align-items-start justify-content-start w-100 mt-5">
+
+
+  const Menu = () => {
+    const [showMenu, setShowMenu] = useState(false);
+    const [selectedItem, setSelectedItem] = useState('Dashboard');
+
+   const handleSelect = (item) => {
+      // console.log("Selected Item:", item);
+      setSelectedItem(item);
+      setShowMenu(false);
+    };
+
+    return (
+      <div className="d-flex flex-column align-items-center position-relative" style={{ backgroundColor: ' #010037', width: "100%", }}>
+        <div className="d-flex align-items-center justify-content-between p-3 w-100 text-white" onClick={() => setShowMenu(!showMenu)} style={{ cursor: "pointer", borderBottom: "1px solid white" }}>
+          <span>{selectedItem}</span>
+          <MdKeyboardDoubleArrowDown size={24} />
+        </div>
+        {showMenu && (
+          <div className="position-absolute text-white w-100 p-3" style={{ backgroundColor: ' #010037', top: "50px", zIndex: 1000 }}>
             <ul className="nav flex-column mt-4 fs-4 w-100">
               <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("dashboard"); setSelectedCompany(''); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Dashboard"); setActiveSection("dashboard"); setSelectedCompany(''); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                   <MdDashboard /> Dashboard
                 </Link>
               </li>
@@ -675,23 +691,23 @@ const Dashboard = () => {
               {userRole === 'Sadmin' || userRole === 'admin' ? (
                 <>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Companies"); setActiveSection("companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <BsBuildingsFill /> Companies
                     </Link>
                   </li>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("offers"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("offers"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <FaUsers /> Offers
                     </Link>
                   </li>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("payments"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payments"); setActiveSection("payments"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <RiSecurePaymentFill /> Payments
                     </Link>
                   </li>
                   {userData.length > 0 && (
                     <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                      <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("users"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                      <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Roles & Permissions"); setActiveSection("users"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                         <FaUserGear /> Roles & Permissions
                       </Link>
                     </li>
@@ -700,19 +716,19 @@ const Dashboard = () => {
               ) : (
                 <>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Orders"); setActiveSection("orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <FaBoxOpen /> Orders
                     </Link>
                   </li>
 
                   <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <MdPayment /> Offers
                     </Link>
                   </li>
 
                   <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payment History"); setActiveSection("payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <MdPayment /> Payment History
                     </Link>
                   </li>
@@ -721,32 +737,118 @@ const Dashboard = () => {
 
             </ul>
           </div>
-        </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="vh-100">
+
+      <div className=" d-flex justify-content-end ">
+        <Navbar />
+      </div>
+      <div className="d-flex flex-row align-items-center justify-content-end vh-100 bg-light">
+        {isMobile ? (
+          <>
+
+          </>
+        ) : (
+          <>
+            <div className="d-flex flex-column align-items-center" style={{ backgroundColor: ' #010037', width: "100%", maxWidth: "20%", height: '100vh' }}>
+              <div className="d-flex align-items-start justify-content-start w-100 mt-5">
+                <ul className="nav flex-column mt-4 fs-4 w-100">
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("dashboard"); setSelectedCompany(''); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                      <MdDashboard /> Dashboard
+                    </Link>
+                  </li>
+
+                  {userRole === 'Sadmin' || userRole === 'admin' ? (
+                    <>
+                      <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                          <BsBuildingsFill /> Companies
+                        </Link>
+                      </li>
+                      <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("offers"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                          <FaUsers /> Offers
+                        </Link>
+                      </li>
+                      <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("payments"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                          <RiSecurePaymentFill /> Payments
+                        </Link>
+                      </li>
+                      {userData.length > 0 && (
+                        <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                          <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("users"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                            <FaUserGear /> Roles & Permissions
+                          </Link>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                          <FaBoxOpen /> Orders
+                        </Link>
+                      </li>
+
+                      <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                          <MdPayment /> Offers
+                        </Link>
+                      </li>
+
+                      <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <Link to="#" className="nav-link text-white" onClick={() => { setActiveSection("payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                          <MdPayment /> Payment History
+                        </Link>
+                      </li>
+                    </>
+                  )}
+
+                </ul>
+              </div>
+            </div>
+          </>
+        )}
+
 
         {activeSection === "dashboard" && (
           <>
             {userRole === 'Sadmin' || userRole === 'admin' ? (
               <>
-                <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
-                  <div className=" d-flex justify-content-end mt-2">
-                    <div className="p-3 pe-5">
-                      <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                    </div>
-                    <div className="border-start p-2 border-3 border-dark">
-                      <Dropdown style={{ width: '13rem' }}>
-                        <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                          <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu style={{ width: '13rem' }}>
-                          <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                            <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                            <label><strong>Email-:</strong> {userInfo.email}</label>
-                            <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                            <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                            <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                          </div>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
+                  <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                    {isMobile && (
+                      <div className="w-100 d-flex justify-content-start">
+                        <Menu />
+                      </div>
+                    )}
+                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                      <div className="p-3">
+                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                      </div>
+                      <div className="border-start p-2 border-3 border-dark">
+                        <Dropdown style={{ width: '13rem' }}>
+                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ width: '13rem' }}>
+                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                              <label><strong>Email-:</strong> {userInfo.email}</label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
                     </div>
                   </div>
 
@@ -798,7 +900,7 @@ const Dashboard = () => {
               </>
             ) : (
               <>
-                <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
                   <div className=" d-flex justify-content-end mt-2">
                     <div className="p-2">
                       <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
@@ -863,7 +965,7 @@ const Dashboard = () => {
 
         {activeSection === 'orders' && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
               <div className=" d-flex justify-content-end mt-2">
                 <div className="p-2">
                   <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
@@ -999,7 +1101,7 @@ const Dashboard = () => {
 
         {selected_groupage && (
           <>
-            <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: '78%', height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "78%", height: '100vh', overflow: 'auto' }}>
               <div className=" d-flex justify-content-end mt-2">
                 <div className="p-2">
                   <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
@@ -1266,7 +1368,7 @@ const Dashboard = () => {
 
         {activeSection === 'payment_history' && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
               <div className=" d-flex justify-content-end mt-2">
                 <div className="p-2">
                   <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
@@ -1298,7 +1400,7 @@ const Dashboard = () => {
 
         {activeSection === 'user_offers' && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
               <div className=" d-flex justify-content-end mt-2">
                 <div className="p-2">
                   <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
@@ -1584,27 +1686,35 @@ const Dashboard = () => {
 
         {activeSection === "companies" && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
-              <div className=" d-flex justify-content-end mt-2">
-                <div className="p-3 pe-5">
-                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                </div>
-                <div className="border-start p-2 border-3 border-dark">
-                  <Dropdown style={{ width: '13rem' }}>
-                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu style={{ width: '13rem' }}>
-                      <div className="d-flex flex-column justify-content-center align-items-center">
-                        <label><strong>Role-:</strong>{userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                        <label><strong>Email-:</strong> {userInfo.email}</label>
-                        <label><button className="btn btn-secondary btn-sm">Edit Name</button> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                    {isMobile && (
+                      <div className="w-100 d-flex justify-content-start">
+                        <Menu />
                       </div>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
+                    )}
+                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                      <div className="p-3">
+                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                      </div>
+                      <div className="border-start p-2 border-3 border-dark">
+                        <Dropdown style={{ width: '13rem' }}>
+                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ width: '13rem' }}>
+                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                              <label><strong>Email-:</strong> {userInfo.email}</label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
@@ -1673,7 +1783,7 @@ const Dashboard = () => {
             </div>
 
             {selectedCompany && (
-              <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: '79%', height: '100vh', overflow: 'auto' }}>
+              <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
                 <div className=" d-flex justify-content-end mt-2">
                   <div className="p-3 pe-5">
                     <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
@@ -1794,7 +1904,7 @@ const Dashboard = () => {
 
             {showRegisterPopup && (
               <>
-                <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: '79%', height: '100vh', overflow: 'auto' }}>
+                <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
                   <div className=" d-flex justify-content-end mt-2">
                     <div className="p-3 pe-5">
                       <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
@@ -1834,27 +1944,35 @@ const Dashboard = () => {
 
         {activeSection === "offers" && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
-              <div className=" d-flex justify-content-end mt-2">
-                <div className="p-3 pe-5">
-                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                </div>
-                <div className="border-start p-2 border-3 border-dark">
-                  <Dropdown style={{ width: '13rem' }}>
-                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu style={{ width: '13rem' }}>
-                      <div className="d-flex flex-column justify-content-center align-items-center">
-                        <label><strong>Role-:</strong>{userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                        <label><strong>Email-:</strong> {userInfo.email}</label>
-                        <label><button className="btn btn-secondary btn-sm">Edit Name</button> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                    {isMobile && (
+                      <div className="w-100 d-flex justify-content-start">
+                        <Menu />
                       </div>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
+                    )}
+                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                      <div className="p-3">
+                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                      </div>
+                      <div className="border-start p-2 border-3 border-dark">
+                        <Dropdown style={{ width: '13rem' }}>
+                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ width: '13rem' }}>
+                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                              <label><strong>Email-:</strong> {userInfo.email}</label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
@@ -1943,7 +2061,7 @@ const Dashboard = () => {
 
         {showOfferDetails && (
           <>
-            <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: '79%', height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
               <div className=" d-flex justify-content-end mt-2">
                 <div className="p-2">
                   <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
@@ -1986,7 +2104,7 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                <strong className="fs-5">Payment Inforamtion</strong>
+                  <strong className="fs-5">Payment Inforamtion</strong>
                   <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
@@ -2287,27 +2405,35 @@ const Dashboard = () => {
 
         {activeSection === "payments" && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
-              <div className=" d-flex justify-content-end mt-2">
-                <div className="p-3 pe-5">
-                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                </div>
-                <div className="border-start p-2 border-3 border-dark">
-                  <Dropdown style={{ width: '13rem' }}>
-                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu style={{ width: '13rem' }}>
-                      <div className="d-flex flex-column justify-content-center align-items-center">
-                        <label><strong>Role-:</strong>{userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                        <label><strong>Email-:</strong> {userInfo.email}</label>
-                        <label><button className="btn btn-secondary btn-sm">Edit Name</button> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                    {isMobile && (
+                      <div className="w-100 d-flex justify-content-start">
+                        <Menu />
                       </div>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
+                    )}
+                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                      <div className="p-3">
+                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                      </div>
+                      <div className="border-start p-2 border-3 border-dark">
+                        <Dropdown style={{ width: '13rem' }}>
+                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ width: '13rem' }}>
+                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                              <label><strong>Email-:</strong> {userInfo.email}</label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
@@ -2379,27 +2505,35 @@ const Dashboard = () => {
 
         {activeSection === "notification" && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
-              <div className=" d-flex justify-content-end mt-2">
-                <div className="p-3 pe-5">
-                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                </div>
-                <div className="border-start p-2 border-3 border-dark">
-                  <Dropdown style={{ width: '13rem' }}>
-                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu style={{ width: '13rem' }}>
-                      <div className="d-flex flex-column justify-content-center align-items-center">
-                        <label><strong>Role-:</strong>{userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                        <label><strong>Email-:</strong> {userInfo.email}</label>
-                        <label><button className="btn btn-secondary btn-sm">Edit Name</button> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                    {isMobile && (
+                      <div className="w-100 d-flex justify-content-start">
+                        <Menu />
                       </div>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
+                    )}
+                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                      <div className="p-3">
+                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                      </div>
+                      <div className="border-start p-2 border-3 border-dark">
+                        <Dropdown style={{ width: '13rem' }}>
+                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ width: '13rem' }}>
+                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                              <label><strong>Email-:</strong> {userInfo.email}</label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
@@ -2491,27 +2625,35 @@ const Dashboard = () => {
 
         {activeSection === "users" && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: '80%', height: '100vh', overflow: 'auto' }}>
-              <div className=" d-flex justify-content-end mt-2">
-                <div className="p-3 pe-5">
-                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                </div>
-                <div className="border-start p-2 border-3 border-dark">
-                  <Dropdown style={{ width: '13rem' }}>
-                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu style={{ width: '13rem' }}>
-                      <div className="d-flex flex-column justify-content-center align-items-center">
-                        <label><strong>Role-:</strong>{userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                        <label><strong>Email-:</strong> {userInfo.email}</label>
-                        <label><button className="btn btn-secondary btn-sm">Edit Name</button> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                    {isMobile && (
+                      <div className="w-100 d-flex justify-content-start">
+                        <Menu />
                       </div>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
+                    )}
+                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                      <div className="p-3">
+                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                      </div>
+                      <div className="border-start p-2 border-3 border-dark">
+                        <Dropdown style={{ width: '13rem' }}>
+                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ width: '13rem' }}>
+                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                              <label><strong>Email-:</strong> {userInfo.email}</label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">

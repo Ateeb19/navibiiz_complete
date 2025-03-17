@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
-import Footer from "../../Footer/Footer";
+import Footer from "../Footer/Footer";
 import { FaLocationDot, FaWeightScale, FaMapLocationDot, FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
 import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "react-icons/fa";
 import { HiBadgeCheck } from "react-icons/hi";
@@ -186,207 +186,360 @@ const Offers = () => {
                         >
                             <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
                                 style={{
-                                    width: '70%',
+                                    width: '90%',
+                                    maxWidth: '900px',
                                     height: '90vh',
                                     overflowY: 'auto'
                                 }}
                             >
-                                <div className="d-flex flex-column justify-content-start align-items-start">
+                                <div className="d-flex flex-column justify-content-start align-items-center">
                                     <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setGroupage_detail(null)}>
                                         ✕
                                     </button>
 
-                                    <strong className="fs-3">Submitting an Offer</strong>
-                                    <span className="mt-2">Offer ID: <span className="text-primary"> #{groupage_detail.id}</span></span>
+                                    <strong className="fs-3 text-start w-100">Submitting an Offer</strong>
+                                    <span className="mt-2 text-start w-100">Offer ID: <span className="text-primary"> #{groupage_detail.id}</span></span>
 
-                                    <h5 className="mt-5">Product Details</h5>
+                                    <h5 className="mt-5 text-start w-100">Product Details</h5>
 
-                                    <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                    <div className="d-flex flex-wrap justify-content-center gap-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            >
+                                                <SiAnytype />
+                                            </div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Product Type</span>
                                                 <h6>{groupage_detail.product_type}</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaWeightScale /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Weight</span>
                                                 <h6>{groupage_detail.p_weight} Kg</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandHeightFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Height</span>
                                                 <h6>{groupage_detail.p_height} Cm</h6>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaRuler /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                    <div className="d-flex flex-wrap justify-content-center gap-3 mt-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaRuler /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Length</span>
                                                 <h6>{groupage_detail.p_length} Cm</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandWidthFill /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandWidthFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Width</span>
                                                 <h6>{groupage_detail.p_width} Cm</h6>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <h5 className="mt-5">Pick Up Information</h5>
+                                    <h5 className="mt-5 text-start w-100">Pick Up Information</h5>
 
-                                    <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                    <div className="d-flex flex-wrap justify-content-center gap-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><SiAnytype /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Country</span>
                                                 <h6>XXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaWeightScale /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">State</span>
                                                 <h6>XXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandHeightFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">City</span>
                                                 <h6>XXXX</h6>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaRuler /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                    <div className="d-flex flex-wrap justify-content-center gap-3 mt-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaRuler /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Zip Code</span>
                                                 <h6>XXXXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandWidthFill /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandWidthFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Pick Up Date</span>
                                                 <h6>{groupage_detail.pickup_date.includes('Select End Date') ? groupage_detail.pickup_date.split(' - ')[0] : groupage_detail.pickup_date}</h6>
                                             </div>
                                         </div>
                                     </div>
 
+                                    <h5 className="mt-5 text-start w-100">Delivery Information</h5>
 
-                                    <h5 className="mt-5">Delivery Information</h5>
-
-                                    <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                    <div className="d-flex flex-wrap justify-content-center gap-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><SiAnytype /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Receiver’s Name</span>
                                                 <h6>XXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaWeightScale /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Contact Number </span>
                                                 <h6>XXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandHeightFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Email ID</span>
                                                 <h6>XXXX@gmail.com</h6>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaRuler /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                    <div className="d-flex flex-wrap justify-content-center gap-3 mt-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaRuler /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Country</span>
                                                 <h6>XXXXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandWidthFill /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandWidthFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">State</span>
                                                 <h6>XXXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandWidthFill /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandWidthFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">City</span>
                                                 <h6>XXXXX</h6>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <h5 className="mt-5">Customer Information</h5>
+                                    <h5 className="mt-5 text-start w-100">Customer Information</h5>
 
-                                    <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                    <div className="d-flex flex-wrap justify-content-center gap-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><SiAnytype /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Customer Name</span>
                                                 <h6>XXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaWeightScale /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Contact Number </span>
                                                 <h6>XXXX</h6>
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
-                                            <div className="d-flex flex-column align-items-center gap-2">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: 'rgb(174, 252, 255)',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandHeightFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Email ID</span>
                                                 <h6>XXXX</h6>
                                             </div>
                                         </div>
                                     </div>
 
-
-                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-5 p-3" style={{}}>
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-5 p-3">
                                         <strong className="fs-3">Bidding Information</strong>
                                         <span className="mt-3">What is the full amount you want to bid for this order?</span>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100 gap-5 mt-4 border-bottom border-2 pb-2">
-                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2">
+                                        <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4 border-bottom border-2 pb-2">
+                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-50">
                                                 <span className="fs-5">Bid Amount</span>
-                                                <spna className="text-secondary">Total amount the client will see on your proposal</spna>
+                                                <span className="text-secondary text-start">Total amount the client will see on your proposal</span>
                                             </div>
-                                            <input type="text" className="form-control w-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`$ ${bidAmount}`} />
+                                            <input type="text" className="form-control w-100 w-sm-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`$ ${bidAmount}`} />
                                         </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100 gap-5 mt-4">
-                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2">
-                                                <spna className="text-secondary">How long will this product take to deliver?</spna>
+                                        <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4">
+                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-50">
+                                                <span className="text-secondary text-start">How long will this product take to deliver?</span>
                                             </div>
-                                            <input type="date" className="form-control w-50 fs-5" min={new Date().toISOString().split("T")[0]} onChange={(e) => setExpetedDate(e.target.value)} value={expetedDate} />
+                                            <input type="date" className="form-control w-100 w-sm-50 fs-5" min={new Date().toISOString().split("T")[0]} onChange={(e) => setExpetedDate(e.target.value)} value={expetedDate} />
                                         </div>
                                     </div>
                                     <div className="d-flex w-100 justify-content-end">

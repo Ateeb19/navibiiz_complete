@@ -8,7 +8,7 @@ import { BiSolidDetail } from "react-icons/bi";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaTruckFast } from "react-icons/fa6";
 import { MdDeliveryDining } from "react-icons/md";
-import Footer from "../../Footer/Footer";
+import Footer from "../Footer/Footer";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';

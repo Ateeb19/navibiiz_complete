@@ -160,7 +160,7 @@ const Company_Register = (req, res) => {
                 res.json({ message: 'Error in database', status: false });
                 console.log(err);
             } else {
-                db.query('CREATE TABLE ' + sqlData.companyName + '_' + result1.insertId + '(id INT AUTO_INCREMENT PRIMARY KEY, countries VARCHAR(255), duration VARCHAR(255), service_type VARCHAR(255));', (err, result2) => {
+                db.query('CREATE TABLE ' + 'company' + '_' + result1.insertId + '(id INT AUTO_INCREMENT PRIMARY KEY, countries VARCHAR(255), duration VARCHAR(255), service_type VARCHAR(255));', (err, result2) => {
                     if (err) {
                         res.json({ message: 'Error in creating table', status: false });
                     } else {
@@ -389,7 +389,7 @@ const display_company = (req, res) => {
         }
         try {
             for (const element of result1) {
-                const name = `${element.company_name}_${element.id}`;
+                const name = `company_${element.id}`;
                 const countries = await new Promise((resolve, reject) => {
                     db.query(`SELECT * FROM ${name}`, (err, data) => {
                         if (err) {

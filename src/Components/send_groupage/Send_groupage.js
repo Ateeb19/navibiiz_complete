@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 import { useNavigate } from 'react-router-dom'
 import { Stepper } from 'primereact/stepper';
 import { StepperPanel } from 'primereact/stepperpanel';
@@ -231,37 +232,48 @@ const Send_groupage = () => {
             <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-5">
                 <strong className="fs-4">Shipping Information</strong>
 
-                <div className="d-flex flex-row align-items-start justify-content-between w-100 mt-2 gap-2">
-                    <div className="d-flex flex-column align-items-start justify-content-start w-75 border border-3 rounded-4">
-                        <Stepper linear desabled ref={stepperRef} onStepChange={(step) => setCurrentStep(step)} style={{ flexBasis: 'auto' }}>
-                            <StepperPanel header="Product Information" >
-                                <StepperPanel header="Basic Details" >
-                                    <div className="flex flex-column h-12rem">
-                                        <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                                            <>
+                <div className="row align-items-between justify-content-between w-100 mt-2 ps-3">
+                    <div className="d-flex flex-column align-items-start justify-content-start col-md-9 col-12  border border-3 border-end-0 rounded-4">
+                        <Stepper linear desabled ref={stepperRef} onStepChange={(step) => setCurrentStep(step)} style={{ flexBasis: 'auto', width: '100%' }}>
+                            <StepperPanel header="Product Information">
+                                <StepperPanel header="Basic Details">
+                                    <div className="container-fluid">
+                                        <div className="row">
+                                            <div className="col-12">
+                                                <div className="border-2 border-dashed surface-border border-round surface-ground p-1">
+                                                    {/* Image Upload Section */}
+                                                    <div className="text-center mb-3">
+                                                        <DragAndDrop
+                                                            accept="image/*"
+                                                            multiple={true}
+                                                            onFileDrop={handleFileDrop}
+                                                            label="Drag and drop images here, or click to select (Max: 10 images)"
+                                                        />
+                                                    </div>
 
-                                                <div>
-                                                    <DragAndDrop
-                                                        accept="image/*"
-                                                        multiple={true}
-                                                        onFileDrop={handleFileDrop}
-                                                        label="Drag and drop images here, or click to select (Max: 10 images)"
-                                                    />
-
+                                                    {/* Preview Images */}
                                                     {selectedFiles.length > 0 && (
-                                                        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                                                        <div className="d-flex flex-wrap justify-content-center gap-2">
                                                             {selectedFiles.map((img, index) => (
-                                                                <div key={index} style={{ position: "relative", display: "inline-block" }}>
+                                                                <div key={index} className="position-relative">
                                                                     <img
                                                                         src={img.preview}
                                                                         alt={`Selected ${index}`}
                                                                         className="rounded border border-1 border-dark"
-                                                                        style={{ width: "100px", height: "100px" }}
+                                                                        style={{ width: "80px", height: "80px", objectFit: "cover" }}
                                                                     />
                                                                     <button
                                                                         onClick={() => handleRemoveImage(index)}
                                                                         className="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle"
-                                                                        style={{ transform: "translate(50%, -50%)", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0" }}
+                                                                        style={{
+                                                                            transform: "translate(50%, -50%)",
+                                                                            width: "20px",
+                                                                            height: "20px",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            padding: "0",
+                                                                        }}
                                                                     >
                                                                         ×
                                                                     </button>
@@ -269,364 +281,329 @@ const Send_groupage = () => {
                                                             ))}
                                                         </div>
                                                     )}
-                                                </div>
 
-                                                <div className="d-flex flex-md-row align-items-center justify-content-center w-100 mt-4 gap-5">
-                                                    <div className="pe-1 ps-1" style={{ width: '50%' }}>
-                                                        <label className="form-label text-start w-100">Product Name <span className="text-danger">*</span></label>
-                                                        <input
-                                                            className="form-control"
-                                                            type="text"
-                                                            value={productName}
-                                                            onChange={(e) => setProductName(e.target.value)}
-                                                            placeholder="Enter the product name"
-                                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
+                                                    {/* Product Name & Type */}
+                                                    <div className="row mt-3">
+                                                        <div className="col-12 col-md-6 mb-2">
+                                                            <label className="form-label">Product Name <span className="text-danger">*</span></label>
+                                                            <input
+                                                                className="form-control"
+                                                                type="text"
+                                                                value={productName}
+                                                                onChange={(e) => setProductName(e.target.value)}
+                                                                placeholder="Enter the product name"
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                required
+                                                            />
+                                                        </div>
+                                                        <div className="col-12 col-md-6 mb-2">
+                                                            <label className="form-label">Product Type</label>
+                                                            <input
+                                                                className="form-control"
+                                                                type="text"
+                                                                value={productType}
+                                                                onChange={(e) => setProductType(e.target.value)}
+                                                                placeholder="Enter the product type"
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                required
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className="pe-1 ps-1" style={{ width: '50%' }}>
-                                                        <label className="form-label text-start w-100">Product Type </label>
-                                                        <input className="form-control"
-                                                            type="tel"
-                                                            placeholder="Enter the product type"
-                                                            value={productType}
-                                                            onChange={(e) => setProductType(e.target.value)}
-                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                                            required />
+
+                                                    {/* Product Dimensions (Responsive Grid) */}
+                                                    <div className="row mt-3">
+                                                        <div className="col-6 col-md-3 mb-2">
+                                                            <label className="form-label">Weight (kg)</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                onChange={(e) => setPweight(e.target.value.replace(/[^0-9.]/g, ""))}
+                                                                value={Pweight}
+                                                                placeholder="Eg: 0"
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                required
+                                                            />
+                                                        </div>
+                                                        <div className="col-6 col-md-3 mb-2">
+                                                            <label className="form-label">Height (cm)</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                onChange={(e) => setPheight(e.target.value.replace(/[^0-9.]/g, ""))}
+                                                                value={Pheight}
+                                                                placeholder="Eg: 0"
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                required
+                                                            />
+                                                        </div>
+                                                        <div className="col-6 col-md-3 mb-2">
+                                                            <label className="form-label">Length (cm)</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                onChange={(e) => setPlength(e.target.value.replace(/[^0-9.]/g, ""))}
+                                                                value={Plength}
+                                                                placeholder="Eg: 0"
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                required
+                                                            />
+                                                        </div>
+                                                        <div className="col-6 col-md-3 mb-2">
+                                                            <label className="form-label">Width (cm)</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                onChange={(e) => setPwidth(e.target.value.replace(/[^0-9.]/g, ""))}
+                                                                value={Pwidth}
+                                                                placeholder="Eg: 0"
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                required
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5">
-                                                    <div className="pe-1 ps-1" style={{ width: '24%' }}>
-                                                        <label className="form-label text-start w-100">Weight <span className="text-secondary"> (kg)</span></label>
-                                                        <input
-                                                            type="text"
-                                                            onChange={(e) => {
-                                                                const value = e.target.value.replace(/[^0-9.]/g, "");
-                                                                setPweight(value);
-                                                            }}
-                                                            className="form-control"
-                                                            value={Pweight}
-                                                            placeholder="Eg : 0"
-                                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
-                                                    </div>
-                                                    <div className="pe-1 ps-1" style={{ width: '24%' }}>
-                                                        <label className="form-label text-start w-100">Height <span className="text-secondary"> (cm)</span></label>
-                                                        <input
-                                                            className="form-control"
-                                                            type="text"
-                                                            onChange={(e) => {
-                                                                const value = e.target.value.replace(/[^0-9.]/g, "");
-                                                                setPheight(value);
-                                                            }}
-                                                            value={Pheight}
-                                                            placeholder="Eg : 0"
-                                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
-                                                    </div>
-                                                    <div className="pe-1 ps-1" style={{ width: '24%' }}>
-                                                        <label className="form-label text-start w-100">Length <span className="text-secondary"> (cm)</span></label>
-                                                        <input
-                                                            className="form-control"
-                                                            type="text"
-                                                            onChange={(e) => {
-                                                                const value = e.target.value.replace(/[^0-9.]/g, "");
-                                                                setPlength(value);
-                                                            }}
-                                                            value={Plength}
-                                                            placeholder="Eg : 0"
-                                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
-                                                    </div>
-                                                    <div className="pe-1 ps-1" style={{ width: '24%' }}>
-                                                        <label className="form-label text-start w-100">Width <span className="text-secondary"> (cm)</span></label>
-                                                        <input
-                                                            className="form-control"
-                                                            type="text"
-                                                            onChange={(e) => {
-                                                                const value = e.target.value.replace(/[^0-9.]/g, "");
-                                                                setPwidth(value);
-                                                            }}
-                                                            value={Pwidth}
-                                                            placeholder="Eg : 0"
-                                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
-                                                    </div>
-                                                </div>
-                                            </>
+                                            </div>
                                         </div>
                                     </div>
                                 </StepperPanel>
                             </StepperPanel>
 
-                            <StepperPanel header="Pick-up Information" >
-                                <div className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5">
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Full Name <span className="text-danger">*</span></label>
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            value={userName}
-                                            onChange={(e) => setUserName(e.target.value)}
-                                            placeholder="Enter your full name"
-                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
-                                    </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Contact Number <span className="text-danger">*</span></label>
-                                        <input className="form-control"
-                                            type="tel"
-                                            placeholder="Enter your contact number"
-                                            value={userNumber}
-                                            onChange={(e) => setUserNumber(e.target.value)}
-                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            required />
-                                    </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Email Address<span className="text-danger">*</span></label>
-                                        <input className="form-control"
-                                            type="email"
-                                            placeholder="Enter your email id"
-                                            value={userEmail}
-                                            onChange={(e) => setUserEmail(e.target.value)}
-                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            required />
-                                    </div>
-                                </div>
-                                <div className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5">
-                                    <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                        <label className="form-label text-start w-100">
-                                            Country<span className="text-danger">*</span>
-                                        </label>
-                                        <Countries_selector
-                                            onSelectCountry={(value) => setUserCountry(value)}
-                                            value={userCountry}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                        <label className="form-label text-start w-100">
-                                            State<span className="text-danger">*</span>
-                                        </label>
-                                        <State_selector
-                                            onSelectState={(value) => setUserState(value)}
-                                            value={userState}
-                                        />
-                                    </div>
-                                    <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                        <label className="form-label text-start w-100">
-                                            City<span className="text-danger">*</span>
-                                        </label>
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            placeholder="Enter the city name"
-                                            style={{ backgroundColor: "rgb(214, 214, 214)" }}
-                                            value={userCity}
-                                            onChange={(e) => setUserCity(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                                <div className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5">
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Street Addess <span className="text-danger">*</span></label>
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            value={streetAddress}
-                                            onChange={(e) => setStreetAddress(e.target.value)}
-                                            placeholder="Enter your Street Addess"
-                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
-                                    </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Zip Code <span className="text-danger">*</span></label>
-                                        <input className="form-control"
-                                            type="number"
-                                            placeholder="Enter your Zip Code"
-                                            value={zipCode}
-                                            onChange={(e) => setZipCode(e.target.value)}
-                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            required />
-                                    </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Picking Period<span className="text-danger">*</span></label>
-                                        <div style={{ position: "relative", width: "100%" }}>
-                                            <input
-                                                type="text"
-                                                readOnly
-                                                className="form-control"
-                                                value={
-                                                    state[0].endDate
-                                                        ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
-                                                        : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
-                                                }
-                                                onClick={() => setShowCalendar(!showCalendar)}
-                                                style={{ cursor: "pointer", backgroundColor: 'rgb(214, 214, 214)' }}
-                                            />
-                                            {showCalendar && (
-                                                <div
-                                                    style={{
-                                                        position: "absolute",
-                                                        top: "40px",
-                                                        zIndex: 1000,
-                                                        background: "#fff",
-                                                        borderRadius: "8px",
-                                                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-                                                    }}
-                                                >
-                                                    <DateRange
-                                                        editableDateInputs={true}
-                                                        onChange={item => setState([item.selection])}
-                                                        moveRangeOnFirstSelection={false}
-                                                        ranges={state}
-                                                    />
-                                                </div>
-                                            )}
+
+                            <StepperPanel header="Pick-up Information">
+                                <div className="container-fluid">
+                                    <div className="row mt-4 g-3">
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">Full Name <span className="text-danger">*</span></label>
+                                            <input className="form-control" type="text" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder="Enter your full name" style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                        </div>
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">Contact Number <span className="text-danger">*</span></label>
+                                            <input className="form-control" type="tel" placeholder="Enter your contact number" value={userNumber} onChange={(e) => setUserNumber(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                        </div>
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">Email Address<span className="text-danger">*</span></label>
+                                            <input className="form-control" type="email" placeholder="Enter your email id" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
                                         </div>
                                     </div>
-                                </div>
-                                <div className="d-flex flex-column align-items-start justify-content-start mt-4 gap-2">
-                                    <label className="form-label text-start w-100">Notes (if any)</label>
-                                    <textarea className="form-control" style={{ backgroundColor: 'rgb(214, 214, 214)' }} row='10' col='10' value={userDescription} onChange={(e) => setUserDescription(e.target.value)} placeholder="Type here ....." />
-                                </div>
 
-                                <Button label="Back"
-                                    severity="secondary"
-                                    icon="pi pi-arrow-left"
-                                    className="btn btn-secondary rounded-2 mt-4"
-                                    iconPos="center"
-                                    onClick={() => { stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); }} />
+                                    <div className="row mt-4 g-3">
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">Country<span className="text-danger">*</span></label>
+                                            <Countries_selector onSelectCountry={(value) => setUserCountry(value)} value={userCountry} required />
+                                        </div>
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">State<span className="text-danger">*</span></label>
+                                            <State_selector onSelectState={(value) => setUserState(value)} value={userState} />
+                                        </div>
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">City<span className="text-danger">*</span></label>
+                                            <input className="form-control" type="text" placeholder="Enter the city name" style={{ backgroundColor: "rgb(214, 214, 214)" }} value={userCity} onChange={(e) => setUserCity(e.target.value)} required />
+                                        </div>
+                                    </div>
+
+                                    <div className="row mt-4 g-3">
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">Street Address <span className="text-danger">*</span></label>
+                                            <input className="form-control" type="text" value={streetAddress} onChange={(e) => setStreetAddress(e.target.value)} placeholder="Enter your Street Address" style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                        </div>
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">Zip Code <span className="text-danger">*</span></label>
+                                            <input className="form-control" type="number" placeholder="Enter your Zip Code" value={zipCode} onChange={(e) => setZipCode(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                        </div>
+                                        <div className="col-12 col-md-4">
+                                            <label className="form-label">Picking Period<span className="text-danger">*</span></label>
+                                            <div style={{ position: "relative", width: "100%" }}>
+                                                <input type="text" readOnly className="form-control" value={state[0].endDate ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}` : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`} onClick={() => setShowCalendar(!showCalendar)} style={{ cursor: "pointer", backgroundColor: 'rgb(214, 214, 214)' }} />
+                                                {showCalendar && (
+                                                    <div style={{ position: "absolute", top: "45px", left: "0", right: "0", zIndex: 1000, background: "#fff", borderRadius: "8px", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)" }}>
+                                                        <DateRange editableDateInputs={true} onChange={item => setState([item.selection])} moveRangeOnFirstSelection={false} ranges={state} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="row mt-4">
+                                        <div className="col-12">
+                                            <label className="form-label">Notes (if any)</label>
+                                            <textarea className="form-control" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows="4" value={userDescription} onChange={(e) => setUserDescription(e.target.value)} placeholder="Type here ....."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div className="d-flex justify-content-center mt-4">
+                                        <Button label="Back" severity="secondary" icon="pi pi-arrow-left" className="btn btn-secondary rounded-2" iconPos="center" onClick={() => { stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); }} />
+                                    </div>
+                                </div>
                             </StepperPanel>
 
-                            <StepperPanel header="Delivery Information" >
-                                <div className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5">
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Receiver Full Name <span className="text-danger">*</span></label>
+
+                            <StepperPanel header="Delivery Information">
+                                <div className="row justify-content-center mt-4 g-4">
+                                    <div className="col-md-4">
+                                        <label className="form-label">Receiver Full Name <span className="text-danger">*</span></label>
                                         <input
                                             className="form-control"
                                             type="text"
                                             value={senderName}
                                             onChange={(e) => setSenderName(e.target.value)}
-                                            placeholder="Enter Sender full name"
-                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
+                                            placeholder="Enter Receiver's full name"
+                                            required
+                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                        />
                                     </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Receiver Contact Number <span className="text-danger">*</span></label>
-                                        <input className="form-control"
+                                    <div className="col-md-4">
+                                        <label className="form-label">Receiver Contact Number <span className="text-danger">*</span></label>
+                                        <input
+                                            className="form-control"
                                             type="tel"
-                                            placeholder="Enter Sender contact number"
                                             value={senderNumber}
                                             onChange={(e) => setSenderNumber(e.target.value)}
+                                            placeholder="Enter Receiver's contact number"
+                                            required
                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            required />
+                                        />
                                     </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Receiver Email Address<span className="text-danger">*</span></label>
-                                        <input className="form-control"
+                                    <div className="col-md-4">
+                                        <label className="form-label">Receiver Email Address <span className="text-danger">*</span></label>
+                                        <input
+                                            className="form-control"
                                             type="email"
-                                            placeholder="Enter Sender email id"
                                             value={senderEmail}
                                             onChange={(e) => setSenderEmail(e.target.value)}
+                                            placeholder="Enter Receiver's email"
+                                            required
                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            required />
+                                        />
                                     </div>
                                 </div>
-                                <div className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5">
-                                    <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                        <label className="form-label text-start w-100">
-                                            Country<span className="text-danger">*</span>
-                                        </label>
+
+                                <div className="row justify-content-center mt-4 g-4">
+                                    <div className="col-md-4">
+                                        <label className="form-label">Country <span className="text-danger">*</span></label>
                                         <Countries_selector
                                             onSelectCountry={(value) => setSenderCountry(value)}
                                             value={senderCountry}
                                             required
                                         />
                                     </div>
-                                    <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                        <label className="form-label text-start w-100">
-                                            State<span className="text-danger">*</span>
-                                        </label>
+                                    <div className="col-md-4">
+                                        <label className="form-label">State <span className="text-danger">*</span></label>
                                         <State_selector
                                             onSelectState={(value) => setSenderState(value)}
                                             value={senderState}
                                         />
                                     </div>
-                                    <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                        <label className="form-label text-start w-100">
-                                            City<span className="text-danger">*</span>
-                                        </label>
+                                    <div className="col-md-4">
+                                        <label className="form-label">City <span className="text-danger">*</span></label>
                                         <input
                                             className="form-control"
                                             type="text"
-                                            placeholder="Enter the city name"
-                                            style={{ backgroundColor: "rgb(214, 214, 214)" }}
                                             value={senderCity}
                                             onChange={(e) => setSenderCity(e.target.value)}
+                                            placeholder="Enter City Name"
                                             required
+                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                         />
                                     </div>
                                 </div>
-                                <div className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5">
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Receiver Street Addess</label>
+
+                                <div className="row justify-content-center mt-4 g-4">
+                                    <div className="col-md-4">
+                                        <label className="form-label">Receiver Street Address</label>
                                         <input
                                             className="form-control"
                                             type="text"
                                             value={senderStreetAddress}
                                             onChange={(e) => setSenderStreetAddress(e.target.value)}
-                                            placeholder="Enter Sender Street Addess"
-                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
+                                            placeholder="Enter Receiver's Street Address"
+                                            required
+                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                        />
                                     </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Receiver Zip Code</label>
-                                        <input className="form-control"
+                                    <div className="col-md-4">
+                                        <label className="form-label">Receiver Zip Code</label>
+                                        <input
+                                            className="form-control"
                                             type="number"
-                                            placeholder="Enter Sender Zip Code"
                                             value={senderZipCode}
                                             onChange={(e) => setSenderZipCode(e.target.value)}
+                                            placeholder="Enter Receiver's Zip Code"
+                                            required
                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            required />
+                                        />
                                     </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Preferred Departure Date</label>
-                                        <input className="form-control"
+                                    <div className="col-md-4">
+                                        <label className="form-label">Preferred Departure Date</label>
+                                        <input
+                                            className="form-control"
                                             type="date"
                                             value={departure_date}
                                             onChange={(e) => setDeparture_date(e.target.value)}
-                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                             min={new Date().toISOString().split("T")[0]}
-                                            required />
+                                            required
+                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                        />
                                     </div>
                                 </div>
-                                <div className="d-flex flex-column align-items-start justify-content-start mt-4 gap-2">
-                                    <label className="form-label text-start w-100">Notes (if any)</label>
-                                    <textarea className="form-control" style={{ backgroundColor: 'rgb(214, 214, 214)' }} row='10' col='10' value={senderDescription} onChange={(e) => setSenderDescription(e.target.value)} placeholder="Type here ....." />
-                                </div>
-                                <Button label="Back"
-                                    severity="secondary"
-                                    icon="pi pi-arrow-left"
-                                    className="btn btn-secondary rounded-2 mt-4"
-                                    iconPos="center"
-                                    onClick={() => { stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); }} />
-                            </StepperPanel>
 
-                            <StepperPanel header="Additional Information" >
-                                <div className="d-flex flex-column align-items-center w-100 justify-content-center mt-4 gap-2">
-
-                                    <label className="text-dark mb-1">Attach any product documents (if any)</label>
-                                    <DragAndDrop
-                                        accept="application/pdf, image/jpeg"
-                                        style={{ width: '80%' }}
-                                        multiple={false}
-                                        onFileDrop={(file) => setDocument(file)}
-                                        label="Drag and drop file to upload or Select file from folder (pdf, jpeg)"
+                                <div className="mt-4">
+                                    <label className="form-label">Notes (if any)</label>
+                                    <textarea
+                                        className="form-control"
+                                        value={senderDescription}
+                                        onChange={(e) => setSenderDescription(e.target.value)}
+                                        placeholder="Type here..."
+                                        rows="4"
+                                        style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                     />
                                 </div>
-                                <Button label="Back"
-                                    severity="secondary"
-                                    icon="pi pi-arrow-left"
-                                    className="btn btn-secondary rounded-2"
-                                    iconPos="center"
-                                    onClick={() => { stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); }} />
+
+                                <div className="mt-4">
+                                    <Button
+                                        label="Back"
+                                        severity="secondary"
+                                        icon="pi pi-arrow-left"
+                                        className="btn btn-secondary rounded-2"
+                                        iconPos="center"
+                                        onClick={() => {
+                                            stepperRef.current.prevCallback();
+                                            setCurrentStep((prev) => prev - 1);
+                                        }}
+                                    />
+                                </div>
                             </StepperPanel>
+
+
+                            <StepperPanel header="Additional Information">
+                                <div className="d-flex flex-column align-items-center w-100 justify-content-center mt-4 gap-3">
+                                    <label className="text-dark fw-semibold">Attach any product documents (if any)</label>
+                                    <DragAndDrop
+                                        accept="application/pdf, image/jpeg"
+                                        style={{ width: '80%', maxWidth: '500px' }} // Ensures proper width on larger screens
+                                        multiple={false}
+                                        onFileDrop={(file) => setDocument(file)}
+                                        label="Drag & drop a file or select from folder (PDF, JPEG)"
+                                    />
+                                </div>
+                                <div className="mt-4 text-center">
+                                    <Button
+                                        label="Back"
+                                        severity="secondary"
+                                        icon="pi pi-arrow-left"
+                                        className="btn btn-secondary rounded-2"
+                                        iconPos="center"
+                                        onClick={() => {
+                                            stepperRef.current.prevCallback();
+                                            setCurrentStep((prev) => prev - 1);
+                                        }}
+                                    />
+                                </div>
+                            </StepperPanel>
+
 
                         </Stepper>
                     </div>
-                    <div className="d-flex flex-column align-items-start justify-content-start w-25 border border-3 rounded-4">
+                    <div className="d-flex flex-column align-items-start justify-content-start col-md-3 cod-12  border border-3 rounded-4">
 
                         <div className="d-flex flex-column align-items-start w-100">
                             <div className="p-3">
@@ -675,10 +652,16 @@ const Send_groupage = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <h5>Additional Information</h5>
+                                        <h5 className="mb-3">Additional Information</h5>
                                         <div className="d-flex flex-column align-items-start w-100">
-                                            <div className="d-flex justify-content-between w-100 p-2"> <span className="text-secondary">Product Doxument :</span> <span className="text-dark"> {document ? (<h6>{document.name}</h6>) : (<span>N/A</span>)}</span></div>
+                                            <div className="d-flex justify-content-between w-100 p-2">
+                                                <span className="text-secondary">Product Document:</span>
+                                                <span className="text-dark">
+                                                    {document ? <strong>{document.name}</strong> : <span>N/A</span>}
+                                                </span>
+                                            </div>
                                         </div>
+
                                     </>
                                 )}
 
@@ -755,6 +738,9 @@ const Send_groupage = () => {
                 )}
             </div>
 
+            <div className=" d-flex justify-content-center w-100">
+                <Footer />
+            </div>
         </div>
     )
 }

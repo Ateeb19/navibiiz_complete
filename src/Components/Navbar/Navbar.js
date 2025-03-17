@@ -57,24 +57,25 @@ const Navbar = () => {
     <nav className="d-flex justify-content-between align-items-center w-100 px-3 py-2"
       style={navStyle}>
 
-      <div className="d-flex justify-content-start align-items-center ms-5">
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <div
-            className="d-flex justify-content-center align-items-center rounded-circle"
-            style={{
-              width: "100%",
-              height: "100px",
-              overflow: "hidden",
-            }}
-          >
-            <img
-              src="/Images/novibiz/fulllogo_transparent.png"
-              alt="logo"
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
-          </div>
-        </Link>
-      </div>
+<div className="d-flex justify-content-start align-items-center ms-3">
+  <Link to="/" style={{ textDecoration: "none" }}>
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{
+        width: "150px", // Ensures proper scaling
+        height: "80px",  // Adjusted for mobile & desktop
+      }}
+    >
+      <img
+        src="/Images/novibiz/fulllogo_transparent_nobuffer.png"
+        alt="logo"
+        className="img-fluid"
+        style={{ maxHeight: "100%", objectFit: "contain" }} // Prevents cropping
+      />
+    </div>
+  </Link>
+</div>
+
 
 
 

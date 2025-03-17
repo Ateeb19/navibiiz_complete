@@ -307,163 +307,160 @@ const Registration = () => {
         <div className="flex justify-content-start h-100vh">
 
             <Stepper linear desabled ref={stepperRef} style={{ flexBasis: 'auto' }}>
-                <StepperPanel header="Basic Details" >
-                    <div className="flex flex-column h-12rem">
-                        <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                            <>
-
-                                <div>
+                <StepperPanel header="Basic Details">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-12">
+                                <div className="border-2 border-dashed surface-border border-round surface-ground p-3 text-center">
                                     <DragAndDrop
                                         accept="image/*"
                                         onFileDrop={handleFileDrop}
-                                        // onFileDrop={(file) => setSelectedImage(URL.createObjectURL(file))}
                                         label="Drag and drop an image here, or click to select (only one image allowed)"
                                     />
                                     {selectedImage && (
-                                        <div>
+                                        <div className="mt-3">
                                             <h4>Preview:</h4>
                                             <img
                                                 src={selectedImage}
                                                 alt="Selected"
                                                 className="rounded-circle border border-1 border-dark"
-                                                style={{ width: "150px", height: '150px', marginTop: "10px" }}
+                                                style={{ width: "150px", height: '150px' }}
                                             />
                                         </div>
                                     )}
                                 </div>
+                            </div>
+                        </div>
 
-                                <div className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5">
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Company Name <span className="text-danger">*</span></label>
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            value={companyName}
-                                            onChange={(e) => setCompanyName(e.target.value)}
-                                            placeholder="Enter the company name"
-                                            style={{ backgroundColor: ' rgb(214, 214, 214)' }} required />
-                                    </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Contect Number <span className="text-danger">*</span></label>
-                                        <input className="form-control"
-                                            type="tel"
-                                            placeholder="Enter the company number"
-                                            value={contactNumber}
-                                            onChange={(e) => setContactNumber(e.target.value)}
-                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            required />
-                                    </div>
-                                    <div className="pe-1 ps-1" style={{ width: '30%' }}>
-                                        <label className="form-label text-start w-100">Email Address<span className="text-danger">*</span></label>
-                                        <input className="form-control"
-                                            type="email"
-                                            placeholder="Enter the company email id"
-                                            value={emailAddress}
-                                            onChange={(e) => setEmailAddress(e.target.value)}
-                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                            required />
-                                    </div>
-                                </div>
+                        <div className="row mt-4">
+                            <div className="col-12 col-md-6 col-lg-4 mb-3">
+                                <label className="form-label">Company Name <span className="text-danger">*</span></label>
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    value={companyName}
+                                    onChange={(e) => setCompanyName(e.target.value)}
+                                    placeholder="Enter the company name"
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    required
+                                />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-4 mb-3">
+                                <label className="form-label">Contact Number <span className="text-danger">*</span></label>
+                                <input
+                                    className="form-control"
+                                    type="tel"
+                                    placeholder="Enter the company number"
+                                    value={contactNumber}
+                                    onChange={(e) => setContactNumber(e.target.value)}
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    required
+                                />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-4 mb-3">
+                                <label className="form-label">Email Address <span className="text-danger">*</span></label>
+                                <input
+                                    className="form-control"
+                                    type="email"
+                                    placeholder="Enter the company email"
+                                    value={emailAddress}
+                                    onChange={(e) => setEmailAddress(e.target.value)}
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    required
+                                />
+                            </div>
+                        </div>
 
-                                {locations.map((location, index) => (
-                                    <div
-                                        className="d-flex flex-md-row align-items-center justify-content-center mt-4 gap-5 position-relative"
-                                        key={index}
-                                    >
-                                        <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                            <label className="form-label text-start w-100">
-                                                Country<span className="text-danger">*</span>
-                                            </label>
-                                            <Countries_selector
-                                                onSelectCountry={(value) => handlecountry(value, index)}
-                                                label="Select the country"
-                                                value={location.country}
-                                                required
-                                            />
-                                        </div>
-                                        <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                            <label className="form-label text-start w-100">
-                                                State<span className="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={location.state}
-                                                className="form-control"
-                                                style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                                readOnly
-                                                onClick={() => toggleSelector(index)} // Show selector on click
-                                            />
-                                            {visibleSelectors[index] && (
-                                                <State_selector
-                                                    onSelectState={(value) => handlestate(value, index)} // Pass index
-                                                    value={location.state}
-                                                />
-                                            )}
-                                        </div>
-                                        <div className="pe-1 ps-1" style={{ width: "30%" }}>
-                                            <label className="form-label text-start w-100">
-                                                City<span className="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="Enter the city name"
-                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
-                                                value={location.city}
-                                                onChange={(e) => handlecity(e.target.value, index)} // Pass index
-                                                required
-                                            />
-                                        </div>
-                                        {/* Remove Button for locations added after the first one */}
-                                        {index > 0 && (
-                                            <button
-                                                className="btn btn-danger btn-sm position-absolute"
-                                                style={{ top: "-10px", right: "-10px" }}
-                                                onClick={() => handleRemoveLocation(index)}
-                                            >
-                                                Remove
-                                            </button>
-                                        )}
-                                    </div>
-                                ))}
-
-                                <div className="d-flex align-items-end justify-content-end">
-                                    <button
-                                        className="btn btn-light text-info border border-info mt-4"
-                                        onClick={handleAddLocation}
-                                    // disabled={locations.length >= 10}
-                                    >
-                                        <IoMdAddCircleOutline className="fs-4" /> Add More Location
-                                    </button>
-                                </div>
-
-                                <div className="d-flex mt-3 flex-column align-items-start">
-                                    <label className="form-label">Brief description about the company <span className="text-danger">*</span></label>
-                                    <textarea
-                                        className="form-control"
-                                        rows="5"
-                                        placeholder="Enter the company description"
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                        style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                        {locations.map((location, index) => (
+                            <div className="row mt-3 position-relative" key={index}>
+                                <div className="col-12 col-md-4 mb-3">
+                                    <label className="form-label">Country <span className="text-danger">*</span></label>
+                                    <Countries_selector
+                                        onSelectCountry={(value) => handlecountry(value, index)}
+                                        label="Select the country"
+                                        value={location.country}
                                         required
-                                    ></textarea>
+                                    />
+                                </div>
+                                <div className="col-12 col-md-4 mb-3">
+                                    <label className="form-label">State <span className="text-danger">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={location.state}
+                                        className="form-control"
+                                        style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                        readOnly
+                                        onClick={() => toggleSelector(index)}
+                                    />
+                                    {visibleSelectors[index] && (
+                                        <State_selector
+                                            onSelectState={(value) => handlestate(value, index)}
+                                            value={location.state}
+                                        />
+                                    )}
+                                </div>
+                                <div className="col-12 col-md-4 mb-3">
+                                    <label className="form-label">City <span className="text-danger">*</span></label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        placeholder="Enter the city name"
+                                        style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                        value={location.city}
+                                        onChange={(e) => handlecity(e.target.value, index)}
+                                        required
+                                    />
                                 </div>
 
-                            </>
+                                {index > 0 && (
+                                    <button
+                                        className="btn btn-danger btn-sm position-absolute"
+                                        style={{ top: "-10px", right: "-10px" }}
+                                        onClick={() => handleRemoveLocation(index)}
+                                    >
+                                        Remove
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+
+                        <div className="d-flex justify-content-end mt-3">
+                            <button
+                                className="btn btn-light text-info border border-info"
+                                onClick={handleAddLocation}
+                            >
+                                <IoMdAddCircleOutline className="fs-4" /> Add More Location
+                            </button>
+                        </div>
+
+                        <div className="row mt-4">
+                            <div className="col-12">
+                                <label className="form-label">Brief description about the company <span className="text-danger">*</span></label>
+                                <textarea
+                                    className="form-control"
+                                    rows="5"
+                                    placeholder="Enter the company description"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    required
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <div className="d-flex pt-4 justify-content-end">
+                            <Button
+                                label="Next"
+                                icon="pi pi-arrow-right"
+                                disabled={!basicDetails()}
+                                className="btn btn-primary rounded-2"
+                                iconPos="center"
+                                onClick={() => stepperRef.current.nextCallback()}
+                            />
                         </div>
                     </div>
-                    <div className="d-flex pt-4 justify-content-end">
-                        <Button
-                            label="Next"
-                            icon="pi pi-arrow-right"
-                            disabled={!basicDetails()}
-                            className="btn btn-primary rounded-2"
-                            iconPos="center"
-                            onClick={() => stepperRef.current.nextCallback()}
-                        />
-                    </div>
                 </StepperPanel>
+
 
                 <StepperPanel header="Transportation Offered">
                     <div className="flex flex-column h-12rem">
@@ -471,11 +468,11 @@ const Registration = () => {
 
                             <>
 
-                                <div className="d-flex flex-md-column align-items-center justify-content-center mt-4 gap-5">
+                                <div className="d-flex flex-column align-items-center justify-content-center mt-4 gap-5">
                                     <div className="d-flex flex-column justify-content-start align-items-start w-100">
                                         <div className="d-flex align-items-start w-100">
                                             <label>Do you offer containers to transport goods?<span className="text-danger">*</span></label>
-                                            <Form.Check // prettier-ignore
+                                            <Form.Check 
                                                 type="switch"
                                                 id="container"
                                                 checked={containerService}
@@ -529,115 +526,121 @@ const Registration = () => {
                                         )}
                                     </div>
 
-                                    <div className="d-flex align-items-start w-100">
-                                        <label>Do you ship Car ?<span className="text-danger">*</span></label>
-                                        <Form.Check // prettier-ignore
-                                            type="switch"
-                                            id="car"
-                                            checked={carService}
-                                            onChange={(e) => setCarService(e.target.checked)}
-                                        />
-                                    </div>
-                                    {carService && (
-                                        <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                                            <div className="d-flex w-100 flex-column align-items-start gap-2">
-                                                <label>Countries we ship Car to<span className="text-danger">*</span></label>
-                                                <Countries_selector onSelectCountry={(value) => handleCarCountry(value)} label='Select the Country' className="w-100" />
-                                            </div>
-                                            <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
-                                                <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                    <lable>Countries Selected</lable>
-                                                    {selectedCarCountries.map((item, index) => (
-                                                        <input
-                                                            key={index}
-                                                            type="text"
-                                                            value={item.country}
-                                                            className="form-control"
-                                                            readOnly
-                                                            style={{ backgroundColor: "rgb(214, 214, 214)" }}
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                    <lable>Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
-                                                    {selectedCarCountries.map((item, index) => (
-                                                        <div className="d-flex align-items-center gap-2 w-100" key={index}>
-                                                            <input
-                                                                type="number"
-                                                                className="form-control"
-                                                                placeholder="Enter the delivery duration in days"
-                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
-                                                                value={item.deliveryTime}
-                                                                onChange={(e) => handleDeliveryTimeChange_car(index, e.target.value)}
-                                                                required
-                                                            />
-                                                            <button
-                                                                className="btn btn-danger btn-sm ms-1"
-                                                                onClick={() => handleRemoveCarCountry(index)}
-                                                            >
-                                                                x
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
+                                    <div className="d-flex flex-column justify-content-start align-items-start w-100">
 
-                                    <div className="d-flex align-items-start w-100">
-                                        <label>Do you offer groupage to transport goods?<span className="text-danger">*</span></label>
-                                        <Form.Check // prettier-ignore
-                                            type="switch"
-                                            id="groupage"
-                                            checked={groupageService}
-                                            onChange={(e) => setGroupageService(e.target.checked)}
-                                        />
-                                    </div>
-                                    {groupageService && (
-                                        <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                                            <div className="d-flex w-100 flex-column align-items-start gap-2">
-                                                <label>Countries we ship Groupage to<span className="text-danger">*</span></label>
-                                                <Countries_selector onSelectCountry={(value) => handleGroupageCountry(value)} label="Select the Country" className="w-100" />
-                                            </div>
-                                            <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
-                                                <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                    <lable>Countries Selected</lable>
-                                                    {selectedGroupageCountries.map((item, index) => (
-                                                        <input
-                                                            key={index}
-                                                            type="text"
-                                                            value={item.country}
-                                                            className="form-control"
-                                                            readOnly
-                                                            style={{ backgroundColor: "rgb(214, 214, 214)" }}
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                    <lable>Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
-                                                    {selectedGroupageCountries.map((item, index) => (
-                                                        <div className="d-flex align-items-center gap-2 w-100" key={index}>
-                                                            <input
-                                                                type="number"
-                                                                className="form-control"
-                                                                placeholder="Enter the delivery duration in days"
-                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
-                                                                value={item.deliveryTime}
-                                                                onChange={(e) => handleDeliveryTimeChange_groupage(index, e.target.value)}
-                                                                required
-                                                            />
-                                                            <button
-                                                                className="btn btn-danger btn-sm ms-1"
-                                                                onClick={() => handleRemoveGroupageCountry(index)}
-                                                            >
-                                                                x
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
+                                        <div className="d-flex align-items-start w-100">
+                                            <label>Do you ship Car ?<span className="text-danger">*</span></label>
+                                            <Form.Check // prettier-ignore
+                                                type="switch"
+                                                id="car"
+                                                checked={carService}
+                                                onChange={(e) => setCarService(e.target.checked)}
+                                            />
                                         </div>
-                                    )}
+                                        {carService && (
+                                            <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                                                <div className="d-flex w-100 flex-column align-items-start gap-2">
+                                                    <label>Countries we ship Car to<span className="text-danger">*</span></label>
+                                                    <Countries_selector onSelectCountry={(value) => handleCarCountry(value)} label='Select the Country' className="w-100" />
+                                                </div>
+                                                <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
+                                                    <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
+                                                        <lable>Countries Selected</lable>
+                                                        {selectedCarCountries.map((item, index) => (
+                                                            <input
+                                                                key={index}
+                                                                type="text"
+                                                                value={item.country}
+                                                                className="form-control"
+                                                                readOnly
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
+                                                        <lable>Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
+                                                        {selectedCarCountries.map((item, index) => (
+                                                            <div className="d-flex align-items-center gap-2 w-100" key={index}>
+                                                                <input
+                                                                    type="number"
+                                                                    className="form-control"
+                                                                    placeholder="Enter the delivery duration in days"
+                                                                    style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                    value={item.deliveryTime}
+                                                                    onChange={(e) => handleDeliveryTimeChange_car(index, e.target.value)}
+                                                                    required
+                                                                />
+                                                                <button
+                                                                    className="btn btn-danger btn-sm ms-1"
+                                                                    onClick={() => handleRemoveCarCountry(index)}
+                                                                >
+                                                                    x
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                        <div className="d-flex align-items-start w-100">
+                                            <label>Do you offer groupage to transport goods?<span className="text-danger">*</span></label>
+                                            <Form.Check // prettier-ignore
+                                                type="switch"
+                                                id="groupage"
+                                                checked={groupageService}
+                                                onChange={(e) => setGroupageService(e.target.checked)}
+                                            />
+                                        </div>
+                                        {groupageService && (
+                                            <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                                                <div className="d-flex w-100 flex-column align-items-start gap-2">
+                                                    <label>Countries we ship Groupage to<span className="text-danger">*</span></label>
+                                                    <Countries_selector onSelectCountry={(value) => handleGroupageCountry(value)} label="Select the Country" className="w-100" />
+                                                </div>
+                                                <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
+                                                    <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
+                                                        <lable>Countries Selected</lable>
+                                                        {selectedGroupageCountries.map((item, index) => (
+                                                            <input
+                                                                key={index}
+                                                                type="text"
+                                                                value={item.country}
+                                                                className="form-control"
+                                                                readOnly
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
+                                                        <lable>Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
+                                                        {selectedGroupageCountries.map((item, index) => (
+                                                            <div className="d-flex align-items-center gap-2 w-100" key={index}>
+                                                                <input
+                                                                    type="number"
+                                                                    className="form-control"
+                                                                    placeholder="Enter the delivery duration in days"
+                                                                    style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                    value={item.deliveryTime}
+                                                                    onChange={(e) => handleDeliveryTimeChange_groupage(index, e.target.value)}
+                                                                    required
+                                                                />
+                                                                <button
+                                                                    className="btn btn-danger btn-sm ms-1"
+                                                                    onClick={() => handleRemoveGroupageCountry(index)}
+                                                                >
+                                                                    x
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
 
                                 </div>
 
