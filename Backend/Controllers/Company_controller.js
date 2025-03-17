@@ -382,30 +382,41 @@ const Add_New_country = (req, res) => {
 }
 
 
-const display_company = (req, res) => {
-    db.query('SELECT * FROM companies_info', async (err, result1) => {
-        if (err) {
-            return res.json({ message: `Error in database-: ${err}`, status: false });
-        }
-        try {
-            for (const element of result1) {
-                const name = `company_${element.id}`;
+const display_company = async (req, res) => {
+    try {
+        // Fetch all companies
+        const result1 = await new Promise((resolve, reject) => {
+            db.query('SELECT * FROM companies_info', (err, data) => {
+                if (err) return reject(err);
+                resolve(data);
+            });
+        });
+
+        // Fetch countries for each company
+        for (const element of result1) {
+            const name = `company_${element.id}`;
+
+            try {
                 const countries = await new Promise((resolve, reject) => {
-                    db.query(`SELECT * FROM ${name}`, (err, data) => {
-                        if (err) {
-                            return reject(err);
-                        }
+                    db.query(`SELECT * FROM \`${name}\``, (err, data) => {
+                        if (err) return reject(err);
                         resolve(data);
                     });
                 });
                 element.Countries = countries;
+            } catch (err) {
+                console.error(`Error fetching countries for ${name}:`, err);
+                element.Countries = []; // Set to empty array on error
             }
-            res.json({ message: result1, status: true });
-        } catch (error) {
-            res.json({ message: 'Error in database during nested queries', status: false });
         }
-    });
-}
+
+        res.json({ message: result1, status: true });
+    } catch (error) {
+        console.error('Database Error:', error);
+        res.json({ message: `Error in database: ${error.message}`, status: false });
+    }
+};
+
 module.exports = {
     Company_Register,
     Update_companyName,
