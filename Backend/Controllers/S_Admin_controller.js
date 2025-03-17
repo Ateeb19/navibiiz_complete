@@ -11,7 +11,7 @@ const Display_All_company = (req, res) => {
                 }
                 const companyDataPromises = companies.map((company) => {
                     return new Promise((resolve) => {
-                        db.query(`SELECT * FROM ??`, [company.company_name + '_' + company.id], (err, tableData) => {
+                        db.query(`SELECT * FROM company_${company.id}`, (err, tableData) => {
                             if (err) {
                                 console.error(`Error fetching data for ${company.company_name}:`, err);
                                 resolve({ ...company, tableData: [], error: "Error fetching table data" });
@@ -25,7 +25,6 @@ const Display_All_company = (req, res) => {
                     .then((companiesWithTableData) => {
                         res.json({
                             message: "Data fetched successfully",
-                            // data: 'hello',
                             data: companiesWithTableData,
                         });
                     })

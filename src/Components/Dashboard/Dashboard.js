@@ -171,7 +171,7 @@ const Dashboard = () => {
           Authorization: token,
         }
       }).then((response) => {
-        // console.log("Data fetched successfully:", response.data);
+        console.log("Data fetched successfully:", response.data);
         setCompanyData(response.data.data);
       }).catch((error) => {
         if (error.response && error.response.status === 403) {
@@ -223,7 +223,7 @@ const Dashboard = () => {
     if (userConfirmed) {
       alert(`Deleting ${company.company_name}`);
       if (userRole === 'Sadmin') {
-        axios.delete(`${port}/s_admin/delete_compnay/${company.company_name}_${company.id}`, {
+        axios.delete(`${port}/s_admin/delete_compnay/company_${company.id}`, {
           headers: {
             Authorization: token,
           }
@@ -234,7 +234,7 @@ const Dashboard = () => {
         );
       }
       if (userRole === 'admin') {
-        axios.delete(`${port}/admin/delete_compnay/${company.company_name}_${company.id}`, {
+        axios.delete(`${port}/admin/delete_compnay/'company'_${company.id}`, {
           headers: {
             Authorization: token,
           }

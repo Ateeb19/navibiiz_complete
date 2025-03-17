@@ -166,7 +166,7 @@ const Company_Register = (req, res) => {
                     } else {
                         if (sqlData.transportation.containerService === true) {
                             sqlData.transportation.selectedContainerCountries.map((country) => {
-                                db.query('INSERT INTO ' + sqlData.companyName + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'container' }, (err, result001) => {
+                                db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'container' }, (err, result001) => {
                                     if (err) {
                                         console.log('error in cpmanyName table', err);
                                     }
@@ -176,7 +176,7 @@ const Company_Register = (req, res) => {
                         }
                         if (sqlData.transportation.carService === true) {
                             sqlData.transportation.selectedCarCountries.map((country) => {
-                                db.query('INSERT INTO ' + sqlData.companyName + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'car' }, (err, result002) => {
+                                db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'car' }, (err, result002) => {
                                     if (err) {
                                         console.log('error in cpmanyName table', err);
                                     }
@@ -186,7 +186,7 @@ const Company_Register = (req, res) => {
                         }
                         if (sqlData.transportation.groupageService === true) {
                             sqlData.transportation.selectedGroupageCountries.map((country) => {
-                                db.query('INSERT INTO ' + sqlData.companyName + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'groupage' }, (err, result003) => {
+                                db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'groupage' }, (err, result003) => {
                                     if (err) {
                                         console.log('error in cpmanyName table', err);
                                     }
