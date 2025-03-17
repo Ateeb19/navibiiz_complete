@@ -385,7 +385,7 @@ const Add_New_country = (req, res) => {
 const display_company = (req, res) => {
     db.query('SELECT * FROM companies_info', async (err, result1) => {
         if (err) {
-            return res.json({ message: 'Error in database', status: false });
+            return res.json({ message: `Error in database-: ${err}`, status: false });
         }
         try {
             for (const element of result1) {
