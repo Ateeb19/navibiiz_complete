@@ -13,21 +13,21 @@ const transporter = nodemailer.createTransport({
     port: 587, // Use 587 instead of 465
     secure: false, // Important! 587 does NOT use implicit TLS
     auth: {
-      user: "info@novibiz.com",
-      pass: "Novibiz*2025",
+        user: "info@novibiz.com",
+        pass: "Novibiz*2025",
     },
     tls: {
-      rejectUnauthorized: false, // Prevents strict TLS rejection
+        rejectUnauthorized: false, // Prevents strict TLS rejection
     },
-  });
+});
 
-  transporter.verify((error, success) => {
+transporter.verify((error, success) => {
     if (error) {
-      console.log('SMTP Connection Error:', error);
+        console.log('SMTP Connection Error:', error);
     } else {
-      console.log('SMTP Server is ready to send emails.');
+        console.log('SMTP Server is ready to send emails.');
     }
-  });
+});
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -250,7 +250,7 @@ const delete_groupage = (req, res) => {
 
 //show all groupage user
 const show_all_groupage = (req, res) => {
-    db.query('SELECT id, product_name, product_type, p_weight, p_height, p_length, p_width, sender_country, sender_description, receiver_country, img01, created_at, pickup_date FROM groupage', (err, result) => {
+    db.query('SELECT id, product_name, product_type, p_weight, p_height, p_length, p_width, sender_country, sender_state, sender_city, sender_zipcode, receiver_country, receiver_state, receiver_city, sender_description, RIGHT(sender_contact, 4) AS sender_contact, RIGHT(receiver_contact, 4) AS receiver_contact, img01, created_at, pickup_date FROM groupage', (err, result) => {
         if (err) {
             res.json({ message: 'error in database', status: false });
         } else {
@@ -269,7 +269,7 @@ const create_offer = (req, res) => {
             res.json({ message: 'error in database', status: false });
         } else {
             if (result.length === 0) {
-                db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, expeted_date: data.expected_date,accepted: 0, status: 'pending' }, (err, result) => {
+                db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, expeted_date: data.expected_date, accepted: 0, status: 'pending' }, (err, result) => {
                     if (err) {
                         console.log(err, '12')
                         res.json({ message: 'error in database', status: false });
@@ -281,7 +281,7 @@ const create_offer = (req, res) => {
                             }
                             else {
                                 res.json({ message: 'Data inserted successfully', status: true });
-                                console.log('email',result[0].created_by)
+                                console.log('email', result[0].created_by)
                                 transporter.sendMail({
                                     from: '"Novibiz" info@novibiz.com',
                                     to: result[0].created_by,
@@ -349,7 +349,7 @@ const show_offers_user = (req, res) => {
 
             res.json({ message: mergedData, status: true });
         });
-    }); 
+    });
 }
 
 //delete the offer of the user
@@ -366,7 +366,7 @@ const delete_offer_user = (req, res) => {
 }
 
 //return the groupage data info
-const groupage_info = (req, res) => {   
+const groupage_info = (req, res) => {
     const id = req.params.id;
     db.query('SELECT * FROM groupage WHERE id = ?', id, (err, result) => {
         if (err) {

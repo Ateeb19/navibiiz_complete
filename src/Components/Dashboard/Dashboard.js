@@ -585,7 +585,12 @@ const Dashboard = () => {
         Authorization: token,
       }
     }).then((response) => {
-      setOffers(response.data.message);
+      if (response.data.status === true) {
+        setOffers(response.data.message);
+      } else {
+        setOffers([]);
+      }
+      console.log(response.data, 'offers');
     }).catch((err) => { console.log(err); });
   }
 
@@ -667,7 +672,7 @@ const Dashboard = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedItem, setSelectedItem] = useState('Dashboard');
 
-   const handleSelect = (item) => {
+    const handleSelect = (item) => {
       // console.log("Selected Item:", item);
       setSelectedItem(item);
       setShowMenu(false);
@@ -1687,34 +1692,34 @@ const Dashboard = () => {
         {activeSection === "companies" && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                    {isMobile && (
-                      <div className="w-100 d-flex justify-content-start">
-                        <Menu />
-                      </div>
-                    )}
-                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
-                      <div className="p-3">
-                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                      </div>
-                      <div className="border-start p-2 border-3 border-dark">
-                        <Dropdown style={{ width: '13rem' }}>
-                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu style={{ width: '13rem' }}>
-                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                              <label><strong>Email-:</strong> {userInfo.email}</label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                    </div>
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
                   </div>
+                )}
+                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                  <div className="p-3">
+                    <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                  </div>
+                  <div className="border-start p-2 border-3 border-dark">
+                    <Dropdown style={{ width: '13rem' }}>
+                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu style={{ width: '13rem' }}>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                          <label><strong>Email-:</strong> {userInfo.email}</label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </div>
+              </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
@@ -1945,34 +1950,34 @@ const Dashboard = () => {
         {activeSection === "offers" && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                    {isMobile && (
-                      <div className="w-100 d-flex justify-content-start">
-                        <Menu />
-                      </div>
-                    )}
-                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
-                      <div className="p-3">
-                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                      </div>
-                      <div className="border-start p-2 border-3 border-dark">
-                        <Dropdown style={{ width: '13rem' }}>
-                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu style={{ width: '13rem' }}>
-                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                              <label><strong>Email-:</strong> {userInfo.email}</label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                    </div>
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
                   </div>
+                )}
+                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                  <div className="p-3">
+                    <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                  </div>
+                  <div className="border-start p-2 border-3 border-dark">
+                    <Dropdown style={{ width: '13rem' }}>
+                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu style={{ width: '13rem' }}>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                          <label><strong>Email-:</strong> {userInfo.email}</label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </div>
+              </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
@@ -2406,34 +2411,34 @@ const Dashboard = () => {
         {activeSection === "payments" && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                    {isMobile && (
-                      <div className="w-100 d-flex justify-content-start">
-                        <Menu />
-                      </div>
-                    )}
-                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
-                      <div className="p-3">
-                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                      </div>
-                      <div className="border-start p-2 border-3 border-dark">
-                        <Dropdown style={{ width: '13rem' }}>
-                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu style={{ width: '13rem' }}>
-                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                              <label><strong>Email-:</strong> {userInfo.email}</label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                    </div>
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
                   </div>
+                )}
+                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                  <div className="p-3">
+                    <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                  </div>
+                  <div className="border-start p-2 border-3 border-dark">
+                    <Dropdown style={{ width: '13rem' }}>
+                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu style={{ width: '13rem' }}>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                          <label><strong>Email-:</strong> {userInfo.email}</label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </div>
+              </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
@@ -2506,34 +2511,34 @@ const Dashboard = () => {
         {activeSection === "notification" && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                    {isMobile && (
-                      <div className="w-100 d-flex justify-content-start">
-                        <Menu />
-                      </div>
-                    )}
-                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
-                      <div className="p-3">
-                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                      </div>
-                      <div className="border-start p-2 border-3 border-dark">
-                        <Dropdown style={{ width: '13rem' }}>
-                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu style={{ width: '13rem' }}>
-                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                              <label><strong>Email-:</strong> {userInfo.email}</label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                    </div>
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
                   </div>
+                )}
+                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                  <div className="p-3">
+                    <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                  </div>
+                  <div className="border-start p-2 border-3 border-dark">
+                    <Dropdown style={{ width: '13rem' }}>
+                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu style={{ width: '13rem' }}>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                          <label><strong>Email-:</strong> {userInfo.email}</label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </div>
+              </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
@@ -2626,34 +2631,34 @@ const Dashboard = () => {
         {activeSection === "users" && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                    {isMobile && (
-                      <div className="w-100 d-flex justify-content-start">
-                        <Menu />
-                      </div>
-                    )}
-                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
-                      <div className="p-3">
-                        <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
-                      </div>
-                      <div className="border-start p-2 border-3 border-dark">
-                        <Dropdown style={{ width: '13rem' }}>
-                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu style={{ width: '13rem' }}>
-                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                              <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                              <label><strong>Email-:</strong> {userInfo.email}</label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                              <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                    </div>
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
                   </div>
+                )}
+                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                  <div className="p-3">
+                    <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                  </div>
+                  <div className="border-start p-2 border-3 border-dark">
+                    <Dropdown style={{ width: '13rem' }}>
+                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu style={{ width: '13rem' }}>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                          <label><strong>Email-:</strong> {userInfo.email}</label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
+                          <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </div>
+              </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">

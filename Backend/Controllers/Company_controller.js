@@ -195,7 +195,7 @@ const Company_Register = (req, res) => {
                             });
                         }
                         if (req.user.role === 'user') {
-                            db.query('UPDATE users SET role = ? WHERE email = ?', ['admin', req.user.useremail], (err, result) => {
+                            db.query('UPDATE users SET role = ?, company = ? WHERE email = ?', ['admin', 'yes', req.user.useremail], (err, result) => {
                                 if (err) {
                                     console.log(err);
                                 } else {

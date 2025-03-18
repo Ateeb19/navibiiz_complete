@@ -31,7 +31,6 @@ const Offers = () => {
             console.log(err);
         });
     }, []);
-
     const getDaysAgo = (createdAt) => {
         const createdDate = new Date(createdAt);
         const currentDate = new Date();
@@ -302,7 +301,7 @@ const Offers = () => {
                                             ><SiAnytype /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Country</span>
-                                                <h6>XXXX</h6>
+                                                <h6>{groupage_detail.sender_country}</h6>
                                             </div>
                                         </div>
 
@@ -318,7 +317,7 @@ const Offers = () => {
                                             ><FaWeightScale /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">State</span>
-                                                <h6>XXXX</h6>
+                                                <h6>{groupage_detail.sender_state}</h6>
                                             </div>
                                         </div>
 
@@ -334,7 +333,7 @@ const Offers = () => {
                                             ><RiExpandHeightFill /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">City</span>
-                                                <h6>XXXX</h6>
+                                                <h6>{groupage_detail.sender_city}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -351,7 +350,7 @@ const Offers = () => {
                                             ><FaRuler /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Zip Code</span>
-                                                <h6>XXXXXX</h6>
+                                                <h6>{groupage_detail.sender_zipcode}</h6>
                                             </div>
                                         </div>
 
@@ -403,7 +402,7 @@ const Offers = () => {
                                             ><FaWeightScale /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Contact Number </span>
-                                                <h6>XXXX</h6>
+                                                <h6>{groupage_detail.receiver_contact}</h6>
                                             </div>
                                         </div>
 
@@ -436,7 +435,7 @@ const Offers = () => {
                                             ><FaRuler /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Country</span>
-                                                <h6>XXXXXX</h6>
+                                                <h6>{groupage_detail.receiver_country}</h6>
                                             </div>
                                         </div>
 
@@ -452,7 +451,7 @@ const Offers = () => {
                                             ><RiExpandWidthFill /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">State</span>
-                                                <h6>XXXXX</h6>
+                                                <h6>{groupage_detail.receiver_state}</h6>
                                             </div>
                                         </div>
 
@@ -468,7 +467,7 @@ const Offers = () => {
                                             ><RiExpandWidthFill /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">City</span>
-                                                <h6>XXXXX</h6>
+                                                <h6>{groupage_detail.receiver_city}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -504,7 +503,7 @@ const Offers = () => {
                                             ><FaWeightScale /></div>
                                             <div className="d-flex flex-column align-items-start gap-2">
                                                 <span className="text-secondary">Contact Number </span>
-                                                <h6>XXXX</h6>
+                                                <h6>{groupage_detail.sender_contact}</h6>
                                             </div>
                                         </div>
 

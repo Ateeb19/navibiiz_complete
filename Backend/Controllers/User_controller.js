@@ -27,7 +27,7 @@ const Register = (req, res) => {
                     res.json({ message: "password must be of 8 characters", status: false });
                 } else {
                     const hash = await bcrypt.hash(password, 8);
-                    db.query('INSERT INTO users SET ?', { name: name, email: email, password: hash, role: "user" }, (err, result) => {
+                    db.query('INSERT INTO users SET ?', { name: name, email: email, password: hash, role: "user", company: 'no' }, (err, result) => {
                         if (err) {
                             res.json({ message: "error inserting data", err })
                         } else {

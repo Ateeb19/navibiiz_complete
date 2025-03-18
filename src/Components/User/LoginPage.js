@@ -129,12 +129,9 @@ const LoginPage = () => {
       style={{ backgroundImage: 'url(/Images/loginBg.jpg)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="d-flex align-items-center justify-content-end" style={{ height: "100vh" }}>
         <div className="bg-light" style={{ width: "100%", maxWidth: "40%", height: "100vh" }}>
-          <div className=" d-flex justify-content-start">
-            <Link to='/' className="btn" style={{ textDecoration: 'none', color: 'white', backgroundColor: 'tomato', padding: '0.2rem 1rem', margin: '0.5rem 2rem' }} ><h2>Home</h2></Link>
-          </div>
-          <div className="ps-5 pt-1 pe-2 d-flex flex-column align-items-start w-100">
+          <div className="ps-5 pt-1 pe-2 d-flex flex-column align-items-start w-100 mt-4">
             <div className="d-flex align-items-start mb-1">
-              <img src="/Images/novibiz/icononly_transparent_nobuffer.png" alt="logo" style={{ width: "50px", height: "50px" }} />
+              <Link to='/'><img src="/Images/novibiz/icononly_transparent_nobuffer.png" alt="logo" style={{ width: "50px", height: "50px" }} /></Link>
             </div>
             <div className="d-flex flex-column align-items-start">
               <h2>Welcome!</h2>
