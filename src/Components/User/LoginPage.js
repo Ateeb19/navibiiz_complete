@@ -66,6 +66,7 @@ const LoginPage = () => {
         if (response.data.role === 'Sadmin' || response.data.role === 'admin') {
           navigate('/dashboard');
         } else {
+          localStorage.setItem("userType", selected);
           navigate('/');
         }
       } catch (err) {
@@ -120,6 +121,8 @@ const LoginPage = () => {
     setShow('password');
   }
 
+  const [selected, setSelected] = useState("individual");
+
 
   return (
     <div className="container-fluid vh-100 p-0"
@@ -127,16 +130,40 @@ const LoginPage = () => {
       <div className="d-flex align-items-center justify-content-end" style={{ height: "100vh" }}>
         <div className="bg-light" style={{ width: "100%", maxWidth: "40%", height: "100vh" }}>
           <div className=" d-flex justify-content-start">
-            <Link to='/' className="btn" style={{textDecoration:'none', color:'white', backgroundColor:'tomato', padding: '0.2rem 1rem', margin:'0.5rem 2rem'}} ><h2>Home</h2></Link>
+            <Link to='/' className="btn" style={{ textDecoration: 'none', color: 'white', backgroundColor: 'tomato', padding: '0.2rem 1rem', margin: '0.5rem 2rem' }} ><h2>Home</h2></Link>
           </div>
-          <div className="ps-5 pt-5 pe-2 d-flex flex-column align-items-start w-100">
-            <div className="d-flex align-items-start mb-4">
-              <h2>Logo</h2>
+          <div className="ps-5 pt-1 pe-2 d-flex flex-column align-items-start w-100">
+            <div className="d-flex align-items-start mb-1">
+              <img src="/Images/novibiz/icononly_transparent_nobuffer.png" alt="logo" style={{ width: "50px", height: "50px" }} />
             </div>
             <div className="d-flex flex-column align-items-start">
               <h2>Welcome!</h2>
-              <label className="mt-1 text-secondary">Enter your details below to sign <span>{isSignup ? 'up' : 'in'}</span></label>
+              <label className="text-secondary">Enter your details below to sign <span>{isSignup ? 'up' : 'in'}</span></label>
             </div>
+
+
+            <div className="w-75">
+              <>
+                <div className="d-flex align-items-start justify-content-between p-2 ps-4 pe-4 w-100 border rounded-5">
+                  <div
+                    className={'border rounded-5 p-2'}
+                    style={{ cursor: "pointer", backgroundColor: selected === "individual" ? "tomato" : "", color: selected === "individual" ? "white" : "" }}
+                    onClick={() => setSelected("individual")}
+                  >
+                    <strong onClick={() => setSelected('individual')}>As an individual</strong>
+                  </div>
+
+                  <div
+                    className={'border rounded-5 p-2'}
+                    style={{ cursor: "pointer", backgroundColor: selected === "company" ? "tomato" : "", color: selected === "company" ? "white" : "" }}
+                    onClick={() => setSelected("company")}
+                  >
+                    <strong onClick={() => setSelected('company')}>As a company</strong>
+                  </div>
+                </div>
+              </>
+            </div>
+
 
             <form onSubmit={handleOnSubmit_up} className="w-100">
               <div className="d-flex flex-column align-items-start">
@@ -146,7 +173,7 @@ const LoginPage = () => {
                     <input type="text"
                       onChange={handleChange_up}
                       name="name"
-                      placeholder="User Name"
+                      placeholder={selected === 'individual' ? 'User Name' : 'Company Name'}
                       required
                       className="form-control w-100 mb-3" style={{ backgroundColor: "rgba(0, 52, 197, 0.21)" }} />
                   </>
@@ -158,7 +185,7 @@ const LoginPage = () => {
                 <input type="email"
                   onChange={handleChange_up}
                   name="email"
-                  placeholder="User Email"
+                  placeholder={selected === 'individual' ? 'User Email' : 'Company Email'}
                   required
                   className="form-control w-100 mb-3" style={{ backgroundColor: "rgba(0, 52, 197, 0.21)" }} />
 
