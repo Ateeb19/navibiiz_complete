@@ -38,15 +38,32 @@ const Navbar = () => {
     };
     const userType = localStorage.getItem("userType");
     if (userType === "company") {
-      setIsVisible(true); 
+      setIsVisible(true);
     }
     fetchToken();
   }, [token]);
 
+  const [userInfo, setUserInfo] = useState('');
+  useEffect(() => {
+    if (!token) {
+      navigate('/');
+    }
+    if (userRole !== 'admin' && userRole !== 'Sadmin' && userRole !== 'user') {
+      navigate('/');
+    } else {
+      axios.get(`${port}/user/display_profile`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        setUserInfo(response.data.message);
+      }).catch((err) => { console.log(err) });
+    }
+  }, [userRole]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const handleClose = () => {setIsVisible(false); localStorage.setItem("userType", '')}
+  const handleClose = () => { setIsVisible(false); localStorage.setItem("userType", '') }
   const location = useLocation();
   const navStyle = {
     backgroundColor: location.pathname === '/dashboard' ? '#010037' : '#0044BC', // Blue for '/' and Dark Blue for '/dashboard'
@@ -104,11 +121,16 @@ const Navbar = () => {
                 <BsSendFill /> Send through groupage
               </button>
             </Link>
-            <Link to="/">
-              <button className="btn text-light m-1" onClick={() => setIsVisible(true)} style={{ fontSize: "1rem", backgroundColor: "tomato" }}>
-                Register Your Company
-              </button>
-            </Link>
+            {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
+              <>
+                <Link to="/">
+                  <button className="btn text-light m-1" onClick={() => setIsVisible(true)} style={{ fontSize: "1rem", backgroundColor: "tomato" }}>
+                    Register Your Company
+                  </button>
+                </Link>
+              </>
+            )}
+
             {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
               <Link to="/dashboard">
                 <button className="btn btn-light m-1" style={{ fontSize: "1rem", color: "tomato" }}>
@@ -154,11 +176,15 @@ const Navbar = () => {
                     <BsSendFill /> Send through groupage
                   </button>
                 </Link>
-                <Link to="/">
-                  <button className="btn text-light w-100" onClick={() => setIsVisible(true)} style={{ fontSize: "1rem", backgroundColor: "tomato" }}>
-                    Register Your Company
-                  </button>
-                </Link>
+                {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
+                  <>
+                    <Link to="/">
+                      <button className="btn text-light m-1" onClick={() => setIsVisible(true)} style={{ fontSize: "1rem", backgroundColor: "tomato" }}>
+                        Register Your Company
+                      </button>
+                    </Link>
+                  </>
+                )}
                 {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                   <Link to="/dashboard">
                     <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "tomato" }}>

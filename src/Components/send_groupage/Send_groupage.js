@@ -61,7 +61,6 @@ const Send_groupage = () => {
     const stepperRef = useRef(null);
 
     const [currentStep, setCurrentStep] = useState(1);
-    console.log(currentStep);
     useEffect(() => {
         if (!token || token.length <= 0) {
             navigate('/login')

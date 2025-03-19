@@ -31,7 +31,7 @@ const Register = (req, res) => {
                         if (err) {
                             res.json({ message: "error inserting data", err })
                         } else {
-                            const token = jwt.sign({ userid: result.insertId, username: name, useremail: email, role: 'user' }, process.env.JWT_SECRET, {
+                            const token = jwt.sign({ userid: result.insertId, username: name, useremail: email, role: 'user',company: 'no' }, process.env.JWT_SECRET, {
                                 expiresIn: "1day",
                             });
                             res.json({ message: "user regester success", status: true, role: 'user', token: token, name: name, email: email, id: result.insertId });
@@ -55,12 +55,12 @@ const login = (req, res) => {
             if (result.length > 0) {
                 const hash = await bcrypt.compare(value[1], result[0].password);
                 if (hash) {
-                    const token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role }, process.env.JWT_SECRET, {
+                    const token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role, company: result[0].company }, process.env.JWT_SECRET, {
                         expiresIn: "4day",
                     });
                     req.session.role = result[0].role;
                     req.session.email = result[0].email;
-                    res.json({ message: "user login success", status: true, role: req.session.role, token, id: result[0].id, name: result[0].name, email: result[0].email });
+                    res.json({ message: "user login success", status: true, role: req.session.role, token, id: result[0].id, name: result[0].name, email: result[0].email, company: result[0].company });
                 }
                 else {
                     res.json({ message: "email or password is wrong", status: false });
@@ -76,7 +76,7 @@ const login = (req, res) => {
 //display profile
 const display_profile = (req, res) => {
     const id = req.user.userid;
-    db.query('SELECT name, email, role FROM users WHERE id = ?', [id], (err, result) => {
+    db.query('SELECT name, email, role, company FROM users WHERE id = ?', [id], (err, result) => {
         if (err) {
             console.log(err);
             res.json({ message: "error in database", status: false });

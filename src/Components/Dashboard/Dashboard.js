@@ -19,6 +19,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import Registration from "./Registration";
+import { formatDistanceToNow } from "date-fns";
 
 
 
@@ -30,7 +31,37 @@ const Dashboard = () => {
   const userRole = localStorage.getItem('userRole');
   // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const [userInfo, setUserInfo] = useState('');
+  const [admin_notification, setAdmin_notification] = useState([]);
+  const [super_admin_notification, setSuper_admin_notification] = useState([]);
   useEffect(() => {
+    const notification = () => {
+      if (userRole === 'admin') {
+        axios.get(`${port}/notification/admin_notification`, {
+          headers: {
+            Authorization: token,
+          }
+        }).then((response) => {
+          if (response.data.status === true) {
+            setAdmin_notification(response.data.message);
+          }
+        }).catch((err) => { console.log(err) })
+      }
+      if (userRole === 'Sadmin') {
+        axios.get(`${port}/notification/SuperAdmin_notification`, {
+          headers: {
+            Authorization: token,
+          }
+        }).then((response) => {
+          if (response.data.status === true) {
+            setSuper_admin_notification(response.data.message);
+          }
+        }).catch((err) => { console.log(err) })
+      }
+    }
+    if (userRole === 'admin' || userRole === 'Sadmin') {
+      notification();
+    }
+
     if (!token) {
       navigate('/');
     }
@@ -46,6 +77,15 @@ const Dashboard = () => {
       }).catch((err) => { console.log(err) });
     }
   }, [userRole]);
+
+  const notification_groupageData = super_admin_notification.filter(
+    (item) => item.groupage_created_at && item.groupage_created_by
+  ).slice(0, 4); // Ensure only first 4 items
+
+  const notification_companyData = super_admin_notification.filter(
+    (item) => item.company_info_logo !== null && item.company_info_name !== null
+  ).slice(0, 4);
+  console.log('notfication', notification_groupageData, '\ncompany', notification_companyData);
 
 
   //edit profile
@@ -866,52 +906,66 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex mt-5 flex-row justify-content-center align-items-center">
-                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><PiShippingContainerDuotone /></div>
-                      <strong className="mt-3">20</strong>
-                      <label className="text-success fs-6">+5% Last Month</label>
-                      <label className="fs-4">Total Containers</label>
-                    </div>
-                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><BsCarFrontFill /></div>
-                      <strong className="mt-3">15</strong>
-                      <label className="text-danger fs-6">-2% Last Month</label>
-                      <label className="fs-4">Total Cars</label>
-                    </div>
-                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaTruckLoading /></div>
-                      <strong className="mt-3">25</strong>
-                      <label className="text-success fs-6">+10% Last Month</label>
-                      <label className="fs-4">Total Groupage</label>
-                    </div>
+                  <div className="row mt-5 g-3 justify-content-center">
+                    {[{ count: 20, change: "+5%", text: "Total Containers", icon: <PiShippingContainerDuotone /> },
+                    { count: 15, change: "-2%", text: "Total Cars", icon: <BsCarFrontFill /> },
+                    { count: 25, change: "+10%", text: "Total Groupage", icon: <FaTruckLoading /> }
+                    ].map((item, index) => (
+                      <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
+                        <div className="p-3 rounded-4 text-center shadow-lg w-100" style={{ maxWidth: '300px' }}>
+                          <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary mx-auto" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                            {item.icon}
+                          </div>
+                          <strong className="mt-3 d-block">{item.count}</strong>
+                          <label className={`fs-6 ${item.change.includes("+") ? "text-success" : "text-danger"}`}>{item.change} Last Month</label>
+                          <label className="fs-4 d-block">{item.text}</label>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="d-flex mt-5 flex-row justify-content-center align-items-center">
-                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '45%' }}>
-                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><BsBuildingsFill /></div>
-                      <strong className="mt-3">06</strong>
-                      <label className="text-success fs-6">+7% Last Month</label>
-                      <label className="fs-4">Companies Regestered</label>
-                    </div>
-                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '45%' }}>
-                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUsers /></div>
-                      <strong className="mt-3">40</strong>
-                      <label className="text-danger fs-6">+2% Last Month</label>
-                      <label className="fs-4">Customers Regestered</label>
-                    </div>
+                  <div className="row mt-5 g-3 justify-content-center">
+                    {[{ count: 6, change: "+7%", text: "Companies Registered", icon: <BsBuildingsFill /> },
+                    { count: 40, change: "+2%", text: "Customers Registered", icon: <FaUsers /> }
+                    ].map((item, index) => (
+                      <div key={index} className="col-12 col-sm-6 col-md-5 d-flex justify-content-center">
+                        <div className="p-3 rounded-4 text-center shadow-lg w-100" style={{ maxWidth: '350px' }}>
+                          <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary mx-auto" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                            {item.icon}
+                          </div>
+                          <strong className="mt-3 d-block">{item.count}</strong>
+                          <label className={`fs-6 ${item.change.includes("+") ? "text-success" : "text-danger"}`}>{item.change} Last Month</label>
+                          <label className="fs-4 d-block">{item.text}</label>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </>
             ) : (
               <>
                 <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
-                  <div className=" d-flex justify-content-end mt-2">
+                  <div className="d-flex flex-wrap justify-content-end align-items-center mt-2 gap-3">
+                    {isMobile && (
+                      <div className="w-100 d-flex justify-content-start">
+                        <Menu />
+                      </div>
+                    )}
                     <div className="p-2">
-                      <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+                      <button
+                        className="btn text-light d-flex align-items-center gap-2"
+                        style={{ backgroundColor: 'tomato' }}
+                        onClick={() => navigate('/send_groupage')}
+                      >
+                        <IoMdAddCircleOutline className="fs-4" />
+                        <h5 className="m-0">Create New Order</h5>
+                      </button>
                     </div>
                     <div className="p-3 pe-5">
-                      <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                      <FaBell
+                        className="fs-3 text-primary"
+                        onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false); }}
+                      />
                     </div>
                     <div className="border-start p-2 border-3 border-dark">
                       <Dropdown style={{ width: '13rem' }}>
@@ -919,18 +973,17 @@ const Dashboard = () => {
                           <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                         </Dropdown.Toggle>
                         <Dropdown.Menu style={{ width: '13rem' }}>
-                          <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          <div className="d-flex flex-column justify-content-center align-items-center gap-2 text-center">
                             <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
                             <label><strong>Email-:</strong> {userInfo.email}</label>
-                            <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                            <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                            <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                            <label><button className="btn btn-secondary btn-sm w-100">Edit Name</button></label>
+                            <label><button className="btn btn-secondary btn-sm w-100">Edit Password</button></label>
+                            <button className="btn btn-danger btn-sm mt-1 w-100" onClick={handel_logout}>Logout</button>
                           </div>
                         </Dropdown.Menu>
                       </Dropdown>
                     </div>
                   </div>
-
                   <div className="d-flex justify-content-start align-items-center mt-2 rounded-1" >
                     <div className="d-flex ps-4 w-50 justify-content-start">
                       <label className="fs-3">Hi, <strong>{userInfo.name}</strong></label>
@@ -940,27 +993,53 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex mt-5 flex-row justify-content-center align-items-center">
-                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><PiShippingContainerDuotone /></div>
+                  <div className="d-flex flex-wrap justify-content-center align-items-center mt-5 gap-4">
+                    <div className="p-3 rounded-4 d-flex flex-column justify-content-center align-items-center"
+                      style={{
+                        boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)',
+                        width: '30%',
+                        minWidth: '250px'
+                      }}
+                    >
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <PiShippingContainerDuotone />
+                      </div>
                       <strong className="mt-3">20</strong>
                       <label className="text-success fs-6">+5% Last Month</label>
                       <label className="fs-4">Total Orders</label>
                     </div>
-                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><BsCarFrontFill /></div>
+                    <div className="p-3 rounded-4 d-flex flex-column justify-content-center align-items-center"
+                      style={{
+                        boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)',
+                        width: '30%',
+                        minWidth: '250px'
+                      }}
+                    >
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <BsCarFrontFill />
+                      </div>
                       <strong className="mt-3">15</strong>
                       <label className="text-danger fs-6">-2% Last Month</label>
                       <label className="fs-4">Upcoming Pick up</label>
                     </div>
-                    <div className="ms-4 me-4 p-3 rounded-4 d-flex flex-column judtify-content-center align-items-center" style={{ boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)', width: '30%' }}>
-                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary" style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaTruckLoading /></div>
+                    <div className="p-3 rounded-4 d-flex flex-column justify-content-center align-items-center"
+                      style={{
+                        boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.5)',
+                        width: '30%',
+                        minWidth: '250px'
+                      }}
+                    >
+                      <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '5rem', height: '5rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaTruckLoading />
+                      </div>
                       <strong className="mt-3">25</strong>
                       <label className="text-success fs-6">+10% Last Month</label>
                       <label className="fs-4">Total Spending</label>
                     </div>
                   </div>
-
                 </div>
               </>
             )}
@@ -971,11 +1050,18 @@ const Dashboard = () => {
         {activeSection === 'orders' && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "80%", height: '100vh', overflow: 'auto' }}>
-              <div className=" d-flex justify-content-end mt-2">
-                <div className="p-2">
-                  <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+              {isMobile && (
+                <div className="w-100 d-flex justify-content-start">
+                  <Menu />
                 </div>
-                <div className="p-3 pe-5">
+              )}
+              <div className="d-flex flex-wrap justify-content-end align-items-center mt-2 gap-3">
+                <div className="p-2">
+                  <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}>
+                    <h5><IoMdAddCircleOutline className="fs-4" /> Create New Order</h5>
+                  </button>
+                </div>
+                <div className="p-3 pe-lg-5 pe-3">
                   <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
                 </div>
                 <div className="border-start p-2 border-3 border-dark">
@@ -988,7 +1074,7 @@ const Dashboard = () => {
                         <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
                         <label><strong>Email-:</strong> {userInfo.email}</label>
                         <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                        <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
+                        <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -996,110 +1082,132 @@ const Dashboard = () => {
                 </div>
               </div>
 
+
               <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
                 <div className="d-flex ps-4 w-100 justify-content-start">
                   <label className="fs-3"><strong>Order List</strong></label>
                 </div>
               </div>
 
-              <div className="d-flex mt-4 p-1 flex-column justify-content-start align-items-start m-5 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-                <div className="d-flex flex-row justify-contentt start align-items-start border-bottom bordre-dark w-100 mb-3">
-                  <div className="p-3 border-end">
-                    <span className="">All</span>
-                  </div>
-                  <div className="p-3 border-end">
-                    <span className="">Unpaid</span>
-                  </div>
-                  <div className="p-3 border-end">
-                    <span className="">Paid</span>
-                  </div>
-                </div>
+              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-5 rounded-1"
+  style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+  
+  {/* Filter Tabs */}
+  <div className="d-flex flex-row justify-content-start align-items-start border-bottom border-dark w-100 mb-3">
+    <div className="p-3 border-end">
+      <span>All</span>
+    </div>
+    <div className="p-3 border-end">
+      <span>Unpaid</span>
+    </div>
+    <div className="p-3 border-end">
+      <span>Paid</span>
+    </div>
+  </div>
 
-                <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3">
-                  <h5>Filter By:</h5>
-                  <div className="d-flex flex-row align-items-between justify-content-start pe-5">
-                    <div className="w-25">
-                      <input type="text" placeholder="Search by product name or order id" className="form-control"></input>
-                    </div>
-                    <div className="w-25">
-                      <Countries_selector label="Pick Up Country" bgcolor="white" />
-                    </div>
-                    <div className="w-25">
-                      <Countries_selector label="Destination Country" bgcolor="white" />
-                    </div>
-                    <div className="w-25">
-                      <div style={{ position: "relative", width: "100%" }}>
-                        <input
-                          type="text"
-                          readOnly
-                          className="form-control"
-                          value={
-                            state[0].endDate
-                              ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
-                              : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
-                          }
-                          onClick={() => setShowCalendar(!showCalendar)}
-                          style={{ cursor: "pointer" }}
-                        />
-                        {showCalendar && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "40px",
-                              zIndex: 1000,
-                              background: "#fff",
-                              borderRadius: "8px",
-                              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-                            }}
-                          >
-                            <DateRange
-                              editableDateInputs={true}
-                              onChange={item => setState([item.selection])}
-                              moveRangeOnFirstSelection={false}
-                              ranges={state}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+  {/* Filters Section */}
+  <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
+    <h5>Filter By:</h5>
+    
+    <div className="row w-100 g-2">
+      <div className="col-12 col-md-6 col-lg-3">
+        <input type="text" placeholder="Search by product name or order id" className="form-control" />
+      </div>
+      <div className="col-12 col-md-6 col-lg-3">
+        <Countries_selector label="Pick Up Country" bgcolor="white" />
+      </div>
+      <div className="col-12 col-md-6 col-lg-3">
+        <Countries_selector label="Destination Country" bgcolor="white" />
+      </div>
+      <div className="col-12 col-md-6 col-lg-3">
+        <div style={{ position: "relative", width: "100%" }}>
+          <input
+            type="text"
+            readOnly
+            className="form-control"
+            value={
+              state[0].endDate
+                ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
+                : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
+            }
+            onClick={() => setShowCalendar(!showCalendar)}
+            style={{ cursor: "pointer" }}
+          />
+          {showCalendar && (
+            <div style={{
+              position: "absolute",
+              top: "40px",
+              zIndex: 1000,
+              background: "#fff",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"
+            }}>
+              <DateRange
+                editableDateInputs={true}
+                onChange={item => setState([item.selection])}
+                moveRangeOnFirstSelection={false}
+                ranges={state}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
 
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col"><h6>Order Id</h6></th>
-                      <th scope="col"><h6>Product Name</h6></th>
-                      <th scope="col"><h6>Pick up</h6></th>
-                      <th scope="col"><h6>Delivery</h6></th>
-                      <th scope="col"><h6>Pick up Date</h6></th>
-                      <th scope="col"><h6>Payment Status</h6></th>
-                      <th scope="col"><h6>Actions</h6></th>
-                    </tr>
-                  </thead>
-                  {groupageUser ? (
-                    <tbody >
-                      {groupageUser.map((item, index) => (
-                        <tr key={index}>
-                          <td className="text-primary">#{item.id}</td>
-                          <td className="text-secondary">{item.product_name}</td>
-                          <td className="text-secondary">{item.sender_country}</td>
-                          <td className="text-secondary">{item.receiver_country}</td>
-                          <td className="text-secondary">    {item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</td>
-                          <td className="text-secondary"><span className="p-2 fw-bold" style={{ backgroundColor: item.payment_status === 'unpaid' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)', color: item.payment_status === 'unpaid' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)' }}>{item.payment_status === 'unpaid' ? ('Unpaid') : ('Paid')}</span></td>
-                          <td className="text-secondary"><button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}><FaEye /></button><button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handle_show_groupage_delete(item)} style={{ fontSize: '1.5rem' }}><MdDelete /></button></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  ) : (
-                    <tbody>
-                      <tr>
-                        <td colSpan='4' className="text-secondary">No Data</td>
-                      </tr>
-                    </tbody>
-                  )}
-                </table>
-              </div>
+  {/* Table Section */}
+  <div className="table-responsive w-100">
+    <table className="table">
+      <thead>
+        <tr>
+          <th scope="col"><h6>Order Id</h6></th>
+          <th scope="col"><h6>Product Name</h6></th>
+          <th scope="col"><h6>Pick up</h6></th>
+          <th scope="col"><h6>Delivery</h6></th>
+          <th scope="col"><h6>Pick up Date</h6></th>
+          <th scope="col"><h6>Payment Status</h6></th>
+          <th scope="col"><h6>Actions</h6></th>
+        </tr>
+      </thead>
+      {groupageUser && groupageUser.length > 0 ? (
+        <tbody>
+          {groupageUser.map((item, index) => (
+            <tr key={index}>
+              <td className="text-primary">#{item.id}</td>
+              <td className="text-secondary">{item.product_name}</td>
+              <td className="text-secondary">{item.sender_country}</td>
+              <td className="text-secondary">{item.receiver_country}</td>
+              <td className="text-secondary">{item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</td>
+              <td className="text-secondary">
+                <span className="p-2 fw-bold" style={{
+                  backgroundColor: item.payment_status === 'unpaid' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)',
+                  color: item.payment_status === 'unpaid' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)'
+                }}>
+                  {item.payment_status === 'unpaid' ? 'Unpaid' : 'Paid'}
+                </span>
+              </td>
+              <td className="text-secondary">
+                <button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}>
+                  <FaEye />
+                </button>
+                <button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handle_show_groupage_delete(item)} style={{ fontSize: '1.5rem' }}>
+                  <MdDelete />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      ) : (
+        <tbody>
+          <tr>
+            <td colSpan='7' className="text-secondary text-center">No Data Available</td>
+          </tr>
+        </tbody>
+      )}
+    </table>
+  </div>
+</div>
+
             </div>
           </>
         )}
@@ -1725,35 +1833,58 @@ const Dashboard = () => {
                 <div className="d-flex ps-4 w-50 justify-content-start">
                   <label className="fs-3"><strong>Comapnies List</strong></label>
                 </div>
-                <div className="w-50 pe-3 d-flex justify-content-end">
-                  <button className="btn btn-primary btn-sm text-light fs-5 ps-3 pe-3" onClick={() => setShowRegisterPopup(true)}><IoIosAddCircleOutline /> Add New Comapny</button>
-                </div>
+                {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
+                  <>
+                    <div className="w-50 pe-3 d-flex justify-content-end">
+                      <button className="btn btn-primary btn-sm text-light fs-5 ps-3 pe-3" onClick={() => setShowRegisterPopup(true)}><IoIosAddCircleOutline /> Add New Comapny</button>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="d-flex mt-3 p-3 pt-1 flex-column justify-content-start align-items-start m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-                <div className="d-flex w-50 justify-content-start">
-                  <h4>Filters By:</h4>
-                </div>
-                <div className="w-50 pe-3 d-flex justify-content-start align-items-start w-100">
-                  <div className="d-flex flex-column align-items-start" style={{ width: '33%' }}>
-                    <label className="text-secondary fs-5">Company Name</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 w-75" style={{ backgroundColor: 'rgb(214, 214, 214)' }}><input type="text" className="form-control mt-1" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Search here..." value={filter_companyName} onChange={(e) => setFilter_companyName(e.target.value)} /><div className="fs-4 ms-1 text-primary p-0"><FaSearch /> </div></div>
-                  </div>
-                  <div className="d-flex flex-column align-items-start" style={{ width: '33%' }}>
-                    <label className="text-secondary fs-5">Destination Countries</label>
-                    <div className="p-1 rounded-3 mt-1 w-75" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <Countries_selector onSelectCountry={handleSelectCountry} />
+                <div className="d-flex flex-wrap w-100 justify-content-between align-items-center">
+                  <h4 className="col-12 col-md-2">Filters By:</h4>
+                  <div className="row w-100">
+                    {/* Company Name Filter */}
+                    <div className="col-12 col-md-4 d-flex flex-column align-items-start">
+                      <label className="text-secondary fs-5">Company Name</label>
+                      <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
+                        <input
+                          type="text"
+                          className="form-control mt-1"
+                          style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                          placeholder="Search here..."
+                          value={filter_companyName}
+                          onChange={(e) => setFilter_companyName(e.target.value)}
+                        />
+                        <div className="fs-4 ms-1 text-primary p-0"><FaSearch /></div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="d-flex flex-column align-items-start" style={{ width: '33%' }}>
-                    <label className="text-secondary fs-5">Services Offered</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 w-75" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <Form.Select value={filter_selectedService} onChange={(e) => setFilter_selectedService(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                        <option value="">Select the modes</option>
-                        <option value="container">Container</option>
-                        <option value="groupage">Groupage</option>
-                        <option value="car">Car</option>
-                      </Form.Select>
+
+                    {/* Destination Countries Filter */}
+                    <div className="col-12 col-md-4 d-flex flex-column align-items-start">
+                      <label className="text-secondary fs-5">Destination Countries</label>
+                      <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
+                        <Countries_selector onSelectCountry={handleSelectCountry} />
+                      </div>
+                    </div>
+
+                    {/* Services Offered Filter */}
+                    <div className="col-12 col-md-4 d-flex flex-column align-items-start">
+                      <label className="text-secondary fs-5">Services Offered</label>
+                      <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
+                        <Form.Select
+                          value={filter_selectedService}
+                          onChange={(e) => setFilter_selectedService(e.target.value)}
+                          style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                        >
+                          <option value="">Select the modes</option>
+                          <option value="container">Container</option>
+                          <option value="groupage">Groupage</option>
+                          <option value="car">Car</option>
+                        </Form.Select>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1788,7 +1919,12 @@ const Dashboard = () => {
             </div>
 
             {selectedCompany && (
-              <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
+              <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100%', overflow: 'auto' }}>
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
+                  </div>
+                )}
                 <div className=" d-flex justify-content-end mt-2">
                   <div className="p-3 pe-5">
                     <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
@@ -1813,64 +1949,79 @@ const Dashboard = () => {
                   <div className="d-flex ps-4 w-100 justify-content-start">
                     <label className="fs-3"><strong>Comapany Information</strong></label>
                   </div>
-                  <div className="mt-4 rounded-4" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)', width: '95%', overflow: 'auto' }}>
-
+                  <div className="mt-4 rounded-4 container-fluid" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)', width: '95%', overflow: 'auto' }}>
                     {selectedCompany && (
                       <>
-                        <div className="d-flex flex-row align-items-start p-3 justify-content-start">
-                          <div className="d-flex align-items-start" style={{ width: '25%' }}>
+                        <div className="row p-3 align-items-start">
+                          <div className="col-12 col-md-3 d-flex justify-content-center">
                             <img src="/Images/webloon_logo.png" className="img-fluid rounded-circle" width="150px" />
                           </div>
-                          <div className="mt-4 d-flex flex-column align-items-start" style={{ width: '35%' }}>
+                          <div className="col-12 col-md-5 text-center text-md-start mt-3 mt-md-0">
                             <h2>{selectedCompany.company_name}</h2>
-                            <label className="d-flex align-items-center justify-content-start"><IoStar className="text-warning fs-5" /><span className="text-secondary"> 4.85</span> <span className="text-primary"> (20 Reviews)</span></label>
+                            <label className="d-flex align-items-center justify-content-center justify-content-md-start">
+                              <IoStar className="text-warning fs-5" />
+                              <span className="text-secondary"> 4.85</span>
+                              <span className="text-primary"> (20 Reviews)</span>
+                            </label>
                           </div>
-                          <div className="d-flex mt-4 justify-content-end" style={{ width: '40%' }}>
+                          <div className="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
                             <h3 className="text-primary"><RiPencilFill /> Edit Details</h3>
                           </div>
                         </div>
-                        <div className="d-flex mb-4 mt-5 flex-row justify-content-center align-items-center">
-                          <div className="d-flex justify-content-start align-items-center" style={{ width: '28%' }}>
-                            <div className="rounded-circle pt-1 pb-1 text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '15%' }}><h3><FaPhoneAlt /></h3></div>
-                            <label className="text-secondary d-flex ms-3 flex-column align-items-start">Contect Number<h5 className="text-dark">{selectedCompany.contect_no}</h5></label>
-                          </div>
-                          <div className="d-flex justify-content-start align-items-center" style={{ width: '28%' }}>
-                            <div className="rounded-circle pt-1 pb-1 text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '15%' }}><h3><MdEmail /></h3></div>
-                            <label className="text-secondary d-flex ms-3 flex-column align-items-start">Email ID<h5 className="text-dark">{selectedCompany.email}</h5></label>
-                          </div>
-                          <div className="d-flex justify-content-start align-items-center" style={{ width: '28%' }}>
-                            <div className="rounded-circle pt-1 pb-1 text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '15%' }}><h3><FaLocationDot /></h3></div>
-                            <label className="text-secondary d-flex ms-3 flex-column align-items-start">Country<h5 className="text-dark">{selectedCompany.location1.split(",")[0].trim()}</h5></label>
-                          </div>
+
+                        <div className="row mt-5 text-center text-md-start">
+                          {[
+                            { icon: <FaPhoneAlt />, label: 'Contact Number', value: selectedCompany.contect_no },
+                            { icon: <MdEmail />, label: 'Email ID', value: selectedCompany.email },
+                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1.split(",")[0].trim() },
+                          ].map((item, index) => (
+                            <div key={index} className="col-12 col-md-4 d-flex align-items-center justify-content-center justify-content-md-start mb-3">
+                              <div className="rounded-circle d-flex align-items-center justify-content-center text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '40px', height: '40px' }}>
+                                <h5>{item.icon}</h5>
+                              </div>
+                              <label className="text-secondary ms-3 d-flex flex-column">
+                                {item.label}
+                                <h5 className="text-dark">{item.value}</h5>
+                              </label>
+                            </div>
+                          ))}
                         </div>
-                        <div className="d-flex mt-5 mb-4 flex-row justify-content-center align-items-center">
-                          <div className="d-flex justify-content-start align-items-center" style={{ width: '28%' }}>
-                            <div className="rounded-circle pt-1 pb-1 text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '15%' }}><h3><FaCity /></h3></div>
-                            <label className="text-secondary d-flex ms-3 flex-column align-items-start">State<h5 className="text-dark">{selectedCompany.location1.split(",")[1].trim()}</h5></label>
-                          </div>
-                          <div className="d-flex justify-content-start align-items-center" style={{ width: '28%' }}>
-                            <div className="rounded-circle pt-1 pb-1 text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '15%' }}><h3><FaCity /></h3></div>
-                            <label className="text-secondary d-flex ms-3 flex-column align-items-start">City<h5 className="text-dark">{selectedCompany.location1.split(",")[2].trim()}</h5></label>
-                          </div>
-                          <div className="d-flex justify-content-start align-items-center" style={{ width: '28%' }}>
-                            <div className="rounded-circle pt-1 pb-1 text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '15%' }}><h3><FaLocationDot /></h3></div>
-                            <label className="text-secondary d-flex ms-3 flex-column align-items-start">Shipping Countries<h5 className="text-dark">{selectedCompany.tableData[0].countries}<sapn className='text-primary' onClick={handleScrollToMore}> & more</sapn></h5></label>
-                          </div>
+
+                        <div className="row mt-4 text-center text-md-start">
+                          {[
+                            { icon: <FaCity />, label: 'State', value: selectedCompany.location1.split(",")[1].trim() },
+                            { icon: <FaCity />, label: 'City', value: selectedCompany.location1.split(",")[2].trim() },
+                            { icon: <FaLocationDot />, label: 'Shipping Countries', value: selectedCompany.tableData[0].countries, extra: <span className="text-primary" onClick={handleScrollToMore}> & more</span> },
+                          ].map((item, index) => (
+                            <div key={index} className="col-12 col-md-4 d-flex align-items-center justify-content-center justify-content-md-start mb-3">
+                              <div className="rounded-circle d-flex align-items-center justify-content-center text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '40px', height: '40px' }}>
+                                <h5>{item.icon}</h5>
+                              </div>
+                              <label className="text-secondary ms-3 d-flex flex-column">
+                                {item.label}
+                                <h5 className="text-dark">{item.value}{item.extra}</h5>
+                              </label>
+                            </div>
+                          ))}
                         </div>
-                        <div className="d-flex flex-row justify-content-center align-items-start">
-                          <div className="d-flex justify-content-end" style={{ width: '12%' }}>
-                            <div className="rounded-circle pt-1 pb-1 text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '40%' }}><h3><BsFillInfoCircleFill /></h3></div>
+
+                        <div className="row mt-4 text-center text-md-start">
+                          <div className="col-12 col-md-2 d-flex justify-content-center justify-content-md-end">
+                            <div className="rounded-circle d-flex align-items-center justify-content-center text-primary" style={{ backgroundColor: 'rgb(147, 246, 255)', width: '40px', height: '40px' }}>
+                              <h5><BsFillInfoCircleFill /></h5>
+                            </div>
                           </div>
-                          <div className="d-flex flex-column ps-3 pe-4 justify-content-start align-items-start" style={{ width: "88%" }}>
-                            <label className="text-secondary fs-5 mb-2">About Comapny</label>
-                            <p className="text-start" style={{ fontSize: '0.8rem' }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                          <div className="col-12 col-md-10">
+                            <label className="text-secondary fs-5 mb-2">About Company</label>
+                            <p className="text-start" style={{ fontSize: '0.9rem' }}>
+                              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...
+                            </p>
                           </div>
                         </div>
 
-
-                        <div id="more" className="d-flex mt-3 pb-5 p-1 justify-content-center align-items-center">
-                          <div className="border-top border-2 " style={{ width: '85%' }}>
-                            <table class="table">
+                        <div id="more" className="d-flex mt-3 pb-5 p-1 justify-content-center align-items-center mb-5">
+                          <div className="border-top border-2" style={{ width: '85%' }}>
+                            <table className="table">
                               <thead>
                                 <tr>
                                   <th scope="col"><h6>Transport Offered</h6></th>
@@ -1879,9 +2030,9 @@ const Dashboard = () => {
                                 </tr>
                               </thead>
                               {selectedCompany.tableData ? (
-                                <tbody >
+                                <tbody>
                                   {selectedCompany.tableData.map((item, index) => (
-                                    <tr>
+                                    <tr key={index}>
                                       <td className="text-secondary">{item.service_type}</td>
                                       <td className="text-secondary">{item.countries}</td>
                                       <td className="text-secondary">{item.duration}</td>
@@ -1891,7 +2042,7 @@ const Dashboard = () => {
                               ) : (
                                 <tbody>
                                   <tr>
-                                    <td colSpan='4' className="text-secondary">No Data</td>
+                                    <td colSpan='3' className="text-secondary text-center">No Data</td>
                                   </tr>
                                 </tbody>
                               )}
@@ -1901,6 +2052,7 @@ const Dashboard = () => {
                       </>
                     )}
                   </div>
+
                 </div>
               </div>
             )}
@@ -1909,7 +2061,12 @@ const Dashboard = () => {
 
             {showRegisterPopup && (
               <>
-                <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
+                <div className="bg-light container-fluid position-fixed ps-4 pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
+                  {isMobile && (
+                    <div className="w-100 d-flex justify-content-start">
+                      <Menu />
+                    </div>
+                  )}
                   <div className=" d-flex justify-content-end mt-2">
                     <div className="p-3 pe-5">
                       <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
@@ -1935,7 +2092,7 @@ const Dashboard = () => {
                       <label className="fs-3"><strong>Comapany Regesteration</strong></label>
                     </div>
                   </div>
-                  <div className="d-flex flex-column align-items-center w-100">
+                  <div className="d-flex flex-column align-items-center w-100 pb-5 mb-5">
                     <div className="mt-4 rounded-4 p-1 mb-5" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)', width: '95%', overflow: 'auto' }}>
                       <Registration />
                     </div>
@@ -1992,73 +2149,78 @@ const Dashboard = () => {
                 <div className="d-flex w-50 justify-content-start mt-3">
                   <h5>Filters By:</h5>
                 </div>
-                <div className="pe-3 d-flex justify-content-start align-items-start w-100 mb-3">
-                  <div className="d-flex flex-column align-items-start" style={{ width: '40%' }}>
-                    <label className="text-secondary fs-5">Serch here</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 " style={{ width: '90%', backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <input type="text" className="form-control mt-1" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Search here..." />
+
+                <div className="row pe-3 justify-content-start align-items-start w-100 mb-3">
+                  <div className="col-12 col-md-4 d-flex flex-column align-items-start">
+                    <label className="text-secondary fs-5">Search here</label>
+                    <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
+                      <input type="text" className="form-control mt-1 border-0" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Search here..." />
                     </div>
                   </div>
-                  <div className="d-flex flex-column align-items-start" style={{ width: '20%' }}>
+
+                  <div className="col-12 col-md-3 d-flex flex-column align-items-start mt-3 mt-md-0">
                     <label className="text-secondary fs-5">Pick up Country</label>
-                    <div className="p-1 rounded-3 mt-1 " style={{ width: '90%', backgroundColor: 'rgb(214, 214, 214)' }}>
+                    <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
                       <Countries_selector />
                     </div>
                   </div>
-                  <div className="d-flex flex-column align-items-start" style={{ width: '20%' }}>
+
+                  <div className="col-12 col-md-3 d-flex flex-column align-items-start mt-3 mt-md-0">
                     <label className="text-secondary fs-5">Destination Country</label>
-                    <div className="p-1 rounded-3 mt-1 " style={{ width: '90%', backgroundColor: 'rgb(214, 214, 214)' }}>
+                    <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
                       <Countries_selector />
                     </div>
                   </div>
-                  <div className="d-flex flex-column align-items-start" style={{ width: '20%' }}>
+
+                  <div className="col-12 col-md-2 d-flex flex-column align-items-start mt-3 mt-md-0">
                     <label className="text-secondary fs-5">Pick up date</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 " style={{ width: '90%', backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <input type="date" className="form-control mt-1" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Pick up date" />
+                    <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
+                      <input type="date" className="form-control mt-1 border-0" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Pick up date" />
                     </div>
                   </div>
                 </div>
 
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col"><h6>Order Id</h6></th>
-                      <th scope="col"><h6>Product Name</h6></th>
-                      <th scope="col"><h6>Offer Created By</h6></th>
-                      <th scope="col"><h6>Pricr ($)</h6></th>
-                      <th scope="col"><h6>Offer Received By</h6></th>
-                      <th scope="col"><h6>Payment Status ($)</h6></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {allOffers ? (
-                      <>
-                        {allOffers.map((item, index) => (
 
+                <div className="table-responsive w-100">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col"><h6>Order Id</h6></th>
+                        <th scope="col"><h6>Product Name</h6></th>
+                        <th scope="col"><h6>Offer Created By</h6></th>
+                        <th scope="col"><h6>Price ($)</h6></th>
+                        <th scope="col"><h6>Offer Received By</h6></th>
+                        <th scope="col"><h6>Payment Status ($)</h6></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {allOffers && allOffers.length > 0 ? (
+                        allOffers.map((item, index) => (
                           <tr key={index}>
                             <td className="text-primary" onClick={() => show_offer_details(item)}>#{item.offer_id}</td>
                             <td className="text-secondary">{item.product_name}</td>
                             <td className="text-secondary">{item.created_by}</td>
                             <td className="text-dark"><b>{item.amount}</b></td>
                             <td className="text-secondary">{item.created_by_email}</td>
-                            <td className="text-secondary"><span
-                              className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : 'text-success'}`}
-                              style={{ backgroundColor: item.status === 'pending' ? 'rgb(255, 242, 128)' : 'rgb(145, 255, 128)' }}
-                            >
-                              {item.status === 'pending' ? 'Pending' : 'Success'}
-                            </span></td>
+                            <td className="text-secondary">
+                              <span
+                                className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : 'text-success'}`}
+                                style={{ backgroundColor: item.status === 'pending' ? 'rgb(255, 242, 128)' : 'rgb(145, 255, 128)' }}
+                              >
+                                {item.status === 'pending' ? 'Pending' : 'Success'}
+                              </span>
+                            </td>
                           </tr>
-                        ))}
-                      </>
-                    ) : (
-                      <>
+                        ))
+                      ) : (
                         <tr>
-                          <td> No Data </td>
+                          <td colSpan="6" className="text-center text-secondary">No Data Available</td>
                         </tr>
-                      </>
-                    )}
-                  </tbody>
-                </table>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
               </div>
             </div>
           </>
@@ -2066,31 +2228,57 @@ const Dashboard = () => {
 
         {showOfferDetails && (
           <>
-            <div className="bg-light position-fixed pb-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
-              <div className=" d-flex justify-content-end mt-2">
+            <div className="bg-light position-fixed pb-5 ps-4" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
+              <div className="d-flex justify-content-end mt-2 flex-wrap gap-3">
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
+                  </div>
+                )}
                 <div className="p-2">
-                  <button className="btn text-light" style={{ backgroundColor: 'tomato' }} onClick={() => navigate('/send_groupage')}> <h5> <IoMdAddCircleOutline className="fs-4" /> Create New Order</h5></button>
+                  <button
+                    className="btn text-light d-flex align-items-center gap-2"
+                    style={{ backgroundColor: 'tomato' }}
+                    onClick={() => navigate('/send_groupage')}
+                  >
+                    <IoMdAddCircleOutline className="fs-4" />
+                    <h5 className="m-0">Create New Order</h5>
+                  </button>
                 </div>
+
+                {/* Notification Bell */}
                 <div className="p-3 pe-5">
-                  <FaBell className="fs-3 text-primary" onClick={() => { setActiveSection("notification"); setSelectedCompany(''); setShowRegisterPopup(false) }} />
+                  <FaBell
+                    className="fs-3 text-primary cursor-pointer"
+                    onClick={() => {
+                      setActiveSection("notification");
+                      setSelectedCompany('');
+                      setShowRegisterPopup(false);
+                    }}
+                  />
                 </div>
+
+                {/* User Profile Dropdown */}
                 <div className="border-start p-2 border-3 border-dark">
                   <Dropdown style={{ width: '13rem' }}>
-                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                    <Dropdown.Toggle className="fs-5 w-100 text-secondary d-flex align-items-center gap-2" variant="light" id="dropdown-basic">
+                      <FaUserTie />
+                      <strong className="text-capitalize">{userInfo.name}</strong>
                     </Dropdown.Toggle>
-                    <Dropdown.Menu style={{ width: '13rem' }}>
-                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                        <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                        <label><strong>Email-:</strong> {userInfo.email}</label>
-                        <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                        <label> <button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+
+                    <Dropdown.Menu style={{ width: '13rem' }} className="text-center">
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
+                        <label><strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
+                        <label><strong>Email:</strong> {userInfo.email}</label>
+                        <button className="btn btn-secondary btn-sm">Edit Name</button>
+                        <button className="btn btn-secondary btn-sm">Edit Password</button>
+                        <button className="btn btn-danger btn-sm mt-2" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
               </div>
+
 
               <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
                 <div className="d-flex ps-4 w-100 justify-content-start">
@@ -2109,133 +2297,99 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                  <strong className="fs-5">Payment Inforamtion</strong>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Amount Received</span>
-                        <h6>Testing</h6>
-                      </div>
+                  <strong className="fs-5">Payment Information</strong>
+                  {[
+                    [
+                      { icon: <SiAnytype />, label: "Amount Received", value: "Testing" },
+                      { icon: <FaWeightScale />, label: "Commission Earned", value: "Testing" },
+                      { icon: <RiExpandHeightFill />, label: "Payment Status", value: "Testing" }
+                    ],
+                    [
+                      { icon: <SiAnytype />, label: "Paid By", value: "Testing" },
+                      { icon: <FaWeightScale />, label: "Paypal ID", value: "Testing" },
+                      { icon: <RiExpandHeightFill />, label: "Offers Received", value: "Testing" }
+                    ],
+                    [
+                      { icon: <SiAnytype />, label: "Company Name", value: "Testing" },
+                      { icon: <FaWeightScale />, label: "Contact Number", value: "Testing" },
+                      { icon: <RiExpandHeightFill />, label: "Company Email ID", value: "Testing" }
+                    ]
+                  ].map((row, index) => (
+                    <div key={index} className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
+                      {row.map((item, idx) => (
+                        <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                          <div className="rounded-circle d-flex justify-content-center align-items-center text-primary"
+                            style={{
+                              width: '3rem',
+                              height: '3rem',
+                              backgroundColor: 'rgb(174, 252, 255)',
+                              fontSize: '1.5rem'
+                            }}>
+                            {item.icon}
+                          </div>
+                          <div className="d-flex flex-column align-items-center gap-2">
+                            <span className="text-secondary">{item.label}</span>
+                            <h6>{item.value}</h6>
+                          </div>
+                        </div>
+                      ))}
                     </div>
+                  ))}
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Commission Earned</span>
-                        <h6>Testing</h6>
-                      </div>
-                    </div>
+                  <strong className="fs-5 mt-3">Product Information</strong>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Payment Status</span>
-                        <h6>Testing</h6>
+                  <div className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
+                    {[
+                      { icon: <SiAnytype />, label: "Product Type", value: showOfferDetails.product_type },
+                      { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Kg` },
+                      { icon: <RiExpandHeightFill />, label: "Height", value: `${showOfferDetails.p_height} Cm` }
+                    ].map((item, idx) => (
+                      <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle d-flex justify-content-center align-items-center text-primary"
+                          style={{
+                            width: '3rem',
+                            height: '3rem',
+                            backgroundColor: 'rgb(174, 252, 255)',
+                            fontSize: '1.5rem'
+                          }}>
+                          {item.icon}
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">{item.label}</span>
+                          <h6>{item.value}</h6>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Paid By</span>
-                        <h6>Testing</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Paypal ID</span>
-                        <h6>Testing</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Offers Received</span>
-                        <h6>Testing</h6>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Company Name</span>
-                        <h6>Testing</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Contact Number</span>
-                        <h6>Testing</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Company Email ID</span>
-                        <h6>Testing</h6>
-                      </div>
-                    </div>
+                    ))}
                   </div>
 
-                  <strong className="fs-5">Product Information</strong>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><SiAnytype /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Product Type</span>
-                        <h6>{showOfferDetails.product_type}</h6>
+                  <div className="d-flex flex-wrap w-100 gap-3 gap-lg-5 mt-3">
+                    {[
+                      { icon: <FaRuler />, label: "Length", value: `${showOfferDetails.p_length} Cm` },
+                      { icon: <RiExpandWidthFill />, label: "Width", value: `${showOfferDetails.p_width} Cm` }
+                    ].map((item, idx) => (
+                      <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          {item.icon}
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">{item.label}</span>
+                          <h6>{item.value}</h6>
+                        </div>
                       </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaWeightScale /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Weight</span>
-                        <h6>{showOfferDetails.p_weight} Kg</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandHeightFill /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Height</span>
-                        <h6>{showOfferDetails.p_height} Cm</h6>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaRuler /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Length</span>
-                        <h6>{showOfferDetails.p_length} Cm</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><RiExpandWidthFill /></div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Width</span>
-                        <h6>{showOfferDetails.p_width} Cm</h6>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
 
+
                 <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                   <strong className="fs-5">Pick Up Information</strong>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-between justify-content-start w-100 gap-5">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUser /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaUser />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Full Name</span>
                         <h6>{showOfferDetails.sender_name}</h6>
@@ -2243,7 +2397,10 @@ const Dashboard = () => {
                     </div>
 
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><IoCall /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <IoCall />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Contact Number</span>
                         <h6>{showOfferDetails.sender_contact}</h6>
@@ -2251,30 +2408,45 @@ const Dashboard = () => {
                     </div>
 
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdAttachEmail /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <MdAttachEmail />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Email Address</span>
                         <h6>{showOfferDetails.sender_email}</h6>
                       </div>
                     </div>
                   </div>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+
+                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaFlag /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaFlag />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Country</span>
                         <h6>{showOfferDetails.sender_country}</h6>
                       </div>
                     </div>
+
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaBuildingFlag /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaBuildingFlag />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">State</span>
                         <h6>{showOfferDetails.sender_state}</h6>
                       </div>
                     </div>
+
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCity /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaCity />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">City</span>
                         <h6>{showOfferDetails.sender_city}</h6>
@@ -2282,29 +2454,42 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+
+                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaMapPin /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaMapPin />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Street Address</span>
                         <h6>{showOfferDetails.sender_address}</h6>
                       </div>
                     </div>
+
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdConfirmationNumber /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <MdConfirmationNumber />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Zip Code</span>
                         <h6>{showOfferDetails.sender_zipcode}</h6>
                       </div>
                     </div>
+
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCalendarCheck /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaCalendarCheck />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Pick Up Date</span>
                         <h6>{showOfferDetails.pickup_date.includes('Select End Date') ? `${showOfferDetails.pickup_date.split(' - ')[0]} -` : showOfferDetails.pickup_date}</h6>
                       </div>
                     </div>
                   </div>
+
 
                   <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-3" style={{ width: '100%' }}>
@@ -2319,9 +2504,12 @@ const Dashboard = () => {
 
                 <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                   <strong className="fs-5">Delivery Information</strong>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5">
+                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaUser /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaUser />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Full Name</span>
                         <h6>{showOfferDetails.receiver_name}</h6>
@@ -2329,7 +2517,10 @@ const Dashboard = () => {
                     </div>
 
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><IoCall /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <IoCall />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Contact Number</span>
                         <h6>{showOfferDetails.receiver_contact}</h6>
@@ -2337,30 +2528,45 @@ const Dashboard = () => {
                     </div>
 
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdAttachEmail /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <MdAttachEmail />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Email Address</span>
                         <h6>{showOfferDetails.receiver_email}</h6>
                       </div>
                     </div>
                   </div>
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+
+                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaFlag /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaFlag />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Country</span>
                         <h6>{showOfferDetails.receiver_country}</h6>
                       </div>
                     </div>
+
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaBuildingFlag /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaBuildingFlag />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">State</span>
                         <h6>{showOfferDetails.receiver_state}</h6>
                       </div>
                     </div>
+
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCity /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaCity />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">City</span>
                         <h6>{showOfferDetails.receiver_city}</h6>
@@ -2368,23 +2574,35 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+
+                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaMapPin /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaMapPin />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Street Address</span>
                         <h6>{showOfferDetails.receiver_address}</h6>
                       </div>
                     </div>
+
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><MdConfirmationNumber /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <MdConfirmationNumber />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Zip Code</span>
                         <h6>{showOfferDetails.receiver_zipcode}</h6>
                       </div>
                     </div>
+
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaCalendarCheck /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaCalendarCheck />
+                      </div>
                       <div className="d-flex flex-column align-items-center gap-2">
                         <span className="text-secondary">Preferred Delivery Date</span>
                         <h6>{showOfferDetails.departure_date}</h6>
@@ -2392,15 +2610,20 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+
+                  <div className="d-flex flex-row flex-wrap align-items-start justify-content-start w-100 gap-5 mt-3">
                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaInfoCircle /></div>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                        <FaInfoCircle />
+                      </div>
                       <div className="d-flex flex-column align-items-start gap-2">
                         <span className="text-secondary">Delivery Notes</span>
-                        <p className="text-start"><h6>{showOfferDetails.receiver_description}</h6></p>
+                        <h6 className="text-start">{showOfferDetails.receiver_description}</h6>
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
 
@@ -2446,64 +2669,75 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-2 rounded-1"
+                style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+
                 <div className="d-flex w-50 justify-content-start">
                   <h4>Latest Offers</h4>
                 </div>
+
                 <div className="d-flex w-50 justify-content-start mt-3">
                   <h5>Filters By:</h5>
                 </div>
-                <div className="pe-3 d-flex justify-content-start align-items-start w-100 mb-3">
-                  <div className="d-flex flex-column align-items-start" style={{ width: '40%' }}>
-                    <label className="text-secondary fs-5">Serch here</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 " style={{ width: '90%', backgroundColor: 'rgb(214, 214, 214)' }}>
+
+                {/* Filters Section */}
+                <div className="row w-100 mb-3">
+                  <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-start">
+                    <label className="text-secondary fs-5">Search here</label>
+                    <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
                       <input type="text" className="form-control mt-1" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Search here..." />
                     </div>
                   </div>
-                  <div className="d-flex flex-column align-items-start" style={{ width: '20%' }}>
+
+                  <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-start">
                     <label className="text-secondary fs-5">Pick up Country</label>
-                    <div className="p-1 rounded-3 mt-1 " style={{ width: '90%', backgroundColor: 'rgb(214, 214, 214)' }}>
+                    <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
                       <Countries_selector />
                     </div>
                   </div>
-                  <div className="d-flex flex-column align-items-start" style={{ width: '20%' }}>
+
+                  <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-start">
                     <label className="text-secondary fs-5">Destination Country</label>
-                    <div className="p-1 rounded-3 mt-1 " style={{ width: '90%', backgroundColor: 'rgb(214, 214, 214)' }}>
+                    <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
                       <Countries_selector />
                     </div>
                   </div>
-                  <div className="d-flex flex-column align-items-start" style={{ width: '20%' }}>
+
+                  <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-start">
                     <label className="text-secondary fs-5">Pick up date</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 " style={{ width: '90%', backgroundColor: 'rgb(214, 214, 214)' }}>
+                    <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
                       <input type="date" className="form-control mt-1" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Pick up date" />
                     </div>
                   </div>
                 </div>
 
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col"><h6>Order Id</h6></th>
-                      <th scope="col"><h6>Company Name</h6></th>
-                      <th scope="col"><h6>Payment Date</h6></th>
-                      <th scope="col"><h6>Amount($)</h6></th>
-                      <th scope="col"><h6>Offer Received By</h6></th>
-                      <th scope="col"><h6>Status</h6></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="text-primary">#561256</td>
-                      <td className="text-secondary">Test Company</td>
-                      <td className="text-secondary">Jan 18, 2025</td>
-                      <td className="text-dark"><b>450</b></td>
-                      <td className="text-secondary">Test Company</td>
-                      <td className="text-secondary"><span className="p-2 pe-4 ps-4 text-success fw-bold" style={{ backgroundColor: 'rgb(145, 255, 128)' }}>Paid</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="table-responsive" style={{ width: '100%', overflowX: 'auto' }}>
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col"><h6>Order Id</h6></th>
+                        <th scope="col"><h6>Company Name</h6></th>
+                        <th scope="col"><h6>Payment Date</h6></th>
+                        <th scope="col"><h6>Amount($)</h6></th>
+                        <th scope="col"><h6>Offer Received By</h6></th>
+                        <th scope="col"><h6>Status</h6></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="text-primary">#561256</td>
+                        <td className="text-secondary">Test Company</td>
+                        <td className="text-secondary">Jan 18, 2025</td>
+                        <td className="text-dark"><b>450</b></td>
+                        <td className="text-secondary">Test Company</td>
+                        <td className="text-secondary">
+                          <span className="p-2 pe-4 ps-4 text-success fw-bold" style={{ backgroundColor: 'rgb(145, 255, 128)' }}>Paid</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-
             </div>
           </>
         )}
@@ -2547,83 +2781,113 @@ const Dashboard = () => {
               </div>
 
               <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-5 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-                <div className="d-flex mt-2 p-2 w-100">
-                  <strong>New</strong>
-                  <div className="d-flex flex-column mt-2 ps-5 p-2 w-100">
-                    <div className="d-flex flex-row align-items-center w-100 justify-content-between mt-3 mb-3">
-                      <div className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center" style={{ width: '3.5rem', height: '3.5rem' }}>
-                        Logo
-                      </div>
-                      <div className="ps-3 flex-grow-1">
-                        <p className="mb-0 text-start">
-                          A new company named <strong>Test Company</strong> Pvt Ltd has been registered
-                          <br />
-                          <span className="text-secondary">2 hours ago</span>
-                        </p>
-                      </div>
-                      <div className="text-primary">
-                        <span>See Details</span>
-                      </div>
-                    </div>
+                <div className="d-flex flex-column align-items-start justify-content-start mt-2 p-2 w-100">
 
-                    <div className="d-flex flex-row align-items-center w-100 justify-content-between mb-3 mt-3">
-                      <div className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center" style={{ width: '3.5rem', height: '3.5rem' }}>
-                        Pic
-                      </div>
-                      <div className="ps-3 flex-grow-1">
-                        <p className="mb-0 text-start">
-                          <strong>Alex Smith</strong> has placed an order request
-                          <br />
-                          <span className="text-secondary">1 hours ago</span>
-                        </p>
-                      </div>
-                      <div className="text-primary">
-                        <span>See Details</span>
-                      </div>
-                    </div>
+                  {userRole === 'admin' ? (
+                    <>
+                      <strong>New Offers</strong>
+                      {admin_notification && (
+                        <>
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            {admin_notification.map((item, index) => (
+                              <div className="d-flex flex-row align-items-start w-100 justify-content-start mt-3 mb-3">
+                                <div
+                                  className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center overflow-hidden"
+                                  style={{ width: '3.5rem', height: '3.5rem' }}
+                                >
+                                  <img
+                                    src={item.img01}
+                                    alt="Item"
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                  />
+                                </div>
+                                <div className="ps-3 flex-grow-1">
+                                  <p className="mb-0 text-start">
+                                    A new product name <strong>{item.product_name}</strong> has been added for groupage
+                                    <br />
+                                    <span className="text-secondary">{formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}</span>
+                                  </p>
+                                </div>
+                                <div className="text-primary">
+                                  <span onClick={() => navigate('/offers')}>See Details</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
 
-                  </div>
-                </div>
+                        </>
+                      )}
+                    </>
+                  ) : userRole === 'Sadmin' ? (
+                    <>
+                      <strong>New Groupage Created</strong>
+                      {notification_groupageData && (
+                        <>
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            {notification_groupageData.map((item, index) => (
+                              <div className="d-flex flex-row align-items-start w-100 justify-content-start mt-3 mb-3">
+                                <div
+                                  className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center overflow-hidden"
+                                  style={{ width: '3.5rem', height: '3.5rem' }}
+                                >
+                                  <img
+                                    src={item.img01}
+                                    alt="Item"
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                  />
+                                </div>
+                                <div className="ps-3 flex-grow-1">
+                                  <p className="mb-0 text-start">
+                                    A new product name <strong>{item.product_name}</strong> has been added for groupage
+                                    <br />
+                                    <span className="text-secondary">{formatDistanceToNow(new Date(item.groupage_created_at), { addSuffix: true })}</span>
+                                  </p>
+                                </div>
+                                <div className="text-primary">
+                                  <span onClick={() => navigate('/offers')}>See Details</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                      <strong>New Companies Regestered</strong>
+                      {notification_companyData && (
+                        <>
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            {notification_companyData.map((item, index) => (
+                              <div className="d-flex flex-row align-items-start w-100 justify-content-start mt-3 mb-3" key={index}>
+                                <div
+                                  className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center overflow-hidden"
+                                  style={{ width: '3.5rem', height: '3.5rem' }}
+                                >
+                                  <img
+                                    src={item.comapny_info_logo}
+                                    alt="Logo"
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                  />
+                                </div>
+                                <div className="ps-3 flex-grow-1">
+                                  <p className="mb-0 text-start">
+                                    A new company name <strong>{item.company_info_name}</strong> has been regestered
+                                  </p>
+                                </div>
+                                <div className="text-primary">
+                                  <span onClick={() => navigate('/companies_list')}>See Details</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                    </>
+                  )}
 
-                <div className="d-flex mt-2 p-2 w-100">
-                  <strong>Earlier</strong>
-                  <div className="d-flex flex-column mt-2 ps-5 p-2 w-100">
-                    <div className="d-flex flex-row align-items-center w-100 justify-content-between mt-3 mb-3">
-                      <div className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center" style={{ width: '3.5rem', height: '3.5rem' }}>
-                        Logo
-                      </div>
-                      <div className="ps-3 flex-grow-1">
-                        <p className="mb-0 text-start">
-                          A new company named <strong>Test Company</strong> Pvt Ltd has been registered
-                          <br />
-                          <span className="text-secondary">2 hours ago</span>
-                        </p>
-                      </div>
-                      <div className="text-primary">
-                        <span>See Details</span>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-center w-100 justify-content-between mb-3 mt-3">
-                      <div className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center" style={{ width: '3.5rem', height: '3.5rem' }}>
-                        Pic
-                      </div>
-                      <div className="ps-3 flex-grow-1">
-                        <p className="mb-0 text-start">
-                          <strong>Alex Smith</strong> has placed an order request
-                          <br />
-                          <span className="text-secondary">1 hours ago</span>
-                        </p>
-                      </div>
-                      <div className="text-primary">
-                        <span>See Details</span>
-                      </div>
-                    </div>
-
-                  </div>
                 </div>
               </div>
-
             </div>
           </>
         )}
@@ -2660,51 +2924,71 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
-                <div className="d-flex ps-4 w-50 justify-content-start">
+              <div className="d-flex flex-wrap justify-content-between align-items-center mt-2 rounded-1">
+                <div className="d-flex ps-4 w-100 w-md-50 justify-content-start">
                   <label className="fs-3"><strong>Roles & Permissions</strong></label>
                 </div>
-                <div className="w-50 pe-3 d-flex justify-content-end">
-                  <button className="btn btn-primary btn-sm text-light fs-5 ps-3 pe-3" onClick={() => setShowRegisterPopup(true)}><IoIosAddCircleOutline /> Add New Role</button>
+                <div className="w-100 w-md-50 pe-3 d-flex justify-content-start justify-content-md-end mt-2 mt-md-0">
+                  <button className="btn btn-primary btn-sm text-light fs-5 ps-3 pe-3"
+                    onClick={() => setShowRegisterPopup(true)}>
+                    <IoIosAddCircleOutline /> Add New Role
+                  </button>
                 </div>
               </div>
 
-              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-5 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
 
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col"><h6>Name</h6></th>
-                      <th scope="col"><h6>Email ID</h6></th>
-                      <th scope="col"><h6>Role</h6></th>
-                      <th scope="col"><h6>Actions</h6></th>
-                    </tr>
-                  </thead>
-                  {userData ? (
-                    <tbody >
-                      {userData.map((item, index) => (
-                        <tr>
-                          <td className="text-secondary">{item.name}</td>
-                          <td className="text-secondary">{item.email}</td>
-                          <td className="text-secondary">{item.role === 'Sadmin' ? ('Super Admin') : item.role === 'admin' ? ('Admin') : item.role === 'user' && ('User')}</td>
-                          <td className="text-secondary"><button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handleEditUser(item)} style={{ fontSize: '1.5rem' }}><RiPencilFill /></button><button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handleDeleteUser(item)} style={{ fontSize: '1.5rem' }}><MdDelete /></button></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  ) : (
-                    <tbody>
+              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-5 rounded-1"
+                style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+
+                <div className="table-responsive" style={{ width: '100%', overflowX: 'auto' }}>
+                  <table className="table">
+                    <thead>
                       <tr>
-                        <td colSpan='4' className="text-secondary">No Data</td>
+                        <th scope="col"><h6>Name</h6></th>
+                        <th scope="col"><h6>Email ID</h6></th>
+                        <th scope="col"><h6>Role</h6></th>
+                        <th scope="col"><h6>Actions</h6></th>
                       </tr>
-                    </tbody>
-                  )}
-                </table>
+                    </thead>
+                    {userData ? (
+                      <tbody>
+                        {userData.map((item, index) => (
+                          <tr key={index}>
+                            <td className="text-secondary">{item.name}</td>
+                            <td className="text-secondary">{item.email}</td>
+                            <td className="text-secondary">
+                              {item.role === 'Sadmin' ? 'Super Admin' : item.role === 'admin' ? 'Admin' : 'User'}
+                            </td>
+                            <td className="text-secondary">
+                              <button className="btn btn-sm btn-light text-primary pt-0 pb-0"
+                                onClick={() => handleEditUser(item)}
+                                style={{ fontSize: '1.5rem' }}>
+                                <RiPencilFill />
+                              </button>
+                              <button className="btn btn-sm btn-light text-danger pt-0 pb-0"
+                                onClick={() => handleDeleteUser(item)}
+                                style={{ fontSize: '1.5rem' }}>
+                                <MdDelete />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    ) : (
+                      <tbody>
+                        <tr>
+                          <td colSpan="4" className="text-secondary">No Data</td>
+                        </tr>
+                      </tbody>
+                    )}
+                  </table>
+                </div>
               </div>
             </div>
 
             {updateUser && (
               <div
-                className="position-fixed bg-light p-4 shadow rounded"
+                className="position-fixed bg-light p-4 shadow rounded text-center"
                 style={{
                   top: "50%",
                   left: "50%",
@@ -2723,13 +3007,20 @@ const Dashboard = () => {
                 <p>
                   <strong>Change user role as -:</strong>
                 </p>
-                <p>
-                  <button className="ms-4 me-4 fs-5 fw-bold btn btn-dark p-2" onClick={() => ChangeUserRole(updateUser.id, 'Sadmin')}>Super Admin</button>
-                  <button className="ms-4 me-4 fs-5 fw-bold btn btn-dark p-2" onClick={() => ChangeUserRole(updateUser.id, 'admin')}>Admin</button>
-                  <button className="ms-4 me-4 fs-5 fw-bold btn btn-dark p-2" onClick={() => ChangeUserRole(updateUser.id, 'user')}>User</button>
-                </p>
+                <div className="d-flex flex-wrap justify-content-center gap-3">
+                  <button className="fs-5 fw-bold btn btn-dark p-2" onClick={() => ChangeUserRole(updateUser.id, 'Sadmin')}>
+                    Super Admin
+                  </button>
+                  <button className="fs-5 fw-bold btn btn-dark p-2" onClick={() => ChangeUserRole(updateUser.id, 'admin')}>
+                    Admin
+                  </button>
+                  <button className="fs-5 fw-bold btn btn-dark p-2" onClick={() => ChangeUserRole(updateUser.id, 'user')}>
+                    User
+                  </button>
+                </div>
               </div>
             )}
+
           </>
         )}
       </div>

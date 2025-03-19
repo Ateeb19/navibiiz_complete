@@ -48,6 +48,7 @@ app.use('/company', require('./Routers/Company_route.js'));
 app.use('/admin', require('./Routers/Admin_route.js'));
 app.use('/s_admin', require('./Routers/S_Admin_route.js'));
 app.use('/send_groupage', require('./Routers/Send_Groupage_router.js'));
+app.use('/notification', require('./Routers/Notification_route.js'));
 
 
 app.listen((4000), ()=> {
