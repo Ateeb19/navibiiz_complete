@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use(cors({
     origin: 'http://localhost:3000',
-    // origin: 'https://wvxjcrpt-3000.inc1.devtunnels.ms',
+    origin: 'http://217.154.86.64:3000',
     methods: ["POST", "GET", 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
