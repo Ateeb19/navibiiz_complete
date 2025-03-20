@@ -9,8 +9,7 @@ require('dotenv').config({path: './.env'});
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:3000',
-    origin: 'http://217.154.86.64:3000',
+    origin: ['http://localhost:3000', 'http://217.154.86.64:3000' ],
     methods: ["POST", "GET", 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true

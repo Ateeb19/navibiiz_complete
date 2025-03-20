@@ -31,4 +31,13 @@ const Sadmin_notificaiton = (req, res) => {
     }
 }
 
-module.exports = { admin_notificaiton, Sadmin_notificaiton }
+const user_notification = (req, res) =>{
+    db.query('SELECT company_name, logo FROM companies_info ORDER BY id DESC LIMIT 4', (err, result) => {
+        if(err){
+            res.json({message: 'error in database', status: false});
+        }else{
+            res.json({message: result, status: true});
+        }
+    })
+}
+module.exports = { admin_notificaiton, Sadmin_notificaiton, user_notification }

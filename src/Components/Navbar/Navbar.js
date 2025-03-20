@@ -45,9 +45,6 @@ const Navbar = () => {
 
   const [userInfo, setUserInfo] = useState('');
   useEffect(() => {
-    if (!token) {
-      navigate('/');
-    }
     if (userRole !== 'admin' && userRole !== 'Sadmin' && userRole !== 'user') {
       navigate('/');
     } else {
