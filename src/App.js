@@ -96,7 +96,7 @@ useEffect(() => {
   displayCompany();
 },[])
   return (
-    <div className="App container-fluid">
+    <div className="App">
       <Router>
         <div className="d-flex flex-column" style={{ width: "100" }}>
           {/* <div className="d-flex justify-content-end">

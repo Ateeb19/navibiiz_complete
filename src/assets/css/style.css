@@ -1,0 +1,72 @@
+.features-head h5{
+    font-size: 18px;
+    font-weight: 600;
+}
+.features-head p{
+    font-size: 16px;
+    color: #474747;
+}
+
+.navbar-wrapper{
+    background-color: #0044BC;
+    width: 100%;
+}
+
+.hero-wrapper{
+    width: 100%;
+    min-height: 43vh;
+    padding-top: 70px;
+    border-radius: 0 0 30px 30px;
+    background-color: rgb(0, 68, 188);
+    position: relative;
+}
+
+.search-wrapper{
+    width: 100%;
+    margin-top: -60px;
+    z-index: 2;
+}
+
+.hero-wrap-head h1{
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.hero-wrap-head p{
+    font-size: 18px;
+    color: #fff;
+    width: 75%;
+    margin: 18px auto;
+    line-height: 32px;
+}
+
+.title-head h3{
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.new-add-company-wrapper{
+    background-color: #f2f2f2;
+    padding: 40px 0;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.company-box-wrap{
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 0 5px  #ccc;
+    padding: 25px;
+    border-radius: 8px;
+}
+
+.btn-main{
+    padding: 12px 30px;
+    color: #fff;
+    background-color: #FF5722;
+    border: 1px solid #FF5722;
+    border-radius: 6px;
+    margin: 50px auto 0 auto;
+}

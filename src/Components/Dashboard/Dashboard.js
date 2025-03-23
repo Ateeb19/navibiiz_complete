@@ -20,8 +20,7 @@ import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import Registration from "./Registration";
 import { formatDistanceToNow } from "date-fns";
-
-
+import Paypal_payment from "./Paypal_payment";
 
 
 const Dashboard = () => {
@@ -687,14 +686,16 @@ const Dashboard = () => {
   }
 
   const handleAcceptOffer = (item) => {
-    axios.get(`${port}/send_groupage/update_offer_status/${item.offer_id}`, {
-      headers: {
-        Authorization: token,
-      }
-    }).then((response) => {
-      alert(response.data.message);
-      window.location.reload();
-    }).catch((err) => { console.log(err); });
+    // axios.get(`${port}/send_groupage/update_offer_status/${item.offer_id}`, {
+    //   headers: {
+    //     Authorization: token,
+    //   }
+    // }).then((response) => {
+    //   alert(response.data.message);
+    //   window.location.reload();
+    // }).catch((err) => { console.log(err); });
+
+
   }
 
   const [allOffers, setAllOffers] = useState([]);
@@ -1992,7 +1993,13 @@ const Dashboard = () => {
                   </div>
 
                   <div className="d-flex flex-column w-100 justify-content-center align-items-center">
-                    <button className="btn btn-success mt-3 w-100" onClick={() => handleAcceptOffer(selected_offer)}>Accept</button>
+                    <button className="btn btn-light border border-2 border-dark mt-3 w-100"><strong>Accept</strong> <br></br>
+                      <Paypal_payment
+                        selected_offer={selected_offer}
+                        handleAcceptOffer={handleAcceptOffer}
+                      />
+                    </button>
+
                     <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
                   </div>
                 </div>

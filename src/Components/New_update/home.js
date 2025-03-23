@@ -12,6 +12,7 @@ import Footer from "../Footer/Footer";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import '../../assets/css/style.css'
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -21,14 +22,14 @@ const Home = () => {
     const displayCompany = () => {
         // localStorage.setItem('companyInfo');
         axios.get(`${port}/company/display_company`)
-        .then((response) => {
-            // console.log(response.data.message);
-            localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
-        }).catch((err) => {console.log('error', err)});
+            .then((response) => {
+                // console.log(response.data.message);
+                localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
+            }).catch((err) => { console.log('error', err) });
     }
     useEffect(() => {
-      displayCompany();
-    },[])
+        displayCompany();
+    }, [])
     const [company_info, setCompany_info] = useState([]);
     const companies = () => {
         if (localStorage.getItem('companyInfo').length > 0) {
@@ -100,112 +101,129 @@ const Home = () => {
     ];
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
-            <div className=" d-flex justify-content-center w-100">
-                <Navbar />
-            </div>
-            <div className="d-flex flex-column justify-content-center align-items-center text-light px-3" style={{
-                width: "100%",
-                minHeight: "40vh", // Adjusts dynamically
-                borderRadius: "0% 0% 2% 2% / 28% 28% 20% 20%",
-                backgroundColor: "#0044BC",
-                position: "relative", // Changed from fixed
-                zIndex: -1, // Ensures visibility
-            }}>
-                <div className="text-center mt-3 w-100">
-                    <strong className="fs-3 d-block mb-2">Ship Your Goods Worldwide with Reliable and Trusted Logistics Partners</strong>
-                    <p className="w-50 mx-auto">
-                        Connect with reliable logistics providers to transport goods across borders seamlessly. Our platform ensures efficient and hassle-free global shipping tailored to your needs.
-                    </p>
+            <div className='navbar-wrapper'>
+                <div className=" d-flex justify-content-center w-100">
+                    <Navbar />
                 </div>
             </div>
 
-            <div className="container" style={{ marginTop: "-3%" }}>
-                <div className="row bg-light rounded-3 p-3 shadow border border-3">
-                    <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
-                        <h5>Pick Up</h5>
-                        <span>Search Country</span>
-                    </div>
-                    <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
-                        <h5>Delivery</h5>
-                        <span>Search Country</span>
-                    </div>
-                    <div className="col-12 col-md-3 p-3 text-center text-md-start">
-                        <h5>Service</h5>
-                        <span>Select Service</span>
-                    </div>
-                    <div className="col-12 col-md-3 p-3 text-center">
-                        <button className="btn btn-light border border-danger text-danger w-100">
-                            Search Shipping Companies
-                        </button>
+            <section className="hero-wrapper">
+                <div className="container">
+                    <div className="d-flex flex-column justify-content-center align-items-center text-light px-3">
+                        <div className="text-center mt-3 w-100">
+                            <div className="hero-wrap-head">
+                                <h1>Ship Your Goods Worldwide with Reliable and Trusted Logistics Partners</h1>
+                                <p>
+                                    Connect with reliable logistics providers to transport goods across borders seamlessly. Our platform ensures efficient and hassle-free global shipping tailored to your needs.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+            <section className="search-wrapper">
+                <div className="container">
+                    <div className="row bg-light rounded-3 p-3 shadow border border-3">
+                        <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
+                            <h5>Pick Up</h5>
+                            <span>Search Country</span>
+                        </div>
+                        <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
+                            <h5>Delivery</h5>
+                            <span>Search Country</span>
+                        </div>
+                        <div className="col-12 col-md-3 p-3 text-center text-md-start">
+                            <h5>Service</h5>
+                            <span>Select Service</span>
+                        </div>
+                        <div className="col-12 col-md-3 p-3 text-center">
+                            <button className="btn btn-light border border-danger text-danger w-100">
+                                Search Shipping Companies
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <div className="container mt-4">
                 <div className="row g-4 text-center">
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="d-flex flex-column align-items-center">
-                            <span style={{ fontSize: '3rem', color: 'tomato' }}><BiSolidDetail /></span>
-                            <h5>Easy Shipment Details</h5>
-                            <p className="text-secondary">Simply provide your shipment details to get a tailored list of logistics companies</p>
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-6 col-md-3">
-                        <div className="d-flex flex-column align-items-center">
-                            <span style={{ fontSize: '3rem', color: 'tomato' }}><IoLocationSharp /></span>
-                            <h5>Location-based Filtering</h5>
-                            <p className="text-secondary">Filter shipping companies by your destination and origin for precise results</p>
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-6 col-md-3">
-                        <div className="d-flex flex-column align-items-center">
-                            <span style={{ fontSize: '3rem', color: 'tomato' }}><FaTruckFast /></span>
-                            <h5>Shipping Methods</h5>
-                            <p className="text-secondary">Choose your preferred shipping method and connect with the right partners</p>
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-6 col-md-3">
-                        <div className="d-flex flex-column align-items-center">
-                            <span style={{ fontSize: '3rem', color: 'tomato' }}><MdDeliveryDining /></span>
-                            <h5>Pickup Service</h5>
-                            <p className="text-secondary">Shipping companies will send their professionals to pick up your goods from your location</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div className="d-flex flex-column justify-content-center align-items-center ps-3 w-100 mt-5">
-                <div className="text-start mb-4">
-                    <strong className="fs-4">Newly Added Companies</strong>
-                </div>
-
-                <div className="container">
-                    <div className="row justify-content-center">
-                        {last_companies.map((company, index) => (
-                            <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                <div className="p-3 border rounded-4 border-3 d-flex flex-column align-items-start">
-                                    <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
-                                        <img
-                                            src={company.logo ? company.logo : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
-                                            alt="Logo"
-                                            className="w-100 h-100 object-fit-cover"
-                                        />
-                                    </div>
-                                    <h5>{company.company_name}</h5>
-                                    <span className="text-secondary">4.5 (20 Ratings)</span>
-                                    <p className="text-secondary text-start mt-1">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                    <span className="text-danger" style={{ cursor: "pointer" }}>View Details</span>
-                                </div>
+                            <div className="features-head">
+                                <span style={{ fontSize: '3rem', color: '#FF5722' }}><BiSolidDetail /></span>
+                                <h5>Easy Shipment Details</h5>
+                                <p >Simply provide your shipment details to get a tailored list of logistics companies</p>
                             </div>
-                        ))}
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-6 col-md-3">
+                        <div className="d-flex flex-column align-items-center">
+                            <div className="features-head">
+                                <span style={{ fontSize: '3rem', color: '#FF5722' }}><IoLocationSharp /></span>
+                                <h5>Location-based Filtering</h5>
+                                <p>Filter shipping companies by your destination and origin for precise results</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-6 col-md-3">
+                        <div className="d-flex flex-column align-items-center">
+                            <div className="features-head">
+                                <span style={{ fontSize: '3rem', color: '#FF5722' }}><FaTruckFast /></span>
+                                <h5>Shipping Methods</h5>
+                                <p>Choose your preferred shipping method and connect with the right partners</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-6 col-md-3">
+                        <div className="d-flex flex-column align-items-center">
+                            <div className="features-head">
+                                <span style={{ fontSize: '3rem', color: '#FF5722' }}><MdDeliveryDining /></span>
+                                <h5>Pickup Service</h5>
+                                <p >Shipping companies will send their professionals to pick up your goods from your location</p>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-
-                <button className="btn text-light px-4 py-2 mt-4" onClick={() => navigate('/companies_list')} style={{ backgroundColor: 'tomato' }}>
-                    View All
-                </button>
             </div>
+
+            <section className="new-add-company-wrapper">
+                <div className="container">
+                    <div className="d-flex flex-column justify-content-start align-items-start">
+                        <div className="title-head">
+                            <h3>Newly Added Companies</h3>
+                        </div>
+
+                        <div className="row justify-content-center">
+                            {last_companies.map((company, index) => (
+                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3">
+                                    <div className="company-box-wrap">
+                                        <div className="d-flex flex-column align-items-start">
+                                            <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
+                                                <img
+                                                    src={company.logo ? company.logo : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
+                                                    alt="Logo"
+                                                    className="w-100 h-100 object-fit-cover"
+                                                />
+                                            </div>
+                                            <h5>{company.company_name}</h5>
+                                            <span className="text-secondary">4.5 (20 Ratings)</span>
+                                            <p className="text-secondary text-start mt-1">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
+                                            <span className="text-danger" style={{ cursor: "pointer" }}>View Details</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <button className="btn-main" onClick={() => navigate('/companies_list')}>
+                            View All
+                        </button>
+                    </div>
+                </div>
+            </section>
+
 
 
             <div className="container mt-5">
