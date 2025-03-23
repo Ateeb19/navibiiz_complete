@@ -95,8 +95,10 @@ const Offers = () => {
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
 
-            <div className=" d-flex justify-content-center w-100">
-                <Navbar />
+            <div className='navbar-wrapper'>
+                <div className=" d-flex justify-content-center w-100">
+                    <Navbar />
+                </div>
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center text-light px-3" style={{
                 width: "100%",

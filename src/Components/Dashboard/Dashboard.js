@@ -800,8 +800,10 @@ const Dashboard = () => {
   return (
     <div className="vh-100">
 
-      <div className=" d-flex justify-content-end ">
-        <Navbar />
+      <div className='navbar-wrapper'>
+        <div className=" d-flex justify-content-center w-100">
+          <Navbar />
+        </div>
       </div>
       <div className="d-flex flex-row align-items-center justify-content-end vh-100 bg-light">
         {isMobile ? (

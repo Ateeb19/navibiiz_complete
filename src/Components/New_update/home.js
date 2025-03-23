@@ -5,6 +5,7 @@ import { Form } from "react-bootstrap";
 import Navbar from "../Navbar/Navbar";
 import { BiSolidDetail } from "react-icons/bi";
 import { IoLocationSharp } from "react-icons/io5";
+import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaTruckFast } from "react-icons/fa6";
 import { MdDeliveryDining } from "react-icons/md";
 import Footer from "../Footer/Footer";
@@ -13,6 +14,30 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../../assets/css/style.css'
 import Countryselector from '../Dashboard/Countries_selector';
+import Accordion from 'react-bootstrap/Accordion';
+import Card from 'react-bootstrap/Card';
+import { useAccordionButton } from 'react-bootstrap/AccordionButton';
+
+
+function CustomToggle({ children, eventKey }) {
+    const decoratedOnClick = useAccordionButton(eventKey, () =>
+        console.log('totally custom!'),
+    );
+
+    return (
+        // <IoIosAddCircleOutline onClick={decoratedOnClick}/>
+        <div onClick={decoratedOnClick}>
+            {children}
+        </div>
+
+        //   <button
+        //     type="button"
+        //     style={{ backgroundColor: 'pink' }}
+        //     onClick={decoratedOnClick}
+        //   >
+        //   </button>
+    );
+}
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -47,7 +72,7 @@ const Home = () => {
         dots: true,
         infinite: true,
         speed: 100,
-        slidesToShow: 2.7,
+        slidesToShow: 3,
         slidesToScroll: 1,
         appendDots: dots => (
             <ul style={{ margin: '0px', padding: '10px' }}> {dots} </ul>
@@ -56,14 +81,14 @@ const Home = () => {
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 2.7,
+                    slidesToShow: 3,
                     slidesToScroll: 1
                 }
             },
             {
                 breakpoint: 900,
                 settings: {
-                    slidesToShow: 1.7,
+                    slidesToShow: 2,
                     slidesToScroll: 1
                 }
             },
@@ -138,14 +163,14 @@ const Home = () => {
             </section>
             <section className="search-wrapper">
                 <div className="container">
-                    <div className="row bg-light rounded-3 p-3 shadow border border-3">
+                    <div className="row bg-white rounded-3 p-3 shadow border border-3">
                         <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
                             <h5>Pick Up</h5>
-                            <span><Countryselector bgcolor='#ffffff' onSelectCountry={(country) => setPickupCountry(country)} /></span>
+                            <span><Countryselector bgcolor='#ffffff' bordercolor ='1px solid #ffffff' margincount='15px 0 0 0' onSelectCountry={(country) => setPickupCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
                             <h5>Delivery</h5>
-                            <span><Countryselector bgcolor='#ffffff' onSelectCountry={(country) => setDestinationCountry(country)} /></span>
+                            <span><Countryselector bgcolor='#ffffff' bordercolor ='1px solid #ffffff' margincount='15px 0 0 0' onSelectCountry={(country) => setDestinationCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 p-3 text-center text-md-start">
                             <h5>Service</h5>
@@ -153,7 +178,7 @@ const Home = () => {
                                 <Form.Select
                                     value={filter_selectedService}
                                     onChange={(e) => setFilter_selectedService(e.target.value)}
-                                    style={{ backgroundColor: '#ffffff' }}
+                                    style={{ backgroundColor: '#ffffff' , border: '1px solid #ffffff', padding: '0', marginTop: '15px'}}
                                 >
                                     <option value="">Select the service</option>
                                     <option value="container">Container</option>
@@ -162,7 +187,7 @@ const Home = () => {
                             </span>
                         </div>
                         <div className="col-12 col-md-3 p-3 text-center">
-                            <button className="btn btn-light border border-danger text-danger w-100"  onClick={handleSearch}>
+                            <button className="btn btn-light border border-danger text-danger w-100" onClick={handleSearch}>
                                 Search Shipping Companies
                             </button>
                         </div>
@@ -223,7 +248,7 @@ const Home = () => {
 
                         <div className="row justify-content-center">
                             {last_companies.map((company, index) => (
-                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3">
+                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                                     <div className="company-box-wrap">
                                         <div className="d-flex flex-column align-items-start">
                                             <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
@@ -251,197 +276,263 @@ const Home = () => {
 
 
 
-            <div className="container mt-5">
-                <div className="text-center mb-4">
-                    <strong className="fs-3">How It Works: Simple & Secure Shipping in Four Easy Steps</strong>
-                </div>
-
-                <div className="row w-75 mx-auto align-items-center mb-4">
-                    <div className="col-12 col-md-6 order-2 order-md-2 text-start">
-                        <h4 style={{ color: 'tomato' }}>1</h4>
-                        <h5>Provide Your Shipment Details</h5>
-                        <p className="text-secondary">Fill out a simple form with your shipment details, including type of goods, origin, and destination.</p>
+            <section className="step-wrapper">
+                <div className="container mt-5">
+                    <div className="text-center mb-4">
+                        <div className="title-head">
+                            <h3>How It Works: Simple & Secure Shipping in Four Easy Steps</h3>
+                        </div>
                     </div>
-                    <div className="col-12 col-md-6 order-1 order-md-1 ">
-                        <img src="/Images/image.png" alt="Step 1" className="img-fluid w-100" />
-                    </div>
-                </div>
 
-                <div className="row w-75 mx-auto align-items-center mb-4">
-                    <div className="col-12 col-md-6 order-1 order-md-1 text-start">
-                        <h4 style={{ color: 'tomato' }}>2</h4>
-                        <h5>Receive Offers from Multiple Companies</h5>
-                        <p className="text-secondary">Get competitive quotes from trusted shipping providers tailored to your needs.</p>
-                    </div>
-                    <div className="col-12 col-md-6 order-2 order-md-2 ">
-                        <img src="/Images/image copy.png" alt="Step 2" className="img-fluid w-100" />
-                    </div>
-                </div>
-
-                <div className="row w-75 mx-auto align-items-center mb-4">
-                    <div className="col-12 col-md-6 order-1 order-md-1 ">
-                        <img src="/Images/image copy 2.png" alt="Step 3" className="img-fluid w-100" />
-                    </div>
-                    <div className="col-12 col-md-6 order-2 order-md-2 text-start">
-                        <h4 style={{ color: 'tomato' }}>3</h4>
-                        <h5>Choose the Best Offer</h5>
-                        <p className="text-secondary">Compare pricing, delivery times, and services to select the most suitable option.</p>
-                    </div>
-                </div>
-
-                <div className="row w-75 mx-auto align-items-center mb-4">
-                    <div className="col-12 col-md-6 order-1 order-md-1 text-start">
-                        <h4 style={{ color: 'tomato' }}>4</h4>
-                        <h5>Make Payment & Get Provider Details</h5>
-                        <p className="text-secondary">Securely complete your booking and receive the provider’s details. The shipping company will contact you to confirm pickup arrangements and provide the estimated delivery timeline.</p>
-                    </div>
-                    <div className="col-12 col-md-6 order-2 order-md-2">
-                        <img src="/Images/image copy 3.png" alt="Step 4" className="img-fluid w-100" />
-                    </div>
-                </div>
-
-                <div className="text-center mt-4">
-                    <button className="btn text-light px-4 py-2" style={{ backgroundColor: "tomato" }}>
-                        Start Shipping your products
-                    </button>
-                </div>
-            </div>
-
-            <div className="d-flex flex-column justify-content-center align-items-center ps-3 w-100 mt-5">
-                <div className="text-start mb-4">
-                    <strong className="fs-4">Recent Offers Posted</strong>
-                </div>
-
-                <div className="container">
-                    <div className="row justify-content-center">
-                        {last_companies.map((company, index) => (
-                            <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                <div className="p-3 border rounded-4 border-3 d-flex flex-column align-items-start">
-                                    {/* Company Logo */}
-                                    <div className="d-flex align-items-start mb-3">
-                                        <img
-                                            src={company.logo ? company.logo : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
-                                            alt="Logo"
-                                            className="rounded-circle"
-                                            style={{
-                                                backgroundColor: 'rgb(175, 175, 175)',
-                                                width: "60px",
-                                                height: "60px",
-                                                objectFit: "cover"
-                                            }}
-                                        />
-                                    </div>
-
-                                    {/* Company Details */}
-                                    <h5>{company.company_name}</h5>
-                                    <span className="text-secondary">4.5 (20 Ratings)</span>
-                                    <p className="text-secondary text-start mt-1">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                    <span className="text-danger" style={{ cursor: "pointer" }}>View Details</span>
-                                </div>
+                    <div className="row w-75 mx-auto align-items-center mb-4 mt-5">
+                        <div className="col-12 col-md-6 order-2 order-md-2 text-start">
+                            <div className="step-text-wrapper">
+                                <h4>1</h4>
+                                <h5>Provide Your Shipment Details</h5>
+                                <p>Fill out a simple form with your shipment details, including type of goods, origin, and destination.</p>
                             </div>
-                        ))}
+                        </div>
+                        <div className="col-12 col-md-6 order-1 order-md-1 ">
+                            <div className="step-image-wrapper">
+                                <img src="/Images/image.png" alt="Step 1" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row w-75 mx-auto align-items-center mb-4">
+                        <div className="col-12 col-md-6 order-1 order-md-1 text-start">
+                            <div className="step-text-wrapper">
+
+                                <h4 style={{ color: 'tomato' }}>2</h4>
+                                <h5>Receive Offers from Multiple Companies</h5>
+                                <p className="text-secondary">Get competitive quotes from trusted shipping providers tailored to your needs.</p>
+
+                            </div>
+                        </div>
+                        <div className="col-12 col-md-6 order-2 order-md-2 ">
+                            <div className="step-image-wrapper">
+                                <img src="/Images/image copy.png" alt="Step 2" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row w-75 mx-auto align-items-center mb-4">
+                        <div className="col-12 col-md-6 order-1 order-md-1 ">
+                            <div className="step-image-wrapper">
+                                <img src="/Images/image copy 2.png" alt="Step 3" />
+                            </div>
+                        </div>
+                        <div className="col-12 col-md-6 order-2 order-md-2 text-start">
+                            <div className="step-text-wrapper">
+
+                                <h4 style={{ color: 'tomato' }}>3</h4>
+                                <h5>Choose the Best Offer</h5>
+                                <p className="text-secondary">Compare pricing, delivery times, and services to select the most suitable option.</p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row w-75 mx-auto align-items-center mb-4">
+                        <div className="col-12 col-md-6 order-1 order-md-1 text-start">
+                            <div className="step-text-wrapper">
+                                <h4 style={{ color: 'tomato' }}>4</h4>
+                                <h5>Make Payment & Get Provider Details</h5>
+                                <p className="text-secondary">Securely complete your booking and receive the provider’s details. The shipping company will contact you to confirm pickup arrangements and provide the estimated delivery timeline.</p>
+
+                            </div>
+
+                        </div>
+                        <div className="col-12 col-md-6 order-2 order-md-2">
+                            <div className="step-image-wrapper">
+                                <img src="/Images/image copy 3.png" alt="Step 4" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="text-center mt-4">
+                        <button className="btn-main">
+                            Start Shipping your products
+                        </button>
                     </div>
                 </div>
+            </section>
 
-                <button className="btn text-light px-4 py-2 mt-4" style={{ backgroundColor: 'tomato' }}>
-                    View All
-                </button>
-            </div>
 
-            <div className="container mt-5">
-                <div className="text-center mb-4">
-                    <strong className="fs-3">How It Works: Effortless Shipping in Four Easy Steps</strong>
-                </div>
 
-                <div className="row w-75 mx-auto align-items-center mb-4">
-                    <div className="col-12 col-md-6 order-2 order-md-2 text-start">
-                        <h4 style={{ color: 'tomato' }}>1</h4>
-                        <h5>Provide Your Shipment Details</h5>
-                        <p className="text-secondary">Fill out a simple form with your shipment details, including type of goods, origin, and destination</p>
-                    </div>
-                    <div className="col-12 col-md-6 order-1 order-md-1 ">
-                        <img src="/Images/image.png" alt="Step 1" className="img-fluid w-100" />
-                    </div>
-                </div>
 
-                <div className="row w-75 mx-auto align-items-center mb-4">
-                    <div className="col-12 col-md-6 order-1 order-md-1 text-start">
-                        <h4 style={{ color: 'tomato' }}>2</h4>
-                        <h5>Get Matched with Trusted Companies</h5>
-                        <p className="text-secondary">Receive a curated list of trusted shipping companies that can handle your shipment</p>
-                    </div>
-                    <div className="col-12 col-md-6 order-2 order-md-2 ">
-                        <img src="/Images/image copy.png" alt="Step 2" className="img-fluid w-100" />
-                    </div>
-                </div>
+            <section className="new-add-company-wrapper">
+                <div className="container">
+                    <div className="d-flex flex-column justify-content-start align-items-start">
+                        <div className="title-head">
+                            <h3>Recent Offers Posted</h3>
+                        </div>
 
-                <div className="row w-75 mx-auto align-items-center mb-4">
-                    <div className="col-12 col-md-6 order-1 order-md-1 ">
-                        <img src="/Images/image copy 2.png" alt="Step 3" className="img-fluid w-100" />
-                    </div>
-                    <div className="col-12 col-md-6 order-2 order-md-2 text-start">
-                        <h4 style={{ color: 'tomato' }}>3</h4>
-                        <h5>Choose Your Preferred Company</h5>
-                        <p className="text-secondary">Review the list of companies and select the one that best fits your needs based on their services</p>
+                        <div className="row justify-content-center">
+                            {last_companies.map((company, index) => (
+                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                    <div className="company-box-wrap">
+                                        <div className="d-flex flex-column align-items-start">
+                                            <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
+                                                <img
+                                                    src={company.logo ? company.logo : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
+                                                    alt="Logo"
+                                                    className="w-100 h-100 object-fit-cover"
+                                                />
+                                            </div>
+                                            <h5>{company.company_name}</h5>
+                                            <span className="text-secondary">4.5 (20 Ratings)</span>
+                                            <p className="text-secondary text-start mt-1">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
+                                            <span className="text-danger" style={{ cursor: "pointer" }} onClick={() => View_details(company)}>View Details</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <button className="btn-main" onClick={() => navigate('/companies_list')}>
+                            View All
+                        </button>
                     </div>
                 </div>
+            </section>
 
-                <div className="row w-75 mx-auto align-items-center mb-4">
-                    <div className="col-12 col-md-6 order-1 order-md-1 text-start">
-                        <h4 style={{ color: 'tomato' }}>4</h4>
-                        <h5>Contact the Company Directly</h5>
-                        <p className="text-secondary">The shipping company will contact you to confirm pickup arrangements and provide the estimated delivery timeline</p>
+
+            <section className="step-wrapper">
+                <div className="container mt-5">
+                    <div className="text-center mb-4">
+                        <div className="title-head">
+                            <h3>How It Works: Effortless Shipping in Four Easy Steps</h3>
+                        </div>
                     </div>
-                    <div className="col-12 col-md-6 order-2 order-md-2">
-                        <img src="/Images/image copy 3.png" alt="Step 4" className="img-fluid w-100" />
+
+                    <div className="row w-75 mx-auto align-items-center mb-4 mt-5">
+                        <div className="col-12 col-md-6 order-2 order-md-2 text-start">
+                            <div className="step-text-wrapper">
+                                <h4>1</h4>
+                                <h5>Provide Your Shipment Details</h5>
+                                <p>Fill out a simple form with your shipment details, including type of goods, origin, and destination</p>
+                            </div>
+                        </div>
+                        <div className="col-12 col-md-6 order-1 order-md-1 ">
+                            <div className="step-image-wrapper">
+                                <img src="/Images/image.png" alt="Step 1" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row w-75 mx-auto align-items-center mb-4">
+                        <div className="col-12 col-md-6 order-1 order-md-1 text-start">
+                            <div className="step-text-wrapper">
+
+                                <h4 >2</h4>
+                                <h5>Get Matched with Trusted Companies</h5>
+                                <p >Receive a curated list of trusted shipping companies that can handle your shipment</p>
+
+                            </div>
+                        </div>
+                        <div className="col-12 col-md-6 order-2 order-md-2 ">
+                            <div className="step-image-wrapper">
+                                <img src="/Images/image copy.png" alt="Step 2" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row w-75 mx-auto align-items-center mb-4">
+                        <div className="col-12 col-md-6 order-1 order-md-1 ">
+                            <div className="step-image-wrapper">
+                                <img src="/Images/image copy 2.png" alt="Step 3" />
+                            </div>
+                        </div>
+                        <div className="col-12 col-md-6 order-2 order-md-2 text-start">
+                            <div className="step-text-wrapper">
+
+                                <h4 >3</h4>
+                                <h5>Choose Your Preferred Company</h5>
+                                <p >Review the list of companies and select the one that best fits your needs based on their services</p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row w-75 mx-auto align-items-center mb-4">
+                        <div className="col-12 col-md-6 order-1 order-md-1 text-start">
+                            <div className="step-text-wrapper">
+                                <h4 >4</h4>
+                                <h5>Contact the Company Directly</h5>
+                                <p >The shipping company will contact you to confirm pickup arrangements and provide the estimated delivery timeline</p>
+
+                            </div>
+
+                        </div>
+                        <div className="col-12 col-md-6 order-2 order-md-2">
+                            <div className="step-image-wrapper">
+                                <img src="/Images/image copy 3.png" alt="Step 4" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="text-center mt-4">
+                        <button className="btn-main">
+                            View all offers
+                        </button>
                     </div>
                 </div>
+            </section>
 
-                <div className="text-center mt-4">
-                    <button className="btn text-light px-4 py-2" style={{ backgroundColor: "tomato" }}>
-                        Start Shipping your products
-                    </button>
-                </div>
-            </div>
+            <section className="stats-wrapper">
+                <div className="container">
+                    <div className="w-100 d-flex flex-wrap justify-content-between align-items-center">
+                        <div className="flex-grow-1 text-light text-center">
+                            <div className="stats-wrap">
+                                <h3>100+</h3>
+                                <p>Verified Logistics Companies</p>
+                            </div>
+                        </div>
+                        <div className="flex-grow-1 text-light text-center">
+                            <div className="stats-wrap">
+                                <h3>100+</h3>
+                                <p>Countries Covered</p>
+                            </div>
 
-            <div className="w-100 d-flex flex-wrap justify-content-between align-items-center p-4 mt-5"
-                style={{ backgroundColor: "#0044BC" }}>
-                <div className="flex-grow-1 text-light text-center">
-                    <strong className="fs-4">100+</strong>
-                    <p>Verified Logistics Companies</p>
-                </div>
-                <div className="flex-grow-1 text-light text-center">
-                    <strong className="fs-4">100+</strong>
-                    <p>Countries Covered</p>
-                </div>
-                <div className="flex-grow-1 text-light text-center">
-                    <strong className="fs-4">10,000+</strong>
-                    <p>Shipments Processed</p>
-                </div>
-                <div className="flex-grow-1 text-light text-center">
-                    <strong className="fs-4">98%</strong>
-                    <p>Customer Satisfaction Rate</p>
-                </div>
-            </div>
+                        </div>
+                        <div className="flex-grow-1 text-light text-center">
+                            <div className="stats-wrap">
+                                <h3>10,000+</h3>
+                                <p>Shipments Processed</p>
+                            </div>
 
+                        </div>
+                        <div className="flex-grow-1 text-light text-center">
+                            <div className="stats-wrap">
+                                <h3>98%</h3>
+                                <p>Customer Satisfaction Rate</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            {/* <section className="testi-wrapper"> */}
             <div className="d-flex flex-column justify-content-center align-items-center w-100 mt-5">
-                <strong className="fs-4">Real stories, Real impact</strong>
-
-                <div className="w-75 mx-auto py-3 px-3">
+                <div className="title-head">
+                    <h3>Real stories, Real impact</h3>
+                </div>
+                <div className="w-100 mx-auto px-3">
                     <Slider {...settings}>
                         {profiles.map((profile, index) => (
                             <div key={index} className="p-4">
-                                <div className="bg-white shadow-lg rounded-3 w-100 p-4 d-flex flex-column align-items-center text-center border">
-                                    <img
-                                        src={profile.img}
-                                        alt={profile.name}
-                                        style={{
-                                            width: '40%',
-                                            height: '5rem'
-                                        }}
-                                        className="rounded-circle mb-4 mt-2"
-                                    />
-                                    <p className="text-secondary ">{profile.description}</p>
+                                <div className="bg-white rounded-3 w-100 p-4 d-flex flex-column align-items-center text-center border">
+                                    <div className="testi-img-wrapper">
+                                        <img
+                                            src={profile.img}
+                                            alt={profile.name}
+                                        />
+                                    </div>
+                                    <div className="testi-desc-wrapper">
+                                        <p>{profile.description}</p>
+                                    </div>
                                     <h5 className="mb-2">{profile.name}</h5>
                                 </div>
                             </div>
@@ -449,6 +540,138 @@ const Home = () => {
                     </Slider>
                 </div>
             </div>
+
+            {/* </section> */}
+
+            <section className="faq-wrapper">
+                <div className="title-head">
+                    <h4>Questions we get asked</h4>
+                </div>
+
+                <div className="container">
+                    <div className="faq-wrap">
+                        <div className="d-flex flex-column flex-md-row justify-content-center p-3 p-md-5 gap-3 gap-md-5 w-100">
+                            <div className="col-12 col-md-6 d-flex flex-column align-items-center">
+                                <ul className="list-unstyled w-100 text-start">
+                                    <Accordion defaultActiveKey="0">
+                                        <li >
+                                            <Card>
+                                                <Card.Header>
+                                                    <CustomToggle eventKey="0">
+                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
+                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                    </CustomToggle>
+                                                </Card.Header>
+                                                <Accordion.Collapse eventKey="0">
+                                                    <Card.Body>Hello! I'm the body</Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
+                                        </li>
+                                        <li >
+                                            <Card>
+                                                <Card.Header>
+                                                    <CustomToggle eventKey="1">
+                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
+                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                    </CustomToggle>
+                                                </Card.Header>
+                                                <Accordion.Collapse eventKey="1">
+                                                    <Card.Body>Hello! I'm the body</Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
+                                        </li>
+                                        <li >
+                                            <Card>
+                                                <Card.Header>
+                                                    <CustomToggle eventKey="2">
+                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
+                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                    </CustomToggle>
+                                                </Card.Header>
+                                                <Accordion.Collapse eventKey="2">
+                                                    <Card.Body>Hello! I'm the body</Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
+                                        </li>
+                                        <li >
+                                            <Card>
+                                                <Card.Header>
+                                                    <CustomToggle eventKey="3">
+                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
+                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                    </CustomToggle>
+                                                </Card.Header>
+                                                <Accordion.Collapse eventKey="3">
+                                                    <Card.Body>Hello! I'm the body</Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
+                                        </li>
+                                    </Accordion>
+                                </ul>
+                            </div>
+                            <div className="col-12 col-md-6 d-flex flex-column align-items-center">
+                                <ul className="list-unstyled w-100 text-start">
+                                <Accordion defaultActiveKey="0">
+                                        <li >
+                                            <Card>
+                                                <Card.Header>
+                                                    <CustomToggle eventKey="0">
+                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
+                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                    </CustomToggle>
+                                                </Card.Header>
+                                                <Accordion.Collapse eventKey="0">
+                                                    <Card.Body>Hello! I'm the body</Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
+                                        </li>
+                                        <li >
+                                            <Card>
+                                                <Card.Header>
+                                                    <CustomToggle eventKey="1">
+                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
+                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                    </CustomToggle>
+                                                </Card.Header>
+                                                <Accordion.Collapse eventKey="1">
+                                                    <Card.Body>Hello! I'm the body</Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
+                                        </li>
+                                        <li >
+                                            <Card>
+                                                <Card.Header>
+                                                    <CustomToggle eventKey="2">
+                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
+                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                    </CustomToggle>
+                                                </Card.Header>
+                                                <Accordion.Collapse eventKey="2">
+                                                    <Card.Body>Hello! I'm the body</Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
+                                        </li>
+                                        <li >
+                                            <Card>
+                                                <Card.Header>
+                                                    <CustomToggle eventKey="3">
+                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
+                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                    </CustomToggle>
+                                                </Card.Header>
+                                                <Accordion.Collapse eventKey="3">
+                                                    <Card.Body>Hello! I'm the body</Card.Body>
+                                                </Accordion.Collapse>
+                                            </Card>
+                                        </li>
+                                    </Accordion>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <div className="w-100 mt-5">
                 <Footer />
             </div>

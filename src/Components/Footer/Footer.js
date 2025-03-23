@@ -13,26 +13,7 @@ const Footer = () => {
     return (
         <div className="d-flex flex-column align-items-center mt-4 ">
 
-    <h4>Questions we get asked</h4>
-
-    <div className="d-flex flex-column flex-md-row justify-content-center p-3 p-md-5 gap-3 gap-md-5 w-100">
-        <div className="col-12 col-md-6 d-flex flex-column align-items-center">
-            <ul className="list-unstyled w-100 text-start">
-                <li className="d-flex mb-3 mb-md-5 border border-2 p-2 p-md-1 rounded-4 mt-3 mt-md-5"><strong><IoIosAddCircleOutline className="text-primary fs-5 me-2" /></strong><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p></li>
-                <li className="d-flex mb-3 mb-md-5 border border-2 p-2 p-md-1 rounded-4 mt-3 mt-md-5"><strong><IoIosAddCircleOutline className="text-primary fs-5 me-2" /></strong><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p></li>
-                <li className="d-flex mb-3 mb-md-5 border border-2 p-2 p-md-1 rounded-4 mt-3 mt-md-5"><strong><IoIosAddCircleOutline className="text-primary fs-5 me-2" /></strong><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p></li>
-                <li className="d-flex mb-3 mb-md-5 border border-2 p-2 p-md-1 rounded-4 mt-3 mt-md-5"><strong><IoIosAddCircleOutline className="text-primary fs-5 me-2" /></strong><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p></li>
-            </ul>
-        </div>
-        <div className="col-12 col-md-6 d-flex flex-column align-items-center">
-            <ul className="list-unstyled w-100 text-start">
-                <li className="d-flex mb-3 mb-md-5 border border-2 p-2 p-md-1 rounded-4 mt-3 mt-md-5"><strong><IoIosAddCircleOutline className="text-primary fs-5 me-2" /></strong><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p></li>
-                <li className="d-flex mb-3 mb-md-5 border border-2 p-2 p-md-1 rounded-4 mt-3 mt-md-5"><strong><IoIosAddCircleOutline className="text-primary fs-5 me-2" /></strong><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p></li>
-                <li className="d-flex mb-3 mb-md-5 border border-2 p-2 p-md-1 rounded-4 mt-3 mt-md-5"><strong><IoIosAddCircleOutline className="text-primary fs-5 me-2" /></strong><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p></li>
-                <li className="d-flex mb-3 mb-md-5 border border-2 p-2 p-md-1 rounded-4 mt-3 mt-md-5"><strong><IoIosAddCircleOutline className="text-primary fs-5 me-2" /></strong><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p></li>
-            </ul>
-        </div>
-    </div>
+   
 
     <div className="row mt-2 w-100">
         <div className="col-12 col-md-1 d-none d-md-block"></div>
