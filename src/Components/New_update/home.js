@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
-import { CountrySelect } from "react-country-state-city";
 import { Form } from "react-bootstrap";
 import Navbar from "../Navbar/Navbar";
 import { BiSolidDetail } from "react-icons/bi";
@@ -13,6 +12,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../../assets/css/style.css'
+import Countryselector from '../Dashboard/Countries_selector';
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -76,7 +76,22 @@ const Home = () => {
             }
         ]
     };
+    const [pickupCountry, setPickupCountry] = useState('');
+    const [destinationCountry, setDestinationCountry] = useState('');
+    const [filter_selectedService, setFilter_selectedService] = useState('');
+    const handleSearch = () => {
+        navigate('/companies_list', {
+            state: {
+                pickupCountry,
+                destinationCountry,
+                selectedService: filter_selectedService,
+            },
+        });
+    };
 
+    const View_details = (item) => {
+        navigate(`/company_details/${item.id}`, { state: { company: item } });
+    };
     const profiles = [
         {
             name: 'John Doe',
@@ -126,18 +141,28 @@ const Home = () => {
                     <div className="row bg-light rounded-3 p-3 shadow border border-3">
                         <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
                             <h5>Pick Up</h5>
-                            <span>Search Country</span>
+                            <span><Countryselector bgcolor='#ffffff' onSelectCountry={(country) => setPickupCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
                             <h5>Delivery</h5>
-                            <span>Search Country</span>
+                            <span><Countryselector bgcolor='#ffffff' onSelectCountry={(country) => setDestinationCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 p-3 text-center text-md-start">
                             <h5>Service</h5>
-                            <span>Select Service</span>
+                            <span>
+                                <Form.Select
+                                    value={filter_selectedService}
+                                    onChange={(e) => setFilter_selectedService(e.target.value)}
+                                    style={{ backgroundColor: '#ffffff' }}
+                                >
+                                    <option value="">Select the service</option>
+                                    <option value="container">Container</option>
+                                    <option value="car">Car</option>
+                                </Form.Select>
+                            </span>
                         </div>
                         <div className="col-12 col-md-3 p-3 text-center">
-                            <button className="btn btn-light border border-danger text-danger w-100">
+                            <button className="btn btn-light border border-danger text-danger w-100"  onClick={handleSearch}>
                                 Search Shipping Companies
                             </button>
                         </div>
@@ -211,7 +236,7 @@ const Home = () => {
                                             <h5>{company.company_name}</h5>
                                             <span className="text-secondary">4.5 (20 Ratings)</span>
                                             <p className="text-secondary text-start mt-1">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                            <span className="text-danger" style={{ cursor: "pointer" }}>View Details</span>
+                                            <span className="text-danger" style={{ cursor: "pointer" }} onClick={() => View_details(company)}>View Details</span>
                                         </div>
                                     </div>
                                 </div>

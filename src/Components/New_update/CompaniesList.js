@@ -6,8 +6,11 @@ import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "rea
 import { HiBadgeCheck } from "react-icons/hi";
 import Countries_selector from "../Dashboard/Countries_selector";
 import { Rating } from 'react-simple-star-rating';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const CompaniesList = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const companies = JSON.parse(localStorage.getItem('companyInfo'));
 
@@ -15,6 +18,15 @@ const CompaniesList = () => {
     const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
     const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
     const [selectedDuration, setSelectedDuration] = useState('');
+
+    useEffect(() => {
+        if (location.state) {
+            setSelectedPickupCountry(location.state.pickupCountry || '');
+            setSelectedDestinationCountry(location.state.destinationCountry || '');
+            setSelectedServices(location.state.selectedService || '');
+        }
+    }, [location.state]);
+
     const handleServiceChange = (e) => {
         const value = e.target.value;
         setSelectedServices((prev) =>
@@ -71,10 +83,13 @@ const CompaniesList = () => {
 
     // console.log(filteredData)
     const [company_detail, setCompany_detail] = useState(null);
-    const View_details = (item) => {
-        setCompany_detail(item);
-    }
+    // const View_details = (item) => {
+    //     setCompany_detail(item);
+    // }
 
+    const View_details = (item) => {
+        navigate(`/company_details/${item.id}`, { state: { company: item } });
+    };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
 

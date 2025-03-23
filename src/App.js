@@ -23,7 +23,7 @@ import axios from 'axios';
 import CompaniesList from './Components/New_update/CompaniesList';
 import send_groupage from './Components/send_groupage/Send_groupage';
 import Offers from './Components/New_update/Offers';
-
+import CompanyDetails from './Components/New_update/Companies_details';
 
 
 const App = () => {
@@ -118,6 +118,7 @@ useEffect(() => {
             <Route Component={Cars} path='/cars'></Route>
             <Route Component={SendTransport} path='/send_transport'></Route>
             <Route Component={LoginPage} path='/login'></Route>
+            <Route path="/company_details/:id" element={<CompanyDetails />} />
           </Routes>
         </div>
       </Router>
