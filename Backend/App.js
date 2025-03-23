@@ -9,7 +9,7 @@ require('dotenv').config({path: './.env'});
 app.use(express.json());
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://217.154.86.64:3000' ],
+    origin: ['http://localhost:3000', 'http://217.154.86.64:3000', 'https://novibiz.com/' ],
     methods: ["POST", "GET", 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -48,6 +48,7 @@ app.use('/admin', require('./Routers/Admin_route.js'));
 app.use('/s_admin', require('./Routers/S_Admin_route.js'));
 app.use('/send_groupage', require('./Routers/Send_Groupage_router.js'));
 app.use('/notification', require('./Routers/Notification_route.js'));
+app.use('/paypal', require('./Routers/Paypal_route.js'));
 
 
 app.listen((4000), ()=> {
