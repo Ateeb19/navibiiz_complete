@@ -45,7 +45,7 @@ const Navbar = () => {
 
   const [userInfo, setUserInfo] = useState('');
   useEffect(() => {
-    if (userRole !== 'admin' && userRole !== 'Sadmin' && userRole !== 'user') {
+    if (userRole !== 'admin' && userRole !== 'Sadmin') {
       navigate('/');
     } else {
       axios.get(`${port}/user/display_profile`, {
