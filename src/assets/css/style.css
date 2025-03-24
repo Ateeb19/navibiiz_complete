@@ -205,8 +205,50 @@
 }
 
 .contact-form-wrap{
-    width: 90%;
+    width: 80%;
+    margin: 0 auto;
     background-color: white;
     box-shadow: 0 0 6px #ccc;
-    padding: 30px ;
+    padding: 30px 10px 30px 40px;
+    border-radius: 10px;
+}
+
+.contact-field{
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #ebebeb;
+    border-radius: 6px;
+    border: 1px solid #ebebeb;
+    font-size: 17px !important;
+    margin-bottom: 30px;
+}
+
+.contact-form-wrap h4{
+    font-size: 22px;
+    margin-bottom: 18px;
+    font-weight: bold;
+}
+
+.promo-wrapper p{
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    margin: 10px 0 35px 0 ;
+}
+
+.btn-register{
+    padding: 12px 30px;
+    color: #fff;
+    background-color: #FF5722;
+    border: 1px solid #FF5722;
+    border-radius: 6px;
+}
+
+.footer-logo-wrap img{
+    width: 40%;
+    ;
+}
+
+.footer-wrapper{
+    padding: 50px 0;
 }
