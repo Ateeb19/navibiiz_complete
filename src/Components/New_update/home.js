@@ -15,29 +15,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import '../../assets/css/style.css'
 import Countryselector from '../Dashboard/Countries_selector';
 import Accordion from 'react-bootstrap/Accordion';
-import Card from 'react-bootstrap/Card';
-import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 
-
-function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionButton(eventKey, () =>
-        console.log('totally custom!'),
-    );
-
-    return (
-        // <IoIosAddCircleOutline onClick={decoratedOnClick}/>
-        <div onClick={decoratedOnClick}>
-            {children}
-        </div>
-
-        //   <button
-        //     type="button"
-        //     style={{ backgroundColor: 'pink' }}
-        //     onClick={decoratedOnClick}
-        //   >
-        //   </button>
-    );
-}
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -166,11 +144,11 @@ const Home = () => {
                     <div className="row bg-white rounded-3 p-3 shadow border border-3">
                         <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
                             <h5>Pick Up</h5>
-                            <span><Countryselector bgcolor='#ffffff' bordercolor ='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
+                            <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
                             <h5>Delivery</h5>
-                            <span><Countryselector bgcolor='#ffffff' bordercolor ='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px" onSelectCountry={(country) => setDestinationCountry(country)} /></span>
+                            <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px" onSelectCountry={(country) => setDestinationCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 p-3 text-center text-md-start">
                             <h5>Service</h5>
@@ -178,7 +156,7 @@ const Home = () => {
                                 <Form.Select
                                     value={filter_selectedService}
                                     onChange={(e) => setFilter_selectedService(e.target.value)}
-                                    style={{ backgroundColor: '#ffffff' , border: '1px solid #ffffff', padding: '0', marginTop: '15px'}}
+                                    style={{ backgroundColor: '#ffffff', border: '1px solid #ffffff', padding: '0', marginTop: '15px' }}
                                 >
                                     <option value="">Select the service</option>
                                     <option value="container">Container</option>
@@ -554,115 +532,147 @@ const Home = () => {
                             <div className="col-12 col-md-6 d-flex flex-column align-items-center">
                                 <ul className="list-unstyled w-100 text-start">
                                     <Accordion defaultActiveKey="0">
-                                        <li >
-                                            <Card>
-                                                <Card.Header>
-                                                    <CustomToggle eventKey="0">
-                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
-                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                                                    </CustomToggle>
-                                                </Card.Header>
-                                                <Accordion.Collapse eventKey="0">
-                                                    <Card.Body>Hello! I'm the body</Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
+                                        <li>
+                                            <Accordion.Item eventKey="0">
+                                                <Accordion.Header>
+                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
+                                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                    culpa qui officia deserunt mollit anim id est laborum.
+                                                </Accordion.Body>
+                                            </Accordion.Item>
                                         </li>
-                                        <li >
-                                            <Card>
-                                                <Card.Header>
-                                                    <CustomToggle eventKey="1">
-                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
-                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                                                    </CustomToggle>
-                                                </Card.Header>
-                                                <Accordion.Collapse eventKey="1">
-                                                    <Card.Body>Hello! I'm the body</Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
+                                        <li>
+                                            <Accordion.Item eventKey="1">
+                                                <Accordion.Header>
+                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
+                                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                    culpa qui officia deserunt mollit anim id est laborum.
+                                                </Accordion.Body>
+                                            </Accordion.Item>
                                         </li>
-                                        <li >
-                                            <Card>
-                                                <Card.Header>
-                                                    <CustomToggle eventKey="2">
-                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
-                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                                                    </CustomToggle>
-                                                </Card.Header>
-                                                <Accordion.Collapse eventKey="2">
-                                                    <Card.Body>Hello! I'm the body</Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
+                                        <li>
+                                            <Accordion.Item eventKey="2">
+                                                <Accordion.Header>
+                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
+                                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                    culpa qui officia deserunt mollit anim id est laborum.
+                                                </Accordion.Body>
+                                            </Accordion.Item>
                                         </li>
-                                        <li >
-                                            <Card>
-                                                <Card.Header>
-                                                    <CustomToggle eventKey="3">
-                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
-                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                                                    </CustomToggle>
-                                                </Card.Header>
-                                                <Accordion.Collapse eventKey="3">
-                                                    <Card.Body>Hello! I'm the body</Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
+                                        <li>
+                                            <Accordion.Item eventKey="3">
+                                                <Accordion.Header>
+                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
+                                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                    culpa qui officia deserunt mollit anim id est laborum.
+                                                </Accordion.Body>
+                                            </Accordion.Item>
                                         </li>
                                     </Accordion>
                                 </ul>
                             </div>
                             <div className="col-12 col-md-6 d-flex flex-column align-items-center">
                                 <ul className="list-unstyled w-100 text-start">
-                                <Accordion defaultActiveKey="0">
-                                        <li >
-                                            <Card>
-                                                <Card.Header>
-                                                    <CustomToggle eventKey="0">
-                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
-                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                                                    </CustomToggle>
-                                                </Card.Header>
-                                                <Accordion.Collapse eventKey="0">
-                                                    <Card.Body>Hello! I'm the body</Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
+                                    <Accordion defaultActiveKey="0">
+                                        <li>
+                                            <Accordion.Item eventKey="0">
+                                                <Accordion.Header>
+                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
+                                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                    culpa qui officia deserunt mollit anim id est laborum.
+                                                </Accordion.Body>
+                                            </Accordion.Item>
                                         </li>
-                                        <li >
-                                            <Card>
-                                                <Card.Header>
-                                                    <CustomToggle eventKey="1">
-                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
-                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                                                    </CustomToggle>
-                                                </Card.Header>
-                                                <Accordion.Collapse eventKey="1">
-                                                    <Card.Body>Hello! I'm the body</Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
+                                        <li>
+                                            <Accordion.Item eventKey="1">
+                                                <Accordion.Header>
+                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
+                                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                    culpa qui officia deserunt mollit anim id est laborum.
+                                                </Accordion.Body>
+                                            </Accordion.Item>
                                         </li>
-                                        <li >
-                                            <Card>
-                                                <Card.Header>
-                                                    <CustomToggle eventKey="2">
-                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
-                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                                                    </CustomToggle>
-                                                </Card.Header>
-                                                <Accordion.Collapse eventKey="2">
-                                                    <Card.Body>Hello! I'm the body</Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
+                                        <li>
+                                            <Accordion.Item eventKey="2">
+                                                <Accordion.Header>
+                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
+                                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                    culpa qui officia deserunt mollit anim id est laborum.
+                                                </Accordion.Body>
+                                            </Accordion.Item>
                                         </li>
-                                        <li >
-                                            <Card>
-                                                <Card.Header>
-                                                    <CustomToggle eventKey="3">
-                                                        <h5><IoIosAddCircleOutline className="text-primary" /></h5>
-                                                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                                                    </CustomToggle>
-                                                </Card.Header>
-                                                <Accordion.Collapse eventKey="3">
-                                                    <Card.Body>Hello! I'm the body</Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
+                                        <li>
+                                            <Accordion.Item eventKey="3">
+                                                <Accordion.Header>
+                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
+                                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                    culpa qui officia deserunt mollit anim id est laborum.
+                                                </Accordion.Body>
+                                            </Accordion.Item>
                                         </li>
                                     </Accordion>
                                 </ul>

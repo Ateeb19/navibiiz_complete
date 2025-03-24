@@ -250,5 +250,29 @@
 }
 
 .footer-wrapper{
-    padding: 50px 0;
+    padding: 50px 0 20px 0;
+    text-align: left;
+}
+
+.footer-wrap ul{
+    margin: 0;
+    padding: 0;
+}
+
+.footer-wrap ul li{
+    color: #575757;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.footer-wrap h3{
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.footer-wrap .follow li{
+    display: inline-block;
+    color: #FF5722;
+    font-size: 22px;
+    padding-right: 12px;
 }

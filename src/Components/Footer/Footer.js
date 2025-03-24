@@ -111,7 +111,7 @@ const Footer = () => {
 
                             <div className="col-12 col-md-3">
                                 <h3>Follow Us</h3>
-                                <ul>
+                                <ul className="follow">
                                     <li> <FaFacebook /></li>
                                     <li><FaInstagramSquare /></li>
                                     <li><FaLinkedin /></li>
@@ -120,7 +120,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    <div className="w-100 text-center text-secondary">
+                    <div className="w-100 text-center text-secondary mt-4">
                         <p>© 2025 Navibiiz. All Rights Reserved.</p>
                     </div>
                 </div>
