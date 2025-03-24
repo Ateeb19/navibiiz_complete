@@ -77,7 +77,7 @@ const Footer = () => {
                         <h2>Partner With Us and Grow Your Reach</h2>
                     </div>
                     <p className="">Join our platform to connect with global customers and expand your logistics business</p>
-                    <button className="btn-register">Register your Company</button>
+                    <button className="btn-register" onClick={() => {navigate("/next-page", { state: { isVisible: true } })}}>Register your Company</button>
                 </div>
             </section>
 

@@ -276,3 +276,49 @@
     font-size: 22px;
     padding-right: 12px;
 }
+
+.search-result-wrap{
+    margin-left: 30px;;
+}
+.search-result-data-wrap{
+    width: 100%;
+    background-color: #f6f6f6;
+    padding: 30px ;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    cursor: pointer;
+}
+.search-result-logo-wrap img{
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
+    margin-bottom: 20px;
+}
+
+.input-select{
+width: 100%;
+background-color: #686866;
+border-radius: 5px;
+padding: 12px;
+}
+
+.offer-details-wrap{
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 25px;
+}
+
+.offer-submit-sub-head{
+    font-size: 15px;
+}
+
+.btn-main-offer {
+    padding: 12px 30px;
+    color: #fff;
+    background-color: #FF5722;
+    border: 1px solid #FF5722;
+    border-radius: 6px;
+    margin-top: 30px;
+}

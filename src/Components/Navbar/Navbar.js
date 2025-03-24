@@ -45,8 +45,8 @@ const Navbar = () => {
 
   const [userInfo, setUserInfo] = useState('');
   useEffect(() => {
-    if (userRole !== 'admin' && userRole !== 'Sadmin') {
-      // navigate('/');
+    if (userRole !== 'admin' && userRole !== 'Sadmin' && userRole !== 'user') {
+      console.log('hello');
     } else {
       axios.get(`${port}/user/display_profile`, {
         headers: {
@@ -57,6 +57,9 @@ const Navbar = () => {
       }).catch((err) => { console.log(err) });
     }
   }, [userRole]);
+
+  console.log('data-:', userInfo);
+
 
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);

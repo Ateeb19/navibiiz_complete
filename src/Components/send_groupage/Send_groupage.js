@@ -225,8 +225,10 @@ const Send_groupage = () => {
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
-            <div className=" d-flex justify-content-center w-100">
-                <Navbar />
+            <div className='navbar-wrapper'>
+                <div className=" d-flex justify-content-center w-100">
+                    <Navbar />
+                </div>
             </div>
             <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-5">
                 <strong className="fs-4">Shipping Information</strong>
@@ -737,7 +739,7 @@ const Send_groupage = () => {
                 )}
             </div>
 
-            <div className=" d-flex justify-content-center w-100">
+            <div className="w-100">
                 <Footer />
             </div>
         </div>

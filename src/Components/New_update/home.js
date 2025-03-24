@@ -141,14 +141,14 @@ const Home = () => {
             </section>
             <section className="search-wrapper">
                 <div className="container">
-                    <div className="row bg-white rounded-3 p-3 shadow border border-3">
-                        <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
+                    <div className="row bg-white rounded-3 p-3 shadow border">
+                        <div className="col-12 col-md-3 border-end border-1 p-3 text-center text-md-start">
                             <h5>Pick Up</h5>
-                            <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
+                            <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px 6px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                         </div>
-                        <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
+                        <div className="col-12 col-md-3 border-end border-1 p-3 text-center text-md-start">
                             <h5>Delivery</h5>
-                            <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px" onSelectCountry={(country) => setDestinationCountry(country)} /></span>
+                            <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px 6px" onSelectCountry={(country) => setDestinationCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 p-3 text-center text-md-start">
                             <h5>Service</h5>
@@ -156,7 +156,7 @@ const Home = () => {
                                 <Form.Select
                                     value={filter_selectedService}
                                     onChange={(e) => setFilter_selectedService(e.target.value)}
-                                    style={{ backgroundColor: '#ffffff', border: '1px solid #ffffff', padding: '0', marginTop: '15px' }}
+                                    style={{ backgroundColor: '#ffffff', border: '1px solid #ffffff', padding: '0 6px', marginTop: '15px' }}
                                 >
                                     <option value="">Select the service</option>
                                     <option value="container">Container</option>
