@@ -166,11 +166,11 @@ const Home = () => {
                     <div className="row bg-white rounded-3 p-3 shadow border border-3">
                         <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
                             <h5>Pick Up</h5>
-                            <span><Countryselector bgcolor='#ffffff' bordercolor ='1px solid #ffffff' margincount='15px 0 0 0' onSelectCountry={(country) => setPickupCountry(country)} /></span>
+                            <span><Countryselector bgcolor='#ffffff' bordercolor ='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 border-end border-3 p-3 text-center text-md-start">
                             <h5>Delivery</h5>
-                            <span><Countryselector bgcolor='#ffffff' bordercolor ='1px solid #ffffff' margincount='15px 0 0 0' onSelectCountry={(country) => setDestinationCountry(country)} /></span>
+                            <span><Countryselector bgcolor='#ffffff' bordercolor ='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px" onSelectCountry={(country) => setDestinationCountry(country)} /></span>
                         </div>
                         <div className="col-12 col-md-3 p-3 text-center text-md-start">
                             <h5>Service</h5>
@@ -248,7 +248,7 @@ const Home = () => {
 
                         <div className="row justify-content-center">
                             {last_companies.map((company, index) => (
-                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                <div key={index} className="col-12 col-sm-6 col-md-4 col-xl-3">
                                     <div className="company-box-wrap">
                                         <div className="d-flex flex-column align-items-start">
                                             <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>

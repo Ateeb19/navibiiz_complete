@@ -208,7 +208,7 @@ const LoginPage = () => {
             </form>
             <div className="w-100">
               <label className="fst-italic fs-6 mt-3">OR</label><br />
-              <label className="fs-5 mt-2">{isSignup ? "Already have an account?" : "Don't have an account?"}{" "}<span className="text-primary" onClick={toggleForm}>{isSignup ? "Login" : "Sign Up"}</span></label>
+              <label className="fs-6 mt-2">{isSignup ? "Already have an account?" : "Don't have an account?"}{" "}<span className="text-primary" onClick={toggleForm}>{isSignup ? "Login" : "Sign Up"}</span></label>
             </div>
           </div>
         </div>
