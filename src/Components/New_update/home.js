@@ -545,7 +545,7 @@ const Home = () => {
 
             <section className="faq-wrapper">
                 <div className="title-head">
-                    <h4>Questions we get asked</h4>
+                    <h3>Questions we get asked</h3>
                 </div>
 
                 <div className="container">

@@ -199,3 +199,14 @@
     background-position: center;
     height: 100vh;
 }
+
+.faq-wrapper{
+    margin-top: 60px;
+}
+
+.contact-form-wrap{
+    width: 90%;
+    background-color: white;
+    box-shadow: 0 0 6px #ccc;
+    padding: 30px ;
+}
