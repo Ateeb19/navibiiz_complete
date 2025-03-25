@@ -114,7 +114,7 @@ const CompaniesList = () => {
                 </div>
             </div>
 
-            <section className="search-result-wrapper">
+            <section className="search-result-wrapper w-100">
                 <div className="container">
                     <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-4 mt-md-5 w-100">
                         <div className="d-flex flex-column align-items-start p-3 ps-5 pb-5 col-12 col-md-3">
@@ -141,7 +141,7 @@ const CompaniesList = () => {
                             <div className="d-flex flex-column align-items-start w-100  mb-4 border-bottom border-2 pb-4">
                                 <h6>DESTINATION COUNTRY</h6>
                                 <span className="w-100 w-md-75">
-                                    <Countries_selector onSelectCountry={handleDestinationCountrySelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px'/>
+                                    <Countries_selector onSelectCountry={handleDestinationCountrySelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
                                 </span>
                             </div>
                             <div className="d-flex flex-column align-items-start w-100 mb-4 border-bottom border-2 pb-4">
@@ -165,7 +165,7 @@ const CompaniesList = () => {
                             </div>
                         </div>
                         <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-3">
-                            <div className="search-result-wrap">
+                            <div className="search-result-wrap w-100">
                                 <div className="title-head text-start">
                                     <h3>Search Results </h3>
                                 </div>
@@ -204,11 +204,27 @@ const CompaniesList = () => {
                                                 ))}
                                             </>
                                         ) : (
-                                            <strong className="fs-4 w-100 mt-5">No Data</strong>
+                                            <div className="search-result-data-wrap bg-light" >
+                                                <div className="d-flex flex-column align-items-start justify-content-start">
+
+                                                    <div className="d-flex flex-column flex-md-row gap-4">
+
+                                                        <h2>No Data</h2>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         )}
                                     </>
                                 ) : (
-                                    <strong className="fs-4 w-100 mt-5">No Data</strong>
+                                    <div className="search-result-data-wrap bg-light" >
+                                        <div className="d-flex flex-column align-items-start justify-content-start">
+
+                                            <div className="d-flex flex-column flex-md-row gap-4">
+
+                                                <h2>No Data</h2>
+                                            </div>
+                                        </div>
+                                    </div>
                                 )}
                                 {company_detail && (
                                     <div

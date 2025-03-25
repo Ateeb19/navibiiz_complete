@@ -94,6 +94,7 @@ const LoginPage = () => {
           name: response.data.name,
           email: response.data.email
         }
+        localStorage.setItem('user_logins_type', selected)
         localStorage.setItem('userInfo', JSON.stringify(response.data));
         alert(response.data.message);
         if (response.data.role === 'Sadmin' || response.data.role === 'admin') {
@@ -107,6 +108,7 @@ const LoginPage = () => {
             window.location.reload();
           }, 0);
         }
+
       } catch (err) {
         console.log(err);
       }

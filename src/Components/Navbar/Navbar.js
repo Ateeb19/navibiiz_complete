@@ -5,7 +5,7 @@ import { BsSendFill } from "react-icons/bs";
 import { MdDashboardCustomize } from "react-icons/md";
 import { FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
-
+import { FaBell } from "react-icons/fa"
 import Registration from "../Dashboard/Registration";
 import axios from "axios";
 
@@ -14,7 +14,7 @@ const Navbar = () => {
   const token = localStorage.getItem('token');
   const port = process.env.REACT_APP_SECRET;
   const navigate = useNavigate();
-
+  const user_login_state = localStorage.getItem('user_logins_type');
 
   useEffect(() => {
     const fetchToken = () => {
@@ -74,7 +74,7 @@ const Navbar = () => {
     window.location.reload();
   }
   return (
-    <div className="container">
+    <div className="container-fluid">
       <nav className="d-flex justify-content-between align-items-center w-100 px-3 py-2"
         style={navStyle}>
 
@@ -121,16 +121,21 @@ const Navbar = () => {
                   <BsSendFill /> Send through groupage
                 </button>
               </Link>
-              {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
+              {user_login_state === 'company' && (
                 <>
-                  <Link to="/">
-                    <button className="btn text-light m-1" onClick={() => setIsVisible(true)} style={{ fontSize: "1rem", backgroundColor: "tomato" }}>
-                      Register Your Company
-                    </button>
-                  </Link>
+                  {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
+                    <>
+                      <Link to="/">
+                        <button className="btn text-light m-1" onClick={() => setIsVisible(true)} style={{ fontSize: "1rem", backgroundColor: "tomato" }}>
+                          Register Your Company
+                        </button>
+                      </Link>
+                    </>
+                  )}
                 </>
               )}
 
+              <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard">
                   <button className="btn btn-light m-1" style={{ fontSize: "1rem", color: "tomato" }}>
@@ -185,6 +190,7 @@ const Navbar = () => {
                       </Link>
                     </>
                   )}
+                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
                   {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                     <Link to="/dashboard">
                       <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "tomato" }}>
@@ -205,6 +211,7 @@ const Navbar = () => {
                       <BsSendFill /> Send through groupage
                     </button>
                   </Link>
+                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
                 </>
               )}
             </div>

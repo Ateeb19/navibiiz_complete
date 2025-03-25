@@ -11,6 +11,12 @@
 .navbar-wrapper {
     background-color: #0044BC;
     width: 100%;
+    padding: 8px 0;
+    /* position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 10; */
 }
 
 .hero-wrapper {
@@ -59,13 +65,20 @@
     margin-top: 30px;
     width: 100%;
 }
+.new-add-company-wrapper h5{
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 18px;
+}
 
 .company-box-wrap {
+    height: 100%;
     width: 100%;
     background-color: white;
     box-shadow: 0 0 5px #ccc;
     padding: 25px;
     border-radius: 8px;
+    cursor: pointer;
 }
 
 .btn-main {
@@ -79,7 +92,6 @@
 
 .step-image-wrapper img {
     width: 90%;
-    ;
 }
 
 .step-text-wrapper h4 {
@@ -167,16 +179,18 @@
     border: 1px solid #ebebeb;
     font-size: 17px !important;
     margin-bottom: 30px;
+    font-family: 'Montserrat';
 }
 .input-field :focus-visible{
     outline: none;
-    border: 1px solid #ebebeb   ;
+    border: 1px solid #ebebeb;
 }
 
 .input-label{
-    font-size: 19px;
+    font-size: 17px;
     color: #000;
     margin-bottom: 8px;
+    font-family: 'Montserrat';
 }
 
 .btn-sign{
@@ -219,7 +233,7 @@
     background-color: #ebebeb;
     border-radius: 6px;
     border: 1px solid #ebebeb;
-    font-size: 17px !important;
+    font-size: 15px !important;
     margin-bottom: 30px;
 }
 
@@ -321,4 +335,66 @@ padding: 12px;
     border: 1px solid #FF5722;
     border-radius: 6px;
     margin-top: 30px;
+}
+
+.sidebar-wrapper{
+    /* position: fixed;
+    left: 0;
+    top: 5; */
+    background-color: #010037;
+    width: 20%;
+    height: 100vh;
+    /* z-index: 0; */
+ }
+
+.sidebar-wrap ul li .sidebar-links{
+    font-size: 18px;
+    padding: 10px 14px;
+}
+
+.dashboard-wrap-box{
+    width: 95%;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px #ccc;
+}
+
+.dashbord-info-wrap{
+    padding: 0 40px;
+    background-color: #f6f6f6;
+}
+
+.shipping-wrapper{
+    margin-bottom: 40px;
+}
+
+.shipping-input-field{
+    width: 100%;
+    padding: 12px 18px;
+    background-color: #ebebeb;
+    border-radius: 6px;
+    border: 1px solid #ebebeb;
+    font-size: 15px !important;
+    font-family: 'Montserrat';
+}
+
+.shipping-input-label{
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 8px;
+    font-family: 'Montserrat';
+}
+input:focus-visible{
+    outline: none !important;
+}
+
+.order-details-wrap span{
+    font-size: 15px;
+    color: #595959;
+}
+
+.order-details-wrap span h6{
+    color: #000;
+    font-weight: 500;
 }

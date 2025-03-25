@@ -22,6 +22,7 @@ import CompaniesList from './Components/New_update/CompaniesList';
 import send_groupage from './Components/send_groupage/Send_groupage';
 import Offers from './Components/New_update/Offers';
 import CompanyDetails from './Components/New_update/Companies_details';
+import Notification from './Components/New_update/Notification';
 
 
 const App = () => {
@@ -111,6 +112,7 @@ useEffect(() => {
             <Route Component={Offers} path='/offers'></Route>
             <Route Component={CompaniesList} path='/companies_list'></Route>
             <Route Component={send_groupage} path='/send_groupage'></Route>
+            <Route Component={Notification} path='/notification'></Route>
             {/* <Route Component={Containers} path='/container'></Route>
             <Route Component={Groupage} path='/groupage'></Route>
             <Route Component={Cars} path='/cars'></Route>

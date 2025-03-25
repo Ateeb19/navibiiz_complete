@@ -8,6 +8,7 @@ import { IoLocationSharp } from "react-icons/io5";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaTruckFast } from "react-icons/fa6";
 import { MdDeliveryDining } from "react-icons/md";
+import { FaStar } from "react-icons/fa";
 import Footer from "../Footer/Footer";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -226,7 +227,7 @@ const Home = () => {
 
                         <div className="row justify-content-center">
                             {last_companies.map((company, index) => (
-                                <div key={index} className="col-12 col-sm-6 col-md-4 col-xl-3">
+                                <div key={index} className="col-12 col-sm-6 col-md-4 col-xl-3" onClick={() => View_details(company)}>
                                     <div className="company-box-wrap">
                                         <div className="d-flex flex-column align-items-start">
                                             <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
@@ -237,8 +238,8 @@ const Home = () => {
                                                 />
                                             </div>
                                             <h5>{company.company_name}</h5>
-                                            <span className="text-secondary">4.5 (20 Ratings)</span>
-                                            <p className="text-secondary text-start mt-1">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
+                                            <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1"/> 4.5 (20 Ratings)</span>
+                                            <p className="text-secondary text-start mt-2">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
                                             <span className="text-danger" style={{ cursor: "pointer" }} onClick={() => View_details(company)}>View Details</span>
                                         </div>
                                     </div>
@@ -348,7 +349,7 @@ const Home = () => {
 
                         <div className="row justify-content-center">
                             {last_companies.map((company, index) => (
-                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" onClick={() => View_details(company)}>
                                     <div className="company-box-wrap">
                                         <div className="d-flex flex-column align-items-start">
                                             <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
@@ -359,15 +360,15 @@ const Home = () => {
                                                 />
                                             </div>
                                             <h5>{company.company_name}</h5>
-                                            <span className="text-secondary">4.5 (20 Ratings)</span>
+                                            {/* <span className="text-secondary">4.5 (20 Ratings)</span> */}
                                             <p className="text-secondary text-start mt-1">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                            <span className="text-danger" style={{ cursor: "pointer" }} onClick={() => View_details(company)}>View Details</span>
+                                            <span className="text-danger" style={{ cursor: "pointer" }} onClick={() => View_details(company)}>Submit Offer</span>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <button className="btn-main" onClick={() => navigate('/companies_list')}>
+                        <button className="btn-main" onClick={() => navigate('/offers')}>
                             View All
                         </button>
                     </div>
