@@ -4,8 +4,6 @@ import './App.css';
 // import { Nav } from 'react-bootstrap';
 import { IoMdHome } from "react-icons/io";
 import { MdDashboardCustomize } from "react-icons/md";
-
-
 import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import LoginPage from './Components/User/LoginPage';
 // import Regester_company from './Components/Companies/Regester_company';
@@ -13,10 +11,10 @@ import LoginPage from './Components/User/LoginPage';
 // import Companies from './Components/Companies/Companies';
 // import { TbUserPentagon } from "react-icons/tb";
 import Home from './Components/New_update/home';
-import Containers from './Components/New_update/Container';
-import Groupage from './Components/New_update/Groupage';
-import Cars from './Components/New_update/Cars';
-import SendTransport from './Components/New_update/Send_Transport';
+// import Containers from './Components/New_update/Container';
+// import Groupage from './Components/New_update/Groupage';
+// import Cars from './Components/New_update/Cars';
+// import SendTransport from './Components/New_update/Send_Transport';
 import CompleateDashbboard from './Components/Dashboard/Dashboard';
 import Regesteration from './Components/Dashboard/Check ';
 import axios from 'axios';
@@ -113,10 +111,10 @@ useEffect(() => {
             <Route Component={Offers} path='/offers'></Route>
             <Route Component={CompaniesList} path='/companies_list'></Route>
             <Route Component={send_groupage} path='/send_groupage'></Route>
-            <Route Component={Containers} path='/container'></Route>
+            {/* <Route Component={Containers} path='/container'></Route>
             <Route Component={Groupage} path='/groupage'></Route>
             <Route Component={Cars} path='/cars'></Route>
-            <Route Component={SendTransport} path='/send_transport'></Route>
+            <Route Component={SendTransport} path='/send_transport'></Route> */}
             <Route Component={LoginPage} path='/login'></Route>
             <Route path="/company_details/:id" element={<CompanyDetails />} />
           </Routes>

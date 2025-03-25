@@ -263,50 +263,54 @@ const show_all_groupage = (req, res) => {
 //create the offer
 const create_offer = (req, res) => {
     const data = req.body;
-    db.query('SELECT * FROM offers WHERE created_by_id = ? AND groupage_id = ?', [req.user.userid, data.offer_id], (err, result) => {
-        if (err) {
-            console.log(err, '1')
-            res.json({ message: 'error in database', status: false });
-        } else {
-            if (result.length === 0) {
-                db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, expeted_date: data.expected_date, accepted: 0, status: 'pending' }, (err, result) => {
-                    if (err) {
-                        console.log(err, '12')
-                        res.json({ message: 'error in database', status: false });
-                    } else {
-                        db.query('SELECT created_by FROM groupage WHERE id = ?', [data.offer_id], (err, result) => {
-                            if (err) {
-                                console.log(err, '123')
-                                res.json({ message: 'error in database', status: false });
-                            }
-                            else {
-                                res.json({ message: 'Data inserted successfully', status: true });
-                                console.log('email', result[0].created_by)
-                                transporter.sendMail({
-                                    from: '"Novibiz" info@novibiz.com',
-                                    to: result[0].created_by,
-                                    subject: "Offer received from a company",
-                                    html: "<h3>There is a new offer from a company.</h3><br><br><br><h4>Details-:</h4><p>Amount: $" + data.offer_amount + "</p><p>Expected Date: " + data.expected_date + "</p>",
-                                }).then(info => {
-                                    console.log({ info });
-                                }).catch(console.error);
-                            }
-                        });
-                    }
-                });
-            } else {
-                db.query('UPDATE offers SET amount = ?, expeted_date = ? WHERE groupage_id = ? AND created_by_id = ?', [data.offer_amount, data.expected_date, data.offer_id, req.user.userid], (err, result) => {
-                    if (err) {
-                        console.log(err, '123')
-                        res.json({ message: 'error in database', status: false });
-                    } else {
-                        res.json({ message: 'Data inserted successfully Update', status: true });
-                    }
-                });
-            }
-        }
-    });
+    if (req.user.company === 'yes') {
 
+        db.query('SELECT * FROM offers WHERE created_by_id = ? AND groupage_id = ?', [req.user.userid, data.offer_id], (err, result) => {
+            if (err) {
+                console.log(err, '1')
+                res.json({ message: 'error in database', status: false });
+            } else {
+                if (result.length === 0) {
+                    db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, expeted_date: data.expected_date, accepted: 0, status: 'pending' }, (err, result) => {
+                        if (err) {
+                            console.log(err, '12')
+                            res.json({ message: 'error in database', status: false });
+                        } else {
+                            db.query('SELECT created_by FROM groupage WHERE id = ?', [data.offer_id], (err, result) => {
+                                if (err) {
+                                    console.log(err, '123')
+                                    res.json({ message: 'error in database', status: false });
+                                }
+                                else {
+                                    res.json({ message: 'Data inserted successfully', status: true });
+                                    console.log('email', result[0].created_by)
+                                    transporter.sendMail({
+                                        from: '"Novibiz" info@novibiz.com',
+                                        to: result[0].created_by,
+                                        subject: "Offer received from a company",
+                                        html: "<h3>There is a new offer from a company.</h3><br><br><br><h4>Details-:</h4><p>Amount: $" + data.offer_amount + "</p><p>Expected Date: " + data.expected_date + "</p>",
+                                    }).then(info => {
+                                        console.log({ info });
+                                    }).catch(console.error);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    db.query('UPDATE offers SET amount = ?, expeted_date = ? WHERE groupage_id = ? AND created_by_id = ?', [data.offer_amount, data.expected_date, data.offer_id, req.user.userid], (err, result) => {
+                        if (err) {
+                            console.log(err, '123')
+                            res.json({ message: 'error in database', status: false });
+                        } else {
+                            res.json({ message: 'Data inserted successfully Update', status: true });
+                        }
+                    });
+                }
+            }
+        });
+    } else {
+        res.json({ message: 'Login with a company email id', status: false });
+    }
 }
 
 //show offers to the user

@@ -800,7 +800,7 @@ const Dashboard = () => {
   return (
     <div className="vh-100">
 
-      <div className='navbar-wrapper'>
+      <div className='navbar-wrapper' style={{backgroundColor: '#010037'}}>
         <div className=" d-flex justify-content-center w-100">
           <Navbar />
         </div>

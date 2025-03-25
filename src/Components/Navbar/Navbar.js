@@ -66,7 +66,7 @@ const Navbar = () => {
   const handleClose = () => { setIsVisible(false); localStorage.setItem("userType", '') }
   const location = useLocation();
   const navStyle = {
-    backgroundColor: location.pathname === '/dashboard' ? '#010037' : '#0044BC', // Blue for '/' and Dark Blue for '/dashboard'
+    backgroundColor: location.pathname === '/dashboard' ? ' #010037' : '#0044BC',
     position: 'relative'
   };
   const logout = () => {
