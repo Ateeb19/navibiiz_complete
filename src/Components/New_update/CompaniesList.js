@@ -7,13 +7,16 @@ import { HiBadgeCheck } from "react-icons/hi";
 import Countries_selector from "../Dashboard/Countries_selector";
 import { Rating } from 'react-simple-star-rating';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ReactPaginate from "react-paginate";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const CompaniesList = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const itemsPerPage = 5;
 
     const companies = JSON.parse(localStorage.getItem('companyInfo'));
-
+    const [currentPage, setCurrentPage] = useState(0);
     const [selectedServices, setSelectedServices] = useState([]);
     const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
     const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
@@ -76,10 +79,11 @@ const CompaniesList = () => {
                 });
 
             return serviceMatch && pickupCountryMatch && destinationCountryMatch && durationMatch;
-        });
+        }).sort((a) => data.id);
     };
 
     const filteredData = filterData(companies);
+    console.log(filteredData);
 
     // console.log(filteredData)
     const [company_detail, setCompany_detail] = useState(null);
@@ -89,6 +93,14 @@ const CompaniesList = () => {
 
     const View_details = (item) => {
         navigate(`/company_details/${item.id}`, { state: { company: item } });
+    };
+
+    const offset = currentPage * itemsPerPage;
+    const currentItems = filteredData.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+
+    const handlePageClick = ({ selected }) => {
+        setCurrentPage(selected);
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
@@ -164,7 +176,7 @@ const CompaniesList = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-3">
+                        <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-1">
                             <div className="search-result-wrap w-100">
                                 <div className="title-head text-start">
                                     <h3>Search Results </h3>
@@ -173,7 +185,7 @@ const CompaniesList = () => {
                                     <>
                                         {filteredData.length > 0 ? (
                                             <>
-                                                {filteredData.map((item, index) => (
+                                                {currentItems.map((item, index) => (
                                                     <div className="search-result-data-wrap" onClick={() => View_details(item)}>
                                                         <div className="d-flex flex-column align-items-start justify-content-start" key={index}>
                                                             <div className="search-result-logo-wrap">
@@ -202,6 +214,26 @@ const CompaniesList = () => {
                                                         </div>
                                                     </div>
                                                 ))}
+
+                                                <ReactPaginate
+                                                    previousLabel={"<"}
+                                                    nextLabel={">"}
+                                                    breakLabel={"..."}
+                                                    pageCount={pageCount}
+                                                    marginPagesDisplayed={2}
+                                                    pageRangeDisplayed={3}
+                                                    onPageChange={handlePageClick}
+                                                    containerClassName={"pagination justify-content-center"}
+                                                    pageClassName={"page-item"}
+                                                    pageLinkClassName={"page-link"}
+                                                    previousClassName={"page-item"}
+                                                    previousLinkClassName={"page-link"}
+                                                    nextClassName={"page-item"}
+                                                    nextLinkClassName={"page-link"}
+                                                    breakClassName={"page-item"}
+                                                    breakLinkClassName={"page-link"}
+                                                    activeClassName={"active"}
+                                                />
                                             </>
                                         ) : (
                                             <div className="search-result-data-wrap bg-light" >
@@ -226,6 +258,8 @@ const CompaniesList = () => {
                                         </div>
                                     </div>
                                 )}
+
+
                                 {company_detail && (
                                     <div
                                         className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"

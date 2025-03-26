@@ -13,10 +13,12 @@ import { RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
 import { FaRuler } from "react-icons/fa";
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from "react-router-dom";
-
+import ReactPaginate from "react-paginate";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Offers = () => {
     const navigate = useNavigate();
+    const itemsPerPage = 5;
     const port = process.env.REACT_APP_SECRET;
     const token = localStorage.getItem('token');
     const [groupage, setGroupage] = useState([]);
@@ -55,20 +57,20 @@ const Offers = () => {
     };
 
     const filterData = (data) => {
-        return data.filter((groupage) => {
-            const pickupCountryMatch =
-                !selectedPickupCountry || groupage.sender_country === selectedPickupCountry;
-
-            const destinationCountryMatch =
-                !selectedDestinationCountry || groupage.receiver_country === selectedDestinationCountry;
-
-            return pickupCountryMatch && destinationCountryMatch;
-        });
+        return data
+            .filter((groupage) => {
+                const pickupCountryMatch =
+                    !selectedPickupCountry || groupage.sender_country === selectedPickupCountry;
+    
+                const destinationCountryMatch =
+                    !selectedDestinationCountry || groupage.receiver_country === selectedDestinationCountry;
+    
+                return pickupCountryMatch && destinationCountryMatch;
+            })
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sorting by latest `created_at`
     };
-
+    
     const filteredData = filterData(groupage);
-
-    // console.log(filteredData)
     const [groupage_detail, setGroupage_detail] = useState(null);
     const View_details = (item) => {
         setGroupage_detail(item);
@@ -103,6 +105,15 @@ const Offers = () => {
             console.log(err);
         });
     }
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const offset = currentPage * itemsPerPage;
+    const currentItems = filteredData.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+
+    const handlePageClick = ({ selected }) => {
+        setCurrentPage(selected);
+    };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
 
@@ -147,8 +158,8 @@ const Offers = () => {
                             </div>
 
                         </div>
-                        <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-3">
-                            <div className="search-result-wrap">
+                        <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-1">
+                            <div className="search-result-wrap w-100">
                                 <div className="title-head text-start">
                                     <h3>Search Results </h3>
                                 </div>
@@ -156,7 +167,7 @@ const Offers = () => {
                                     <>
                                         {filteredData.length > 0 ? (
                                             <>
-                                                {filteredData.map((item, index) => (
+                                                {currentItems.map((item, index) => (
                                                     <div className="search-result-data-wrap" key={index} onClick={() => View_details(item)}>
                                                         <div className="d-flex flex-column align-items-start justify-content-start">
                                                             <div className="search-result-logo-wrap">
@@ -185,6 +196,26 @@ const Offers = () => {
                                                         </div>
                                                     </div>
                                                 ))}
+
+                                                <ReactPaginate
+                                                    previousLabel={"<"}
+                                                    nextLabel={">"}
+                                                    breakLabel={"..."}
+                                                    pageCount={pageCount}
+                                                    marginPagesDisplayed={2}
+                                                    pageRangeDisplayed={3}
+                                                    onPageChange={handlePageClick}
+                                                    containerClassName={"pagination justify-content-center"}
+                                                    pageClassName={"page-item"}
+                                                    pageLinkClassName={"page-link"}
+                                                    previousClassName={"page-item"}
+                                                    previousLinkClassName={"page-link"}
+                                                    nextClassName={"page-item"}
+                                                    nextLinkClassName={"page-link"}
+                                                    breakClassName={"page-item"}
+                                                    breakLinkClassName={"page-link"}
+                                                    activeClassName={"active"}
+                                                />
                                             </>
                                         ) : (
                                             <div className="search-result-data-wrap bg-light" >

@@ -1,21 +1,36 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 import { FaLocationDot, FaMapLocationDot, FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
 import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "react-icons/fa";
 import { HiBadgeCheck } from "react-icons/hi";
 import { Rating } from 'react-simple-star-rating';
 import Footer from "../Footer/Footer";
+import { useState } from 'react';
+import { FaBuilding } from "react-icons/fa";
+import { IoIosMailOpen } from "react-icons/io";
+import { RiContactsBook3Fill } from "react-icons/ri";
+
 
 
 const CompanyDetails = () => {
     const { id } = useParams();
     const location = useLocation();
     const company = location.state?.company;
-
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
+    const [details_company, setDetails_company] = useState(false);
     if (!company) {
         return <h2 className="text-danger">Company details not found.</h2>;
     }
-
+    console.log(company, 'this now data');
+    const handle_contact = () => {
+        if (token) {
+            setDetails_company(true);
+        } else {
+            alert('Please login to contact the company.');
+            navigate('/login');
+        }
+    }
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
             <div className='navbar-wrapper'>
@@ -158,12 +173,46 @@ const CompanyDetails = () => {
                                 </>
                             )}
                         </div>
-                        <button className="btn w-100 text-light mt-4" style={{ backgroundColor: "tomato" }}>
+                        <button className="btn w-100 text-light mt-4" onClick={handle_contact} style={{ backgroundColor: "tomato" }}>
                             Contact Company
                         </button>
                     </div>
                 </div>
             </div>
+
+            {details_company && (
+                <>
+                    <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+                        <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: 'auto' }}>
+                            <button
+                                className="btn-close position-absolute top-0 end-0 m-2"
+                                onClick={() => setDetails_company(false)}
+                            ></button>
+
+                            <div className='d-flex flex-column align-items-start'>
+                                <div className='title-head'><h3>Company Details</h3></div>
+
+                             <div className='details-wrap w-100 text-start'>
+                                    <span>< FaBuilding className= 'fs-4 me-2' style={{color: '#FF5722', width: '20px'}}/>Name -: {company.company_name}</span>
+                                </div>
+
+                                <div className='details-wrap w-100 text-start'>
+                                    <span>< IoIosMailOpen className= 'fs-4 me-2' style={{color: '#FF5722', width: '20px'}}/>E-mail -: <a href= {`mailto:"${company.email}"`}>{company.email}</a></span>
+                                </div>
+
+                                <div className='details-wrap w-100 text-start'>
+                                    <span>< RiContactsBook3Fill className= 'fs-4 me-2' style={{color: '#FF5722', width: '20px'}}/>Contact Number-: {company.contect_no}</span>
+                                </div>
+
+                                <div className='details-wrap w-100 text-start'>
+                                    <span>< FaLocationDot className= 'fs-4 me-2' style={{color: '#FF5722', width: '20px'}}/>Location -: {company.location1}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </>
+            )}
             <div className="d-flex flex-column align-items-center mt-4 mt-md-5 text-white p-3 p-md-5 w-100" style={{ backgroundColor: "#0044BC" }}>
                 <strong className="fs-3 fs-md-4 text-center">Unable to Find Your Preferred Shipping Companies?</strong>
                 <p className="w-100 w-md-50 p-2 p-md-4 text-center">Reach out to us for tailored shipping solutions that meet<br /> your needs</p>
@@ -175,27 +224,6 @@ const CompanyDetails = () => {
             </div>
 
         </div>
-
-        // <div className="container mt-5">
-        //     <div className="d-flex flex-column align-items-center">
-        //         <div className="rounded-circle overflow-hidden" style={{ width: '150px', height: '150px' }}>
-        //             <img
-        //                 src={company.logo ? company.logo : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
-        //                 alt="Company Logo"
-        //                 className="w-100 h-100 object-fit-cover"
-        //             />
-        //         </div>
-        //         <h2 className="mt-3">{company.company_name}</h2>
-        //         <p className="text-secondary">{company.description}</p>
-        //     </div>
-
-        //     <div className="mt-4 p-3 border rounded shadow">
-        //         <h4>Company Information</h4>
-        //         <p><strong>Location:</strong> {company.location1}</p>
-        //         <p><strong>Services:</strong> {company.container_service ? 'Containers' : ''} {company.car_service ? '& Cars' : ''}</p>
-        //         <p><strong>Deliveries Completed:</strong> 2k+</p>
-        //     </div>
-        // </div>
     );
 };
 

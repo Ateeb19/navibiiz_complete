@@ -15,7 +15,7 @@ const token_check = (req, res) => {
     }
 }
 const Register = (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, user_type} = req.body;
     db.query("SELECT email FROM users WHERE email = ?", [email], async (err, result) => {
         if (err) {
             res.json({ message: "error in databasae", err });
@@ -27,11 +27,11 @@ const Register = (req, res) => {
                     res.json({ message: "password must be of 8 characters", status: false });
                 } else {
                     const hash = await bcrypt.hash(password, 8);
-                    db.query('INSERT INTO users SET ?', { name: name, email: email, password: hash, role: "user", company: 'no' }, (err, result) => {
+                    db.query('INSERT INTO users SET ?', { name: name, email: email, password: hash, role: "user", company: 'no', user_type: user_type }, (err, result) => {
                         if (err) {
                             res.json({ message: "error inserting data", err })
                         } else {
-                            const token = jwt.sign({ userid: result.insertId, username: name, useremail: email, role: 'user',company: 'no' }, process.env.JWT_SECRET, {
+                            const token = jwt.sign({ userid: result.insertId, username: name, useremail: email, role: 'user',company: 'no', user_type: user_type }, process.env.JWT_SECRET, {
                                 expiresIn: "1day",
                             });
                             res.json({ message: "user regester success", status: true, role: 'user', token: token, name: name, email: email, id: result.insertId });
@@ -45,9 +45,11 @@ const Register = (req, res) => {
 const login = (req, res) => {
     const value = [
         req.body.email,
-        req.body.password
+        req.body.password,
+        req.body.user_type
     ];
-    // console.log(value[0],value[1]);
+    // console.log(value[0],value[1],value[2]);
+    // res.json(value[0], value[1], value[2]);
     db.query('SELECT * FROM users WHERE email = ?', [value[0]], async (error, result) => {
         if (error) {
             res.json({ message: "error in database" });
@@ -55,12 +57,16 @@ const login = (req, res) => {
             if (result.length > 0) {
                 const hash = await bcrypt.compare(value[1], result[0].password);
                 if (hash) {
-                    const token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role, company: result[0].company }, process.env.JWT_SECRET, {
+                    const token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role, company: result[0].company, user_type: result[0].user_type }, process.env.JWT_SECRET, {
                         expiresIn: "4day",
                     });
                     req.session.role = result[0].role;
                     req.session.email = result[0].email;
-                    res.json({ message: "user login success", status: true, role: req.session.role, token, id: result[0].id, name: result[0].name, email: result[0].email, company: result[0].company });
+                    if(result[0].user_type === value[2]){
+                        res.json({ message: "user login success", status: true, role: req.session.role, token, id: result[0].id, name: result[0].name, email: result[0].email, company: result[0].company, user_type: result[0].user_type });
+                    }else{
+                        res.json({message: `You can not login with ${value[2]} type. \nSelect the correct user type`, status: false})
+                    }
                 }
                 else {
                     res.json({ message: "email or password is wrong", status: false });
@@ -76,7 +82,7 @@ const login = (req, res) => {
 //display profile
 const display_profile = (req, res) => {
     const id = req.user.userid;
-    db.query('SELECT name, email, role, company FROM users WHERE id = ?', [id], (err, result) => {
+    db.query('SELECT name, email, role, company, user_type FROM users WHERE id = ?', [id], (err, result) => {
         if (err) {
             console.log(err);
             res.json({ message: "error in database", status: false });

@@ -23,7 +23,7 @@ import send_groupage from './Components/send_groupage/Send_groupage';
 import Offers from './Components/New_update/Offers';
 import CompanyDetails from './Components/New_update/Companies_details';
 import Notification from './Components/New_update/Notification';
-
+import Regester_company from './Components/Regester/Regester_company';
 
 const App = () => {
   const port = process.env.REACT_APP_SECRET ;
@@ -113,6 +113,7 @@ useEffect(() => {
             <Route Component={CompaniesList} path='/companies_list'></Route>
             <Route Component={send_groupage} path='/send_groupage'></Route>
             <Route Component={Notification} path='/notification'></Route>
+            <Route Component={Regester_company} path='/regester_company'></Route>
             {/* <Route Component={Containers} path='/container'></Route>
             <Route Component={Groupage} path='/groupage'></Route>
             <Route Component={Cars} path='/cars'></Route>

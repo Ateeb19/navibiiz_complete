@@ -10,6 +10,7 @@ import State_selector from "./State_selector";
 import Form from 'react-bootstrap/Form';
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -53,7 +54,7 @@ const DragAndDrop = ({ accept, onFileDrop, label }) => {
 const Registration = () => {
     const token = localStorage.getItem('token');
     const port = process.env.REACT_APP_SECRET;
-
+    const navigate = useNavigate();
     const stepperRef = useRef(null);
 
     const [selectedImage, setSelectedImage] = useState(null);
@@ -302,6 +303,7 @@ const Registration = () => {
     const congratulations = () => {
         window.location.reload();
     }
+    console.log(stepperRef, 'step');
 
     return (
         <div className="flex justify-content-start h-100vh">
@@ -333,10 +335,10 @@ const Registration = () => {
                         </div>
 
                         <div className="row mt-4">
-                            <div className="col-12 col-md-6 col-lg-4 mb-3">
-                                <label className="form-label">Company Name <span className="text-danger">*</span></label>
+                            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
+                                <label className="shipping-input-label">Company Name <span className="text-danger">*</span></label>
                                 <input
-                                    className="form-control"
+                                    className="shipping-input-field"
                                     type="text"
                                     value={companyName}
                                     onChange={(e) => setCompanyName(e.target.value)}
@@ -345,10 +347,10 @@ const Registration = () => {
                                     required
                                 />
                             </div>
-                            <div className="col-12 col-md-6 col-lg-4 mb-3">
-                                <label className="form-label">Contact Number <span className="text-danger">*</span></label>
+                            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
+                                <label className="shipping-input-label">Contact Number <span className="text-danger">*</span></label>
                                 <input
-                                    className="form-control"
+                                    className="shipping-input-field"
                                     type="tel"
                                     placeholder="Enter the company number"
                                     value={contactNumber}
@@ -357,10 +359,10 @@ const Registration = () => {
                                     required
                                 />
                             </div>
-                            <div className="col-12 col-md-6 col-lg-4 mb-3">
-                                <label className="form-label">Email Address <span className="text-danger">*</span></label>
+                            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
+                                <label className="shipping-input-label">Email Address <span className="text-danger">*</span></label>
                                 <input
-                                    className="form-control"
+                                    className="shipping-input-field"
                                     type="email"
                                     placeholder="Enter the company email"
                                     value={emailAddress}
@@ -373,36 +375,40 @@ const Registration = () => {
 
                         {locations.map((location, index) => (
                             <div className="row mt-3 position-relative" key={index}>
-                                <div className="col-12 col-md-4 mb-3">
-                                    <label className="form-label">Country <span className="text-danger">*</span></label>
+                                <div className="col-12 col-md-4 mb-3 d-flex flex-column align-items-start">
+                                    <label className="shipping-input-label">Country <span className="text-danger">*</span></label>
                                     <Countries_selector
                                         onSelectCountry={(value) => handlecountry(value, index)}
                                         label="Select the country"
                                         value={location.country}
+                                        paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
                                         required
                                     />
                                 </div>
-                                <div className="col-12 col-md-4 mb-3">
-                                    <label className="form-label">State <span className="text-danger">*</span></label>
+                                <div className="col-12 col-md-4 mb-3 d-flex flex-column align-items-start">
+                                    <label className="shipping-input-label">State <span className="text-danger">*</span></label>
                                     <input
                                         type="text"
                                         value={location.state}
-                                        className="form-control"
+                                        className="shipping-input-field"
                                         style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                         readOnly
                                         onClick={() => toggleSelector(index)}
                                     />
                                     {visibleSelectors[index] && (
-                                        <State_selector
-                                            onSelectState={(value) => handlestate(value, index)}
-                                            value={location.state}
-                                        />
+                                        <div className="w-100">
+                                            <State_selector
+                                                onSelectState={(value) => handlestate(value, index)}
+                                                value={location.state}
+                                                paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                            />
+                                        </div>
                                     )}
                                 </div>
-                                <div className="col-12 col-md-4 mb-3">
-                                    <label className="form-label">City <span className="text-danger">*</span></label>
+                                <div className="col-12 col-md-4 mb-3 d-flex flex-column align-items-start">
+                                    <label className="shipping-input-label ">City <span className="text-danger">*</span></label>
                                     <input
-                                        className="form-control"
+                                        className="shipping-input-field"
                                         type="text"
                                         placeholder="Enter the city name"
                                         style={{ backgroundColor: "rgb(214, 214, 214)" }}
@@ -413,13 +419,15 @@ const Registration = () => {
                                 </div>
 
                                 {index > 0 && (
-                                    <button
-                                        className="btn btn-danger btn-sm position-absolute"
-                                        style={{ top: "-10px", right: "-10px" }}
-                                        onClick={() => handleRemoveLocation(index)}
-                                    >
-                                        Remove
-                                    </button>
+                                    <div className="">
+                                        <button
+                                            className="btn btn-danger btn-sm position-absolute"
+                                            style={{ top: "-10px", right: "-10px" }}
+                                            onClick={() => handleRemoveLocation(index)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
                                 )}
                             </div>
                         ))}
@@ -434,10 +442,10 @@ const Registration = () => {
                         </div>
 
                         <div className="row mt-4">
-                            <div className="col-12">
-                                <label className="form-label">Brief description about the company <span className="text-danger">*</span></label>
+                            <div className="col-12 d-flex flex-column align-items-start">
+                                <label className="shipping-input-label">Brief description about the company <span className="text-danger">*</span></label>
                                 <textarea
-                                    className="form-control"
+                                    className="shipping-input-field"
                                     rows="5"
                                     placeholder="Enter the company description"
                                     value={description}
@@ -453,7 +461,8 @@ const Registration = () => {
                                 label="Next"
                                 icon="pi pi-arrow-right"
                                 disabled={!basicDetails()}
-                                className="btn btn-primary rounded-2"
+                                className="btn rounded-2 "
+                                style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                                 iconPos="center"
                                 onClick={() => stepperRef.current.nextCallback()}
                             />
@@ -471,8 +480,8 @@ const Registration = () => {
                                 <div className="d-flex flex-column align-items-center justify-content-center mt-4 gap-5">
                                     <div className="d-flex flex-column justify-content-start align-items-start w-100">
                                         <div className="d-flex align-items-start w-100">
-                                            <label>Do you offer containers to transport goods?<span className="text-danger">*</span></label>
-                                            <Form.Check 
+                                            <label className="shipping-input-label">Do you offer containers to transport goods?<span className="text-danger">*</span></label>
+                                            <Form.Check
                                                 type="switch"
                                                 id="container"
                                                 checked={containerService}
@@ -482,30 +491,30 @@ const Registration = () => {
                                         {containerService && (
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
-                                                    <label>Countries we ship Container to<span className="text-danger">*</span></label>
-                                                    <Countries_selector onSelectCountry={(value) => handleContainerCountry(value)} lable="Select the Country" className="w-100" />
+                                                    <label className="shipping-input-label">Countries we ship Container to<span className="text-danger">*</span></label>
+                                                    <Countries_selector onSelectCountry={(value) => handleContainerCountry(value)} lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable>Countries Selected</lable>
+                                                        <lable className="shipping-input-label">Countries Selected</lable>
                                                         {selectedContainerCountries.map((item, index) => (
                                                             <input
                                                                 key={index}
                                                                 type="text"
                                                                 value={item.country}
-                                                                className="form-control"
+                                                                className="shipping-input-field"
                                                                 readOnly
                                                                 style={{ backgroundColor: "rgb(214, 214, 214)" }}
                                                             />
                                                         ))}
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable>Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
+                                                        <lable className="shipping-input-label">Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
                                                         {selectedContainerCountries.map((item, index) => (
                                                             <div className="d-flex align-items-center gap-2 w-100" key={index}>
                                                                 <input
                                                                     type="number"
-                                                                    className="form-control"
+                                                                    className="shipping-input-field"
                                                                     placeholder="Enter the delivery duration in days"
                                                                     style={{ backgroundColor: "rgb(214, 214, 214)" }}
                                                                     value={item.deliveryTime}
@@ -529,7 +538,7 @@ const Registration = () => {
                                     <div className="d-flex flex-column justify-content-start align-items-start w-100">
 
                                         <div className="d-flex align-items-start w-100">
-                                            <label>Do you ship Car ?<span className="text-danger">*</span></label>
+                                            <label className="shipping-input-label">Do you ship Car ?<span className="text-danger">*</span></label>
                                             <Form.Check // prettier-ignore
                                                 type="switch"
                                                 id="car"
@@ -540,30 +549,30 @@ const Registration = () => {
                                         {carService && (
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
-                                                    <label>Countries we ship Car to<span className="text-danger">*</span></label>
-                                                    <Countries_selector onSelectCountry={(value) => handleCarCountry(value)} label='Select the Country' className="w-100" />
+                                                    <label className="shipping-input-label">Countries we ship Car to<span className="text-danger">*</span></label>
+                                                    <Countries_selector onSelectCountry={(value) => handleCarCountry(value)} label='Select the Country' className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable>Countries Selected</lable>
+                                                        <lable className="shipping-input-label">Countries Selected</lable>
                                                         {selectedCarCountries.map((item, index) => (
                                                             <input
                                                                 key={index}
                                                                 type="text"
                                                                 value={item.country}
-                                                                className="form-control"
+                                                                className="shipping-input-field"
                                                                 readOnly
                                                                 style={{ backgroundColor: "rgb(214, 214, 214)" }}
                                                             />
                                                         ))}
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable>Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
+                                                        <lable className="shipping-input-label">Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
                                                         {selectedCarCountries.map((item, index) => (
                                                             <div className="d-flex align-items-center gap-2 w-100" key={index}>
                                                                 <input
                                                                     type="number"
-                                                                    className="form-control"
+                                                                    className="shipping-input-field"
                                                                     placeholder="Enter the delivery duration in days"
                                                                     style={{ backgroundColor: "rgb(214, 214, 214)" }}
                                                                     value={item.deliveryTime}
@@ -586,7 +595,7 @@ const Registration = () => {
 
                                     <div className="d-flex flex-column justify-content-start align-items-start w-100">
                                         <div className="d-flex align-items-start w-100">
-                                            <label>Do you offer groupage to transport goods?<span className="text-danger">*</span></label>
+                                            <label className="shipping-input-label">Do you offer groupage to transport goods?<span className="text-danger">*</span></label>
                                             <Form.Check // prettier-ignore
                                                 type="switch"
                                                 id="groupage"
@@ -597,30 +606,30 @@ const Registration = () => {
                                         {groupageService && (
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
-                                                    <label>Countries we ship Groupage to<span className="text-danger">*</span></label>
-                                                    <Countries_selector onSelectCountry={(value) => handleGroupageCountry(value)} label="Select the Country" className="w-100" />
+                                                    <label className="shipping-input-label">Countries we ship Groupage to<span className="text-danger">*</span></label>
+                                                    <Countries_selector onSelectCountry={(value) => handleGroupageCountry(value)} label="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable>Countries Selected</lable>
+                                                        <lable className="shipping-input-label">Countries Selected</lable>
                                                         {selectedGroupageCountries.map((item, index) => (
                                                             <input
                                                                 key={index}
                                                                 type="text"
                                                                 value={item.country}
-                                                                className="form-control"
+                                                                className="shipping-input-field"
                                                                 readOnly
                                                                 style={{ backgroundColor: "rgb(214, 214, 214)" }}
                                                             />
                                                         ))}
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable>Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
+                                                        <lable className="shipping-input-label">Estimated Delivery Duration(In Days)<span className="text-danger">*</span></lable>
                                                         {selectedGroupageCountries.map((item, index) => (
                                                             <div className="d-flex align-items-center gap-2 w-100" key={index}>
                                                                 <input
                                                                     type="number"
-                                                                    className="form-control"
+                                                                    className="shipping-input-field"
                                                                     placeholder="Enter the delivery duration in days"
                                                                     style={{ backgroundColor: "rgb(214, 214, 214)" }}
                                                                     value={item.deliveryTime}
@@ -648,16 +657,18 @@ const Registration = () => {
 
                         </div>
                     </div>
-                    <div className="d-flex pt-4 justify-content-end gap-3">
+                    <div className="d-flex pt-4 justify-content-end w-100 p-2">
                         <Button label="Back"
                             severity="secondary"
                             icon="pi pi-arrow-left"
-                            className="btn btn-secondary rounded-2"
+                            className="btn rounded-2 me-3"
+                            style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center"
                             onClick={() => stepperRef.current.prevCallback()} />
                         <Button label="Next"
                             icon="pi pi-arrow-right"
-                            className="btn btn-primary rounded-2"
+                            className="btn rounded-2 "
+                            style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                             iconPos="center"
                             disabled={!isTransportationValid()}
                             onClick={() => stepperRef.current.nextCallback()} />
@@ -670,7 +681,7 @@ const Registration = () => {
                             <>
                                 <div className="d-flex flex-md-column align-items-center justify-content-center mt-4 gap-5 w-100">
                                     <div className="w-100 text-start">
-                                        <label className="text-dark mb-1">Attach Registration Documents of the company</label>
+                                        <label className="shipping-input-label">Attach Registration Documents of the company</label>
                                         <DragAndDrop
                                             accept="application/pdf, image/jpeg"
                                             onFileDrop={(file) => setRegistrationDocument(file)}
@@ -680,7 +691,7 @@ const Registration = () => {
                                             {RegistrationDocument && <label>Uploaded File -:  <span>{RegistrationDocument.name}</span></label>}
                                         </div>
 
-                                        <label className="text-dark mb-1">Attach Financial Documents of the company</label>
+                                        <label className="shipping-input-label">Attach Financial Documents of the company</label>
                                         <DragAndDrop
                                             accept="application/pdf, image/jpeg"
                                             onFileDrop={(file) => setFinancialDocument(file)}
@@ -690,7 +701,7 @@ const Registration = () => {
                                             {FinancialDocument && <label>Uploaded File -:  <span>{FinancialDocument.name}</span></label>}
                                         </div>
 
-                                        <label className="text-dark mb-1">Passport of CEO / MD of the company</label>
+                                        <label className="shipping-input-label">Passport of CEO / MD of the company</label>
                                         <DragAndDrop
                                             accept="application/pdf, image/jpeg"
                                             onFileDrop={(file) => setPassportCEO_MD(file)}
@@ -708,25 +719,38 @@ const Registration = () => {
                     <div className="d-flex pt-4 justify-content-end gap-3">
                         <Button label="Back"
                             severity="secondary"
-                            className="btn btn-secondary rounded-2"
+                            className="btn rounded-2"
+                            style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center" icon="pi pi-arrow-left"
                             onClick={() => stepperRef.current.prevCallback()} />
                         <Button label="Submit"
                             onClick={() => { handleSubmit() }}
                             icon="pi pi-arrow-right"
-                            className="btn btn-primary rounded-2"
+                            className="btn rounded-2 "
+                            style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                             iconPos="center" />
                     </div>
                 </StepperPanel>
                 <StepperPanel header="Success">
                     <div className="flex flex-column h-12rem">
                         <div className="border-2  border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                            <div className="w-100 mb-3">
-                                <img src="/Images/congratulation.png" alt="CONGRATULATIONS" width='20%' />
+
+
+                            <div className="success-img-wrap">
+                                <img src="/Images/Party_Popper.png" style={{width: '10%'}} alt="congratulation" />
                             </div>
-                            <h2 className="text-primary"><i>CONGRATULATIONS</i></h2>
-                            <h4>You have successfully registered your company</h4>
-                            <button className="btn btn-primary mt-3" onClick={congratulations}><h5>Go to Dashboard</h5></button>
+
+                            <div className="title-head">
+                                <h3 style={{ color: ' #1ba300', fontFamily:'montserrat'}}>CONGRATULATIONS</h3>
+                            </div>
+
+                            <div className="success-des-wrap">
+                                <p style={{fontFamily:'montserrat', margin: '-4px 0 0 0'}}>You have successfully registered your company</p>
+                            </div>
+
+                            <div className="success-button">
+                                <button className="btn-success" style={{fontFamily:'montserrat', marginBottom: '20px'}} onClick={() => navigate('/dashboard')}>Go To Dashboard</button>
+                            </div>
                         </div>
                     </div>
                 </StepperPanel>

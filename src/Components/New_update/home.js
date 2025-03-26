@@ -330,7 +330,7 @@ const Home = () => {
                     </div>
 
                     <div className="text-center mt-4">
-                        <button className="btn-main">
+                        <button className="btn-main" onClick={() => navigate('/send_groupage')}>
                             Start Shipping your products
                         </button>
                     </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-const Countries_selector = ({ onSelectCountry, label='Select the country', bgcolor='#d6d6d6', bordercolor= '1px solid #d6d6d6', margincount = '0px', paddingcount = '3px' ,borderradiuscount='0' }) => {
+const Countries_selector = ({ onSelectCountry, label='Select the country', bgcolor='#d6d6d6', bordercolor= '1px solid #d6d6d6', margincount = '0px', paddingcount = '3px' ,borderradiuscount='0', fontsizefont ='' }) => {
 
     const [countries, setCountries] = useState([]);
     axios.get('https://countriesnow.space/api/v0.1/countries/positions')
@@ -20,7 +20,7 @@ const Countries_selector = ({ onSelectCountry, label='Select the country', bgcol
     };
     return (
         <div className="w-100" style={{width: 'auto'}}>
-            <select id="country-selector" className='form-select' style={{backgroundColor: bgcolor, border: bordercolor, borderRadius: borderradiuscount,padding:paddingcount , margin: margincount }} value={selectedCountry} onChange={handleChange}>
+            <select id="country-selector" className='form-select' style={{backgroundColor: bgcolor, border: bordercolor, borderRadius: borderradiuscount,padding:paddingcount , fontSize: fontsizefont, margin: margincount, fontFamily: 'montserrat', cursor: 'pointer' }} value={selectedCountry} onChange={handleChange}>
                 <option value="">{label}</option>
                 {countries.map((country,index) => (
                     <option key={index} value={country.name}>

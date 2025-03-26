@@ -8,6 +8,8 @@ const LoginPage = () => {
   const port = process.env.REACT_APP_SECRET;
 
   const [isMobileView, setMobileView] = useState(false);
+  const [selected, setSelected] = useState("individual");
+
   useEffect(() => {
     const handleResize = () => {
       setMobileView(window.innerWidth < 1000);
@@ -31,7 +33,11 @@ const LoginPage = () => {
     name: '',
     email: '',
     password: '',
+    user_type: 'individual',
   })
+  useEffect(() => {
+    setValue((prev) => ({ ...prev, user_type: selected }));
+  }, [selected]);
 
   const handleChange_up = (e) => {
     setValue(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -85,7 +91,7 @@ const LoginPage = () => {
           alert(response.data.message);
           return
         }
-        // console.log(response.data);
+        console.log(selected , 'from login');
         const token = response.data.token;
         localStorage.setItem('token', token);
         localStorage.setItem('userRole', response.data.role);
@@ -122,9 +128,6 @@ const LoginPage = () => {
   const ShwoPassword = () => {
     setShow('password');
   }
-
-  const [selected, setSelected] = useState("individual");
-
 
   return (
     <div className="login-bg-wrapper">

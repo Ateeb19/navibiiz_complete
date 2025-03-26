@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 const Footer = () => {
 
     const navigate = useNavigate();
+
     return (
         <>
             <section className="contact-form-wrapper">
@@ -77,7 +78,7 @@ const Footer = () => {
                         <h2>Partner With Us and Grow Your Reach</h2>
                     </div>
                     <p className="">Join our platform to connect with global customers and expand your logistics business</p>
-                    <button className="btn-register" onClick={() => {navigate("/next-page", { state: { isVisible: true } })}}>Register your Company</button>
+                    <button className="btn-register" onClick={()=> navigate('/regester_company')}>Register your Company</button>
                 </div>
             </section>
 

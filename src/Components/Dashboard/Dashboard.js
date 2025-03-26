@@ -805,7 +805,7 @@ const Dashboard = () => {
           <Navbar />
         </div>
       </div>
-      <div className="d-flex flex-row align-items-center justify-content-end bg-light" style={{height: '100%'}}>
+      <div className="d-flex flex-row align-items-center justify-content-end bg-light" style={{ height: '100%' }}>
         {isMobile ? (
           <>
 
@@ -824,7 +824,7 @@ const Dashboard = () => {
                       </Link>
                     </li>
 
-                    {userRole === 'Sadmin' || userRole === 'admin' ? (
+                    {userRole === 'Sadmin' ? (
                       <>
                         <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                           <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
@@ -851,11 +851,15 @@ const Dashboard = () => {
                       </>
                     ) : (
                       <>
-                        <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
-                            <FaBoxOpen /> Orders
-                          </Link>
-                        </li>
+                        {userRole === 'user' && (
+                          <>
+                            <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                                <FaBoxOpen /> Orders
+                              </Link>
+                            </li>
+                          </>
+                        )}
 
                         <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                           <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
@@ -883,7 +887,7 @@ const Dashboard = () => {
           <>
             {userRole === 'Sadmin' || userRole === 'admin' ? (
               <>
-                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%'}}>
+                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%' }}>
                   <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                     {isMobile && (
                       <div className="w-100 d-flex justify-content-start">
@@ -926,9 +930,9 @@ const Dashboard = () => {
                   </div>
 
                   <div className="row mt-5 g-3 justify-content-center">
-                    {[{ count: 20, change: "+5%", text: "Total Containers", icon: <PiShippingContainerDuotone /> },
-                    { count: 15, change: "-2%", text: "Total Cars", icon: <BsCarFrontFill /> },
-                    { count: 25, change: "+10%", text: "Total Groupage", icon: <FaTruckLoading /> }
+                    {[{ count: 20, change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
+                    { count: 15, change: "-2%", text: "Commetion Earned", icon: <BsCarFrontFill /> },
+                    { count: 25, change: "+10%", text: "Total Amount Paid", icon: <FaTruckLoading /> }
                     ].map((item, index) => (
                       <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                         <div className="p-3 rounded-4 text-center shadow-lg w-100" style={{ maxWidth: '300px' }}>
@@ -1992,15 +1996,15 @@ const Dashboard = () => {
 
               <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                 <div className="d-flex ps-4 w-50 justify-content-start">
-                  <label className="fs-3"><strong>Comapnies List</strong></label>
+                  <label className="fs-3"><strong>Companies List</strong></label>
                 </div>
-                {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
+                {/* {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
                   <>
                     <div className="w-50 pe-3 d-flex justify-content-end">
-                      <button className="btn btn-primary btn-sm text-light fs-5 ps-3 pe-3" onClick={() => setShowRegisterPopup(true)}><IoIosAddCircleOutline /> Add New Comapny</button>
+                      <button className="btn btn-primary btn-sm text-light fs-5 ps-3 pe-3" onClick={() => navigate('/regester_company')}><IoIosAddCircleOutline /> Add New Company</button>
                     </div>
                   </>
-                )}
+                )} */}
               </div>
 
               <div className="d-flex mt-3 p-3 pt-1 flex-column justify-content-start align-items-start m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>

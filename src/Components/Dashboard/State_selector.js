@@ -1,24 +1,24 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-const State_selector = ({ onSelectState }) => {
+const State_selector = ({ onSelectState, paddingcount='', fontsizefont='', bgcolor='', bordercolor='', borderradiuscount='', margincount='' }) => {
 
-    
+
     const country = localStorage.getItem('selectedCountry');
     const [state, setState] = useState([]);
     axios.post(
         "https://countriesnow.space/api/v0.1/countries/states",
         { country },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+            headers: {
+                "Content-Type": "application/json",
+            },
         }
-      )
-    .then((response) => {
-        // console.log(response.data.data.states);
-        setState(response.data.data.states);
-    }).catch((err) => console.log(err));
+    )
+        .then((response) => {
+            // console.log(response.data.data.states);
+            setState(response.data.data.states);
+        }).catch((err) => console.log(err));
 
 
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -33,10 +33,10 @@ const State_selector = ({ onSelectState }) => {
     };
 
     return (
-        <div className="" style={{width: 'auto'}}>
-            <select id="state-selector" className='form-select' style={{backgroundColor: 'rgb(214, 214, 214)'}} value={selectedCountry} onChange={handleChange}>
+        <div className="" style={{ width: 'auto' }}>
+            <select id="state-selector" className='form-select' style={{ backgroundColor: bgcolor, border: bordercolor, borderRadius: borderradiuscount,padding:paddingcount , fontSize: fontsizefont, margin: margincount, fontFamily: 'montserrat', cursor: 'pointer' }} value={selectedCountry} onChange={handleChange}>
                 <option value="">Select the state</option>
-                {state.map((state,index) => (
+                {state.map((state, index) => (
                     <option key={index} value={state.name}>
                         {state.name}
                     </option>
