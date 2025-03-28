@@ -24,9 +24,11 @@ import Offers from './Components/New_update/Offers';
 import CompanyDetails from './Components/New_update/Companies_details';
 import Notification from './Components/New_update/Notification';
 import Regester_company from './Components/Regester/Regester_company';
+import ScrollToTop from "./ScrollToTop";
+import Navbar from './Components/Navbar/Navbar';
 
 const App = () => {
-  const port = process.env.REACT_APP_SECRET ;
+  const port = process.env.REACT_APP_SECRET;
 
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [isMobileView, setMobileView] = useState(false);
@@ -87,18 +89,20 @@ const App = () => {
   //company inof
   const displayCompany = () => {
     axios.get(`${port}/company/display_company`)
-    .then((response) => {
+      .then((response) => {
         localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
-    }).catch((err) => {console.log('error', err)});
-}
-useEffect(() => {
-  displayCompany();
-},[])
+      }).catch((err) => { console.log('error', err) });
+  }
+  useEffect(() => {
+    displayCompany();
+  }, [])
   return (
-    <div className="App">
-      <Router>
-        <div className="d-flex flex-column" style={{ width: "100" }}>
-          {/* <div className="d-flex justify-content-end">
+    <>
+      <div className="App">
+        <Router>
+          <div className="d-flex flex-column" style={{ width: "100" }}>
+
+            {/* <div className="d-flex justify-content-end">
             <Link to='/send_transport'><button className="btn btn-warning m-1" style={{ fontSize: "0.8rem" }}>Send/Transport</button></Link>
             <Link to='/login'><button className="btn btn-warning m-1" style={{ fontSize: "0.8rem" }}>SignUp</button></Link>
             <Link to='/'><button className="btn btn-warning m-1" style={{ fontSize: "0.8rem" }}><IoMdHome /></button></Link>
@@ -106,24 +110,27 @@ useEffect(() => {
               <Link to='/dashboard'><button className="btn btn-warning m-1" style={{ fontSize: "0.8rem" }}><MdDashboardCustomize /></button></Link>
             )}
           </div> */}
-          <Routes>
-            <Route Component={CompleateDashbboard} path='/dashboard'></Route>
-            <Route Component={Home} path='/'></Route>
-            <Route Component={Offers} path='/offers'></Route>
-            <Route Component={CompaniesList} path='/companies_list'></Route>
-            <Route Component={send_groupage} path='/send_groupage'></Route>
-            <Route Component={Notification} path='/notification'></Route>
-            <Route Component={Regester_company} path='/regester_company'></Route>
-            {/* <Route Component={Containers} path='/container'></Route>
+            <ScrollToTop />
+            <Routes>
+              <Route Component={CompleateDashbboard} path='/dashboard'></Route>
+              <Route Component={Home} path='/'></Route>
+              <Route Component={Offers} path='/offers'></Route>
+              <Route Component={CompaniesList} path='/companies_list'></Route>
+              <Route Component={send_groupage} path='/send_groupage'></Route>
+              <Route Component={Notification} path='/notification'></Route>
+              <Route Component={Regester_company} path='/regester_company'></Route>
+              {/* <Route Component={Containers} path='/container'></Route>
             <Route Component={Groupage} path='/groupage'></Route>
             <Route Component={Cars} path='/cars'></Route>
             <Route Component={SendTransport} path='/send_transport'></Route> */}
-            <Route Component={LoginPage} path='/login'></Route>
-            <Route path="/company_details/:id" element={<CompanyDetails />} />
-          </Routes>
-        </div>
-      </Router>
-    </div>
+              <Route Component={LoginPage} path='/login'></Route>
+              <Route path="/company_details/:id" element={<CompanyDetails />} />
+            </Routes>
+          </div>
+        </Router>
+      </div>
+    </>
+
   );
 }
 

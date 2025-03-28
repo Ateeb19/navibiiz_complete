@@ -139,7 +139,7 @@ const Navbar = () => {
               </Link>
               {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
                 <>
-                  {(user_login_state === 'company' || userInfo.role === 'Sadmin') && (
+                  {(user_login_state === 'company' && userInfo.role === 'Sadmin') && (
                     <>
                       <Link to="/regester_company">
                         <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>

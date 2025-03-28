@@ -11,13 +11,18 @@ const LoginPage = () => {
   const [selected, setSelected] = useState("individual");
 
   useEffect(() => {
+    setInterval(() => {      
+      if (selected === 'company' || isSignup === 'true') {
+        navigate('/regester_company');
+      }
+    }, 100);
+  }, []);
+  useEffect(() => {
     const handleResize = () => {
       setMobileView(window.innerWidth < 1000);
     };
-
     handleResize(); // Initialize on component mount
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -25,7 +30,14 @@ const LoginPage = () => {
   // console.log(isMobileView);
 
   const [isSignup, setIsSignup] = useState(false);
-  const toggleForm = () => setIsSignup(!isSignup);
+  const toggleForm = () => {
+
+    if (selected === 'company' || isSignup === 'true') {
+      navigate('/regester_company');
+    }
+    setIsSignup(!isSignup);
+
+  }
   const navigate = useNavigate();
 
 
@@ -91,7 +103,7 @@ const LoginPage = () => {
           alert(response.data.message);
           return
         }
-        console.log(selected , 'from login');
+        console.log(selected, 'from login');
         const token = response.data.token;
         localStorage.setItem('token', token);
         localStorage.setItem('userRole', response.data.role);
@@ -128,6 +140,7 @@ const LoginPage = () => {
   const ShwoPassword = () => {
     setShow('password');
   }
+  console.log(isSignup);
 
   return (
     <div className="login-bg-wrapper">
@@ -158,7 +171,7 @@ const LoginPage = () => {
                   <div
                     className={'tab-btn'}
                     style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#FF5722" : "", color: selected === "company" ? "white" : "" }}
-                    onClick={() => setSelected("company")}
+                    onClick={() => {setSelected('company'); if(isSignup){navigate('/regester_company')}}}
                   >
                     <p onClick={() => setSelected('company')}>As a company</p>
                   </div>
@@ -197,9 +210,9 @@ const LoginPage = () => {
                     name="password"
                     placeholder="Password"
                     required
-                    type={show} 
-                    className="input-field"  />
-                  <span className="fs-4 rounded" onMouseDown={HidePassword} onMouseUp={ShwoPassword} style={{ backgroundColor: "#ebebeb", padding: '12px 18px', height: '64px'}}>
+                    type={show}
+                    className="input-field" />
+                  <span className="fs-4 rounded" onMouseDown={HidePassword} onMouseUp={ShwoPassword} style={{ backgroundColor: "#ebebeb", padding: '12px 18px', height: '64px' }}>
                     <IoEyeOutline /></span>
                 </div>
                 <div className="d-flex flex-row w-100 mb-3 align-items-center">

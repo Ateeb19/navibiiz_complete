@@ -17,7 +17,7 @@ const {
 
 
 Routers.route('/display_company').get(display_company);
-Routers.route('/regester_company').post(AuthenticateToken, Company_Register);
+Routers.route('/regester_company').post(Company_Register);
 //updates
 Routers.route('/update_company_name/:id').put(AuthenticateToken, Update_companyName);
 Routers.route('/update_company_email/:id').put(AuthenticateToken, Update_companyEmail);

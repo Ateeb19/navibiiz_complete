@@ -21,6 +21,8 @@ const CompaniesList = () => {
     const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
     const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
     const [selectedDuration, setSelectedDuration] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
+
 
     useEffect(() => {
         if (location.state) {
@@ -78,7 +80,21 @@ const CompaniesList = () => {
                     return true;
                 });
 
-            return serviceMatch && pickupCountryMatch && destinationCountryMatch && durationMatch;
+            const locationMatch =
+                !searchQuery ||
+                [company.location1, company.location2, company.location3, company.location4, company.location5,
+                company.location6, company.location7, company.location8, company.location9, company.location10]
+                    .some(location => location && location.toLowerCase().includes(searchQuery.toLowerCase()));
+
+            // Match input with countries inside the Countries array
+            const countryMatch =
+                !searchQuery ||
+                company.Countries.some((country) =>
+                    country.countries.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+
+
+            return serviceMatch && pickupCountryMatch && destinationCountryMatch && durationMatch && (locationMatch || countryMatch);
         }).sort((a) => data.id);
     };
 
@@ -132,6 +148,13 @@ const CompaniesList = () => {
                         <div className="d-flex flex-column align-items-start p-3 ps-5 pb-5 col-12 col-md-3">
                             <div className="title-head">
                                 <h3><span style={{ color: ' #FF5722' }}><FaFilter /> </span>Filters by :</h3>
+                            </div>
+                            <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-3">
+                                <input type="text"
+                                    placeholder="Search here ..."
+                                    className="shipping-input-field"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)} />
                             </div>
                             <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-3">
                                 <h6>SERVICES</h6>

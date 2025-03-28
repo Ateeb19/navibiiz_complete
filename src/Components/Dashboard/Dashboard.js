@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,7 +21,17 @@ import { format } from "date-fns";
 import Registration from "./Registration";
 import { formatDistanceToNow } from "date-fns";
 import Paypal_payment from "./Paypal_payment";
+import DataTable from 'datatables.net-react';
+import DT from 'datatables.net-dt';
+// import 'datatables.net-select-dt';
+// import 'datatables.net-responsive-dt';
 
+import $ from "jquery";
+import "datatables.net-dt/css/dataTables.dataTables.css";
+import "datatables.net";
+
+
+DataTable.use(DT);
 
 const Dashboard = () => {
   const port = process.env.REACT_APP_SECRET;
@@ -152,6 +162,7 @@ const Dashboard = () => {
     localStorage.setItem('userRole', 'user');
     localStorage.setItem('token', '');
     localStorage.setItem('userInfo', '');
+    localStorage.setItem('valid', '');
     window.location.reload();
   }
 
@@ -219,7 +230,7 @@ const Dashboard = () => {
           Authorization: token,
         }
       }).then((response) => {
-        console.log("Data fetched successfully:", response.data);
+        // console.log("Data fetched successfully:", response.data);
         setCompanyData(response.data.data);
       }).catch((error) => {
         if (error.response && error.response.status === 403) {
@@ -276,7 +287,7 @@ const Dashboard = () => {
             Authorization: token,
           }
         }).then((response) => {
-          console.log("Data fetched successfully:", response.data);
+          // console.log("Data fetched successfully:", response.data);
           window.location.reload();
         }).catch((error) => { console.error("Error fetching data:", error); }
         );
@@ -709,6 +720,35 @@ const Dashboard = () => {
       setAllOffers(response.data.data);
     }).catch((err) => { console.log(err); });
   }
+
+  console.log(allOffers);
+
+
+  const tableRef = useRef(null);
+
+  useEffect(() => {
+    if (tableRef.current) {
+      $(tableRef.current).DataTable({
+        data: allOffers.map((offer) => [
+          offer.offer_id,
+          offer.product_name,
+          offer.created_by_email,
+          `$${offer.amount}`,
+          offer.receiver_email,
+          offer.payment_status ? offer.payment_status : "Pending",
+        ]),
+        columns: [
+          { title: "Order Id" },
+          { title: "Product Name" },
+          { title: "Offer Created By" },
+          { title: "Price ($)" },
+          { title: "Offer Received By" },
+          { title: "Payment Status" },
+        ],
+        destroy: true, // Prevent re-initialization error
+      });
+    }
+  }, [allOffers]);
 
   const [showOfferDetails, setShowOfferDetails] = useState(null);
   const show_offer_details = (item) => {
@@ -2352,7 +2392,34 @@ const Dashboard = () => {
 
 
                 <div className="table-responsive w-100">
-                  <table className="table">
+
+                
+                  
+                   {/* <table ref={tableRef} className="display">
+                    <thead>
+                      <tr>
+                        <th>Order Id</th>
+                        <th>Product Name</th>
+                        <th>Offer Created By</th>
+                        <th>Price ($)</th>
+                        <th>Offer Received By</th>
+                        <th>Payment Status ($)</th>
+                      </tr>
+                    </thead>
+                  </table> */}
+
+                  {/* <DataTable data={tableRef} ref={tableRef} className="display">
+                    <thead>
+                      <tr>
+                        <th>Order Id</th>
+                        <th>Product Name</th>
+                        <th>Offer Created By</th>
+                        <th>Price ($)</th>
+                        <th>Offer Received By</th>
+                        <th>Payment Status ($)</th>
+                      </tr>
+                    </thead>
+                  </DataTable> */} <table className="table">
                     <thead>
                       <tr>
                         <th scope="col"><h6>Order Id</h6></th>

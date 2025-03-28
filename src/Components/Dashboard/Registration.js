@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Stepper } from 'primereact/stepper';
 import { StepperPanel } from 'primereact/stepperpanel';
 import { Button } from 'primereact/button';
@@ -73,14 +73,23 @@ const Registration = () => {
         setSelectedImage(URL.createObjectURL(file)); // Create a preview
     };
 
+    const [step, setStep] = useState(1);
     const [visibleSelectors, setVisibleSelectors] = useState({});
     const [companyName, setCompanyName] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirm_password, setConfirm_password] = useState("");
     const [contactNumber, setContactNumber] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [description, setDescription] = useState("");
     const [locations, setLocations] = useState([
         { country: "", state: "", city: "" },
     ]);
+    const [bankaccount, setBankaccount] = useState("");
+    const [account_number, setAccount_number] = useState('');
+    const [iban_number, setIban_number] = useState('');
+    const [paypal_id, setPaypal_id] = useState("");
+    const [paypal_id_check, setPaypal_id_check] = useState('');
+
     const handlecountry = (value, index) => {
         const updatedLocations = [...locations];
         updatedLocations[index].country = value;
@@ -130,7 +139,7 @@ const Registration = () => {
             setLocations(updatedLocations);
         }
     };
-    console.log(locations);
+    // console.log(locations);
 
     // const [selectedShippingCountries, setSelectedShippingCountries] = useState([]);
     // const handleShippingCountry = (value) => {
@@ -195,16 +204,60 @@ const Registration = () => {
         setSelectedCarCountries(updatedCountries);
     };
 
-    const basicDetails = () => {
-        if (!companyName || !contactNumber || !emailAddress || !description) return false;
+    const handleregester = async () => {
+        const value = {
+            name: companyName,
+            email: emailAddress,
+            password: password,
+            user_type: 'company',
+        };
+        if (localStorage.getItem('valid') === 'true') {
+            return true;
+        }
+        try {
+            const response = await axios.post(`${port}/user/regester`, value, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-        // Check locations fields
+            if (response.data.status === true) {
+                localStorage.setItem('valid', 'true');
+                return true;
+            } else {
+                alert(response.data.message);
+                localStorage.setItem('valid', 'false');
+                return false;
+            }
+        } catch (err) {
+            console.log(err);
+            localStorage.setItem('valid', 'false');
+            return false;
+        }
+    };
+
+    console.log(step);
+    const basicDetails = useMemo(() => {
+        if (!companyName || !password || !confirm_password || !contactNumber || !emailAddress || !description)
+            return false;
+        if (password !== confirm_password) return false;
         for (const location of locations) {
             if (!location.country || !location.state || !location.city) return false;
         }
-
         return true;
-    }
+    }, [companyName, password, confirm_password, paypal_id, contactNumber, emailAddress, description, locations]);
+
+    // const  = async () => {
+    //     if (!companyName || !password || !confirm_password || !paypal_id || !contactNumber || !emailAddress || !description) return false;
+    //     if (password !== confirm_password) return false;
+    //     for (const location of locations) {
+    //         if (!location.country || !location.state || !location.city) return false;
+    //     }
+    //     // const check = handleregester();
+
+    //     // return check;
+    //     return false;
+    // }
 
     const isTransportationValid = () => {
         if (containerService) {
@@ -243,13 +296,34 @@ const Registration = () => {
         return true; // All validations passed
     };
 
+    const isPaymentValid = () => {
+        if (bankaccount) {
+            if (!account_number || !iban_number) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        if (paypal_id_check) {
+            if (!paypal_id) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return true;
+    }
 
-
+    const [congrat, setCongrat] = useState(false);
     const handleSubmit = async () => {
         const formData = new FormData();
         formData.append('companyName', companyName);
         formData.append('contactNumber', contactNumber);
         formData.append('emailAddress', emailAddress);
+        formData.append('password', password);
+        formData.append('paypal_id', paypal_id);
+        formData.append('account_number', account_number);
+        formData.append('iban_number', iban_number);
         formData.append('description', description);
         formData.append('locations', JSON.stringify(locations));
         if (selectedFile) {
@@ -289,7 +363,7 @@ const Registration = () => {
                     alert('Error submitting data');
                 }
                 console.log(response);
-                nextpage();
+                setCongrat(true);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -303,12 +377,11 @@ const Registration = () => {
     const congratulations = () => {
         window.location.reload();
     }
-    console.log(stepperRef, 'step');
 
     return (
         <div className="flex justify-content-start h-100vh">
 
-            <Stepper linear desabled ref={stepperRef} style={{ flexBasis: 'auto' }}>
+            <Stepper linear desabled ref={stepperRef} onStepChange={(e) => setStep(e)} style={{ flexBasis: 'auto' }}>
                 <StepperPanel header="Basic Details">
                     <div className="container">
                         <div className="row">
@@ -344,6 +417,7 @@ const Registration = () => {
                                     onChange={(e) => setCompanyName(e.target.value)}
                                     placeholder="Enter the company name"
                                     style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    disabled={localStorage.getItem('valid') === 'true'}
                                     required
                                 />
                             </div>
@@ -368,9 +442,51 @@ const Registration = () => {
                                     value={emailAddress}
                                     onChange={(e) => setEmailAddress(e.target.value)}
                                     style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    disabled={localStorage.getItem('valid') === 'true'}
                                     required
                                 />
                             </div>
+                        </div>
+
+                        <div className="row mt-4">
+                            <div className="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-column align-items-start">
+                                <label className="shipping-input-label">Password <span className="text-danger">*</span></label>
+                                <input
+                                    className="shipping-input-field"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Enter the password"
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    disabled={localStorage.getItem('valid') === 'true'}
+                                    required
+                                />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-column align-items-start">
+                                <label className="shipping-input-label">Confirm Password<span className="text-danger">*</span></label>
+                                <input
+                                    className="shipping-input-field"
+                                    type="password"
+                                    placeholder="Enter the confirm password"
+                                    value={confirm_password}
+                                    onChange={(e) => setConfirm_password(e.target.value)}
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    disabled={localStorage.getItem('valid') === 'true'}
+                                    required
+                                />
+                            </div>
+                            {/* <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
+                                <label className="shipping-input-label">Paypal Id<span className="text-danger">*</span></label>
+                                <input
+                                    className="shipping-input-field"
+                                    type="text"
+                                    placeholder="Enter the paypal id"
+                                    value={paypal_id}
+                                    onChange={(e) => setPaypal_id(e.target.value)}
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    required
+                                />
+                            </div> */}
                         </div>
 
                         {locations.map((location, index) => (
@@ -460,11 +576,19 @@ const Registration = () => {
                             <Button
                                 label="Next"
                                 icon="pi pi-arrow-right"
-                                disabled={!basicDetails()}
+                                disabled={!basicDetails}
                                 className="btn rounded-2 "
                                 style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                                 iconPos="center"
-                                onClick={() => stepperRef.current.nextCallback()}
+                                onClick={async () => {
+                                    const done = await handleregester();
+                                    if (done) {
+                                        if (localStorage.getItem('valid') === 'true') {
+                                            stepperRef.current.nextCallback();
+                                            setStep((prev) => prev + 1);
+                                        }
+                                    }
+                                }}
                             />
                         </div>
                     </div>
@@ -664,16 +788,118 @@ const Registration = () => {
                             className="btn rounded-2 me-3"
                             style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center"
-                            onClick={() => stepperRef.current.prevCallback()} />
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); }} />
                         <Button label="Next"
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                             iconPos="center"
                             disabled={!isTransportationValid()}
-                            onClick={() => stepperRef.current.nextCallback()} />
+                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1); }} />
                     </div>
                 </StepperPanel>
+
+                <StepperPanel header="Payment Information">
+                    <div className="flex flex-column h-12rem">
+                        <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+
+                            <>
+
+                                <div className="d-flex flex-column align-items-center justify-content-center mt-4 gap-5">
+                                    <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                        <div className="d-flex align-items-start w-100">
+                                            <label className="shipping-input-label">Do you want to receive payments in bank?<span className="text-danger">*</span></label>
+                                            <Form.Check
+                                                type="switch"
+                                                id="Bank_account"
+                                                checked={bankaccount}
+                                                onChange={(e) => setBankaccount(e.target.checked)}
+                                            />
+                                        </div>
+                                        {bankaccount && (
+                                            <div className="row mt-4 w-100">
+                                                <div className="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-column align-items-start">
+                                                    <label className="shipping-input-label">Account Number<span className="text-danger">*</span></label>
+                                                    <input
+                                                        className="shipping-input-field"
+                                                        type="text"
+                                                        value={account_number}
+                                                        onChange={(e) => setAccount_number(e.target.value)}
+                                                        placeholder="Enter account number"
+                                                        style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-column align-items-start">
+                                                    <label className="shipping-input-label">IBAN<span className="text-danger">*</span></label>
+                                                    <input
+                                                        className="shipping-input-field"
+                                                        type="text"
+                                                        placeholder="Enter the IBAN"
+                                                        value={iban_number}
+                                                        onChange={(e) => setIban_number(e.target.value)}
+                                                        style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+
+                                    <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                        <div className="d-flex align-items-start w-100">
+                                            <label className="shipping-input-label">Do you want to receive in Paypal?<span className="text-danger">*</span></label>
+                                            <Form.Check // prettier-ignore
+                                                type="switch"
+                                                id="paypal_id"
+                                                checked={paypal_id_check}
+                                                onChange={(e) => setPaypal_id_check(e.target.checked)}
+                                            />
+                                        </div>
+                                        {paypal_id_check && (
+                                            <div className="row mt-4 w-100">
+                                                <div className="col-12 col-md-12 col-lg-12 mb-3 d-flex flex-column align-items-start">
+                                                    <label className="shipping-input-label">Paypal ID<span className="text-danger">*</span></label>
+                                                    <input
+                                                        className="shipping-input-field"
+                                                        type="text"
+                                                        value={paypal_id}
+                                                        onChange={(e) => setPaypal_id(e.target.value)}
+                                                        placeholder="Enter Paypal ID"
+                                                        style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+
+                                </div>
+
+                            </>
+
+                        </div>
+                    </div>
+                    <div className="d-flex pt-4 justify-content-end w-100 p-2">
+                        <Button label="Back"
+                            severity="secondary"
+                            icon="pi pi-arrow-left"
+                            className="btn rounded-2 me-3"
+                            style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
+                            iconPos="center"
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); }} />
+                        <Button label="Next"
+                            icon="pi pi-arrow-right"
+                            className="btn rounded-2 "
+                            style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
+                            iconPos="center"
+                            disabled={!isPaymentValid()}
+                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1); }} />
+                    </div>
+                </StepperPanel>
+
                 <StepperPanel header="Additional Information">
                     <div className="flex flex-column h-12rem">
                         <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
@@ -722,40 +948,42 @@ const Registration = () => {
                             className="btn rounded-2"
                             style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center" icon="pi pi-arrow-left"
-                            onClick={() => stepperRef.current.prevCallback()} />
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); }} />
                         <Button label="Submit"
-                            onClick={() => { handleSubmit() }}
+                            onClick={() => { handleSubmit(); setStep((prev) => prev + 1); }}
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                             iconPos="center" />
                     </div>
                 </StepperPanel>
-                <StepperPanel header="Success">
-                    <div className="flex flex-column h-12rem">
-                        <div className="border-2  border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+            </Stepper>
 
+            {congrat && (
+                <>
+                    <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+
+                        <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: '25rem' }}>
 
                             <div className="success-img-wrap">
-                                <img src="/Images/Party_Popper.png" style={{width: '10%'}} alt="congratulation" />
+                                <img src="/Images/Party_Popper.png" alt="congratulation" />
                             </div>
 
                             <div className="title-head">
-                                <h3 style={{ color: ' #1ba300', fontFamily:'montserrat'}}>CONGRATULATIONS</h3>
+                                <h3 style={{ color: ' #1ba300' }}>CONGRATULATIONS</h3>
                             </div>
 
                             <div className="success-des-wrap">
-                                <p style={{fontFamily:'montserrat', margin: '-4px 0 0 0'}}>You have successfully registered your company</p>
+                                <p>You have successfully registered your company.<br/> Login with company email and password</p>
                             </div>
 
                             <div className="success-button">
-                                <button className="btn-success" style={{fontFamily:'montserrat', marginBottom: '20px'}} onClick={() => navigate('/dashboard')}>Go To Dashboard</button>
+                                <button className="btn-success" onClick={() => navigate('/login')}>Go To Login</button>
                             </div>
                         </div>
                     </div>
-                </StepperPanel>
-
-            </Stepper>
+                </>
+            )}
         </div>
     );
 };

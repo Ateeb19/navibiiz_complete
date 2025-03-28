@@ -498,3 +498,8 @@ ul{
     border-radius: 10px;
     margin: 50px 0;
 }
+
+svg {
+    vertical-align: middle !important;
+    margin-right: 4px !important;
+}

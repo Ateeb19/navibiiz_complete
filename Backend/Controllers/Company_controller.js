@@ -78,6 +78,10 @@ const Company_Register = (req, res) => {
             companyName,
             contactNumber,
             emailAddress,
+            password,
+            paypal_id,
+            account_number,
+            iban_number,
             description,
             locations,
             transportation
@@ -122,6 +126,10 @@ const Company_Register = (req, res) => {
             companyName: sanitizeField(companyName),
             contactNumber: sanitizeField(contactNumber),
             emailAddress: sanitizeField(emailAddress),
+            password: sanitizeField(password),
+            paypal_id: sanitizeField(paypal_id),
+            account_number: sanitizeField(account_number),
+            iban_number: sanitizeField(iban_number),
             description: sanitizeField(description),
             // Process and sanitize locations
             locations: JSON.parse(locations).map((loc) => {
@@ -135,7 +143,6 @@ const Company_Register = (req, res) => {
                 selectedImage: uploadedFiles.selectedImage || '',
             },
         };
-
         const sqlData = {
             location1: companyData.locations[0] || '',
             location2: companyData.locations[1] || '',
@@ -150,12 +157,42 @@ const Company_Register = (req, res) => {
             companyName: companyData.companyName,
             contactNumber: companyData.contactNumber,
             emailAddress: companyData.emailAddress,
+            password: companyData.password,
+            paypal_id: companyData.paypal_id,
+            account_number: companyData.account_number,
+            iban_number: companyData.iban_number,  
             description: companyData.description,
             transportation: companyData.transportation,
             files: companyData.files,
         };
 
-        db.query('INSERT INTO companies_info SET ?', { created_by: req.user.useremail, user_role: req.user.role, company_name: sqlData.companyName, email: sqlData.emailAddress, contect_no: sqlData.contactNumber, description: sqlData.description, logo: sqlData.files.selectedImage, location1: sqlData.location1, location2: sqlData.location2, location3: sqlData.location3, location4: sqlData.location4, location5: sqlData.location5, location6: sqlData.location6, location7: sqlData.location7, location8: sqlData.location8, location9: sqlData.location9, location10: sqlData.location10, container_service: sqlData.transportation.containerService, groupage_service: sqlData.transportation.groupageService, car_service: sqlData.transportation.carService, registrationDocument: sqlData.files.registrationDocument, financialDocument: sqlData.files.financialDocument, passport_CEO_MD: sqlData.files.passportCEO_MD }, (err, result1) => {
+        // db.query("SELECT email FROM users WHERE email = ?", [emailAddress], async (err, result) => {
+        //     if (err) {
+        //         res.json({ message: "error in databasae", err });
+        //     } else {
+        //         if (result.length > 0) {
+        //             res.json({ message: "email is in use", status: false });
+        //         } else {
+        //             if (password.length < 8) {
+        //                 res.json({ message: "password must be of 8 characters", status: false });
+        //             } else {
+        //                 const hash = await bcrypt.hash(password, 8);
+        //                 db.query('INSERT INTO users SET ?', { name: name, email: email, password: hash, role: "user", company: 'no', user_type: user_type }, (err, result) => {
+        //                     if (err) {
+        //                         res.json({ message: "error inserting data", err })
+        //                     } else {
+        //                         const token = jwt.sign({ userid: result.insertId, username: name, useremail: email, role: 'user',company: 'no', user_type: user_type }, process.env.JWT_SECRET, {
+        //                             expiresIn: "1day",
+        //                         });
+        //                         res.json({ message: "user regester success", status: true, role: 'user', token: token, name: name, email: email, id: result.insertId });
+        //                     }
+        //                 })
+        //             }
+        //         }
+        //     }
+        // });
+
+        db.query('INSERT INTO companies_info SET ?', { created_by: sqlData.emailAddress, user_role: 'admin', company_name: sqlData.companyName, email: sqlData.emailAddress, paypal_id: sqlData.paypal_id, account_number: sqlData.account_number, iban_number: sqlData.iban_number, contect_no: sqlData.contactNumber, description: sqlData.description, logo: sqlData.files.selectedImage, location1: sqlData.location1, location2: sqlData.location2, location3: sqlData.location3, location4: sqlData.location4, location5: sqlData.location5, location6: sqlData.location6, location7: sqlData.location7, location8: sqlData.location8, location9: sqlData.location9, location10: sqlData.location10, container_service: sqlData.transportation.containerService, groupage_service: sqlData.transportation.groupageService, car_service: sqlData.transportation.carService, registrationDocument: sqlData.files.registrationDocument, financialDocument: sqlData.files.financialDocument, passport_CEO_MD: sqlData.files.passportCEO_MD }, (err, result1) => {
             if (err) {
                 res.json({ message: 'Error in database', status: false });
                 console.log(err);
@@ -194,18 +231,13 @@ const Company_Register = (req, res) => {
                                 });
                             });
                         }
-                        if (req.user.role === 'user') {
-                            db.query('UPDATE users SET role = ?, company = ? WHERE email = ?', ['admin', 'yes', req.user.useremail], (err, result) => {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    res.json({ message: 'Company registered successfully', data: sqlData });
-                                }
-                            })
-                        } else {
-                            res.json({ message: 'Company registered successfully', data: sqlData });
-                        }
                         // res.json({ message: 'Company registered successfully', data: sqlData });
+                        db.query('UPDATE users SET role = ?, company = ? WHERE email = ?', ['admin','yes', sqlData.emailAddress], (err, result) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                        })
+                        res.json({ message: 'Company registered successfully', data: sqlData });
                     }
                 });
                 deleteAllFilse(directoryPath);

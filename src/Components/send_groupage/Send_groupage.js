@@ -220,10 +220,10 @@ const Send_groupage = () => {
                 setIsVisible(false);
                 setCongrat(true);
 
-                setTimeout(() => {
-                    setCongrat(false);
-                    navigate('/dashboard')
-                }, 5000);
+                // setTimeout(() => {
+                //     setCongrat(false);
+                //     navigate('/dashboard')
+                // }, 5000);
                 // window.location.reload();
                 // navigate('/');
             }
