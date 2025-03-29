@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Stepper } from 'primereact/stepper';
 import { StepperPanel } from 'primereact/stepperpanel';
 import { Button } from 'primereact/button';
@@ -56,6 +56,23 @@ const Registration = () => {
     const port = process.env.REACT_APP_SECRET;
     const navigate = useNavigate();
     const stepperRef = useRef(null);
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+          event.preventDefault(); // Required for some browsers
+          const isConfirmed = window.confirm(
+            "The page is about to reload, and your form data will be reset. Do you want to continue?"
+          );
+          if (!isConfirmed) {
+            event.returnValue = ""; // Prevent reload
+          }
+        };
+        localStorage.setItem('valid', 'false');
+        window.addEventListener("beforeunload", handleBeforeUnload);
+    
+        return () => {
+          window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+      }, []);
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -240,7 +257,6 @@ const Registration = () => {
     const basicDetails = useMemo(() => {
         if (!companyName || !password || !confirm_password || !contactNumber || !emailAddress || !description)
             return false;
-        if (password !== confirm_password) return false;
         for (const location of locations) {
             if (!location.country || !location.state || !location.city) return false;
         }
@@ -581,6 +597,10 @@ const Registration = () => {
                                 style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                                 iconPos="center"
                                 onClick={async () => {
+                                    if(password !== confirm_password){
+                                        alert('password and confirm password does not match');
+                                        return;
+                                    }
                                     const done = await handleregester();
                                     if (done) {
                                         if (localStorage.getItem('valid') === 'true') {

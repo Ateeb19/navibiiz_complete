@@ -151,7 +151,7 @@ const CompaniesList = () => {
                             </div>
                             <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-3">
                                 <input type="text"
-                                    placeholder="Search here ..."
+                                    placeholder="Search here by location ..."
                                     className="shipping-input-field"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)} />

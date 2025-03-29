@@ -259,6 +259,15 @@ const show_all_groupage = (req, res) => {
     });
 }
 
+const show_4_groupage = (req, res) => {
+    db.query('SELECT id, product_name, product_type, p_weight, p_height, p_length, p_width, sender_country, sender_state, sender_city, sender_zipcode,        receiver_country, receiver_state, receiver_city, sender_description, RIGHT(sender_contact, 4) AS sender_contact, RIGHT(receiver_contact, 4) AS receiver_contact,        img01, created_at, pickup_date FROM groupage ORDER BY created_at DESC LIMIT 4', (err, result) => {
+        if (err) {
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: result, status: true });
+        }
+    })
+}
 
 //create the offer
 const create_offer = (req, res) => {
@@ -392,4 +401,4 @@ const update_stats_offer = (req, res) => {
         }
     });
 }
-module.exports = { send_groupage_submit, display_user_dashboard, delete_groupage, show_all_groupage, create_offer, show_offers_user, delete_offer_user, groupage_info, update_stats_offer };
+module.exports = { send_groupage_submit, display_user_dashboard, delete_groupage, show_all_groupage, show_4_groupage, create_offer, show_offers_user, delete_offer_user, groupage_info, update_stats_offer };
