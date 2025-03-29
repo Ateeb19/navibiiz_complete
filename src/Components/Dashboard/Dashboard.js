@@ -1146,118 +1146,125 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start mt-5 mb-5 m-2 rounded-1"
-                style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+              <div className="dashboard-wrapper-box">
+                <div className="table-wrap">
+                  <div className="d-flex flex-column justify-content-start align-items-start ">
 
-                <div className="d-flex flex-row justify-content-start align-items-start border-bottom border-dark w-100 mb-3">
-                  <div className="p-3 border-end">
-                    <span>All</span>
-                  </div>
-                  <div className="p-3 border-end">
-                    <span>Unpaid</span>
-                  </div>
-                  <div className="p-3 border-end">
-                    <span>Paid</span>
-                  </div>
-                </div>
-                <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
-                  <h5>Filter By:</h5>
+                    {/* <div className="d-flex flex-row justify-content-start align-items-start border-bottom border-dark w-100 mb-3">
+                      <div className="p-3 border-end">
+                        <span>All</span>
+                      </div>
+                      <div className="p-3 border-end">
+                        <span>Unpaid</span>
+                      </div>
+                      <div className="p-3 border-end">
+                        <span>Paid</span>
+                      </div>
+                    </div> */}
+                    <div className="table-filter-wrap">
+                      <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
+                        <h5>Filter By:</h5>
 
-                  <div className="row w-100 g-2">
-                    <div className="col-12 col-md-6 col-lg-3">
-                      <input type="text" placeholder="Search by product name or order id" className="form-control" />
-                    </div>
-                    <div className="col-12 col-md-6 col-lg-3">
-                      <Countries_selector label="Pick Up Country" bgcolor="white" />
-                    </div>
-                    <div className="col-12 col-md-6 col-lg-3">
-                      <Countries_selector label="Destination Country" bgcolor="white" />
-                    </div>
-                    <div className="col-12 col-md-6 col-lg-3">
-                      <div style={{ position: "relative", width: "100%" }}>
-                        <input
-                          type="text"
-                          readOnly
-                          className="form-control"
-                          value={
-                            state[0].endDate
-                              ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
-                              : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
-                          }
-                          onClick={() => setShowCalendar(!showCalendar)}
-                          style={{ cursor: "pointer" }}
-                        />
-                        {showCalendar && (
-                          <div style={{
-                            position: "absolute",
-                            top: "40px",
-                            zIndex: 1000,
-                            background: "#fff",
-                            borderRadius: "8px",
-                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"
-                          }}>
-                            <DateRange
-                              editableDateInputs={true}
-                              onChange={item => setState([item.selection])}
-                              moveRangeOnFirstSelection={false}
-                              ranges={state}
-                            />
+                        <div className="row w-100 g-2 mt-1 ">
+                          <div className="col-12 col-md-6 col-lg-3">
+                            <input type="text" placeholder="Search by product name or order id" className="shipping-input-field" />
                           </div>
-                        )}
+                          <div className="col-12 col-md-6 col-lg-3">
+                            <Countries_selector paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' label="Pick Up Country" />
+                          </div>
+                          <div className="col-12 col-md-6 col-lg-3">
+                            <Countries_selector paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' label="Destination Country" />
+                          </div>
+                          <div className="col-12 col-md-6 col-lg-3">
+                            <div style={{ position: "relative", width: "100%" }}>
+                              <input
+                                type="text"
+                                readOnly
+                                className="shipping-input-field"
+                                value={
+                                  state[0].endDate
+                                    ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
+                                    : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
+                                }
+                                onClick={() => setShowCalendar(!showCalendar)}
+                                style={{ cursor: "pointer" }}
+                              />
+                              {showCalendar && (
+                                <div style={{
+                                  position: "absolute",
+                                  top: "40px",
+                                  zIndex: 1000,
+                                  background: "#fff",
+                                  borderRadius: "8px",
+                                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"
+                                }}>
+                                  <DateRange
+                                    editableDateInputs={true}
+                                    onChange={item => setState([item.selection])}
+                                    moveRangeOnFirstSelection={false}
+                                    ranges={state}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
+
+                    <div className="table-responsive w-100 ">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th scope="col"><h6>Order Id</h6></th>
+                            <th scope="col"><h6>Product Name</h6></th>
+                            <th scope="col"><h6>Pick up</h6></th>
+                            <th scope="col"><h6>Delivery</h6></th>
+                            <th scope="col"><h6>Pick up Date</h6></th>
+                            <th scope="col"><h6>Payment Status</h6></th>
+                            <th scope="col"><h6>Actions</h6></th>
+                          </tr>
+                        </thead>
+                        {groupageUser && groupageUser.length > 0 ? (
+                          <tbody>
+                            {groupageUser.map((item, index) => (
+                              <tr key={index}>
+                                <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => handle_show_groupage_details(item)}>#{item.id}</td>
+                                <td className="text-secondary">{item.product_name}</td>
+                                <td className="text-secondary">{item.sender_country}</td>
+                                <td className="text-secondary">{item.receiver_country}</td>
+                                <td className="text-secondary">{item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</td>
+                                <td className="text-secondary">
+                                  <span className="p-2 fw-bold" style={{
+                                    backgroundColor: item.payment_status === 'unpaid' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)',
+                                    color: item.payment_status === 'unpaid' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)'
+                                  }}>
+                                    {item.payment_status === 'unpaid' ? 'Unpaid' : 'Paid'}
+                                  </span>
+                                </td>
+                                <td className="text-secondary">
+                                  <button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}>
+                                    <FaEye />
+                                  </button>
+                                  <button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handle_show_groupage_delete(item)} style={{ fontSize: '1.5rem' }}>
+                                    <MdDelete />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        ) : (
+                          <tbody>
+                            <tr>
+                              <td colSpan='7' className="text-secondary text-center">No Data Available</td>
+                            </tr>
+                          </tbody>
+                        )}
+                      </table>
+                    </div>
                   </div>
                 </div>
-                <div className="table-responsive w-100">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col"><h6>Order Id</h6></th>
-                        <th scope="col"><h6>Product Name</h6></th>
-                        <th scope="col"><h6>Pick up</h6></th>
-                        <th scope="col"><h6>Delivery</h6></th>
-                        <th scope="col"><h6>Pick up Date</h6></th>
-                        <th scope="col"><h6>Payment Status</h6></th>
-                        <th scope="col"><h6>Actions</h6></th>
-                      </tr>
-                    </thead>
-                    {groupageUser && groupageUser.length > 0 ? (
-                      <tbody>
-                        {groupageUser.map((item, index) => (
-                          <tr key={index}>
-                            <td className="text-primary" onClick={() => handle_show_groupage_details(item)}>#{item.id}</td>
-                            <td className="text-secondary">{item.product_name}</td>
-                            <td className="text-secondary">{item.sender_country}</td>
-                            <td className="text-secondary">{item.receiver_country}</td>
-                            <td className="text-secondary">{item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</td>
-                            <td className="text-secondary">
-                              <span className="p-2 fw-bold" style={{
-                                backgroundColor: item.payment_status === 'unpaid' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)',
-                                color: item.payment_status === 'unpaid' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)'
-                              }}>
-                                {item.payment_status === 'unpaid' ? 'Unpaid' : 'Paid'}
-                              </span>
-                            </td>
-                            <td className="text-secondary">
-                              <button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}>
-                                <FaEye />
-                              </button>
-                              <button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handle_show_groupage_delete(item)} style={{ fontSize: '1.5rem' }}>
-                                <MdDelete />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    ) : (
-                      <tbody>
-                        <tr>
-                          <td colSpan='7' className="text-secondary text-center">No Data Available</td>
-                        </tr>
-                      </tbody>
-                    )}
-                  </table>
-                </div>
+
               </div>
 
             </div>
@@ -1266,398 +1273,515 @@ const Dashboard = () => {
 
         {selected_groupage && (
           <>
-            <div className="bg-light position-fixed pb-3 ps-4" style={{ width: '100%', maxWidth: isMobile ? "100%" : "78%", height: '100vh', overflow: 'auto' }}>
-              {isMobile && (
-                <div className="w-100 d-flex justify-content-start">
-                  <Menu />
-                </div>
-              )}
-              <div className="d-flex justify-content-end mt-2 flex-wrap">
 
-                <div className="p-3 pe-5">
-                </div>
-
-                <div className="border-start p-2 border-3 border-dark">
-                  <Dropdown style={{ width: '13rem' }}>
-                    <Dropdown.Toggle
-                      className="fs-5 w-100 text-secondary"
-                      variant="light"
-                      id="dropdown-basic"
-                    >
-                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu style={{ width: '13rem' }}>
-                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                        <label><strong>Role-:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}</label>
-                        <label className="text-break w-100"><strong>Email-:</strong> {userInfo.email}</label>
-                        <label><button className="btn btn-secondary btn-sm">Edit Name</button></label>
-                        <label><button className="btn btn-secondary btn-sm">Edit Password</button></label>
-                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                      </div>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-
-              <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
-                <div className="d-flex w-100 justify-content-start">
-                  <label className="fs-3"><strong>Order Details</strong></label>
-                </div>
-              </div>
-
-              <div className="d-flex mt-4 p-1 ps-3 pb-5 mb-5 flex-column justify-content-start align-items-start m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-                <div className="d-flex flex-row justify-content-start align-items-center">
-                  <div className="m-2 w-25 border border-3 border-secondary rounded-1">
-                    <img src={selected_groupage.img01} alt="product image" style={{ width: '100%', height: '100%' }} />
-                  </div>
-                  <div className="ms-5 d-flex flex-column align-items-start justify-content-start">
-                    <strong className="fs-4">{selected_groupage.product_name}</strong>
-                    <span className="text-secondary">ID: #{selected_groupage.id}</span>
-                  </div>
-                </div>
-                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                  <strong className="fs-5">Product Information</strong>
-
-                  <div className="row w-100 g-3">
-                    <div className="col-12 col-md-4">
-                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <SiAnytype />
-                        </div>
-                        <div className="d-flex flex-column align-items-center gap-2">
-                          <span className="text-secondary">Product Type</span>
-                          <h6>{selected_groupage.product_type}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-12 col-md-4">
-                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaWeightScale />
-                        </div>
-                        <div className="d-flex flex-column align-items-center gap-2">
-                          <span className="text-secondary">Weight</span>
-                          <h6>{selected_groupage.p_weight} Kg</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-12 col-md-4">
-                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <RiExpandHeightFill />
-                        </div>
-                        <div className="d-flex flex-column align-items-center gap-2">
-                          <span className="text-secondary">Height</span>
-                          <h6>{selected_groupage.p_height} Cm</h6>
-                        </div>
-                      </div>
+            <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                zIndex: 9999
+              }}
+            >
+              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+                style={{
+                  width: '90%',
+                  maxWidth: '1100px',
+                  height: '90vh',
+                  overflowY: 'auto'
+                }}
+              >
+                <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                  <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_groupage(null)}>
+                    ✕
+                  </button>
+                  <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                    <div className="d-flex w-100 justify-content-start">
+                      <label className="fs-3"><strong>Order Details</strong></label>
                     </div>
                   </div>
 
-                  <div className="row w-100 g-3 mt-3">
-                    <div className="col-12 col-md-4">
-                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaRuler />
-                        </div>
-                        <div className="d-flex flex-column align-items-center gap-2">
-                          <span className="text-secondary">Length</span>
-                          <h6>{selected_groupage.p_length} Cm</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-12 col-md-4">
-                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <RiExpandWidthFill />
-                        </div>
-                        <div className="d-flex flex-column align-items-center gap-2">
-                          <span className="text-secondary">Width</span>
-                          <h6>{selected_groupage.p_width} Cm</h6>
-                        </div>
-                      </div>
+
+                  <div className="d-flex flex-row justify-content-start align-items-center">
+                    <div className="m-2 w-25 border border-3 border-secondary rounded-1">
+                      <img src={selected_groupage.img01} alt="product image" style={{ width: '100%', height: '100%' }} />
+                    </div>
+                    <div className="ms-5 d-flex flex-column align-items-start justify-content-start">
+                      <strong className="fs-4">{selected_groupage.product_name}</strong>
+                      <span className="text-secondary">ID: #{selected_groupage.id}</span>
                     </div>
                   </div>
-                </div>
+                  <div className="offer-details-wrap">
+                    <h5 className="text-start w-100 mb-3 fs-6">Product Information</h5>
 
-
-                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                  <strong className="fs-5">Pick Up Information</strong>
-                  <div className="row w-100 g-3 mt-2">
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaUser />
+                    <div className="row w-100 g-3">
+                      <div className="col-12 col-md-4">
+                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
+                          <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                            style={{
+                              width: '3rem',
+                              height: '3rem',
+                              backgroundColor: '#E1F5FF',
+                              aspectRatio: '1 / 1'
+                            }}>
+                            <SiAnytype />
+                          </div>
+                          <div className="d-flex flex-column align-items-start gap-2">
+                            <span className="text-secondary offer-submit-sub-head">Product Type</span>
+                            <h6>{selected_groupage.product_type}</h6>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Full Name</span>
-                          <h6>{selected_groupage.sender_name}</h6>
+                      </div>
+
+                      <div className="col-12 col-md-4">
+                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
+                          <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                            style={{
+                              width: '3rem',
+                              height: '3rem',
+                              backgroundColor: '#E1F5FF',
+                              aspectRatio: '1 / 1'
+                            }}>
+                            <FaWeightScale />
+                          </div>
+                          <div className="d-flex flex-column align-items-start gap-2">
+                            <span className="text-secondary offer-submit-sub-head">Weight</span>
+                            <h6>{selected_groupage.p_weight} Kg</h6>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-4">
+                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
+                          <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                            style={{
+                              width: '3rem',
+                              height: '3rem',
+                              backgroundColor: '#E1F5FF',
+                              aspectRatio: '1 / 1'
+                            }}>
+                            <RiExpandHeightFill />
+                          </div>
+                          <div className="d-flex flex-column align-items-start gap-2">
+                            <span className="text-secondary offer-submit-sub-head">Height</span>
+                            <h6>{selected_groupage.p_height} Cm</h6>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <IoCall />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Contact Number</span>
-                          <h6>{selected_groupage.sender_contact}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <MdAttachEmail />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Email Address</span>
-                          <h6>{selected_groupage.sender_email}</h6>
+                    <div className="row w-100 g-3 mt-3">
+                      <div className="col-12 col-md-4">
+                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
+                          <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                            style={{
+                              width: '3rem',
+                              height: '3rem',
+                              backgroundColor: '#E1F5FF',
+                              aspectRatio: '1 / 1'
+                            }}>
+                            <FaRuler />
+                          </div>
+                          <div className="d-flex flex-column align-items-start gap-2">
+                            <span className="text-secondary offer-submit-sub-head">Length</span>
+                            <h6>{selected_groupage.p_length} Cm</h6>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaFlag />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Country</span>
-                          <h6>{selected_groupage.sender_country}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaBuildingFlag />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">State</span>
-                          <h6>{selected_groupage.sender_state}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaCity />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">City</span>
-                          <h6>{selected_groupage.sender_city}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaMapPin />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Street Address</span>
-                          <h6>{selected_groupage.sender_address}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <MdConfirmationNumber />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Zip Code</span>
-                          <h6>{selected_groupage.sender_zipcode}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaCalendarCheck />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Pick Up Date</span>
-                          <h6>{selected_groupage.pickup_date.includes('Select End Date') ? `${selected_groupage.pickup_date.split(' - ')[0]} -` : selected_groupage.pickup_date}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaInfoCircle />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Pick Up Notes</span>
-                          <p className="text-start"><h6>{selected_groupage.sender_description}</h6></p>
+                      <div className="col-12 col-md-4">
+                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
+                          <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                            style={{
+                              width: '3rem',
+                              height: '3rem',
+                              backgroundColor: '#E1F5FF',
+                              aspectRatio: '1 / 1'
+                            }}>
+                            <RiExpandWidthFill />
+                          </div>
+                          <div className="d-flex flex-column align-items-start gap-2">
+                            <span className="text-secondary offer-submit-sub-head">Width</span>
+                            <h6>{selected_groupage.p_width} Cm</h6>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                  <strong className="fs-5">Delivery Information</strong>
+                  <div className="offer-details-wrap">
+                    <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                      <h5 className="text-start w-100 mb-3 fs-6">Pick Up Information</h5>
+                      <div className="row w-100 g-3 mt-2">
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaUser />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head">Full Name</span>
+                              <h6>{selected_groupage.sender_name}</h6>
+                            </div>
+                          </div>
+                        </div>
 
-                  <div className="row w-100 g-3 mt-2">
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaUser />
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <IoCall />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head">Contact Number</span>
+                              <h6>{selected_groupage.sender_contact}</h6>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Full Name</span>
-                          <h6>{selected_groupage.receiver_name}</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <IoCall />
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <MdAttachEmail />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Email Address</span>
+                              <h6>{selected_groupage.sender_email}</h6>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Contact Number</span>
-                          <h6>{selected_groupage.receiver_contact}</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <MdAttachEmail />
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaFlag />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Country</span>
+                              <h6>{selected_groupage.sender_country}</h6>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Email Address</span>
-                          <h6>{selected_groupage.receiver_email}</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaFlag />
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaBuildingFlag />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">State</span>
+                              <h6>{selected_groupage.sender_state}</h6>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Country</span>
-                          <h6>{selected_groupage.receiver_country}</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaBuildingFlag />
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaCity />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">City</span>
+                              <h6>{selected_groupage.sender_city}</h6>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">State</span>
-                          <h6>{selected_groupage.receiver_state}</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaCity />
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaMapPin />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Street Address</span>
+                              <h6>{selected_groupage.sender_address}</h6>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">City</span>
-                          <h6>{selected_groupage.receiver_city}</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaMapPin />
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <MdConfirmationNumber />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Zip Code</span>
+                              <h6>{selected_groupage.sender_zipcode}</h6>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Street Address</span>
-                          <h6>{selected_groupage.receiver_address}</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <MdConfirmationNumber />
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaCalendarCheck />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Pick Up Date</span>
+                              <h6>{selected_groupage.pickup_date.includes('Select End Date') ? `${selected_groupage.pickup_date.split(' - ')[0]} -` : selected_groupage.pickup_date}</h6>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Zip Code</span>
-                          <h6>{selected_groupage.receiver_zipcode}</h6>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="col-md-4 col-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaCalendarCheck />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Preferred Delivery Date</span>
-                          <h6>{selected_groupage.departure_date}</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-12">
-                      <div className="d-flex align-items-start p-2 gap-2">
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          <FaInfoCircle />
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="text-secondary">Delivery Notes</span>
-                          <p className="text-start"><h6>{selected_groupage.receiver_description}</h6></p>
+                        <div className="col-md-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaInfoCircle />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Pick Up Notes</span>
+                              <p className="text-start"><h6>{selected_groupage.sender_description}</h6></p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  <div className="offer-details-wrap">
+                    <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                      <h5 className="text-start w-100 mb-3 fs-6">Delivery Information</h5>
+
+                      <div className="row w-100 g-3 mt-2">
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaUser />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Full Name</span>
+                              <h6 className="text-start">{selected_groupage.receiver_name}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <IoCall />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Contact Number</span>
+                              <h6>{selected_groupage.receiver_contact}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <MdAttachEmail />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Email Address</span>
+                              <h6>{selected_groupage.receiver_email}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaFlag />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Country</span>
+                              <h6>{selected_groupage.receiver_country}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaBuildingFlag />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">State</span>
+                              <h6>{selected_groupage.receiver_state}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaCity />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">City</span>
+                              <h6>{selected_groupage.receiver_city}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaMapPin />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Street Address</span>
+                              <h6 className="text-start">{selected_groupage.receiver_address}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <MdConfirmationNumber />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Zip Code</span>
+                              <h6 className="text-start">{selected_groupage.receiver_zipcode}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 col-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaCalendarCheck />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Preferred Delivery Date</span>
+                              <h6 className="text-start">{selected_groupage.departure_date}</h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-md-12">
+                          <div className="d-flex align-items-start p-2 gap-2">
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: '#E1F5FF',
+                                aspectRatio: '1 / 1'
+                              }}>
+                              <FaInfoCircle />
+                            </div>
+                            <div className="d-flex flex-column align-items-start gap-2">
+                              <span className="text-secondary offer-submit-sub-head text-start">Delivery Notes</span>
+                              <p className="text-start"><h6>{selected_groupage.receiver_description}</h6></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -1735,106 +1859,103 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="d-flex mt-4 p-1 flex-column justify-content-start align-items-start mt-5 mb-5 m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-                <div className="d-flex flex-row justify-contentt start align-items-start border-bottom bordre-dark w-100 mb-3">
-                  <div className="p-2">
-                    <strong className="fs-5">Latest Offers</strong>
-                  </div>
-                </div>
+              <div className="dashboard-wrapper-box">
+                <div className="table-wrap">
 
-                <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3">
-                  <h5>Filter By:</h5>
-                  <div className="row g-2 w-100">
-                    <div className="col-12 col-md-6 col-lg-3">
-                      <input
-                        type="text"
-                        placeholder="Search by product name or order id"
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="col-12 col-md-6 col-lg-3">
-                      <Countries_selector label="Pick Up Country" bgcolor="white" />
-                    </div>
-                    <div className="col-12 col-md-6 col-lg-3">
-                      <Countries_selector label="Destination Country" bgcolor="white" />
-                    </div>
-                    <div className="col-12 col-md-6 col-lg-3 position-relative">
-                      <input
-                        type="text"
-                        readOnly
-                        className="form-control"
-                        value={
-                          state[0].endDate
-                            ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
-                            : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
-                        }
-                        onClick={() => setShowCalendar(!showCalendar)}
-                        style={{ cursor: "pointer" }}
-                      />
-                      {showCalendar && (
-                        <div
-                          className="position-absolute bg-white rounded shadow-sm p-2"
-                          style={{ top: "40px", zIndex: 1000 }}
-                        >
-                          <DateRange
-                            editableDateInputs={true}
-                            onChange={(item) => setState([item.selection])}
-                            moveRangeOnFirstSelection={false}
-                            ranges={state}
+                  <div className="table-filter-wrap">
+                    <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
+                      <h5>Filter By:</h5>
+                      <div className="row w-100 g-2 mt-1 ">
+                        <div className="col-12 col-md-6 col-lg-3">
+                          <input
+                            type="text"
+                            placeholder="Search by product name or order id"
+                            className="shipping-input-field"
                           />
                         </div>
-                      )}
+                        <div className="col-12 col-md-6 col-lg-3">
+                          <Countries_selector label="Pick Up Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                        </div>
+                        <div className="col-12 col-md-6 col-lg-3">
+                          <Countries_selector label="Destination Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                        </div>
+                        <div className="col-12 col-md-6 col-lg-3 position-relative">
+                          <input
+                            type="text"
+                            readOnly
+                            className="shipping-input-field"
+                            value={
+                              state[0].endDate
+                                ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
+                                : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
+                            }
+                            onClick={() => setShowCalendar(!showCalendar)}
+                            style={{ cursor: "pointer" }}
+                          />
+                          {showCalendar && (
+                            <div
+                              className="position-absolute bg-white rounded shadow-sm p-2"
+                              style={{ top: "40px", zIndex: 1000 }}
+                            >
+                              <DateRange
+                                editableDateInputs={true}
+                                onChange={(item) => setState([item.selection])}
+                                moveRangeOnFirstSelection={false}
+                                ranges={state}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="table-responsive" style={{
-                  width: "100%",
-                  overflowX: "auto",
-                  whiteSpace: "nowrap",
-                }}>
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col"><h6>Order Id</h6></th>
-                        <th scope="col"><h6>Product Name</h6></th>
-                        <th scope="col"><h6>Offer From</h6></th>
-                        <th scope="col"><h6>Price ($)</h6></th>
-                        <th scope="col"><h6>Delivery Duration</h6></th>
-                        <th scope="col"><h6>Actions</h6></th>
-                      </tr>
-                    </thead>
-                    {offers && offers.length > 0 ? (
-                      <tbody>
-                        {offers.map((item, index) => (
-                          <tr key={index}>
-                            <td className="text-primary">#{item.order_id}</td>
-                            <td className="text-secondary">{item.product_name}</td>
-                            <td className="text-secondary">XXXXX-XXX</td>
-                            <td className="text-secondary">{item.price}</td>
-                            <td className="text-secondary">{item.delivery_duration}</td>
-                            <td>
-                              <button className="btn btn-sm btn-success text-light px-2 me-1" onClick={() => handleShowOffer(item)}>
-                                Accept
-                              </button>
-                              <button className="btn btn-sm btn-danger text-light px-2 ms-1" onClick={() => handleDeleteoffer(item.offer_id)}>
-                                Reject
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    ) : (
-                      <tbody>
+                  <div className="table-responsive" style={{
+                    width: "100%",
+                    overflowX: "auto",
+                    whiteSpace: "nowrap",
+                  }}>
+                    <table className="table">
+                      <thead>
                         <tr>
-                          <td colSpan="6" className="text-center text-secondary">No Data</td>
+                          <th scope="col"><h6>Order Id</h6></th>
+                          <th scope="col"><h6>Product Name</h6></th>
+                          <th scope="col"><h6>Offer From</h6></th>
+                          <th scope="col"><h6>Price ($)</h6></th>
+                          <th scope="col"><h6>Delivery Duration</h6></th>
+                          <th scope="col"><h6>Actions</h6></th>
                         </tr>
-                      </tbody>
-                    )}
-                  </table>
+                      </thead>
+                      {offers && offers.length > 0 ? (
+                        <tbody>
+                          {offers.map((item, index) => (
+                            <tr key={index}>
+                              <td className="text-primary">#{item.order_id}</td>
+                              <td className="text-secondary">{item.product_name}</td>
+                              <td className="text-secondary">XXXXX-XXX</td>
+                              <td className="text-secondary">{item.price}</td>
+                              <td className="text-secondary">{item.delivery_duration}</td>
+                              <td className="d-flex align-items-center justify-content-center w-100 gap-3">
+                                <button className="btn btn-sm text-light " style={{ backgroundColor: '#31b23c' }} onClick={() => handleShowOffer(item)}>
+                                  Accept
+                                </button>
+                                <button className="btn btn-sm text-light" style={{ backgroundColor: '#c63d3d' }} onClick={() => handleDeleteoffer(item.offer_id)}>
+                                  Reject
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      ) : (
+                        <tbody>
+                          <tr>
+                            <td colSpan="6" className="text-center text-secondary">No Data</td>
+                          </tr>
+                        </tbody>
+                      )}
+                    </table>
+                  </div>
                 </div>
               </div>
-
             </div>
           </>
         )}
@@ -1849,7 +1970,7 @@ const Dashboard = () => {
             >
               <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
                 style={{
-                  width: '50%',
+                  width: '55%',
                   height: '90vh',
                   overflowY: 'auto'
                 }}
@@ -1862,124 +1983,124 @@ const Dashboard = () => {
                   <strong className="fs-4">Offer Details</strong>
 
                   <h5 className="mt-3">Product Information</h5>
-                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2">
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                    <div className=" d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Product ID : </span>
                       <span>{selected_offer.id}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Product Name : </span>
                       <span>{selected_offer.product_name}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Weight : </span>
                       <span>{selected_offer.p_weight}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Height :  </span>
                       <span>{selected_offer.p_height}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Length : </span>
                       <span>{selected_offer.p_length}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Width : </span>
                       <span>{selected_offer.p_width}</span>
                     </div>
                   </div>
 
                   <h5 className="mt-3">Company Information</h5>
-                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2">
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Company Name : </span>
                       <span>XXXX-XX</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Price Offered : </span>
                       <span className="fw-bold">${selected_offer.price}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Offer Received Date : </span>
                       <span>{selected_offer.created_at.split("T")[0]}</span>
                     </div>
                   </div>
 
                   <h5 className="mt-3">Pick Up Information</h5>
-                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2">
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Full Name : </span>
                       <span>{selected_offer.sender_name}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Contact Number : </span>
                       <span>{selected_offer.sender_contact}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Email ID : </span>
                       <span>{selected_offer.sender_email}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Country : </span>
                       <span>{selected_offer.sender_country}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">State : </span>
                       <span>{selected_offer.sender_state}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">City : </span>
                       <span>{selected_offer.sender_city}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Street Address : </span>
                       <span>{selected_offer.sender_address}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Zip Code : </span>
                       <span>{selected_offer.sender_zipcode}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Pick Up Date : </span>
                       <span>{selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date}</span>
                     </div>
                   </div>
 
                   <h5 className="mt-3">Delivery Information</h5>
-                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2">
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Full Name : </span>
                       <span>{selected_offer.receiver_name}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Contact Number : </span>
                       <span>{selected_offer.receiver_contact}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Email ID : </span>
                       <span>{selected_offer.receiver_email}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Country : </span>
                       <span>{selected_offer.receiver_country}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">State : </span>
                       <span>{selected_offer.receiver_state}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">City : </span>
                       <span>{selected_offer.receiver_city}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Street Address : </span>
                       <span>{selected_offer.receiver_address}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Zip Code : </span>
                       <span>{selected_offer.receiver_zipcode}</span>
                     </div>
-                    <div className="pe-4 ps-4 d-flex flex-row align-items-start justify-content-between w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Delivery Duration : </span>
                       <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
                     </div>
@@ -2352,50 +2473,34 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-                <div className="d-flex w-50 justify-content-start">
-                  <h4>Latest Offers</h4>
-                </div>
-                <div className="d-flex w-50 justify-content-start mt-3">
-                  <h5>Filters By:</h5>
-                </div>
-
-                <div className="row pe-3 justify-content-start align-items-start w-100 mb-3">
-                  <div className="col-12 col-md-4 d-flex flex-column align-items-start">
-                    <label className="text-secondary fs-5">Search here</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <input type="text" className="form-control mt-1 border-0" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Search here..." />
+              <div className="dashboard-wrapper-box">
+                <div className="table-wrap">
+                  <div className="table-filter-wrap">
+                    <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
+                      <h5>Filter By:</h5>
+                      <div className="row w-100 g-2 mt-1 ">
+                        <div className="col-12 col-md-6 col-lg-3">
+                          <input type="text" className="shipping-input-field" placeholder="Search here..." />
+                        </div>
+                        <div className="col-12 col-md-6 col-lg-3">
+                          <Countries_selector label="Pick Up Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                        </div>
+                        <div className="col-12 col-md-6 col-lg-3">
+                          <Countries_selector label="Destination Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                        </div>
+                        <div className="col-12 col-md-6 col-lg-3 position-relative">
+                          <input type="date" className="shipping-input-field" placeholder="Pick up date" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="col-12 col-md-3 d-flex flex-column align-items-start mt-3 mt-md-0">
-                    <label className="text-secondary fs-5">Pick up Country</label>
-                    <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <Countries_selector />
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-3 d-flex flex-column align-items-start mt-3 mt-md-0">
-                    <label className="text-secondary fs-5">Destination Country</label>
-                    <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <Countries_selector />
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-2 d-flex flex-column align-items-start mt-3 mt-md-0">
-                    <label className="text-secondary fs-5">Pick up date</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <input type="date" className="form-control mt-1 border-0" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Pick up date" />
-                    </div>
-                  </div>
-                </div>
 
 
-                <div className="table-responsive w-100">
 
-                
-                  
-                   {/* <table ref={tableRef} className="display">
+                    <div className="table-responsive w-100">
+
+
+
+                      {/* <table ref={tableRef} className="display">
                     <thead>
                       <tr>
                         <th>Order Id</th>
@@ -2408,7 +2513,7 @@ const Dashboard = () => {
                     </thead>
                   </table> */}
 
-                  {/* <DataTable data={tableRef} ref={tableRef} className="display">
+                      {/* <DataTable data={tableRef} ref={tableRef} className="display">
                     <thead>
                       <tr>
                         <th>Order Id</th>
@@ -2420,100 +2525,82 @@ const Dashboard = () => {
                       </tr>
                     </thead>
                   </DataTable> */} <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col"><h6>Order Id</h6></th>
-                        <th scope="col"><h6>Product Name</h6></th>
-                        <th scope="col"><h6>Offer Created By</h6></th>
-                        <th scope="col"><h6>Price ($)</h6></th>
-                        <th scope="col"><h6>Offer Received By</h6></th>
-                        <th scope="col"><h6>Payment Status ($)</h6></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {allOffers && allOffers.length > 0 ? (
-                        allOffers.map((item, index) => (
-                          <tr key={index}>
-                            <td className="text-primary" onClick={() => show_offer_details(item)}>#{item.offer_id}</td>
-                            <td className="text-secondary">{item.product_name}</td>
-                            <td className="text-secondary">{item.created_by}</td>
-                            <td className="text-dark"><b>{item.amount}</b></td>
-                            <td className="text-secondary">{item.created_by_email}</td>
-                            <td className="text-secondary">
-                              <span
-                                className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : 'text-success'}`}
-                                style={{ backgroundColor: item.status === 'pending' ? 'rgb(255, 242, 128)' : 'rgb(145, 255, 128)' }}
-                              >
-                                {item.status === 'pending' ? 'Pending' : 'Success'}
-                              </span>
-                            </td>
+                        <thead>
+                          <tr>
+                            <th scope="col"><h6>Order Id</h6></th>
+                            <th scope="col"><h6>Product Name</h6></th>
+                            <th scope="col"><h6>Offer Created By</h6></th>
+                            <th scope="col"><h6>Price ($)</h6></th>
+                            <th scope="col"><h6>Offer Received By</h6></th>
+                            <th scope="col"><h6>Payment Status ($)</h6></th>
                           </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan="6" className="text-center text-secondary">No Data Available</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody>
+                          {allOffers && allOffers.length > 0 ? (
+                            allOffers.map((item, index) => (
+                              <tr key={index}>
+                                <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => show_offer_details(item)}>#{item.offer_id}</td>
+                                <td className="text-secondary">{item.product_name}</td>
+                                <td className="text-secondary">{item.created_by}</td>
+                                <td className="text-dark"><b>{item.amount}</b></td>
+                                <td className="text-secondary">{item.created_by_email}</td>
+                                <td className="text-secondary">
+                                  <span
+                                    className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : 'text-success'}`}
+                                    style={{ backgroundColor: item.status === 'pending' ? 'rgb(255, 242, 128)' : 'rgb(145, 255, 128)' }}
+                                  >
+                                    {item.status === 'pending' ? 'Pending' : 'Success'}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan="6" className="text-center text-secondary">No Data Available</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-
               </div>
+
+
             </div>
           </>
         )}
 
         {showOfferDetails && (
           <>
-            <div className="bg-light position-fixed pb-5 ps-4" style={{ width: '100%', maxWidth: isMobile ? "100%" : "79%", height: '100vh', overflow: 'auto' }}>
-              <div className="d-flex justify-content-end mt-2 flex-wrap gap-3">
-                {isMobile && (
-                  <div className="w-100 d-flex justify-content-start">
-                    <Menu />
-                  </div>
-                )}
-                <div className="p-2">
-                  <button
-                    className="btn text-light d-flex align-items-center gap-2"
-                    style={{ backgroundColor: 'tomato' }}
-                    onClick={() => navigate('/send_groupage')}
-                  >
-                    <IoMdAddCircleOutline className="fs-4" />
-                    <h5 className="m-0">Create New Order</h5>
+
+            <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                zIndex: 9999
+              }}
+            >
+              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+                style={{
+                  width: '90%',
+                  maxWidth: '1100px',
+                  height: '90vh',
+                  overflowY: 'auto'
+                }}
+              >
+                <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                  <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
+                    ✕
                   </button>
+                  <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                    <div className="d-flex ps-4 w-100 justify-content-start">
+                      <label className="fs-3"><strong>Offer Details</strong></label>
+                    </div>
+                  </div>
                 </div>
-                <div className="border-start p-2 border-3 border-dark">
-                  <Dropdown>
-                    <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                      <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu align="end">
-                      <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                        <div className="text-capitalize">
-                          <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                        </div>
-                        <div>
-                          <strong>Email:</strong> {userInfo.email}
-                        </div>
-                        <button className="btn btn-secondary btn-sm">Edit Name</button>
-                        <button className="btn btn-secondary btn-sm">Edit Password</button>
-                        <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                      </div>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
 
-
-              <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
-                <div className="d-flex ps-4 w-100 justify-content-start">
-                  <label className="fs-3"><strong>Offer Details</strong></label>
-                </div>
-              </div>
-
-              <div className="d-flex mt-4 p-1 ps-3 pb-5 mb-5 flex-column justify-content-start align-items-start m-2 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
                 <div className="d-flex flex-row justify-content-start align-items-center">
-                  <div className="m-2 w-25 border border-3 border-secondary rounded-1">
+                  <div className="m-2 border border-1 border-secondary rounded-1" style={{ width: '10%' }}>
                     <img src={showOfferDetails.img01} alt="product image" style={{ width: '100%', height: '100%' }} />
                   </div>
                   <div className="ms-5 d-flex flex-column align-items-start justify-content-start">
@@ -2521,27 +2608,61 @@ const Dashboard = () => {
                     <span className="text-secondary">Offer ID: #{showOfferDetails.offer_id}</span>
                   </div>
                 </div>
-                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                  <strong className="fs-5">Payment Information</strong>
-                  {[
-                    [
-                      { icon: <SiAnytype />, label: "Amount Received", value: "Testing" },
-                      { icon: <FaWeightScale />, label: "Commission Earned", value: "Testing" },
-                      { icon: <RiExpandHeightFill />, label: "Payment Status", value: "Testing" }
-                    ],
-                    [
-                      { icon: <SiAnytype />, label: "Paid By", value: "Testing" },
-                      { icon: <FaWeightScale />, label: "Paypal ID", value: "Testing" },
-                      { icon: <RiExpandHeightFill />, label: "Offers Received", value: "Testing" }
-                    ],
-                    [
-                      { icon: <SiAnytype />, label: "Company Name", value: "Testing" },
-                      { icon: <FaWeightScale />, label: "Contact Number", value: "Testing" },
-                      { icon: <RiExpandHeightFill />, label: "Company Email ID", value: "Testing" }
-                    ]
-                  ].map((row, index) => (
-                    <div key={index} className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
-                      {row.map((item, idx) => (
+
+                <div className="offer-details-wrap">
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                    <h5 >Payment Information</h5>
+                    {[
+                      [
+                        { icon: <SiAnytype />, label: "Amount Received", value: "Testing" },
+                        { icon: <FaWeightScale />, label: "Commission Earned", value: "Testing" },
+                        { icon: <RiExpandHeightFill />, label: "Payment Status", value: "Testing" }
+                      ],
+                      [
+                        { icon: <SiAnytype />, label: "Paid By", value: "Testing" },
+                        { icon: <FaWeightScale />, label: "Paypal ID", value: "Testing" },
+                        { icon: <RiExpandHeightFill />, label: "Offers Received", value: "Testing" }
+                      ],
+                      [
+                        { icon: <SiAnytype />, label: "Company Name", value: "Testing" },
+                        { icon: <FaWeightScale />, label: "Contact Number", value: "Testing" },
+                        { icon: <RiExpandHeightFill />, label: "Company Email ID", value: "Testing" }
+                      ]
+                    ].map((row, index) => (
+                      <div key={index} className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
+                        {row.map((item, idx) => (
+                          <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                            <div className="rounded-circle d-flex justify-content-center align-items-center text-primary"
+                              style={{
+                                width: '3rem',
+                                height: '3rem',
+                                backgroundColor: 'rgb(174, 252, 255)',
+                                fontSize: '1.5rem'
+                              }}>
+                              {item.icon}
+                            </div>
+                            <div className="d-flex flex-column align-items-center gap-2">
+                              <span className="text-secondary">{item.label}</span>
+                              <h6>{item.value}</h6>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="offer-details-wrap">
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+
+                    <h5 className="fs-5 mt-3">Product Information</h5>
+
+                    <div className="d-flex flex-wrap w-100 gap-3 gap-lg-5 ">
+                      {[
+                        { icon: <SiAnytype />, label: "Product Type", value: showOfferDetails.product_type },
+                        { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Kg` },
+                        { icon: <RiExpandHeightFill />, label: "Height", value: `${showOfferDetails.p_height} Cm` }
+                      ].map((item, idx) => (
                         <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
                           <div className="rounded-circle d-flex justify-content-center align-items-center text-primary"
                             style={{
@@ -2559,299 +2680,277 @@ const Dashboard = () => {
                         </div>
                       ))}
                     </div>
-                  ))}
 
-                  <strong className="fs-5 mt-3">Product Information</strong>
-
-                  <div className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
-                    {[
-                      { icon: <SiAnytype />, label: "Product Type", value: showOfferDetails.product_type },
-                      { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Kg` },
-                      { icon: <RiExpandHeightFill />, label: "Height", value: `${showOfferDetails.p_height} Cm` }
-                    ].map((item, idx) => (
-                      <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                        <div className="rounded-circle d-flex justify-content-center align-items-center text-primary"
-                          style={{
-                            width: '3rem',
-                            height: '3rem',
-                            backgroundColor: 'rgb(174, 252, 255)',
-                            fontSize: '1.5rem'
-                          }}>
-                          {item.icon}
+                    <div className="d-flex flex-wrap w-100 gap-3 gap-lg-5 mt-3">
+                      {[
+                        { icon: <FaRuler />, label: "Length", value: `${showOfferDetails.p_length} Cm` },
+                        { icon: <RiExpandWidthFill />, label: "Width", value: `${showOfferDetails.p_width} Cm` }
+                      ].map((item, idx) => (
+                        <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                          <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                            style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                            {item.icon}
+                          </div>
+                          <div className="d-flex flex-column align-items-center gap-2">
+                            <span className="text-secondary">{item.label}</span>
+                            <h6>{item.value}</h6>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column align-items-center gap-2">
-                          <span className="text-secondary">{item.label}</span>
-                          <h6>{item.value}</h6>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
+                </div>
 
-                  <div className="d-flex flex-wrap w-100 gap-3 gap-lg-5 mt-3">
-                    {[
-                      { icon: <FaRuler />, label: "Length", value: `${showOfferDetails.p_length} Cm` },
-                      { icon: <RiExpandWidthFill />, label: "Width", value: `${showOfferDetails.p_width} Cm` }
-                    ].map((item, idx) => (
-                      <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                <div className="offer-details-wrap">
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
+                    <h5>Pick Up Information</h5>
+                    <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-between justify-content-start w-100 gap-5">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
                         <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                           style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                          {item.icon}
+                          <FaUser />
                         </div>
                         <div className="d-flex flex-column align-items-center gap-2">
-                          <span className="text-secondary">{item.label}</span>
-                          <h6>{item.value}</h6>
+                          <span className="text-secondary">Full Name</span>
+                          <h6>{showOfferDetails.sender_name}</h6>
                         </div>
                       </div>
-                    ))}
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <IoCall />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Contact Number</span>
+                          <h6>{showOfferDetails.sender_contact}</h6>
+                        </div>
+                      </div>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <MdAttachEmail />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Email Address</span>
+                          <h6>{showOfferDetails.sender_email}</h6>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaFlag />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Country</span>
+                          <h6>{showOfferDetails.sender_country}</h6>
+                        </div>
+                      </div>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaBuildingFlag />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">State</span>
+                          <h6>{showOfferDetails.sender_state}</h6>
+                        </div>
+                      </div>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaCity />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">City</span>
+                          <h6>{showOfferDetails.sender_city}</h6>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaMapPin />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Street Address</span>
+                          <h6>{showOfferDetails.sender_address}</h6>
+                        </div>
+                      </div>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <MdConfirmationNumber />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Zip Code</span>
+                          <h6>{showOfferDetails.sender_zipcode}</h6>
+                        </div>
+                      </div>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaCalendarCheck />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Pick Up Date</span>
+                          <h6>{showOfferDetails.pickup_date.includes('Select End Date') ? `${showOfferDetails.pickup_date.split(' - ')[0]} -` : showOfferDetails.pickup_date}</h6>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-3" style={{ width: '100%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaInfoCircle /></div>
+                        <div className="d-flex flex-column align-items-start">
+                          <span className="text-secondary">Pick Up Notes</span>
+                          <p className="text-start"><h6>{showOfferDetails.sender_description}</h6></p>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
 
+                <div className="offer-details-wrap">
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
 
-                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                  <strong className="fs-5">Pick Up Information</strong>
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-between justify-content-start w-100 gap-5">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaUser />
+                    <h5>Delivery Information</h5>
+                    <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaUser />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Full Name</span>
+                          <h6>{showOfferDetails.receiver_name}</h6>
+                        </div>
                       </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Full Name</span>
-                        <h6>{showOfferDetails.sender_name}</h6>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <IoCall />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Contact Number</span>
+                          <h6>{showOfferDetails.receiver_contact}</h6>
+                        </div>
+                      </div>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <MdAttachEmail />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Email Address</span>
+                          <h6>{showOfferDetails.receiver_email}</h6>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <IoCall />
+                    <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaFlag />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Country</span>
+                          <h6>{showOfferDetails.receiver_country}</h6>
+                        </div>
                       </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Contact Number</span>
-                        <h6>{showOfferDetails.sender_contact}</h6>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaBuildingFlag />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">State</span>
+                          <h6>{showOfferDetails.receiver_state}</h6>
+                        </div>
+                      </div>
+
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaCity />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">City</span>
+                          <h6>{showOfferDetails.receiver_city}</h6>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <MdAttachEmail />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Email Address</span>
-                        <h6>{showOfferDetails.sender_email}</h6>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaFlag />
+                    <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaMapPin />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Street Address</span>
+                          <h6>{showOfferDetails.receiver_address}</h6>
+                        </div>
                       </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Country</span>
-                        <h6>{showOfferDetails.sender_country}</h6>
-                      </div>
-                    </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaBuildingFlag />
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <MdConfirmationNumber />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Zip Code</span>
+                          <h6>{showOfferDetails.receiver_zipcode}</h6>
+                        </div>
                       </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">State</span>
-                        <h6>{showOfferDetails.sender_state}</h6>
-                      </div>
-                    </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaCity />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">City</span>
-                        <h6>{showOfferDetails.sender_city}</h6>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaMapPin />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Street Address</span>
-                        <h6>{showOfferDetails.sender_address}</h6>
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaCalendarCheck />
+                        </div>
+                        <div className="d-flex flex-column align-items-center gap-2">
+                          <span className="text-secondary">Preferred Delivery Date</span>
+                          <h6>{showOfferDetails.departure_date}</h6>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <MdConfirmationNumber />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Zip Code</span>
-                        <h6>{showOfferDetails.sender_zipcode}</h6>
-                      </div>
-                    </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaCalendarCheck />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Pick Up Date</span>
-                        <h6>{showOfferDetails.pickup_date.includes('Select End Date') ? `${showOfferDetails.pickup_date.split(' - ')[0]} -` : showOfferDetails.pickup_date}</h6>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-3" style={{ width: '100%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}><FaInfoCircle /></div>
-                      <div className="d-flex flex-column align-items-start">
-                        <span className="text-secondary">Pick Up Notes</span>
-                        <p className="text-start"><h6>{showOfferDetails.sender_description}</h6></p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
-                  <strong className="fs-5">Delivery Information</strong>
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaUser />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Full Name</span>
-                        <h6>{showOfferDetails.receiver_name}</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <IoCall />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Contact Number</span>
-                        <h6>{showOfferDetails.receiver_contact}</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <MdAttachEmail />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Email Address</span>
-                        <h6>{showOfferDetails.receiver_email}</h6>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaFlag />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Country</span>
-                        <h6>{showOfferDetails.receiver_country}</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaBuildingFlag />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">State</span>
-                        <h6>{showOfferDetails.receiver_state}</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaCity />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">City</span>
-                        <h6>{showOfferDetails.receiver_city}</h6>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaMapPin />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Street Address</span>
-                        <h6>{showOfferDetails.receiver_address}</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <MdConfirmationNumber />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Zip Code</span>
-                        <h6>{showOfferDetails.receiver_zipcode}</h6>
-                      </div>
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaCalendarCheck />
-                      </div>
-                      <div className="d-flex flex-column align-items-center gap-2">
-                        <span className="text-secondary">Preferred Delivery Date</span>
-                        <h6>{showOfferDetails.departure_date}</h6>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div className="d-flex flex-row flex-wrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%' }}>
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
-                        <FaInfoCircle />
-                      </div>
-                      <div className="d-flex flex-column align-items-start gap-2">
-                        <span className="text-secondary">Delivery Notes</span>
-                        <h6 className="text-start">{showOfferDetails.receiver_description}</h6>
+                    <div className="d-flex flex-row flex-wrap align-items-start justify-content-start w-100 gap-5 mt-3">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%' }}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{ width: '3rem', height: '3rem', backgroundColor: 'rgb(174, 252, 255)' }}>
+                          <FaInfoCircle />
+                        </div>
+                        <div className="d-flex flex-column align-items-start gap-2">
+                          <span className="text-secondary">Delivery Notes</span>
+                          <h6 className="text-start">{showOfferDetails.receiver_description}</h6>
+                        </div>
                       </div>
                     </div>
                   </div>
 
                 </div>
               </div>
-
             </div>
           </>
         )}

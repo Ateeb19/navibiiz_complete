@@ -93,6 +93,7 @@ const Registration = () => {
     const [step, setStep] = useState(1);
     const [visibleSelectors, setVisibleSelectors] = useState({});
     const [companyName, setCompanyName] = useState("");
+    const [contact_person_name, setContact_person_name] = useState("");
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirm_password] = useState("");
     const [contactNumber, setContactNumber] = useState("");
@@ -253,7 +254,7 @@ const Registration = () => {
         }
     };
 
-    console.log(step);
+    // console.log(step);
     const basicDetails = useMemo(() => {
         if (!companyName || !password || !confirm_password || !contactNumber || !emailAddress || !description)
             return false;
@@ -309,6 +310,10 @@ const Registration = () => {
             }
         }
 
+        if(!containerService && !carService && !groupageService){
+            return false;
+        }
+
         return true; // All validations passed
     };
 
@@ -320,6 +325,7 @@ const Registration = () => {
                 return true;
             }
         }
+
         if (paypal_id_check) {
             if (!paypal_id) {
                 return false;
@@ -335,6 +341,7 @@ const Registration = () => {
         const formData = new FormData();
         formData.append('companyName', companyName);
         formData.append('contactNumber', contactNumber);
+        formData.append('contact_person_name', contact_person_name);
         formData.append('emailAddress', emailAddress);
         formData.append('password', password);
         formData.append('paypal_id', paypal_id);
@@ -427,13 +434,25 @@ const Registration = () => {
                             <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
                                 <label className="shipping-input-label">Company Name <span className="text-danger">*</span></label>
                                 <input
-                                    className="shipping-input-field"
+                                    className="Countries_selector"
                                     type="text"
                                     value={companyName}
                                     onChange={(e) => setCompanyName(e.target.value)}
                                     placeholder="Enter the company name"
                                     style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                     disabled={localStorage.getItem('valid') === 'true'}
+                                    required
+                                />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
+                                <label className="shipping-input-label">Contact Person Name</label>
+                                <input
+                                    className="shipping-input-field"
+                                    type="text"
+                                    placeholder="Enter the contact person name"
+                                    value={contact_person_name}
+                                    onChange={(e) => setContact_person_name(e.target.value)}
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                     required
                                 />
                             </div>
@@ -449,7 +468,10 @@ const Registration = () => {
                                     required
                                 />
                             </div>
-                            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
+                        </div>
+
+                        <div className="row mt-4">
+                        <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
                                 <label className="shipping-input-label">Email Address <span className="text-danger">*</span></label>
                                 <input
                                     className="shipping-input-field"
@@ -462,10 +484,7 @@ const Registration = () => {
                                     required
                                 />
                             </div>
-                        </div>
-
-                        <div className="row mt-4">
-                            <div className="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-column align-items-start">
+                            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
                                 <label className="shipping-input-label">Password <span className="text-danger">*</span></label>
                                 <input
                                     className="shipping-input-field"
@@ -478,7 +497,7 @@ const Registration = () => {
                                     required
                                 />
                             </div>
-                            <div className="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-column align-items-start">
+                            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
                                 <label className="shipping-input-label">Confirm Password<span className="text-danger">*</span></label>
                                 <input
                                     className="shipping-input-field"
@@ -839,13 +858,13 @@ const Registration = () => {
                                         {bankaccount && (
                                             <div className="row mt-4 w-100">
                                                 <div className="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-column align-items-start">
-                                                    <label className="shipping-input-label">Account Number<span className="text-danger">*</span></label>
+                                                    <label className="shipping-input-label">Account Holder Name<span className="text-danger">*</span></label>
                                                     <input
                                                         className="shipping-input-field"
                                                         type="text"
                                                         value={account_number}
                                                         onChange={(e) => setAccount_number(e.target.value)}
-                                                        placeholder="Enter account number"
+                                                        placeholder="Enter account holder name"
                                                         style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                                         required
                                                     />

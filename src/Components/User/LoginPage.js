@@ -13,7 +13,7 @@ const LoginPage = () => {
   useEffect(() => {
     setInterval(() => {      
       if (selected === 'company' || isSignup === 'true') {
-        navigate('/regester_company');
+        navigate('/register_company');
       }
     }, 100);
   }, []);
@@ -33,7 +33,7 @@ const LoginPage = () => {
   const toggleForm = () => {
 
     if (selected === 'company' || isSignup === 'true') {
-      navigate('/regester_company');
+      navigate('/register_company');
     }
     setIsSignup(!isSignup);
 
@@ -171,7 +171,7 @@ const LoginPage = () => {
                   <div
                     className={'tab-btn'}
                     style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#FF5722" : "", color: selected === "company" ? "white" : "" }}
-                    onClick={() => {setSelected('company'); if(isSignup){navigate('/regester_company')}}}
+                    onClick={() => {setSelected('company'); if(isSignup){navigate('/register_company')}}}
                   >
                     <p onClick={() => setSelected('company')}>As a company</p>
                   </div>
@@ -226,7 +226,7 @@ const LoginPage = () => {
             </form>
             <div className="w-100">
               <label className="fst-italic fs-6 mt-3">OR</label><br />
-              <label className="fs-6 mt-2">{isSignup ? "Already have an account?" : "Don't have an account?"}{" "}<span className="text-primary" onClick={toggleForm}>{isSignup ? "Login" : "Sign Up"}</span></label>
+              <label className="fs-6 mt-2" style={{cursor: 'pointer'}}>{isSignup ? "Already have an account?" : "Don't have an account?"}{" "}<span className="text-primary" onClick={toggleForm}>{isSignup ? "Login" : "Sign Up"}</span></label>
             </div>
           </div>
         </div>

@@ -126,25 +126,24 @@ const CompaniesList = () => {
                     <Navbar />
                 </div>
             </div>
-            <div className="d-flex flex-column justify-content-center align-items-center text-light px-3" style={{
+            {/* <div className="d-flex flex-column justify-content-center align-items-center text-dark px-3" style={{
                 width: "100%",
-                minHeight: "40vh",
-                borderRadius: "0% 0% 2% 2% / 28% 28% 20% 20%",
-                backgroundColor: "#0044BC",
+                minHeight: "25vh",
+                backgroundColor: "#eff6ff",
                 position: "relative",
                 zIndex: -1,
             }}>
                 <div className="text-center mt-3 w-100">
-                    <strong className="fs-3 d-block mb-2">Ship Your Goods Worldwide with Reliable and Trusted Logistics Partners</strong>
+                    <strong className="fs-3 d-block mb-2">Companies</strong>
                     <p className="w-50 mx-auto">
-                        Connect with reliable logistics providers to transport goods across borders seamlessly. Our platform ensures efficient and hassle-free global shipping tailored to your needs.
+                        Connect with verified companies to transport your goods, any where in the world.
                     </p>
                 </div>
-            </div>
+            </div> */}
 
             <section className="search-result-wrapper w-100">
                 <div className="container">
-                    <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-4 mt-md-5 w-100">
+                    <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-3 mt-md-5 w-100">
                         <div className="d-flex flex-column align-items-start p-3 ps-5 pb-5 col-12 col-md-3">
                             <div className="title-head">
                                 <h3><span style={{ color: ' #FF5722' }}><FaFilter /> </span>Filters by :</h3>

@@ -201,15 +201,15 @@ const Home = () => {
             <section className="search-wrapper">
                 <div className="container">
                     <div className="row bg-white rounded-3 p-3 shadow border">
-                        <div className="col-12 col-md-3 border-end border-1 p-3 text-center text-md-start">
+                        <div className="col-12 col-md-9 border-end border-1 p-3 text-center text-md-start">
                             <h5>Pick Up</h5>
                             <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px 6px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                         </div>
-                        <div className="col-12 col-md-3 border-end border-1 p-3 text-center text-md-start">
+                        {/* <div className="col-12 col-md-3 border-end border-1 p-3 text-center text-md-start">
                             <h5>Delivery</h5>
                             <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px 6px" onSelectCountry={(country) => setDestinationCountry(country)} /></span>
-                        </div>
-                        <div className="col-12 col-md-3 p-3 text-center text-md-start">
+                        </div> */}
+                        {/* <div className="col-12 col-md-3 p-3 text-center text-md-start">
                             <h5>Service</h5>
                             <span>
                                 <Form.Select
@@ -222,7 +222,7 @@ const Home = () => {
                                     <option value="car">Car</option>
                                 </Form.Select>
                             </span>
-                        </div>
+                        </div> */}
                         <div className="col-12 col-md-3 p-3 text-center">
                             <button className="btn btn-light border border-danger text-danger w-100" onClick={handleSearch}>
                                 Search Shipping Companies
