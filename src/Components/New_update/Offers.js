@@ -15,11 +15,14 @@ import Form from 'react-bootstrap/Form';
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Alert from "../alert/Alert_message";
 
 const Offers = () => {
     const navigate = useNavigate();
     const itemsPerPage = 5;
     const port = process.env.REACT_APP_SECRET;
+    const [showAlert, setShowAlert] = useState(false);
+    const [alert_message, setAlert_message] = useState('');
     const token = localStorage.getItem('token');
     const [groupage, setGroupage] = useState([]);
     useEffect(() => {
@@ -48,6 +51,7 @@ const Offers = () => {
     const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
     const [bidAmount, setBidAmount] = useState('');
     const [expetedDate, setExpetedDate] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const handlePickupCountrySelect = (country) => {
         setSelectedPickupCountry(country);
     };
@@ -65,11 +69,25 @@ const Offers = () => {
                 const destinationCountryMatch =
                     !selectedDestinationCountry || groupage.receiver_country === selectedDestinationCountry;
 
-                return pickupCountryMatch && destinationCountryMatch;
+                const searchMatch =
+                    !searchQuery ||
+                    [
+                        groupage.receiver_city,
+                        groupage.receiver_country,
+                        groupage.receiver_state,
+                        groupage.sender_city,
+                        groupage.sender_country,
+                        groupage.sender_state
+                    ]
+                        .filter(Boolean) // Remove null/undefined values
+                        .some((location) =>
+                            location.toLowerCase().includes(searchQuery.toLowerCase())
+                        );
+
+                return pickupCountryMatch && destinationCountryMatch && searchMatch;
             })
             .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sorting by latest `created_at`
     };
-
     const filteredData = filterData(groupage);
     const [groupage_detail, setGroupage_detail] = useState(null);
     const View_details = (item) => {
@@ -78,7 +96,8 @@ const Offers = () => {
 
     const handleSubmit_offer = (details) => {
         if (bidAmount === '' || expetedDate === '') {
-            alert('Please fill all the fields');
+            setShowAlert(true);
+            setAlert_message('Please fill all the fields');
             return;
         }
         const data = {
@@ -92,15 +111,18 @@ const Offers = () => {
             },
         }).then((response) => {
             if (response.data.status === false) {
-                alert('login with a company account to submit offer');
+                setShowAlert(true);
+                setAlert_message('login with a company account to submit offer');
                 navigate('/login');
             } else {
                 console.log(response.data);
-                alert(response.data.message);
+                setShowAlert(true);
+                setAlert_message(response.data.message);
                 setGroupage_detail(null);
             }
         }).catch((err) => {
-            alert('login to submit offer');
+            setShowAlert(true);
+            setAlert_message('login to submit offer');
             navigate('/login');
             console.log(err);
         });
@@ -111,12 +133,24 @@ const Offers = () => {
     const currentItems = filteredData.slice(offset, offset + itemsPerPage);
     const pageCount = Math.ceil(filteredData.length / itemsPerPage);
 
+    useEffect(() => {
+        const smoothScroll = () => {
+            let scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            if (scrollY > 0) {
+                window.requestAnimationFrame(smoothScroll);
+                window.scrollTo(0, scrollY - scrollY / 8);
+            }
+        };
+
+        smoothScroll();
+    }, [currentPage]);
+
     const handlePageClick = ({ selected }) => {
         setCurrentPage(selected);
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
-
+            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
@@ -143,6 +177,14 @@ const Offers = () => {
                         <div className="d-flex flex-column align-items-start p-3 ps-5 pb-5 col-12 col-md-3">
                             <div className="title-head">
                                 <h3><span style={{ color: ' #FF5722' }}><FaFilter /> </span>Filters by :</h3>
+                            </div>
+                            <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-3">
+                                <input type="text"
+                                    placeholder="Search here by location ..."
+                                    className="shipping-input-field"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
                             </div>
                             <div className="d-flex flex-column align-items-start w-100 mt-4 mb-4 border-bottom border-2 pb-4">
                                 <h6>PICK UP COUNTRY</h6>

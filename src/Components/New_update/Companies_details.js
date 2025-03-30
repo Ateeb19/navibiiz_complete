@@ -5,54 +5,55 @@ import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "rea
 import { HiBadgeCheck } from "react-icons/hi";
 import { Rating } from 'react-simple-star-rating';
 import Footer from "../Footer/Footer";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaBuilding } from "react-icons/fa";
 import { IoIosMailOpen } from "react-icons/io";
 import { RiContactsBook3Fill } from "react-icons/ri";
+import Alert from "../alert/Alert_message";
 
 
 
 const CompanyDetails = () => {
     const { id } = useParams();
     const location = useLocation();
-    const company = location.state?.company;
+    // const company = location.state?.company;
+    const [company, setCompany] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alert_message, setAlert_message] = useState('');
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
     const [details_company, setDetails_company] = useState(false);
-    if (!company) {
-        return <h2 className="text-danger">Company details not found.</h2>;
-    }
-    console.log(company, 'this now data');
+
+    useEffect(() => {
+        // Retrieve company details from localStorage
+        const storedCompany = localStorage.getItem(`company_${id}`);
+        if (storedCompany) {
+            setCompany(JSON.parse(storedCompany));
+        }
+    }, [id]);
+
+
     const handle_contact = () => {
         if (token) {
             setDetails_company(true);
         } else {
-            alert('Please login to contact the company.');
+            setShowAlert(true);
+            setAlert_message('Please login to contact the company.');
+            localStorage.setItem("redirectAfterLogin", `/company_details/${id}`);
             navigate('/login');
         }
     }
+    if (!company) {
+        return <h2 className="text-danger">Company details not found.</h2>;
+    }
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
+            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
                 </div>
             </div>
-            {/* <section className="hero-wrapper">
-                <div className="container">
-                    <div className="d-flex flex-column justify-content-center align-items-center text-light px-3">
-                        <div className="text-center mt-3 w-100">
-                            <div className="hero-wrap-head">
-                                <h1>Ship Your Goods Worldwide with Reliable and Trusted Logistics Partners</h1>
-                                <p>
-                                    Connect with reliable logistics providers to transport goods across borders seamlessly. Our platform ensures efficient and hassle-free global shipping tailored to your needs.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
-
             <section className='details-wrapper'>
 
                 <div className="row mt-5 ">
@@ -77,7 +78,7 @@ const CompanyDetails = () => {
                                     <strong className="fs-4 mb-3">
                                         {company.company_name}
                                         <span className="text-primary fs-5 ms-1">
-                                            <HiBadgeCheck/>
+                                            <HiBadgeCheck />
                                         </span>
                                     </strong>
                                 </div>

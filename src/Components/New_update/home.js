@@ -20,12 +20,15 @@ import { SiAnytype } from "react-icons/si";
 import { FaWeightScale } from "react-icons/fa6";
 import { RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
 import { FaRuler } from "react-icons/fa";
+import Alert from "../alert/Alert_message";
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
     // console.log(port);
     const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole')
+    const userRole = localStorage.getItem('userRole');
+    const [showAlert, setShowAlert] = useState(false);
+    const [alert_message, setAlert_message] = useState('');
     const [offers_details, setOffers_details] = useState([]);
     const displayCompany = () => {
         // localStorage.setItem('companyInfo');
@@ -144,40 +147,45 @@ const Home = () => {
     ];
     // console.log(offers_details, 'this is offers');
 
-        const [bidAmount, setBidAmount] = useState('');
-        const [expetedDate, setExpetedDate] = useState('');
-        const handleSubmit_offer = (details) => {
-            if (bidAmount === '' || expetedDate === '') {
-                alert('Please fill all the fields');
-                return;
-            }
-            const data = {
-                offer_id: details.id,
-                offer_amount: bidAmount,
-                expected_date: expetedDate
-            }
-            axios.post(`${port}/send_groupage/create_offer`, data, {
-                headers: {
-                    Authorization: token,
-                },
-            }).then((response) => {
-                if (response.data.status === false) {
-                    alert('login with a company account to submit offer');
-                    navigate('/login');
-                } else {
-                    console.log(response.data);
-                    alert(response.data.message);
-                    setGroupage_detail(null);
-                }
-            }).catch((err) => {
-                alert('login to submit offer');
-                navigate('/login');
-                console.log(err);
-            });
+    const [bidAmount, setBidAmount] = useState('');
+    const [expetedDate, setExpetedDate] = useState('');
+    const handleSubmit_offer = (details) => {
+        if (bidAmount === '' || expetedDate === '') {
+            setShowAlert(true);
+            setAlert_message('Please fill all the fields');
+            return;
         }
+        const data = {
+            offer_id: details.id,
+            offer_amount: bidAmount,
+            expected_date: expetedDate
+        }
+        axios.post(`${port}/send_groupage/create_offer`, data, {
+            headers: {
+                Authorization: token,
+            },
+        }).then((response) => {
+            if (response.data.status === false) {
+                setShowAlert(true);
+                setAlert_message('login with a company accout to submit offer');
+                navigate('/login');
+            } else {
+                console.log(response.data);
+                setShowAlert(true);
+                setAlert_message(response.data.message);
+                setGroupage_detail(null);
+            }
+        }).catch((err) => {
+            setShowAlert(true);
+            setAlert_message('login to submit offer');
+            navigate('/login');
+            console.log(err);
+        });
+    }
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
+            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />

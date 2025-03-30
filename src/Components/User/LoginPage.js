@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar'
 import { IoEyeOutline } from "react-icons/io5";
+import Alert from "../alert/Alert_message";
 
 const LoginPage = () => {
   const port = process.env.REACT_APP_SECRET;
@@ -10,8 +11,12 @@ const LoginPage = () => {
   const [isMobileView, setMobileView] = useState(false);
   const [selected, setSelected] = useState("individual");
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [alert_message, setAlert_message] = useState('');
+  const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
+
   useEffect(() => {
-    setInterval(() => {      
+    setInterval(() => {
       if (selected === 'company' || isSignup === 'true') {
         navigate('/register_company');
       }
@@ -67,7 +72,8 @@ const LoginPage = () => {
           }
         })
         if (!response.data.status) {
-          alert(response.data.message);
+          setShowAlert(true);
+          setAlert_message(response.data.message);
           return
         }
         console.log(response.data);
@@ -80,12 +86,14 @@ const LoginPage = () => {
           email: response.data.email
         }
         localStorage.setItem('userInfo', JSON.stringify(response.data));
-        alert(response.data.message);
+        setShowAlert(true);
+        setAlert_message(response.data.message);
         if (response.data.role === 'Sadmin' || response.data.role === 'admin') {
           navigate('/dashboard');
         } else {
           localStorage.setItem("userType", selected);
-          navigate('/');
+          localStorage.removeItem("redirectAfterLogin");
+          navigate(redirectPath);
         }
       } catch (err) {
         console.log(err);
@@ -100,7 +108,8 @@ const LoginPage = () => {
           }
         })
         if (!response.data.status) {
-          alert(response.data.message);
+          setShowAlert(true);
+          setAlert_message(response.data.message);
           return
         }
         console.log(selected, 'from login');
@@ -114,14 +123,16 @@ const LoginPage = () => {
         }
         localStorage.setItem('user_logins_type', selected)
         localStorage.setItem('userInfo', JSON.stringify(response.data));
-        alert(response.data.message);
+        setShowAlert(true);
+        setAlert_message(response.data.message);
         if (response.data.role === 'Sadmin' || response.data.role === 'admin') {
           navigate('/dashboard', { replace: true });
           setTimeout(() => {
             window.location.reload();
           }, 0);
         } else {
-          navigate('/', { replace: true });
+          localStorage.removeItem("redirectAfterLogin"); // Clear stored path
+          navigate(redirectPath, { replace: true });
           setTimeout(() => {
             window.location.reload();
           }, 0);
@@ -144,6 +155,7 @@ const LoginPage = () => {
 
   return (
     <div className="login-bg-wrapper">
+      {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
       <div className="d-flex align-items-center justify-content-end" style={{ height: "100vh" }}>
         <div className="login-wrap">
           <div className="d-flex flex-column align-items-start">
@@ -171,7 +183,7 @@ const LoginPage = () => {
                   <div
                     className={'tab-btn'}
                     style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#FF5722" : "", color: selected === "company" ? "white" : "" }}
-                    onClick={() => {setSelected('company'); if(isSignup){navigate('/register_company')}}}
+                    onClick={() => { setSelected('company'); if (isSignup) { navigate('/register_company') } }}
                   >
                     <p onClick={() => setSelected('company')}>As a company</p>
                   </div>
@@ -226,7 +238,7 @@ const LoginPage = () => {
             </form>
             <div className="w-100">
               <label className="fst-italic fs-6 mt-3">OR</label><br />
-              <label className="fs-6 mt-2" style={{cursor: 'pointer'}}>{isSignup ? "Already have an account?" : "Don't have an account?"}{" "}<span className="text-primary" onClick={toggleForm}>{isSignup ? "Login" : "Sign Up"}</span></label>
+              <label className="fs-6 mt-2" style={{ cursor: 'pointer' }}>{isSignup ? "Already have an account?" : "Don't have an account?"}{" "}<span className="text-primary" onClick={toggleForm}>{isSignup ? "Login" : "Sign Up"}</span></label>
             </div>
           </div>
         </div>

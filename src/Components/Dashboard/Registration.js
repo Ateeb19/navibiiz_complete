@@ -11,6 +11,7 @@ import Form from 'react-bootstrap/Form';
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Alert from "../alert/Alert_message";
 
 
 
@@ -54,25 +55,27 @@ const DragAndDrop = ({ accept, onFileDrop, label }) => {
 const Registration = () => {
     const token = localStorage.getItem('token');
     const port = process.env.REACT_APP_SECRET;
+    const [showAlert, setShowAlert] = useState(false);
+    const [alert_message, setAlert_message] = useState('');
     const navigate = useNavigate();
     const stepperRef = useRef(null);
     useEffect(() => {
         const handleBeforeUnload = (event) => {
-          event.preventDefault(); // Required for some browsers
-          const isConfirmed = window.confirm(
-            "The page is about to reload, and your form data will be reset. Do you want to continue?"
-          );
-          if (!isConfirmed) {
-            event.returnValue = ""; // Prevent reload
-          }
+            event.preventDefault(); // Required for some browsers
+            const isConfirmed = window.confirm(
+                "The page is about to reload, and your form data will be reset. Do you want to continue?"
+            );
+            if (!isConfirmed) {
+                event.returnValue = ""; // Prevent reload
+            }
         };
         localStorage.setItem('valid', 'false');
         window.addEventListener("beforeunload", handleBeforeUnload);
-    
+
         return () => {
-          window.removeEventListener("beforeunload", handleBeforeUnload);
+            window.removeEventListener("beforeunload", handleBeforeUnload);
         };
-      }, []);
+    }, []);
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -136,7 +139,8 @@ const Registration = () => {
 
     const handleAddLocation = () => {
         if (locations.length >= 10) {
-            alert("You can only add up to 10 locations.");
+            setShowAlert(true);
+            setAlert_message("You can only add up to 10 locations.");
             return;
         }
 
@@ -243,7 +247,8 @@ const Registration = () => {
                 localStorage.setItem('valid', 'true');
                 return true;
             } else {
-                alert(response.data.message);
+                setShowAlert(true);
+                setAlert_message(response.data.message);;
                 localStorage.setItem('valid', 'false');
                 return false;
             }
@@ -310,7 +315,7 @@ const Registration = () => {
             }
         }
 
-        if(!containerService && !carService && !groupageService){
+        if (!containerService && !carService && !groupageService) {
             return false;
         }
 
@@ -380,17 +385,20 @@ const Registration = () => {
             .then(response => {
                 if (response.status === 200) {
                     // Handle successful submission
-                    alert('Data submitted successfully!');
+                    setShowAlert(true);
+                    setAlert_message('Data submited Successfully!');
                 } else {
                     // Handle errors
-                    alert('Error submitting data');
+                    setShowAlert(true);
+                    setAlert_message('Error submitting data');
                 }
                 console.log(response);
                 setCongrat(true);
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error submitting data');
+                setShowAlert(true);
+                setAlert_message('Error submittion Data');
             });
     };
 
@@ -403,7 +411,7 @@ const Registration = () => {
 
     return (
         <div className="flex justify-content-start h-100vh">
-
+            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
             <Stepper linear desabled ref={stepperRef} onStepChange={(e) => setStep(e)} style={{ flexBasis: 'auto' }}>
                 <StepperPanel header="Basic Details">
                     <div className="container">
@@ -434,7 +442,7 @@ const Registration = () => {
                             <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
                                 <label className="shipping-input-label">Company Name <span className="text-danger">*</span></label>
                                 <input
-                                    className="Countries_selector"
+                                    className="shipping-input-field"
                                     type="text"
                                     value={companyName}
                                     onChange={(e) => setCompanyName(e.target.value)}
@@ -471,7 +479,7 @@ const Registration = () => {
                         </div>
 
                         <div className="row mt-4">
-                        <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
+                            <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
                                 <label className="shipping-input-label">Email Address <span className="text-danger">*</span></label>
                                 <input
                                     className="shipping-input-field"
@@ -616,8 +624,9 @@ const Registration = () => {
                                 style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                                 iconPos="center"
                                 onClick={async () => {
-                                    if(password !== confirm_password){
-                                        alert('password and confirm password does not match');
+                                    if (password !== confirm_password) {
+                                        setShowAlert(true);
+                                        setAlert_message('Password and confirm password does not match');
                                         return;
                                     }
                                     const done = await handleregester();
@@ -1013,7 +1022,7 @@ const Registration = () => {
                             </div>
 
                             <div className="success-des-wrap">
-                                <p>You have successfully registered your company.<br/> Login with company email and password</p>
+                                <p>You have successfully registered your company.<br /> Login with company email and password</p>
                             </div>
 
                             <div className="success-button">

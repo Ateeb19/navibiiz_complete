@@ -1,3 +1,4 @@
+const { truncate } = require('fs');
 const db = require('../Db_Connection');
 
 const Display_All_company = (req, res) => {
@@ -128,11 +129,40 @@ const show_all_offers = (req, res) => {
     }
 };
 
+const Total_company_count = (req, res) => {
+    if(req.user.role === 'Sadmin') {
+        db.query('SELECT COUNT(*) AS count FROM companies_info', (err, result) => {
+            if(err){
+                res.json({message: 'Error in database', status: 'false'});
+            }else{
+                res.json({message: result[0], status: true});
+            }
+        })
+    }else{
+        res.json({message: 'You are not authorized', status: false});
+    }
+}
+
+const Total_User_count = (req, res) => {
+    if(req.user.role === 'Sadmin') {
+        db.query(`SELECT COUNT(*) AS count FROM users WHERE role = 'user' OR role = 'admin'`, (err, result) => {
+            if(err){
+                res.json({message: 'Error in database', status: 'false'});
+            }else{
+                res.json({message: result[0], status: true});
+            }
+        })
+    }else{
+        res.json({message: 'You are not authorized', status: false});
+    }
+}
 module.exports = {
     Display_All_company,
     Delete_any_company,
     Show_all_User,
     Update_User_role,
     Delete_user,
-    show_all_offers
+    show_all_offers,
+    Total_company_count,
+    Total_User_count
 };

@@ -107,13 +107,33 @@ const CompaniesList = () => {
     //     setCompany_detail(item);
     // }
 
+    // const View_details = (item) => {
+    //     navigate(`/company_details/${item.id}`, { state: { company: item } });
+    // };
+
     const View_details = (item) => {
+        // Store company details in localStorage
+        localStorage.setItem(`company_${item.id}`, JSON.stringify(item));
+    
+        // Navigate to company details page
         navigate(`/company_details/${item.id}`, { state: { company: item } });
     };
 
     const offset = currentPage * itemsPerPage;
     const currentItems = filteredData.slice(offset, offset + itemsPerPage);
     const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+
+    useEffect(() => {
+        const smoothScroll = () => {
+            let scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            if (scrollY > 0) {
+                window.requestAnimationFrame(smoothScroll);
+                window.scrollTo(0, scrollY - scrollY / 8);
+            }
+        };
+    
+        smoothScroll();
+    }, [currentPage]);
 
     const handlePageClick = ({ selected }) => {
         setCurrentPage(selected);
@@ -200,7 +220,7 @@ const CompaniesList = () => {
                         </div>
                         <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-1">
                             <div className="search-result-wrap w-100">
-                                <div className="title-head text-start">
+                                <div className="title-head text-start"   >
                                     <h3>Search Results </h3>
                                 </div>
                                 {companies ? (
@@ -208,7 +228,7 @@ const CompaniesList = () => {
                                         {filteredData.length > 0 ? (
                                             <>
                                                 {currentItems.map((item, index) => (
-                                                    <div className="search-result-data-wrap" onClick={() => View_details(item)}>
+                                                    <div className="search-result-data-wrap" id="listContainer" onClick={() => View_details(item)}>
                                                         <div className="d-flex flex-column align-items-start justify-content-start" key={index}>
                                                             <div className="search-result-logo-wrap">
                                                                 <img

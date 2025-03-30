@@ -15,6 +15,7 @@ import { DateRange } from 'react-date-range';
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
+import Alert from "../alert/Alert_message";
 
 
 
@@ -59,12 +60,14 @@ const Send_groupage = () => {
     const port = process.env.REACT_APP_SECRET;
     const navigate = useNavigate();
     const stepperRef = useRef(null);
-
+    const [showAlert, setShowAlert] = useState(false);
+    const [alert_message, setAlert_message] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
     useEffect(() => {
         if (!token || token.length <= 0) {
+            setShowAlert(true);
+            setAlert_message('Login first!');
             navigate('/login')
-            alert("Login first!");
             // console.log(token.length);
         }
     })
@@ -74,7 +77,8 @@ const Send_groupage = () => {
 
     const handleFileDrop = (files) => {
         if (selectedFiles.length + files.length > 10) {
-            alert("You can only upload up to 10 images.");
+            setShowAlert(true);
+            setAlert_message('You can only upload up to 10 images.');
             return;
         }
 
@@ -233,6 +237,7 @@ const Send_groupage = () => {
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
+            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
@@ -772,12 +777,12 @@ const Send_groupage = () => {
                                 </div>
 
                                 <div className="title-head">
-                                    <h3 style={{color: ' #1ba300'}}>CONGRATULATIONS</h3>
+                                    <h3 style={{ color: ' #1ba300' }}>CONGRATULATIONS</h3>
                                 </div>
 
                                 <div className="success-des-wrap">
-                                    <p>We have received your order request, we will send the offers from 
-                                    different companies to your email & profile id within 24 hours</p>
+                                    <p>We have received your order request, we will send the offers from
+                                        different companies to your email & profile id within 24 hours</p>
                                 </div>
 
                                 <div className="success-button">
