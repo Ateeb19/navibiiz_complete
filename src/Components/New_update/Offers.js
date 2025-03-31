@@ -147,7 +147,7 @@ const Offers = () => {
         const smoothScroll = () => {
             let scrollY = window.scrollY || document.documentElement.scrollTop;
             if (scrollY > 0) {
-                window.scrollTo(0, scrollY - Math.max(20, scrollY / 2));
+                window.scrollTo(0, scrollY - Math.max(20, scrollY / 0));
                 requestAnimationFrame(smoothScroll);
             }
         };

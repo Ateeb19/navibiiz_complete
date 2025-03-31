@@ -59,11 +59,23 @@ const CompaniesList = () => {
                 selectedServices.includes('containers') && company.container_service === '1' ||
                 selectedServices.includes('car') && company.car_service === '1';
 
-            const pickupCountryMatch =
+                
+                const pickupCountryMatch =
                 !selectedPickupCountry ||
-                company.Countries.some((country) => country.countries === selectedPickupCountry) ||
-                [company.location1, company.location2, company.location3, company.location4, company.location5, company.location6, company.location7, company.location8, company.location9, company.location10]
-                    .some(location => location && location.includes(selectedPickupCountry));
+                Object.values({
+                    location1: company.location1,
+                    location2: company.location2,
+                    location3: company.location3,
+                    location4: company.location4,
+                    location5: company.location5,
+                    location6: company.location6,
+                    location7: company.location7,
+                    location8: company.location8,
+                    location9: company.location9,
+                    location10: company.location10,
+                }).some(location => location && location.includes(selectedPickupCountry));
+            
+            
 
             const destinationCountryMatch =
                 !selectedDestinationCountry ||
@@ -124,7 +136,7 @@ const CompaniesList = () => {
         const smoothScroll = () => {
             let scrollY = window.scrollY || document.documentElement.scrollTop;
             if (scrollY > 0) {
-                window.scrollTo(0, scrollY - Math.max(20, scrollY / 2));
+                window.scrollTo(0, scrollY - Math.max(20, scrollY / 0));
                 requestAnimationFrame(smoothScroll);
             }
         };  

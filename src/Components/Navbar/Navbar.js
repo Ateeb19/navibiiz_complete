@@ -133,8 +133,8 @@ const Navbar = () => {
           {token ? (
             <>
               <Link to="/send_groupage">
-                <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
-                  <BsSendFill /> Send through groupage
+                <button className="btn text-light m-1" style={{backgroundColor: "#FF5722" }}>
+                  <BsSendFill /> <span style={{fontSize: '1rem'}}>Send through groupage</span>
                 </button>
               </Link>
               {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
@@ -154,7 +154,7 @@ const Navbar = () => {
               <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard">
-                  <button className="btn btn-light m-1" style={{ fontSize: "1rem", color: "#FF5722" }}>
+                  <button className="btn btn-light m-1" style={{ fontSize: '1rem', color: "#FF5722" }}>
                     <MdDashboardCustomize />
                   </button>
                 </Link>

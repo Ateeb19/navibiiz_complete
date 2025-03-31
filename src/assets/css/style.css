@@ -500,8 +500,8 @@ ul{
 }
 
 svg {
-    vertical-align: middle !important;
-    margin-right: 4px !important;
+    vertical-align: text-top !important;
+    padding-right: 1px !important;
 }
 
 .company-details-wrap{
