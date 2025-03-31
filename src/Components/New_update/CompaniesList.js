@@ -125,12 +125,12 @@ const CompaniesList = () => {
 
     useEffect(() => {
         const smoothScroll = () => {
-            let scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            let scrollY = window.scrollY || document.documentElement.scrollTop;
             if (scrollY > 0) {
-                window.requestAnimationFrame(smoothScroll);
-                window.scrollTo(0, scrollY - scrollY / 8);
+                window.scrollTo(0, scrollY - Math.max(20, scrollY / 2));
+                requestAnimationFrame(smoothScroll);
             }
-        };
+        };  
     
         smoothScroll();
     }, [currentPage]);

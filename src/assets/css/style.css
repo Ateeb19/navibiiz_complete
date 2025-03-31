@@ -535,7 +535,7 @@ svg {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    z-index: 9999; 
+    z-index: 999999; 
     transition: opacity 0.5s ease-in-out;
   }
 
