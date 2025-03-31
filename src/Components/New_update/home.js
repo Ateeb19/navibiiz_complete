@@ -116,6 +116,7 @@ const Home = () => {
     };
 
     const View_details = (item) => {
+        localStorage.setItem(`company_${item.id}`, JSON.stringify(item));
         navigate(`/company_details/${item.id}`, { state: { company: item } });
     };
 
@@ -149,17 +150,20 @@ const Home = () => {
 
     const [bidAmount, setBidAmount] = useState('');
     const [expetedDate, setExpetedDate] = useState('');
+
     const handleSubmit_offer = (details) => {
         if (bidAmount === '' || expetedDate === '') {
             setShowAlert(true);
             setAlert_message('Please fill all the fields');
             return;
         }
+
         const data = {
             offer_id: details.id,
             offer_amount: bidAmount,
             expected_date: expetedDate
-        }
+        };
+
         axios.post(`${port}/send_groupage/create_offer`, data, {
             headers: {
                 Authorization: token,
@@ -167,21 +171,28 @@ const Home = () => {
         }).then((response) => {
             if (response.data.status === false) {
                 setShowAlert(true);
-                setAlert_message('login with a company accout to submit offer');
-                navigate('/login');
+                setAlert_message('Login with a company account to submit an offer');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 1000);
             } else {
                 console.log(response.data);
                 setShowAlert(true);
                 setAlert_message(response.data.message);
                 setGroupage_detail(null);
+                setBidAmount('');
+                setExpetedDate('');
             }
         }).catch((err) => {
             setShowAlert(true);
-            setAlert_message('login to submit offer');
-            navigate('/login');
+            setAlert_message('Login to submit offer');
+            setTimeout(() => {
+                navigate('/login');
+            }, 1000);
+
             console.log(err);
         });
-    }
+    };
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
@@ -821,6 +832,7 @@ const Home = () => {
                                             value={expetedDate}
                                             onChange={(e) => setExpetedDate(e.target.value)}
                                         >
+                                            <option value="">Select Expected Days</option>
                                             <option value="less_than_15_days">Less Than 15 Days</option>
                                             <option value="more_than_15_days">More Than 15 Days</option>
                                             <option value="more_than_30_days">More Than 30 Days</option>

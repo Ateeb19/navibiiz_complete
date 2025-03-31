@@ -112,10 +112,7 @@ const CompaniesList = () => {
     // };
 
     const View_details = (item) => {
-        // Store company details in localStorage
         localStorage.setItem(`company_${item.id}`, JSON.stringify(item));
-    
-        // Navigate to company details page
         navigate(`/company_details/${item.id}`, { state: { company: item } });
     };
 
