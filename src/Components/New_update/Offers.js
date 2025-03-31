@@ -100,11 +100,13 @@ const Offers = () => {
             setAlert_message('Please fill all the fields');
             return;
         }
+
         const data = {
             offer_id: details.id,
             offer_amount: bidAmount,
             expected_date: expetedDate
-        }
+        };
+
         axios.post(`${port}/send_groupage/create_offer`, data, {
             headers: {
                 Authorization: token,
@@ -112,21 +114,29 @@ const Offers = () => {
         }).then((response) => {
             if (response.data.status === false) {
                 setShowAlert(true);
-                setAlert_message('login with a company account to submit offer');
-                navigate('/login');
+                setAlert_message('Login with a company account to submit an offer');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 1000);
             } else {
                 console.log(response.data);
                 setShowAlert(true);
                 setAlert_message(response.data.message);
                 setGroupage_detail(null);
+                setBidAmount('');
+                setExpetedDate('');
             }
         }).catch((err) => {
             setShowAlert(true);
-            setAlert_message('login to submit offer');
-            navigate('/login');
+            setAlert_message('Login to submit offer');
+            setTimeout(() => {
+                navigate('/login');
+            }, 1000);
+
             console.log(err);
         });
-    }
+    };
+
 
     const [currentPage, setCurrentPage] = useState(0);
     const offset = currentPage * itemsPerPage;
@@ -140,7 +150,7 @@ const Offers = () => {
                 window.scrollTo(0, scrollY - Math.max(20, scrollY / 2));
                 requestAnimationFrame(smoothScroll);
             }
-        };  
+        };
 
         smoothScroll();
     }, [currentPage]);
@@ -663,6 +673,7 @@ const Offers = () => {
                                                                 value={expetedDate}
                                                                 onChange={(e) => setExpetedDate(e.target.value)}
                                                             >
+                                                                <option value="">Select Expected Days</option>
                                                                 <option value="less_than_15_days">Less Than 15 Days</option>
                                                                 <option value="more_than_15_days">More Than 15 Days</option>
                                                                 <option value="more_than_30_days">More Than 30 Days</option>
