@@ -123,7 +123,7 @@ const Navbar = () => {
         </div>
 
         <div className="d-none d-lg-flex justify-content-center align-items-center gap-4 flex-grow-1">
-          {/* <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>About Us</Link> */}
+          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>About Us</Link>
           <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Companies</Link>
           <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Offers</Link>
           {/* <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Contact Us</Link> */}
@@ -185,7 +185,7 @@ const Navbar = () => {
             </button>
 
             <div className="d-flex flex-column text-center py-4 text-light">
-              {/* <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>About Us</Link> */}
+              <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>About Us</Link>
               <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Companies</Link>
               <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Offers</Link>
               {/* <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Contact Us</Link> */}

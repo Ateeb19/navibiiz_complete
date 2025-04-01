@@ -155,6 +155,9 @@ const Home = () => {
         if (bidAmount === '' || expetedDate === '') {
             setShowAlert(true);
             setAlert_message('Please fill all the fields');
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 2000);
             return;
         }
 
@@ -174,7 +177,8 @@ const Home = () => {
                 setAlert_message('Login with a company account to submit an offer');
                 setTimeout(() => {
                     navigate('/login');
-                }, 1000);
+                    setShowAlert(false);
+                }, 2000);
             } else {
                 console.log(response.data);
                 setShowAlert(true);
@@ -182,13 +186,17 @@ const Home = () => {
                 setGroupage_detail(null);
                 setBidAmount('');
                 setExpetedDate('');
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 2000);
             }
         }).catch((err) => {
             setShowAlert(true);
             setAlert_message('Login to submit offer');
             setTimeout(() => {
                 navigate('/login');
-            }, 1000);
+                setShowAlert(false);
+            }, 2000);
 
             console.log(err);
         });

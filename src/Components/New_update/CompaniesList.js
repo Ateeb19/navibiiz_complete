@@ -30,6 +30,26 @@ const CompaniesList = () => {
             setSelectedDestinationCountry(location.state.destinationCountry || '');
             setSelectedServices(location.state.selectedService || '');
         }
+
+        const savedFilters = JSON.parse(localStorage.getItem("filters"));
+
+        // Check if the user is coming from the details page
+        if (location.state?.fromDetailsPage) {
+            // Restore filters from localStorage
+            setSelectedServices(savedFilters?.selectedServices || []);
+            setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
+            setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
+            setSelectedDuration(savedFilters?.selectedDuration || "");
+            setSearchQuery(savedFilters?.searchQuery || "");
+        } else {
+            // Clear filters if coming from a fresh visit
+            localStorage.removeItem("filters");
+            setSelectedServices([]);
+            setSelectedPickupCountry("");
+            setSelectedDestinationCountry("");
+            setSelectedDuration("");
+            setSearchQuery("");
+        }
     }, [location.state]);
 
     const handleServiceChange = (e) => {
@@ -59,8 +79,8 @@ const CompaniesList = () => {
                 selectedServices.includes('containers') && company.container_service === '1' ||
                 selectedServices.includes('car') && company.car_service === '1';
 
-                
-                const pickupCountryMatch =
+
+            const pickupCountryMatch =
                 !selectedPickupCountry ||
                 Object.values({
                     location1: company.location1,
@@ -74,8 +94,8 @@ const CompaniesList = () => {
                     location9: company.location9,
                     location10: company.location10,
                 }).some(location => location && location.includes(selectedPickupCountry));
-            
-            
+
+
 
             const destinationCountryMatch =
                 !selectedDestinationCountry ||
@@ -125,6 +145,13 @@ const CompaniesList = () => {
 
     const View_details = (item) => {
         localStorage.setItem(`company_${item.id}`, JSON.stringify(item));
+        localStorage.setItem("filters", JSON.stringify({
+            selectedServices,
+            selectedPickupCountry,
+            selectedDestinationCountry,
+            selectedDuration,
+            searchQuery
+        }));
         navigate(`/company_details/${item.id}`, { state: { company: item } });
     };
 
@@ -139,8 +166,8 @@ const CompaniesList = () => {
                 window.scrollTo(0, scrollY - Math.max(20, scrollY / 0));
                 requestAnimationFrame(smoothScroll);
             }
-        };  
-    
+        };
+
         smoothScroll();
     }, [currentPage]);
 
@@ -177,6 +204,14 @@ const CompaniesList = () => {
                             <div className="title-head">
                                 <h3><span style={{ color: ' #FF5722' }}><FaFilter /> </span>Filters by :</h3>
                             </div>
+                            {(selectedPickupCountry || selectedDestinationCountry) && (
+                                <>
+                                    <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-1 text-start">
+                                        {selectedPickupCountry && (<><span className="mb-2"><h6 style={{fontWeight: '600'}}>Pick up Country:</h6> {selectedPickupCountry}</span></>)}
+                                        {selectedDestinationCountry && (<><span><h6 style={{fontWeight: '600'}}>Destination Country: </h6>{selectedDestinationCountry}</span></>)}
+                                    </div>
+                                </>
+                            )}
                             <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-3">
                                 <input type="text"
                                     placeholder="Search here by location ..."

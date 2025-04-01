@@ -7,7 +7,7 @@ import { Rating } from 'react-simple-star-rating';
 import Footer from "../Footer/Footer";
 import { useEffect, useState } from 'react';
 import { FaBuilding } from "react-icons/fa";
-import { IoIosMailOpen } from "react-icons/io";
+import { IoIosMailOpen, IoMdArrowRoundBack } from "react-icons/io";
 import { RiContactsBook3Fill } from "react-icons/ri";
 import Alert from "../alert/Alert_message";
 
@@ -32,6 +32,9 @@ const CompanyDetails = () => {
         }
     }, [id]);
 
+    const handleGoBack = () => {
+        navigate("/companies_list", { state: { fromDetailsPage: true } });
+    };
 
     const handle_contact = () => {
         if (token) {
@@ -40,7 +43,10 @@ const CompanyDetails = () => {
             setShowAlert(true);
             setAlert_message('Please login to contact the company.');
             localStorage.setItem("redirectAfterLogin", `/company_details/${id}`);
-            navigate('/login');
+            setTimeout(() => {
+                setShowAlert(false);
+                navigate('/login');
+            }, 2000);
         }
     }
     if (!company) {
@@ -58,6 +64,9 @@ const CompanyDetails = () => {
 
                 <div className="row mt-5 ">
                     <div className="col-md-8 border-end border-2 text-start">
+                        <div className='d-flex align-items-start text-head'>
+                            <h3 style={{cursor: 'pointer'}} onClick={handleGoBack }><IoMdArrowRoundBack className='mt-1' /> Back</h3>
+                        </div>
                         <div className="d-flex align-items-center gap-4 p-3 company-details-wrap">
                             <div
                                 className="rounded-circle overflow-hidden"
@@ -102,7 +111,6 @@ const CompanyDetails = () => {
                             <p className="text-secondary">{company.description}</p>
                         </div>
 
-                        {/* Company Information */}
                         <div className="p-4 company-details-wrap my-4 gap-3 d-flex flex-column">
                             <h4>Company Information</h4>
                             <span className="text-secondary d-block">
@@ -112,6 +120,78 @@ const CompanyDetails = () => {
                                 <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
                                 {company.location1}
                             </span>
+                            {company.location2 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location2}
+                                    </span>
+                                </>
+                            )}
+                            {company.location3 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location3}
+                                    </span>
+                                </>
+                            )}
+                            {company.location4 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location4}
+                                    </span>
+                                </>
+                            )}
+                            {company.location5 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location5}
+                                    </span>
+                                </>
+                            )}
+                            {company.location6 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location6}
+                                    </span>
+                                </>
+                            )}
+                            {company.location7 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location7}
+                                    </span>
+                                </>
+                            )}
+                            {company.location8 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location8}
+                                    </span>
+                                </>
+                            )}
+                            {company.location9 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location9}
+                                    </span>
+                                </>
+                            )}
+                            {company.location10 && (
+                                <>
+                                    <span className="text-secondary d-block">
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        {company.location10}
+                                    </span>
+                                </>
+                            )}
                             <span className="text-secondary d-block">
                                 <FaTruckMoving className="fs-5 me-1" style={{ color: '#FF5722' }} /> Offers{" "}
                                 {company.container_service ? "Containers" : ""}

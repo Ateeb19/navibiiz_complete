@@ -67,7 +67,10 @@ const Send_groupage = () => {
         if (!token || token.length <= 0) {
             setShowAlert(true);
             setAlert_message('Login first!');
-            navigate('/login')
+            setTimeout(() => {
+                setShowAlert(false);
+                navigate('/login')
+            }, 2000);
             // console.log(token.length);
         }
     })
@@ -590,7 +593,7 @@ const Send_groupage = () => {
                                             </StepperPanel>
 
 
-                                            <StepperPanel header="Additional Information">
+                                            {/* <StepperPanel header="Additional Information">
                                                 <div className="d-flex flex-column align-items-start justify-content-center gap-3 w-100">
                                                     <label className="shipping-input-label text-start">Attach any product documents (if any)</label>
                                                     <div className="w-100">
@@ -603,7 +606,7 @@ const Send_groupage = () => {
                                                         />
                                                     </div>
                                                 </div>
-                                            </StepperPanel>
+                                            </StepperPanel> */}
 
 
                                         </Stepper>
@@ -641,7 +644,7 @@ const Send_groupage = () => {
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span >Picking Period :</span> <span > {picking_period ? (<h6>{picking_period.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
                                                         </div>
                                                     </>
-                                                ) : currentStep === 3 ? (
+                                                ) : (
                                                     <>
                                                         <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Delivery Information</h5>
                                                         <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
@@ -655,20 +658,22 @@ const Send_groupage = () => {
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>Zip Code :</span> <span > {senderZipCode ? (<h6>{senderZipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
                                                         </div>
                                                     </>
-                                                ) : (
-                                                    <>
-                                                        <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Additional Information</h5>
-                                                        <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
-                                                            <div className="d-flex justify-content-between w-100 p-2">
-                                                                <span>Product Document:</span>
-                                                                <span>
-                                                                    {document ? <h6>{document.name.slice(0, 4)}...</h6> : <span>N/A</span>}
-                                                                </span>
-                                                            </div>
-                                                        </div>
+                                                ) 
+                                                // : (
+                                                //     <>
+                                                //         <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Additional Information</h5>
+                                                //         <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
+                                                //             <div className="d-flex justify-content-between w-100 p-2">
+                                                //                 <span>Product Document:</span>
+                                                //                 <span>
+                                                //                     {document ? <h6>{document.name.slice(0, 4)}...</h6> : <span>N/A</span>}
+                                                //                 </span>
+                                                //             </div>
+                                                //         </div>
 
-                                                    </>
-                                                )}
+                                                //     </>
+                                                // )
+                                                }
 
                                             </div>
                                         </div>
@@ -681,7 +686,7 @@ const Send_groupage = () => {
                                                 iconPos="center"
                                                 disabled={isNextButtonDisabled()}
                                                 onClick={() => {
-                                                    if (currentStep < 4) {
+                                                    if (currentStep < 3) {
                                                         stepperRef.current.nextCallback();
                                                         setCurrentStep((prev) => prev + 1);
                                                     } else {

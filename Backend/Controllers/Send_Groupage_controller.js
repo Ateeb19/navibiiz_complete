@@ -4,30 +4,32 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../Db_Connection');
 require('dotenv').config({ path: './.env' });
-const nodemailer = require('nodemailer');
+const sendMail = require('../Email/Send_mail');
+
+// const nodemailer = require('nodemailer');
 
 
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.ionos.de",
-    port: 587, // Use 587 instead of 465
-    secure: false, // Important! 587 does NOT use implicit TLS
-    auth: {
-        user: "info@novibiz.com",
-        pass: "Novibiz*2025",
-    },
-    tls: {
-        rejectUnauthorized: false, // Prevents strict TLS rejection
-    },
-});
+// const transporter = nodemailer.createTransport({
+//     host: "smtp.ionos.de",
+//     port: 587, // Use 587 instead of 465
+//     secure: false, // Important! 587 does NOT use implicit TLS
+//     auth: {
+//         user: "info@novibiz.com",
+//         pass: "Novibiz*2025",
+//     },
+//     tls: {
+//         rejectUnauthorized: false, // Prevents strict TLS rejection
+//     },
+// });
 
-transporter.verify((error, success) => {
-    if (error) {
-        console.log('SMTP Connection Error:', error);
-    } else {
-        console.log('SMTP Server is ready to send emails.');
-    }
-});
+// transporter.verify((error, success) => {
+//     if (error) {
+//         console.log('SMTP Connection Error:', error);
+//     } else {
+//         console.log('SMTP Server is ready to send emails.');
+//     }
+// });
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -293,14 +295,24 @@ const create_offer = (req, res) => {
                                 else {
                                     res.json({ message: 'Data inserted successfully', status: true });
                                     console.log('email', result[0].created_by)
-                                    transporter.sendMail({
-                                        from: '"Novibiz" info@novibiz.com',
-                                        to: result[0].created_by,
-                                        subject: "Offer received from a company",
-                                        html: "<h3>There is a new offer from a company.</h3><br><br><br><h4>Details-:</h4><p>Amount: $" + data.offer_amount + "</p><p>Expected Date: " + data.expected_date + "</p>",
-                                    }).then(info => {
-                                        console.log({ info });
-                                    }).catch(console.error);
+
+                                    sendMail(
+                                        result[0].created_by,
+                                        "Offer received from a company",
+                                        `<h3>There is a new offer from a company.</h3>
+                                        <br><br><br><h4>Details-:</h4><p>Amount: $${data.offer_amount}</p><p>Expected Date: ${data.expected_date}</p>`
+                                    )
+                                        .then(info => console.log({ info }))
+                                        .catch(console.error);
+
+                                    // transporter.sendMail({
+                                    //     from: '"Novibiz" info@novibiz.com',
+                                    //     to: result[0].created_by,
+                                    //     subject: "Offer received from a company",
+                                    //     html: "<h3>There is a new offer from a company.</h3><br><br><br><h4>Details-:</h4><p>Amount: $" + data.offer_amount + "</p><p>Expected Date: " + data.expected_date + "</p>",
+                                    // }).then(info => {
+                                    //     console.log({ info });
+                                    // }).catch(console.error);
                                 }
                             });
                         }

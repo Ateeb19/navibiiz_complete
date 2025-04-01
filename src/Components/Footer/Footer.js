@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
@@ -9,13 +9,61 @@ import { FaInstagramSquare } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import '../../assets/css/style.css';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Alert from "../alert/Alert_message";
+
 const Footer = () => {
+    const port = process.env.REACT_APP_SECRET;
 
     const navigate = useNavigate();
+    const [showAlert, setShowAlert] = useState(false);
+    const [alert_message, setAlert_message] = useState('');
 
+    const [user_name, setUser_name] = useState('');
+    const [email_id, setEmail_id] = useState('');
+    const [contact_number, setContact_number] = useState('');
+    const [country, setCountry] = useState('');
+    const [message, setmessage] = useState('');
+
+    const handle_sumbit = () => {
+        if (!user_name || !email_id || !contact_number || !country || !message) {
+            setShowAlert(true);
+            setAlert_message('Please fill all the fieldes!');
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 2000);
+            return;
+        }
+        const value = {
+            user_name: user_name,
+            email_id: email_id,
+            contact_number: contact_number,
+            country: country,
+            message: message,
+        }
+        axios.post(`${port}/user/send_message`, value, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => {
+            console.log(response.data);
+            setShowAlert(true);
+            setAlert_message('Message send success');
+            setTimeout(() => {
+                setShowAlert(false);
+                setUser_name('');
+                setEmail_id('');
+                setContact_number('');
+                setCountry('');
+                setmessage('');
+            }, 2000);
+        })
+            .catch((err) => { console.log(err) });
+    }
     return (
         <>
             <section className="contact-form-wrapper">
+                {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
                 <div className="container">
                     <div className="contact-form-wrap">
                         <div className="row mt-2 w-100">
@@ -44,28 +92,28 @@ const Footer = () => {
                                 <div className="row">
                                     <div className="col-12 col-md-6">
                                         <label className="input-label">Full Name <span className="text-danger">*</span></label>
-                                        <input type="text" className="contact-field" placeholder="Enter your full name" />
+                                        <input type="text" className="contact-field" value={user_name} onChange={(e) => setUser_name(e.target.value)} placeholder="Enter your full name" />
                                     </div>
                                     <div className="col-12 col-md-6">
                                         <label className="input-label">Email ID <span className="text-danger">*</span></label>
-                                        <input type="email" className="contact-field" placeholder="Enter your email id" />
+                                        <input type="email" className="contact-field" value={email_id} onChange={(e) => setEmail_id(e.target.value)} placeholder="Enter your email id" />
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12 col-md-6">
                                         <label className="input-label">Contact Number <span className="text-danger">*</span></label>
-                                        <input type="tel" className="contact-field" placeholder="Enter your contact number" />
+                                        <input type="tel" className="contact-field" value={contact_number} onChange={(e) => setContact_number(e.target.value)} placeholder="Enter your contact number" />
                                     </div>
                                     <div className="col-12 col-md-6">
                                         <label className="input-label">Country you Live <span className="text-danger">*</span></label>
-                                        <input type="text" className="contact-field" placeholder="Enter your country" />
+                                        <input type="text" className="contact-field" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Enter your country" />
                                     </div>
                                 </div>
                                 <div className="">
                                     <label className="input-label">Message (if any)</label>
-                                    <textarea className="contact-field" rows="4" placeholder="Type here . . ." style={{ resize: 'none' }}></textarea>
+                                    <textarea className="contact-field" value={message} onChange={(e) => setmessage(e.target.value)} rows="4" placeholder="Type here . . ." style={{ resize: 'none' }}></textarea>
                                 </div>
-                                <button className="btn p-3 text-white w-100" style={{ backgroundColor: ' #FF5722' }}>SUBMIT</button>
+                                <button className="btn p-3 text-white w-100" style={{ backgroundColor: ' #FF5722' }} onClick={handle_sumbit}>SUBMIT</button>
                             </div>
                         </div>
                     </div>
@@ -78,7 +126,7 @@ const Footer = () => {
                         <h2>Partner With Us and Grow Your Reach</h2>
                     </div>
                     <p className="">Join our platform to connect with global customers and expand your logistics business</p>
-                    <button className="btn-register" onClick={()=> navigate('/register_company')}>Register your Company</button>
+                    <button className="btn-register" onClick={() => navigate('/register_company')}>Register your Company</button>
                 </div>
             </section>
 
