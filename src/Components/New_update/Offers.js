@@ -15,14 +15,13 @@ import Form from 'react-bootstrap/Form';
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Alert from "../alert/Alert_message";
+import { useAlert } from "../alert/Alert_message";
 
 const Offers = () => {
     const navigate = useNavigate();
+    const { showAlert } = useAlert();
     const itemsPerPage = 5;
     const port = process.env.REACT_APP_SECRET;
-    const [showAlert, setShowAlert] = useState(false);
-    const [alert_message, setAlert_message] = useState('');
     const token = localStorage.getItem('token');
     const [groupage, setGroupage] = useState([]);
     useEffect(() => {
@@ -96,8 +95,7 @@ const Offers = () => {
 
     const handleSubmit_offer = (details) => {
         if (bidAmount === '' || expetedDate === '') {
-            setShowAlert(true);
-            setAlert_message('Please fill all the fields');
+            showAlert('Please fill all the fields');
             return;
         }
 
@@ -113,26 +111,18 @@ const Offers = () => {
             },
         }).then((response) => {
             if (response.data.status === false) {
-                setShowAlert(true);
-                setAlert_message('Login with a company account to submit an offer');
-                setTimeout(() => {
-                    navigate('/login');
-                }, 1000);
+                showAlert('Login with a company account to submit an offer');
+                navigate('/login');
             } else {
                 console.log(response.data);
-                setShowAlert(true);
-                setAlert_message(response.data.message);
+                showAlert(response.data.message);
                 setGroupage_detail(null);
                 setBidAmount('');
                 setExpetedDate('');
             }
         }).catch((err) => {
-            setShowAlert(true);
-            setAlert_message('Login to submit offer');
-            setTimeout(() => {
-                navigate('/login');
-            }, 1000);
-
+            showAlert('Login to submit offer');
+            navigate('/login');
             console.log(err);
         });
     };
@@ -160,7 +150,7 @@ const Offers = () => {
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
-            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
+            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />

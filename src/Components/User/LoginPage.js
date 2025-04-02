@@ -3,16 +3,15 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar'
 import { IoEyeOutline } from "react-icons/io5";
-import Alert from "../alert/Alert_message";
+import { useAlert } from "../alert/Alert_message";
 
 const LoginPage = () => {
   const port = process.env.REACT_APP_SECRET;
-
+  const { showAlert } = useAlert();
   const [isMobileView, setMobileView] = useState(false);
   const [selected, setSelected] = useState("individual");
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [alert_message, setAlert_message] = useState('');
+
   const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
 
   useEffect(() => {
@@ -72,8 +71,7 @@ const LoginPage = () => {
           }
         })
         if (!response.data.status) {
-          setShowAlert(true);
-          setAlert_message(response.data.message);
+          showAlert(response.data.message);
           return
         }
         console.log(response.data);
@@ -86,8 +84,7 @@ const LoginPage = () => {
           email: response.data.email
         }
         localStorage.setItem('userInfo', JSON.stringify(response.data));
-        setShowAlert(true);
-        setAlert_message(response.data.message);
+        showAlert(response.data.message);
         if (response.data.role === 'Sadmin' || response.data.role === 'admin') {
           navigate('/dashboard');
         } else {
@@ -108,8 +105,7 @@ const LoginPage = () => {
           }
         })
         if (!response.data.status) {
-          setShowAlert(true);
-          setAlert_message(response.data.message);
+          showAlert(response.data.message);
           return
         }
         console.log(selected, 'from login');
@@ -123,19 +119,12 @@ const LoginPage = () => {
         }
         localStorage.setItem('user_logins_type', selected)
         localStorage.setItem('userInfo', JSON.stringify(response.data));
-        setShowAlert(true);
-        setAlert_message(response.data.message);
+        showAlert(response.data.message);
         if (response.data.role === 'Sadmin' || response.data.role === 'admin') {
           navigate('/dashboard', { replace: true });
-          setTimeout(() => {
-            window.location.reload();
-          }, 0);
         } else {
           localStorage.removeItem("redirectAfterLogin"); // Clear stored path
           navigate(redirectPath, { replace: true });
-          setTimeout(() => {
-            window.location.reload();
-          }, 0);
         }
 
       } catch (err) {
@@ -155,7 +144,7 @@ const LoginPage = () => {
 
   return (
     <div className="login-bg-wrapper">
-      {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
+      {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
       <div className="d-flex align-items-center justify-content-end" style={{ height: "100vh" }}>
         <div className="login-wrap">
           <div className="d-flex flex-column align-items-start">

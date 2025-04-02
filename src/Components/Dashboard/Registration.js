@@ -11,8 +11,7 @@ import Form from 'react-bootstrap/Form';
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Alert from "../alert/Alert_message";
-
+import { useAlert } from "../alert/Alert_message";
 
 
 const DragAndDrop = ({ accept, onFileDrop, label }) => {
@@ -54,9 +53,8 @@ const DragAndDrop = ({ accept, onFileDrop, label }) => {
 
 const Registration = () => {
     const token = localStorage.getItem('token');
+    const { showAlert } = useAlert();
     const port = process.env.REACT_APP_SECRET;
-    const [showAlert, setShowAlert] = useState(false);
-    const [alert_message, setAlert_message] = useState('');
     const navigate = useNavigate();
     const stepperRef = useRef(null);
     useEffect(() => {
@@ -139,8 +137,7 @@ const Registration = () => {
 
     const handleAddLocation = () => {
         if (locations.length >= 10) {
-            setShowAlert(true);
-            setAlert_message("You can only add up to 10 locations.");
+            showAlert("You can only add up to 10 locations.");
             return;
         }
 
@@ -247,8 +244,7 @@ const Registration = () => {
                 localStorage.setItem('valid', 'true');
                 return true;
             } else {
-                setShowAlert(true);
-                setAlert_message(response.data.message);;
+                showAlert(response.data.message);;
                 localStorage.setItem('valid', 'false');
                 return false;
             }
@@ -385,20 +381,17 @@ const Registration = () => {
             .then(response => {
                 if (response.status === 200) {
                     // Handle successful submission
-                    setShowAlert(true);
-                    setAlert_message('Data submited Successfully!');
+                    showAlert('Data submited Successfully!');
                 } else {
                     // Handle errors
-                    setShowAlert(true);
-                    setAlert_message('Error submitting data');
+                    showAlert('Error submitting data');
                 }
                 console.log(response);
                 setCongrat(true);
             })
             .catch(error => {
                 console.error('Error:', error);
-                setShowAlert(true);
-                setAlert_message('Error submittion Data');
+                showAlert('Error submittion Data');
             });
     };
 
@@ -411,7 +404,7 @@ const Registration = () => {
 
     return (
         <div className="flex justify-content-start h-100vh">
-            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
+            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <Stepper linear desabled ref={stepperRef} onStepChange={(e) => setStep(e)} style={{ flexBasis: 'auto' }}>
                 <StepperPanel header="Basic Details">
                     <div className="container">
@@ -625,8 +618,7 @@ const Registration = () => {
                                 iconPos="center"
                                 onClick={async () => {
                                     if (password !== confirm_password) {
-                                        setShowAlert(true);
-                                        setAlert_message('Password and confirm password does not match');
+                                        showAlert('Password and confirm password does not match');
                                         return;
                                     }
                                     const done = await handleregester();
@@ -636,6 +628,7 @@ const Registration = () => {
                                             setStep((prev) => prev + 1);
                                         }
                                     }
+                                    window.scrollTo({ top: 0});
                                 }}
                             />
                         </div>
@@ -836,14 +829,14 @@ const Registration = () => {
                             className="btn rounded-2 me-3"
                             style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center"
-                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); }} />
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1);window.scrollTo({ top: 0}); }} />
                         <Button label="Next"
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                             iconPos="center"
                             disabled={!isTransportationValid()}
-                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1); }} />
+                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1);window.scrollTo({ top: 0}); }} />
                     </div>
                 </StepperPanel>
 
@@ -937,14 +930,14 @@ const Registration = () => {
                             className="btn rounded-2 me-3"
                             style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center"
-                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); }} />
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1);window.scrollTo({ top: 0}); }} />
                         <Button label="Next"
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                             iconPos="center"
                             disabled={!isPaymentValid()}
-                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1); }} />
+                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1);window.scrollTo({ top: 0}); }} />
                     </div>
                 </StepperPanel>
 
@@ -996,9 +989,9 @@ const Registration = () => {
                             className="btn rounded-2"
                             style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center" icon="pi pi-arrow-left"
-                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); }} />
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1);window.scrollTo({ top: 0}); }} />
                         <Button label="Submit"
-                            onClick={() => { handleSubmit(); setStep((prev) => prev + 1); }}
+                            onClick={() => { handleSubmit(); setStep((prev) => prev + 1);window.scrollTo({ top: 0}); }}
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}

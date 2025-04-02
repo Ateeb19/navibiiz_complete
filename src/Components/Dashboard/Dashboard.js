@@ -8,7 +8,7 @@ import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, F
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FaBell, FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaSearch, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle } from "react-icons/fa";
 import { PiShippingContainerDuotone } from "react-icons/pi";
-import { BsCarFrontFill, BsFillInfoCircleFill, BsBuildingsFill } from "react-icons/bs";
+import { BsCarFrontFill, BsFillInfoCircleFill, BsBuildingsFill, BsWindowSidebar } from "react-icons/bs";
 import { IoIosAddCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
 import Countries_selector from "./Countries_selector";
 import { IoStar, IoCall } from "react-icons/io5";
@@ -23,7 +23,7 @@ import { formatDistanceToNow } from "date-fns";
 import Paypal_payment from "./Paypal_payment";
 import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-dt';
-import Alert from "../alert/Alert_message";
+import { useAlert } from "../alert/Alert_message";
 import ConfirmationModal from '../alert/Conform_alert';
 
 // import 'datatables.net-select-dt';
@@ -38,9 +38,8 @@ DataTable.use(DT);
 
 const Dashboard = () => {
   const port = process.env.REACT_APP_SECRET;
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = useState(false);
-  const [alert_message, setAlert_message] = useState('');
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
   // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -216,8 +215,7 @@ const Dashboard = () => {
 
   const cancelDelete = () => {
     setShowModal(false);
-    setShowAlert(true);
-    setAlert_message("Delete canceled");
+    showAlert("Delete canceled");
   };
 
 
@@ -229,8 +227,7 @@ const Dashboard = () => {
         }
       }).then((response) => {
         console.log(response.data);
-        setShowAlert(true);
-        setAlert_message(response.data.message);
+        showAlert(response.data.message);
         window.location.reload();
       }).catch((err) => { console.log(err) });
     });
@@ -265,8 +262,7 @@ const Dashboard = () => {
         setCompanyData(response.data.data);
       }).catch((error) => {
         if (error.response && error.response.status === 403) {
-          setShowAlert(true);
-          setAlert_message("Token expired. Redirection to login .....");
+          showAlert("Token expired. Redirection to login .....");
           navigate('/login');
         } else {
           console.error("Error fetching data:", error);
@@ -283,8 +279,7 @@ const Dashboard = () => {
         setCompanyData(response.data.data);
       }).catch((error) => {
         if (error.response && error.response.status === 403) {
-          setShowAlert(true);
-          setAlert_message('Token expirted. Redirection to login ...');
+          showAlert('Token expirted. Redirection to login ...');
           navigate('/login');
         } else {
           console.error("Error fetching data:", error);
@@ -350,8 +345,7 @@ const Dashboard = () => {
     openDeleteModal(
       `Are you sure you want to delete ${company.company_name} company?`,
       () => {
-        setShowAlert(true);
-        setAlert_message(`Deleting ${company.company_name}`);
+        showAlert(`Deleting ${company.company_name}`);
         const endpoint =
           userRole === "Sadmin"
             ? `${port}/s_admin/delete_compnay/company_${company.id}`
@@ -520,8 +514,7 @@ const Dashboard = () => {
 
   const handle_Add_NewCountry = () => {
     if (from_NewCountryValue === '' || to_NewCountryValue === '' || duration_NewCountryValue === '' || from_NewCountryValue === '') {
-      setShowAlert(true);
-      setAlert_message('Please select all the fieldes.');
+      showAlert('Please select all the fieldes.');
       return;
     }
     axios.put(`${port}/company/add_new_country`, { from_NewCountryValue, to_NewCountryValue, duration_NewCountryValue, addNewCountry }, {
@@ -601,8 +594,7 @@ const Dashboard = () => {
       setFromCountry("");
       setToCountry("");
     } else {
-      setShowAlert(true);
-      setAlert_message('Please select both "From" and "To" countries.');
+      showAlert('Please select both "From" and "To" countries.');
     }
   };
 
@@ -722,8 +714,7 @@ const Dashboard = () => {
       })
         .then((response) => {
           console.log(response.data);
-          setShowAlert(true);
-          setAlert_message(response.data.message);
+          showAlert(response.data.message);
           window.location.reload();
         })
         .catch((err) => console.log(err));
@@ -779,8 +770,7 @@ const Dashboard = () => {
         headers: { Authorization: token },
       })
         .then((response) => {
-          setShowAlert(true);
-          setAlert_message(response.data.message);
+          showAlert(response.data.message);
           window.location.reload();
         })
         .catch((err) => console.log(err));
@@ -879,8 +869,6 @@ const Dashboard = () => {
     setShowOfferDetails(item);
   }
   // console.log(showOfferDetails);
-
-
   console.log(selectedCompany)
   const Menu = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -963,7 +951,7 @@ const Dashboard = () => {
 
   return (
     <div className="vh-100">
-      {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
+      {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
       <ConfirmationModal
         show={showModal}
         message={modalMessage}

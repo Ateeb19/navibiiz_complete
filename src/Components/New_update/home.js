@@ -20,15 +20,14 @@ import { SiAnytype } from "react-icons/si";
 import { FaWeightScale } from "react-icons/fa6";
 import { RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
 import { FaRuler } from "react-icons/fa";
-import Alert from "../alert/Alert_message";
+import { useAlert } from "../alert/Alert_message";
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
     // console.log(port);
+    const { showAlert } = useAlert();
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
-    const [showAlert, setShowAlert] = useState(false);
-    const [alert_message, setAlert_message] = useState('');
     const [offers_details, setOffers_details] = useState([]);
     const displayCompany = () => {
         // localStorage.setItem('companyInfo');
@@ -153,11 +152,7 @@ const Home = () => {
 
     const handleSubmit_offer = (details) => {
         if (bidAmount === '' || expetedDate === '') {
-            setShowAlert(true);
-            setAlert_message('Please fill all the fields');
-            setTimeout(() => {
-                setShowAlert(false);
-            }, 2000);
+            showAlert('Please fill all the fields');
             return;
         }
 
@@ -173,30 +168,18 @@ const Home = () => {
             },
         }).then((response) => {
             if (response.data.status === false) {
-                setShowAlert(true);
-                setAlert_message('Login with a company account to submit an offer');
-                setTimeout(() => {
-                    navigate('/login');
-                    setShowAlert(false);
-                }, 2000);
+                showAlert('Login with a company account to submit an offer');
+                navigate('/login');
             } else {
                 console.log(response.data);
-                setShowAlert(true);
-                setAlert_message(response.data.message);
+                showAlert(response.data.message);
                 setGroupage_detail(null);
                 setBidAmount('');
                 setExpetedDate('');
-                setTimeout(() => {
-                    setShowAlert(false);
-                }, 2000);
             }
         }).catch((err) => {
-            setShowAlert(true);
-            setAlert_message('Login to submit offer');
-            setTimeout(() => {
-                navigate('/login');
-                setShowAlert(false);
-            }, 2000);
+            showAlert('Login to submit offer');
+            navigate('/login');
 
             console.log(err);
         });
@@ -204,7 +187,7 @@ const Home = () => {
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
-            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
+            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />

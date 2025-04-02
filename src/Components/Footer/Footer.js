@@ -10,14 +10,12 @@ import { FaLinkedin } from "react-icons/fa";
 import '../../assets/css/style.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Alert from "../alert/Alert_message";
+import { useAlert } from "../alert/Alert_message";
 
 const Footer = () => {
     const port = process.env.REACT_APP_SECRET;
-
+    const { showAlert } = useAlert();
     const navigate = useNavigate();
-    const [showAlert, setShowAlert] = useState(false);
-    const [alert_message, setAlert_message] = useState('');
 
     const [user_name, setUser_name] = useState('');
     const [email_id, setEmail_id] = useState('');
@@ -27,11 +25,7 @@ const Footer = () => {
 
     const handle_sumbit = () => {
         if (!user_name || !email_id || !contact_number || !country || !message) {
-            setShowAlert(true);
-            setAlert_message('Please fill all the fieldes!');
-            setTimeout(() => {
-                setShowAlert(false);
-            }, 2000);
+            showAlert('Please fill all the fieldes!');
             return;
         }
         const value = {
@@ -47,23 +41,19 @@ const Footer = () => {
             }
         }).then((response) => {
             console.log(response.data);
-            setShowAlert(true);
-            setAlert_message('Message send success');
-            setTimeout(() => {
-                setShowAlert(false);
-                setUser_name('');
-                setEmail_id('');
-                setContact_number('');
-                setCountry('');
-                setmessage('');
-            }, 2000);
+            showAlert('Message send success');
+            setUser_name('');
+            setEmail_id('');
+            setContact_number('');
+            setCountry('');
+            setmessage('');
         })
             .catch((err) => { console.log(err) });
     }
     return (
         <>
             <section className="contact-form-wrapper">
-                {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
+                {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
                 <div className="container">
                     <div className="contact-form-wrap">
                         <div className="row mt-2 w-100">

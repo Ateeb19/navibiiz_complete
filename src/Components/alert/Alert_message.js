@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
+import { createContext, useContext } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Alert = ({ message, onClose = () => {} }) => { 
-  const [visible, setVisible] = useState(false);
+const AlertContext = createContext();
 
-  useEffect(() => {
-    setVisible(true);
-    const timer = setTimeout(() => {
-      setVisible(false);
-      onClose(); 
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [message, onClose]);
-
+export const AlertProvider = ({ children }) => {
+  const showAlert = (message) => {
+    toast(message, {
+      autoClose: 7000, 
+      progressClassName: "custom-progress-bar",
+    });
+  };
   return (
-    <div className={`alert-overlay ${visible ? "show" : "hide"}`}>
-      <div className="alert-box">{message}</div>
-    </div>
+    <AlertContext.Provider value={{ showAlert }}>
+      {children}
+      <ToastContainer />
+    </AlertContext.Provider>
   );
 };
 
-export default Alert;
+// Custom hook to use the alert function anywhere
+export const useAlert = () => useContext(AlertContext);

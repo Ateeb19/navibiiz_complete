@@ -9,17 +9,15 @@ import { useEffect, useState } from 'react';
 import { FaBuilding } from "react-icons/fa";
 import { IoIosMailOpen, IoMdArrowRoundBack } from "react-icons/io";
 import { RiContactsBook3Fill } from "react-icons/ri";
-import Alert from "../alert/Alert_message";
-
+import { useAlert } from "../alert/Alert_message";
 
 
 const CompanyDetails = () => {
     const { id } = useParams();
+    const { showAlert } = useAlert();
     const location = useLocation();
     // const company = location.state?.company;
     const [company, setCompany] = useState(null);
-    const [showAlert, setShowAlert] = useState(false);
-    const [alert_message, setAlert_message] = useState('');
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
     const [details_company, setDetails_company] = useState(false);
@@ -40,13 +38,9 @@ const CompanyDetails = () => {
         if (token) {
             setDetails_company(true);
         } else {
-            setShowAlert(true);
-            setAlert_message('Please login to contact the company.');
+            showAlert('Please login to contact the company.');
             localStorage.setItem("redirectAfterLogin", `/company_details/${id}`);
-            setTimeout(() => {
-                setShowAlert(false);
-                navigate('/login');
-            }, 2000);
+            navigate('/login');
         }
     }
     if (!company) {
@@ -54,7 +48,7 @@ const CompanyDetails = () => {
     }
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
-            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
+            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
@@ -64,9 +58,9 @@ const CompanyDetails = () => {
 
                 <div className="row mt-5 ">
                     <div className="col-md-8 border-end border-2 text-start">
-                        <div className='d-flex align-items-start text-head'>
-                            <h3 style={{cursor: 'pointer'}} onClick={handleGoBack }><IoMdArrowRoundBack className='mt-1' /> Back</h3>
-                        </div>
+                        {/* <div className='d-flex align-items-start text-head'>
+                            <h3 style={{ cursor: 'pointer' }} onClick={handleGoBack}><IoMdArrowRoundBack className='mt-1' /> Back</h3>
+                        </div> */}
                         <div className="d-flex align-items-center gap-4 p-3 company-details-wrap">
                             <div
                                 className="rounded-circle overflow-hidden"
@@ -290,7 +284,7 @@ const CompanyDetails = () => {
                                 </div>
 
                                 <div className='details-wrap w-100 text-start'>
-                                    <span>< FaLocationDot className='fs-4 me-2' style={{ color: '#FF5722', width: '20px' }} />Location -: {company.location1}</span>
+                                    <span>< FaLocationDot className='fs-4 me-2' style={{ color: '#FF5722', width: '20px' }} />Location -: {company.location1.split(",")[2].trim()} {company.location2 && <>, {company.location2.split(",")[2].trim()}</>} {company.location3 && <>, {company.location3.split(",")[2].trim()}</>} {company.location4 && <>, {company.location4.split(",")[2].trim()}</>} {company.location6 && <>, {company.location6.split(",")[2].trim()}</>} {company.location7 && <>, {company.location7.split(",")[2].trim()}</>} {company.location8 && <>, {company.location8.split(",")[2].trim()}</>} {company.location9 && <>, {company.location9.split(",")[2].trim()}</>} {company.location10 && <>, {company.location10.split(",")[2].trim()}</>} {company.location10 && <>, {company.location10.split(",")[2].trim()}</>}</span>
                                 </div>
                             </div>
                         </div>

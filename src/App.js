@@ -27,7 +27,7 @@ import Regester_company from './Components/Regester/Regester_company';
 import ScrollToTop from "./ScrollToTop";
 import Navbar from './Components/Navbar/Navbar';
 import About_us from './Components/New_update/About_us';
-
+import { AlertProvider } from "./Components/alert/Alert_message";
 const App = () => {
   const port = process.env.REACT_APP_SECRET;
 
@@ -99,11 +99,12 @@ const App = () => {
   }, [])
   return (
     <>
-      <div className="App">
+      <AlertProvider>
         <Router>
-          <div className="d-flex flex-column" style={{ width: "100" }}>
+          <div className="App">
+            <div className="d-flex flex-column" style={{ width: "100" }}>
 
-            {/* <div className="d-flex justify-content-end">
+              {/* <div className="d-flex justify-content-end">
             <Link to='/send_transport'><button className="btn btn-warning m-1" style={{ fontSize: "0.8rem" }}>Send/Transport</button></Link>
             <Link to='/login'><button className="btn btn-warning m-1" style={{ fontSize: "0.8rem" }}>SignUp</button></Link>
             <Link to='/'><button className="btn btn-warning m-1" style={{ fontSize: "0.8rem" }}><IoMdHome /></button></Link>
@@ -111,26 +112,27 @@ const App = () => {
               <Link to='/dashboard'><button className="btn btn-warning m-1" style={{ fontSize: "0.8rem" }}><MdDashboardCustomize /></button></Link>
             )}
           </div> */}
-            <ScrollToTop />
-            <Routes>
-              <Route Component={CompleateDashbboard} path='/dashboard'></Route>
-              <Route Component={Home} path='/'></Route>
-              <Route Component={Offers} path='/offers'></Route>
-              <Route Component={CompaniesList} path='/companies_list'></Route>
-              <Route Component={send_groupage} path='/send_groupage'></Route>
-              <Route Component={Notification} path='/notification'></Route>
-              <Route Component={Regester_company} path='/register_company'></Route>
-              <Route Component={About_us} path='/about_us'></Route>
-              {/* <Route Component={Containers} path='/container'></Route>
+              <ScrollToTop />
+              <Routes>
+                <Route Component={CompleateDashbboard} path='/dashboard'></Route>
+                <Route Component={Home} path='/'></Route>
+                <Route Component={Offers} path='/offers'></Route>
+                <Route Component={CompaniesList} path='/companies_list'></Route>
+                <Route Component={send_groupage} path='/send_groupage'></Route>
+                <Route Component={Notification} path='/notification'></Route>
+                <Route Component={Regester_company} path='/register_company'></Route>
+                <Route Component={About_us} path='/about_us'></Route>
+                {/* <Route Component={Containers} path='/container'></Route>
             <Route Component={Groupage} path='/groupage'></Route>
             <Route Component={Cars} path='/cars'></Route>
             <Route Component={SendTransport} path='/send_transport'></Route> */}
-              <Route Component={LoginPage} path='/login'></Route>
-              <Route path="/company_details/:id" element={<CompanyDetails />} />
-            </Routes>
+                <Route Component={LoginPage} path='/login'></Route>
+                <Route path="/company_details/:id" element={<CompanyDetails />} />
+              </Routes>
+            </div>
           </div>
         </Router>
-      </div>
+      </AlertProvider>
     </>
 
   );

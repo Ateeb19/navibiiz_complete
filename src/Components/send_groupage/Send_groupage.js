@@ -15,7 +15,7 @@ import { DateRange } from 'react-date-range';
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
-import Alert from "../alert/Alert_message";
+import { useAlert } from "../alert/Alert_message"; // Import the alert function
 
 
 
@@ -57,20 +57,15 @@ const DragAndDrop = ({ accept, onFileDrop, label, multiple = true }) => {
 
 const Send_groupage = () => {
     const token = localStorage.getItem('token');
+    const { showAlert } = useAlert();
     const port = process.env.REACT_APP_SECRET;
     const navigate = useNavigate();
     const stepperRef = useRef(null);
-    const [showAlert, setShowAlert] = useState(false);
-    const [alert_message, setAlert_message] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
     useEffect(() => {
         if (!token || token.length <= 0) {
-            setShowAlert(true);
-            setAlert_message('Login first!');
-            setTimeout(() => {
-                setShowAlert(false);
-                navigate('/login')
-            }, 2000);
+            showAlert('Login first!');
+            navigate('/login')
             // console.log(token.length);
         }
     })
@@ -80,8 +75,7 @@ const Send_groupage = () => {
 
     const handleFileDrop = (files) => {
         if (selectedFiles.length + files.length > 10) {
-            setShowAlert(true);
-            setAlert_message('You can only upload up to 10 images.');
+            showAlert('You can only upload up to 10 images.');
             return;
         }
 
@@ -240,7 +234,7 @@ const Send_groupage = () => {
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
-            {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />}
+            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
@@ -692,6 +686,7 @@ const Send_groupage = () => {
                                                     } else {
                                                         setIsVisible(true);
                                                     }
+                                                    window.scrollTo({ top: 0});
                                                 }}
                                             />
                                         </div>
@@ -705,7 +700,9 @@ const Send_groupage = () => {
                                                     className="btn rounded-2 w-100"
                                                     style={{ backgroundColor: 'transparent', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                                                     iconPos="center"
-                                                    onClick={() => { stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); }}
+                                                    onClick={() => { stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1);                                                    window.scrollTo({ top: 0});
+                                                    window.scrollTo({ top: 0});
+                                                }}
                                                 />
                                             </div>
                                         )}
