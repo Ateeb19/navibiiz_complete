@@ -915,7 +915,7 @@ const Home = () => {
                     </div>
 
                     <div className="text-center mt-4">
-                        <button className="btn-main">
+                        <button className="btn-main" onClick={() => navigate('/offers')}>
                             View all offers
                         </button>
                     </div>

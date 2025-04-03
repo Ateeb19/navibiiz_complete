@@ -71,7 +71,7 @@ const Navbar = () => {
       if (storedValue === "true") {
         setIsVisible(true);
       }
-    }, 500); 
+    }, 500);
     return () => clearInterval(interval);
   }, []);
 
@@ -130,14 +130,17 @@ const Navbar = () => {
         </div>
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-2">
+
           {token ? (
             <>
               <Link to="/send_groupage">
-                <button className="btn text-light m-1" style={{backgroundColor: "#FF5722" }}>
-                  <BsSendFill /> <span style={{fontSize: '1rem'}}>Send through groupage</span>
+                <button className="btn text-light m-1" style={{ backgroundColor: "#FF5722" }}>
+                  <BsSendFill /> <span style={{ fontSize: '1rem' }}>Send through groupage</span>
                 </button>
               </Link>
-              {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
+
+
+              {/* {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
                 <>
                   {(user_login_state === 'company' && userInfo.role === 'Sadmin') && (
                     <>
@@ -149,7 +152,7 @@ const Navbar = () => {
                     </>
                   )}
                 </>
-              )}
+              )} */}
 
               <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
@@ -174,6 +177,12 @@ const Navbar = () => {
               </Link>
             </>
           )}
+          <Link to="/register_company">
+            <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
+            {userInfo.role === 'Sadmin'? <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>: `Register Your Company`}
+              {/* <span>Register Your Company</span> */}
+            </button>
+          </Link>
         </div>
 
         {isOpen && (
@@ -201,7 +210,7 @@ const Navbar = () => {
                     <>
                       <Link to="/regester_company">
                         <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
-                        {userInfo.role === 'Sadmin'? <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>: `Register Your Company`}                        </button>
+                          {userInfo.role === 'Sadmin' ? <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span> : `Register Your Company`}                        </button>
                       </Link>
                     </>
                   )}
