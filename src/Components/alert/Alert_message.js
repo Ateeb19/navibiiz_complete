@@ -7,7 +7,7 @@ const AlertContext = createContext();
 export const AlertProvider = ({ children }) => {
   const showAlert = (message) => {
     toast(message, {
-      autoClose: 7000, 
+      autoClose: 12000, 
       progressClassName: "custom-progress-bar",
     });
   };

@@ -62,13 +62,17 @@ const Send_groupage = () => {
     const navigate = useNavigate();
     const stepperRef = useRef(null);
     const [currentStep, setCurrentStep] = useState(1);
+    const alertShown = useRef(false);
     useEffect(() => {
-        if (!token || token.length <= 0) {
-            showAlert('Login first!');
-            navigate('/login')
+        if (!token || token.length === 0) {
+            if (!alertShown.current) {
+                showAlert('Login first!');
+                alertShown.current = true;
+                navigate('/login')
+            }
             // console.log(token.length);
         }
-    })
+    }, [])
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -652,21 +656,21 @@ const Send_groupage = () => {
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>Zip Code :</span> <span > {senderZipCode ? (<h6>{senderZipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
                                                         </div>
                                                     </>
-                                                ) 
-                                                // : (
-                                                //     <>
-                                                //         <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Additional Information</h5>
-                                                //         <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
-                                                //             <div className="d-flex justify-content-between w-100 p-2">
-                                                //                 <span>Product Document:</span>
-                                                //                 <span>
-                                                //                     {document ? <h6>{document.name.slice(0, 4)}...</h6> : <span>N/A</span>}
-                                                //                 </span>
-                                                //             </div>
-                                                //         </div>
+                                                )
+                                                    // : (
+                                                    //     <>
+                                                    //         <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Additional Information</h5>
+                                                    //         <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
+                                                    //             <div className="d-flex justify-content-between w-100 p-2">
+                                                    //                 <span>Product Document:</span>
+                                                    //                 <span>
+                                                    //                     {document ? <h6>{document.name.slice(0, 4)}...</h6> : <span>N/A</span>}
+                                                    //                 </span>
+                                                    //             </div>
+                                                    //         </div>
 
-                                                //     </>
-                                                // )
+                                                    //     </>
+                                                    // )
                                                 }
 
                                             </div>
@@ -686,7 +690,7 @@ const Send_groupage = () => {
                                                     } else {
                                                         setIsVisible(true);
                                                     }
-                                                    window.scrollTo({ top: 0});
+                                                    window.scrollTo({ top: 0 });
                                                 }}
                                             />
                                         </div>
@@ -700,9 +704,10 @@ const Send_groupage = () => {
                                                     className="btn rounded-2 w-100"
                                                     style={{ backgroundColor: 'transparent', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                                                     iconPos="center"
-                                                    onClick={() => { stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1);                                                    window.scrollTo({ top: 0});
-                                                    window.scrollTo({ top: 0});
-                                                }}
+                                                    onClick={() => {
+                                                        stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); window.scrollTo({ top: 0 });
+                                                        window.scrollTo({ top: 0 });
+                                                    }}
                                                 />
                                             </div>
                                         )}
