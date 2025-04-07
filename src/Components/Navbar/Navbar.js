@@ -134,7 +134,7 @@ const Navbar = () => {
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-2">
           {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
             <Link to="/register_company">
-              <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
+              <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                 {(userInfo && userInfo.role === 'Sadmin') ? (
                   <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>
                 ) : (
@@ -146,7 +146,7 @@ const Navbar = () => {
           {token ? (
             <>
               <Link to="/send_groupage">
-                <button className="btn text-light m-1" style={{ backgroundColor: "#FF5722" }}>
+                <button className="btn text-light m-1" style={{ backgroundColor: "#de8316" }}>
                   <BsSendFill /> <span style={{ fontSize: '1rem' }}>Send through groupage</span>
                 </button>
               </Link>
@@ -154,7 +154,7 @@ const Navbar = () => {
               <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard">
-                  <button className="btn btn-light m-1" style={{ fontSize: '1rem', color: "#FF5722" }}>
+                  <button className="btn btn-light m-1" style={{ fontSize: '1rem', color: "#de8316" }}>
                     <MdDashboardCustomize />
                   </button>
                 </Link>
@@ -162,14 +162,14 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login">
-                <button className="btn btn-light m-1" style={{ fontSize: "1rem", color: "#FF5722" }}>
-                  <FaUser /> Login
+              <Link to="/send_groupage">
+                <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
+                  <BsSendFill /> Send through groupage
                 </button>
               </Link>
-              <Link to="/send_groupage">
-                <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
-                  <BsSendFill /> Send through groupage
+              <Link to="/login">
+                <button className="btn btn-light m-1" style={{ fontSize: "1rem", color: "#de8316" }}>
+                  <FaUser /> Login
                 </button>
               </Link>
             </>
@@ -193,7 +193,7 @@ const Navbar = () => {
               {/* <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Contact Us</Link> */}
               {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
                 <Link to="/register_company">
-                  <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
+                  <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                     {(userInfo && userInfo.role === 'Sadmin') ? (
                       <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>
                     ) : (
@@ -205,14 +205,14 @@ const Navbar = () => {
               {token ? (
                 <>
                   <Link to="/send_groupage" className="py-2">
-                    <button className="btn text-light w-100" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
+                    <button className="btn text-light w-100" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                       <BsSendFill /> Send through groupage
                     </button>
                   </Link>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
                   {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                     <Link to="/dashboard">
-                      <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#FF5722" }}>
+                      <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#de8316" }}>
                         <MdDashboardCustomize />
                       </button>
                     </Link>
@@ -220,17 +220,18 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link to="/login">
-                    <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#FF5722" }}>
-                      <FaUser /> Login
-                    </button>
-                  </Link>
+
                   <Link to="/send_groupage">
-                    <button className="btn text-light w-100 mt-2" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
+                    <button className="btn text-light w-100 mt-2" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                       <BsSendFill /> Send through groupage
                     </button>
                   </Link>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
+                  <Link to="/login">
+                    <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#de8316" }}>
+                      <FaUser /> Login
+                    </button>
+                  </Link>
                 </>
               )}
             </div>

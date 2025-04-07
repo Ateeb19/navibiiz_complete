@@ -103,7 +103,7 @@ const Footer = () => {
                                     <label className="input-label">Message (if any)</label>
                                     <textarea className="contact-field" value={message} onChange={(e) => setmessage(e.target.value)} rows="4" placeholder="Type here . . ." style={{ resize: 'none' }}></textarea>
                                 </div>
-                                <button className="btn p-3 text-white w-100" style={{ backgroundColor: ' #FF5722' }} onClick={handle_sumbit}>SUBMIT</button>
+                                <button className="btn p-3 text-white w-100" style={{ backgroundColor: ' #de8316' }} onClick={handle_sumbit}>SUBMIT</button>
                             </div>
                         </div>
                     </div>

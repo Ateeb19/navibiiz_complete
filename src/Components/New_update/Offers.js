@@ -176,7 +176,7 @@ const Offers = () => {
                     <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-3 mt-md-5 w-100">
                         <div className="d-flex flex-column align-items-start p-3 ps-5 pb-5 col-12 col-md-3">
                             <div className="title-head">
-                                <h3><span style={{ color: ' #FF5722' }}><FaFilter /> </span>Filters by :</h3>
+                                <h3><span style={{ color: ' #de8316' }}><FaFilter /> </span>Filters by :</h3>
                             </div>
                             <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-3">
                                 <input type="text"
@@ -220,19 +220,19 @@ const Offers = () => {
                                                             </div>
                                                             <div className="d-flex justify-content-between w-100">
                                                                 <span><strong className="fs-5 pe-2">{item.product_name}</strong></span>
-                                                                <h5 className="" style={{ color: '#FF5722' }} onClick={() => View_details(item)}><u>Submit Offer</u></h5>
+                                                                <h5 className="" style={{ color: '#de8316' }} onClick={() => View_details(item)}><u>Submit Offer</u></h5>
                                                             </div>
                                                             <p className="mt-2 me-1">GER <span className="text-primary me-1"><BsFillSendFill /></span> IND</p>
                                                             <p className="mt-2 text-start text-secondary">{item.sender_description ? item.sender_description.split(" ").slice(0, 30).join(" ") + "..." : item.sender_description}</p>
                                                             <div className="d-flex flex-column flex-md-row gap-4">
                                                                 <div className="pe-3 border-end border-1">
-                                                                    <FaLocationDot className='fs-4 pe-1' style={{ color: '#FF5722' }} /> <span className="text-secondary">Weight: {item.p_weight}</span>
+                                                                    <FaLocationDot className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Weight: {item.p_weight}</span>
                                                                 </div>
                                                                 <div className="pe-3 border-end border-1">
-                                                                    <FaTruckLoading className='fs-4 pe-1' style={{ color: '#FF5722' }} /> <span className="text-secondary">Pick up: {item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</span>
+                                                                    <FaTruckLoading className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Pick up: {item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</span>
                                                                 </div>
                                                                 <div className="pe-3">
-                                                                    <FaTruckMoving className='fs-4 pe-1' style={{ color: '#FF5722' }} /> <span className="text-secondary">Posted {item.days_ago} </span>
+                                                                    <FaTruckMoving className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Posted {item.days_ago} </span>
                                                                 </div>
                                                             </div>
                                                         </div>

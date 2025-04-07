@@ -202,7 +202,7 @@ const CompaniesList = () => {
                     <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-3 mt-md-5 w-100">
                         <div className="d-flex flex-column align-items-start p-3 ps-5 pb-5 col-12 col-md-3">
                             <div className="title-head">
-                                <h3><span style={{ color: ' #FF5722' }}><FaFilter /> </span>Filters by :</h3>
+                                <h3><span style={{ color: ' #de8316' }}><FaFilter /> </span>Filters by :</h3>
                             </div>
                             {(selectedPickupCountry || selectedDestinationCountry) && (
                                 <>
@@ -288,13 +288,13 @@ const CompaniesList = () => {
                                                             <p className="mt-2 text-start text-secondary">{item.description.split(" ").slice(0, 30).join(" ") + "..."}</p>
                                                             <div className="d-flex flex-column flex-md-row gap-4">
                                                                 <div className="pe-3 border-end border-1">
-                                                                    <FaLocationDot className='fs-4 pe-1 ' style={{ color: '#FF5722' }} /> <span className="text-secondary">{item.location1.split(",")[0].trim()}</span>
+                                                                    <FaLocationDot className='fs-4 pe-1 ' style={{ color: '#de8316' }} /> <span className="text-secondary">{item.location1.split(",")[0].trim()}</span>
                                                                 </div>
                                                                 <div className="pe-3 border-end border-1">
-                                                                    <FaTruckLoading className='fs-4 pe-1    ' style={{ color: '#FF5722' }} /> <span className="text-secondary">2k+ Delivery Completed</span>
+                                                                    <FaTruckLoading className='fs-4 pe-1    ' style={{ color: '#de8316' }} /> <span className="text-secondary">2k+ Delivery Completed</span>
                                                                 </div>
                                                                 <div className="pe-3">
-                                                                    <FaTruckMoving className='fs-4 pe-1 ' style={{ color: '#FF5722' }} /> <span className="text-secondary">Offers {item.container_service ? 'Containers' : ''}{item.car_service ? ' & Cars' : ''}</span>
+                                                                    <FaTruckMoving className='fs-4 pe-1 ' style={{ color: '#de8316' }} /> <span className="text-secondary">Offers {item.container_service ? 'Containers' : ''}{item.car_service ? ' & Cars' : ''}</span>
                                                                 </div>
                                                             </div>
                                                         </div>

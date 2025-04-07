@@ -43,7 +43,7 @@
     border: none;
     border-radius: 5px;
     background-color: #ffffff;
-    color: #FF5722;
+    color: #de8316;
 }
 
 .search-wrapper {
@@ -103,8 +103,8 @@
 .btn-main {
     padding: 12px 30px;
     color: #fff;
-    background-color: #FF5722;
-    border: 1px solid #FF5722;
+    background-color: #de8316;
+    border: 1px solid #de8316;
     border-radius: 6px;
     margin: 50px auto 0 auto;
 }
@@ -115,7 +115,7 @@
 
 .step-text-wrapper h4 {
     font-size: 22px;
-    color: #FF5722;
+    color: #de8316;
     font-weight: bold;
 }
 
@@ -272,8 +272,8 @@
 .btn-register{
     padding: 12px 30px;
     color: #fff;
-    background-color: #FF5722;
-    border: 1px solid #FF5722;
+    background-color: #de8316;
+    border: 1px solid #de8316;
     border-radius: 6px;
 }
 
@@ -305,7 +305,7 @@
 
 .footer-wrap .follow li{
     display: inline-block;
-    color: #FF5722;
+    color: #de8316;
     font-size: 22px;
     padding-right: 12px;
 }
@@ -350,8 +350,8 @@ padding: 12px;
 .btn-main-offer {
     padding: 12px 30px;
     color: #fff;
-    background-color: #FF5722;
-    border: 1px solid #FF5722;
+    background-color: #de8316;
+    border: 1px solid #de8316;
     border-radius: 6px;
     margin-top: 30px;
 }
@@ -545,7 +545,7 @@ svg {
 }
 
 .custom-progress-bar {
-    background: #FF5722; 
+    background: #de8316; 
     height: 5px; 
     border-radius: 2px; 
   }

@@ -108,16 +108,16 @@ const CompanyDetails = () => {
                         <div className="p-4 company-details-wrap my-4 gap-3 d-flex flex-column">
                             <h4>Company Information</h4>
                             <span className="text-secondary d-block">
-                                <FaUserEdit className="fs-5 me-1" style={{ color: '#FF5722' }} /> Completed 10k+ Orders
+                                <FaUserEdit className="fs-5 me-1" style={{ color: '#de8316' }} /> Completed 10k+ Orders
                             </span>
                             <span className="text-secondary d-block">
-                                <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                 {company.location1}
                             </span>
                             {company.location2 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location2}
                                     </span>
                                 </>
@@ -125,7 +125,7 @@ const CompanyDetails = () => {
                             {company.location3 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location3}
                                     </span>
                                 </>
@@ -133,7 +133,7 @@ const CompanyDetails = () => {
                             {company.location4 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location4}
                                     </span>
                                 </>
@@ -141,7 +141,7 @@ const CompanyDetails = () => {
                             {company.location5 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location5}
                                     </span>
                                 </>
@@ -149,7 +149,7 @@ const CompanyDetails = () => {
                             {company.location6 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location6}
                                     </span>
                                 </>
@@ -157,7 +157,7 @@ const CompanyDetails = () => {
                             {company.location7 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location7}
                                     </span>
                                 </>
@@ -165,7 +165,7 @@ const CompanyDetails = () => {
                             {company.location8 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location8}
                                     </span>
                                 </>
@@ -173,7 +173,7 @@ const CompanyDetails = () => {
                             {company.location9 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location9}
                                     </span>
                                 </>
@@ -181,18 +181,18 @@ const CompanyDetails = () => {
                             {company.location10 && (
                                 <>
                                     <span className="text-secondary d-block">
-                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Based in{" "}
+                                        <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}
                                         {company.location10}
                                     </span>
                                 </>
                             )}
                             <span className="text-secondary d-block">
-                                <FaTruckMoving className="fs-5 me-1" style={{ color: '#FF5722' }} /> Offers{" "}
+                                <FaTruckMoving className="fs-5 me-1" style={{ color: '#de8316' }} /> Offers{" "}
                                 {company.container_service ? "Containers" : ""}
                                 {company.car_service ? " & Cars" : ""}
                             </span>
                             <span className="text-secondary d-block">
-                                <FaMapLocationDot className="fs-5 me-1" style={{ color: '#FF5722' }} /> Ship to -{" "}
+                                <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to -{" "}
                                 {company.Countries.map((item, index) => (
                                     <span key={index}>{item.countries}, </span>
                                 ))}
@@ -272,19 +272,19 @@ const CompanyDetails = () => {
                                 <div className='title-head'><h3>Company Details</h3></div>
 
                                 <div className='details-wrap w-100 text-start'>
-                                    <span>< FaBuilding className='fs-4 me-2' style={{ color: '#FF5722', width: '20px' }} />Name -: {company.company_name}</span>
+                                    <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {company.company_name}</span>
                                 </div>
 
                                 <div className='details-wrap w-100 text-start'>
-                                    <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#FF5722', width: '20px' }} />E-mail -: <a href={`mailto:"${company.email}"`}>{company.email}</a></span>
+                                    <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${company.email}"`}>{company.email}</a></span>
                                 </div>
 
                                 <div className='details-wrap w-100 text-start'>
-                                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#FF5722', width: '20px' }} />Contact Number-: {company.contect_no}</span>
+                                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {company.contect_no}</span>
                                 </div>
 
                                 <div className='details-wrap w-100 text-start'>
-                                    <span>< FaLocationDot className='fs-4 me-2' style={{ color: '#FF5722', width: '20px' }} />Location -: {company.location1.split(",")[2].trim()} {company.location2 && <>, {company.location2.split(",")[2].trim()}</>} {company.location3 && <>, {company.location3.split(",")[2].trim()}</>} {company.location4 && <>, {company.location4.split(",")[2].trim()}</>} {company.location6 && <>, {company.location6.split(",")[2].trim()}</>} {company.location7 && <>, {company.location7.split(",")[2].trim()}</>} {company.location8 && <>, {company.location8.split(",")[2].trim()}</>} {company.location9 && <>, {company.location9.split(",")[2].trim()}</>} {company.location10 && <>, {company.location10.split(",")[2].trim()}</>} {company.location10 && <>, {company.location10.split(",")[2].trim()}</>}</span>
+                                    <span>< FaLocationDot className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Location -: {company.location1.split(",")[2].trim()} {company.location2 && <>, {company.location2.split(",")[2].trim()}</>} {company.location3 && <>, {company.location3.split(",")[2].trim()}</>} {company.location4 && <>, {company.location4.split(",")[2].trim()}</>} {company.location6 && <>, {company.location6.split(",")[2].trim()}</>} {company.location7 && <>, {company.location7.split(",")[2].trim()}</>} {company.location8 && <>, {company.location8.split(",")[2].trim()}</>} {company.location9 && <>, {company.location9.split(",")[2].trim()}</>} {company.location10 && <>, {company.location10.split(",")[2].trim()}</>} {company.location10 && <>, {company.location10.split(",")[2].trim()}</>}</span>
                                 </div>
                             </div>
                         </div>

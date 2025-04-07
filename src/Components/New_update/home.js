@@ -255,7 +255,7 @@ const Home = () => {
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="d-flex flex-column align-items-center">
                             <div className="features-head">
-                                <span style={{ fontSize: '3rem', color: '#FF5722' }}><BiSolidDetail /></span>
+                                <span style={{ fontSize: '3rem', color: '#de8316' }}><BiSolidDetail /></span>
                                 <h5>Easy Shipment Details</h5>
                                 <p >Simply provide your shipment details to get a tailored list of logistics companies</p>
                             </div>
@@ -264,7 +264,7 @@ const Home = () => {
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="d-flex flex-column align-items-center">
                             <div className="features-head">
-                                <span style={{ fontSize: '3rem', color: '#FF5722' }}><IoLocationSharp /></span>
+                                <span style={{ fontSize: '3rem', color: '#de8316' }}><IoLocationSharp /></span>
                                 <h5>Location-based Filtering</h5>
                                 <p>Filter shipping companies by your destination and origin for precise results</p>
                             </div>
@@ -274,7 +274,7 @@ const Home = () => {
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="d-flex flex-column align-items-center">
                             <div className="features-head">
-                                <span style={{ fontSize: '3rem', color: '#FF5722' }}><FaTruckFast /></span>
+                                <span style={{ fontSize: '3rem', color: '#de8316' }}><FaTruckFast /></span>
                                 <h5>Shipping Methods</h5>
                                 <p>Choose your preferred shipping method and connect with the right partners</p>
                             </div>
@@ -284,7 +284,7 @@ const Home = () => {
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="d-flex flex-column align-items-center">
                             <div className="features-head">
-                                <span style={{ fontSize: '3rem', color: '#FF5722' }}><MdDeliveryDining /></span>
+                                <span style={{ fontSize: '3rem', color: '#de8316' }}><MdDeliveryDining /></span>
                                 <h5>Pickup Service</h5>
                                 <p >Shipping companies will send their professionals to pick up your goods from your location</p>
                             </div>

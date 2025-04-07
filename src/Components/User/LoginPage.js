@@ -163,7 +163,7 @@ const LoginPage = () => {
                 <div className="d-flex align-items-start justify-content-between p-2 ps-3 pe-3 w-100 border rounded-5">
                   <div
                     className={'tab-btn'}
-                    style={{ cursor: "pointer", backgroundColor: selected === "individual" ? "#FF5722" : "", color: selected === "individual" ? "white" : "" }}
+                    style={{ cursor: "pointer", backgroundColor: selected === "individual" ? "#de8316" : "", color: selected === "individual" ? "white" : "" }}
                     onClick={() => setSelected("individual")}
                   >
                     <p onClick={() => setSelected('individual')}>As an individual</p>
@@ -171,7 +171,7 @@ const LoginPage = () => {
 
                   <div
                     className={'tab-btn'}
-                    style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#FF5722" : "", color: selected === "company" ? "white" : "" }}
+                    style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#de8316" : "", color: selected === "company" ? "white" : "" }}
                     onClick={() => { setSelected('company'); if (isSignup) { navigate('/register_company') } }}
                   >
                     <p onClick={() => setSelected('company')}>As a company</p>
