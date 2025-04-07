@@ -29,7 +29,7 @@
     /* background-image: url(../../../public/Images/naviviz_hero_image.png);
     background-repeat: no-repeat;
     position: relative; */
-    background-image: url(../../../public/Images/hero_img.jpg);
+    background-image: url(../../../public/Images/header_image.jpg);
     background-repeat: no-repeat;
     background-size: cover; /* or 'contain' depending on your goal */
     background-position: center; /* ensures image is centered */
@@ -56,6 +56,7 @@
     font-size: 42px;
     font-weight: bold;
     color: #fff;
+    line-height: 52px;
 }
 
 .hero-wrap-head p {
@@ -63,7 +64,7 @@
     color: #fff;
     width: 75%;
     margin: 18px auto;
-    line-height: 52px;
+    line-height: 28px;
 }
 
 .title-head h3 {
