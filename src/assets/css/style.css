@@ -9,7 +9,7 @@
 }
 
 .navbar-wrapper {
-    background-color: #0044BC;
+    background-color: #010037;
     width: 100%;
     padding: 8px 0;
     /* position: fixed;
@@ -21,11 +21,28 @@
 
 .hero-wrapper {
     width: 100%;
-    min-height: 43vh;
+    min-height: 55vh;
     padding-top: 70px;
-    border-radius: 0 0 30px 30px;
-    background-color: rgb(0, 68, 188);
+    /* border-radius: 0 0 30px 30px; */
+    /* background-color: rgb(0, 68, 188); */
+    /* background-image: url(../../../public/Images/naviviz_hero_image.png);
+    background-repeat: no-repeat;
+    position: relative; */
+    background-image: url(../../../public/Images/naviviz_hero_image.png);
+    background-repeat: no-repeat;
+    background-size: cover; /* or 'contain' depending on your goal */
+    background-position: center; /* ensures image is centered */
     position: relative;
+}
+.pickup-wrap{
+    margin: 40px 0;
+}
+.pickup-wrap button{
+    padding: 12px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #FF5722;
 }
 
 .search-wrapper {

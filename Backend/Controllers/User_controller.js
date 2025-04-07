@@ -159,5 +159,16 @@ const Send_message = (req, res) => {
     res.json(value);
 }
 
+const payment_history = (req, res) => {
+    const id = req.user.userid;
+    db.query('SELECT * FROM payment_info_customers WHERE user_id = ?', [id], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: result, status: true });
+        }
+    })
+}
 
-module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message };
+module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history };

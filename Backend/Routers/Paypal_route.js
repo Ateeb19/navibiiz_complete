@@ -11,6 +11,6 @@ const {
 Routers.route('/api/orders').post(create_order_api);
 Routers.route('/api/orders/:orderID/capture').post(capture_order_route);
 // Routers.route('/create-order', create_order_api);
-Routers.route('/api/save_transaction').post(send_information);
+Routers.route('/api/save_transaction').post(AuthenticateToken, send_information);
 
 module.exports = Routers;

@@ -296,13 +296,13 @@ const Dashboard = () => {
         Authorization: token,
       }
     }).then((response) => {
-      if(response.data.status === true) {
+      if (response.data.status === true) {
         setTotal_companies(response.data.message.count);
-      }else{
+      } else {
         setTotal_companies('');
       }
-      console.log(response.data, 'this is the data 1');
-    }).catch((err) => {console.log(err)});
+      // console.log(response.data, 'this is the data 1');
+    }).catch((err) => { console.log(err) });
   }
 
   const total_users = () => {
@@ -311,13 +311,13 @@ const Dashboard = () => {
         Authorization: token,
       }
     }).then((response) => {
-      if(response.data.status === true) {
+      if (response.data.status === true) {
         setTotal_user(response.data.message.count);
-      }else{
+      } else {
         setTotal_user('');
       }
-      console.log(response.data, 'this is the data 2');
-    }).catch((err) => {console.log(err)});
+      // console.log(response.data, 'this is the data 2');
+    }).catch((err) => { console.log(err) });
   }
 
 
@@ -327,11 +327,44 @@ const Dashboard = () => {
     displayGroupageUser();
     offersForUser();
     displayallOffers();
+    display_admin_Offers();
     total_company();
     total_users();
+    payment_history_user();
+    payment_history();
     // user_requests();
   }, []);
 
+  const [user_payment_history, setUser_payment_history] = useState([]);
+  const payment_history_user = () => {
+    axios.get(`${port}/user/payment_history`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      if (response.data.status === true) {
+        setUser_payment_history(response.data.message);
+      } else {
+        setUser_payment_history('');
+      }
+    }).catch((err) => { console.log(err) });
+  }
+  // console.log(user_payment_history, 'this is the payment');
+
+  const [S_admin_payment, setS_admin_payment] = useState([]);
+  const payment_history = () => {
+    axios.get(`${port}/S_admin/payment_history`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      if (response.data.status === true) {
+        setS_admin_payment(response.data.message);
+      } else {
+        setS_admin_payment('');
+      }
+    }).catch((err) => { console.log(err) });
+  }
 
   const handleViewClick = (company) => {
     setSelectedCompany(company);
@@ -752,7 +785,6 @@ const Dashboard = () => {
       // console.log(response.data, 'offers');
     }).catch((err) => { console.log(err); });
   }
-
   const [selected_offer, setSelected_offer] = useState(null);
   const handleShowOffer = (item) => {
     axios.get(`${port}/send_groupage/groupage_info/${item.order_id}`, {
@@ -763,7 +795,7 @@ const Dashboard = () => {
       setSelected_offer({ ...response.data.message, ...item });
     }).catch((err) => { console.log(err); });
   }
-
+  // console.log(selected_offer, 'this is the selected offer');
   const handleDeleteoffer = (item) => {
     openDeleteModal("Are you sure you want to delete this offer?", () => {
       axios.delete(`${port}/send_groupage/delete_offer_user/${item}`, {
@@ -811,18 +843,23 @@ const Dashboard = () => {
   }
 
   const handleAcceptOffer = (item) => {
-    // axios.get(`${port}/send_groupage/update_offer_status/${item.offer_id}`, {
-    //   headers: {
-    //     Authorization: token,
-    //   }
-    // }).then((response) => {
-    //   alert(response.data.message);
-    //   window.location.reload();
-    // }).catch((err) => { console.log(err); });
-
-
   }
 
+  const [admin_offer, setAdmin_offer] = useState([]);
+  const display_admin_Offers = () => {
+    axios.get(`${port}/admin/display_offer`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      if (response.data.status === true) {
+        setAdmin_offer(response.data.message);
+      } else {
+        setAdmin_offer([]);
+      }
+      // console.log(response.data);
+    }).catch((err) => { });
+  }
   const [allOffers, setAllOffers] = useState([]);
   const displayallOffers = () => {
     axios.get(`${port}/s_admin/show_all_offers`, {
@@ -832,10 +869,10 @@ const Dashboard = () => {
     }).then((response) => {
       // console.log(response.data);
       setAllOffers(response.data.data);
-    }).catch((err) => { console.log(err); });
+    }).catch((err) => { });
   }
 
-  console.log(allOffers);
+  // console.log(allOffers);
 
 
   const tableRef = useRef(null);
@@ -869,7 +906,7 @@ const Dashboard = () => {
     setShowOfferDetails(item);
   }
   // console.log(showOfferDetails);
-  console.log(selectedCompany)
+  // console.log(selectedCompany)
   const Menu = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedItem, setSelectedItem] = useState('Dashboard');
@@ -1025,11 +1062,15 @@ const Dashboard = () => {
                           </Link>
                         </li>
 
-                        <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
-                            <MdPayment /> Payment History
-                          </Link>
-                        </li>
+                        {userRole === 'user' && (
+                          <>
+                            <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                                <MdPayment /> Payment History
+                              </Link>
+                            </li>
+                          </>
+                        )}
                       </>
                     )}
 
@@ -1328,10 +1369,10 @@ const Dashboard = () => {
                                 <td className="text-secondary">{item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</td>
                                 <td className="text-secondary">
                                   <span className="p-2 fw-bold" style={{
-                                    backgroundColor: item.payment_status === 'unpaid' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)',
-                                    color: item.payment_status === 'unpaid' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)'
+                                    backgroundColor: item.payment_status === 'panding' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)',
+                                    color: item.payment_status === 'panding' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)'
                                   }}>
-                                    {item.payment_status === 'unpaid' ? 'Unpaid' : 'Paid'}
+                                    {item.payment_status === 'panding' ? 'Unpaid' : 'Paid'}
                                   </span>
                                 </td>
                                 <td className="text-secondary">
@@ -1910,6 +1951,52 @@ const Dashboard = () => {
                   </Dropdown>
                 </div>
               </div>
+
+              <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                <div className="d-flex ps-4 w-100 justify-content-start">
+                  <label className="fs-3"><strong>Payment History</strong></label>
+                </div>
+              </div>
+              <div className="dashboard-wrapper-box">
+                <div className="table-wrap">
+                  <div className="table-responsive" style={{
+                    width: "100%",
+                    overflowX: "auto",
+                    whiteSpace: "nowrap",
+                  }}>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col"><h6>Order Id</h6></th>
+                          <th scope="col"><h6>Transaction Id</h6></th>
+                          <th scope="col"><h6>Offer Id</h6></th>
+                          <th scope="col"><h6>Amount ($)</h6></th>
+                          <th scope="col"><h6>Status</h6></th>
+                        </tr>
+                      </thead>
+                      {user_payment_history && user_payment_history.length > 0 ? (
+                        <tbody>
+                          {user_payment_history.map((item, index) => (
+                            <tr key={index}>
+                              <td className="text-secondary">{item.order_id}</td>
+                              <td className="text-secondary">{item.transaction_id}</td>
+                              <td className="text-secondary">{item.offer_id}</td>
+                              <td className="text-secondary">{item.amount}</td>
+                              <td className="text-secondary">{item.status}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      ) : (
+                        <tbody>
+                          <tr>
+                            <td colSpan="6" className="text-center text-secondary">No Data</td>
+                          </tr>
+                        </tbody>
+                      )}
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </>
         )}
@@ -1951,103 +2038,201 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="dashboard-wrapper-box">
-                <div className="table-wrap">
+              {userRole === 'admin' ? (
+                <>
+                  <div className="dashboard-wrapper-box">
+                    <div className="table-wrap">
 
-                  <div className="table-filter-wrap">
-                    <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
-                      <h5>Filter By:</h5>
-                      <div className="row w-100 g-2 mt-1 ">
-                        <div className="col-12 col-md-6 col-lg-3">
-                          <input
-                            type="text"
-                            placeholder="Search by product name or order id"
-                            className="shipping-input-field"
-                          />
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-3">
-                          <Countries_selector label="Pick Up Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-3">
-                          <Countries_selector label="Destination Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-3 position-relative">
-                          <input
-                            type="text"
-                            readOnly
-                            className="shipping-input-field"
-                            value={
-                              state[0].endDate
-                                ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
-                                : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
-                            }
-                            onClick={() => setShowCalendar(!showCalendar)}
-                            style={{ cursor: "pointer" }}
-                          />
-                          {showCalendar && (
-                            <div
-                              className="position-absolute bg-white rounded shadow-sm p-2"
-                              style={{ top: "40px", zIndex: 1000 }}
-                            >
-                              <DateRange
-                                editableDateInputs={true}
-                                onChange={(item) => setState([item.selection])}
-                                moveRangeOnFirstSelection={false}
-                                ranges={state}
+                      <div className="table-filter-wrap">
+                        <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
+                          <h5>Filter By:</h5>
+                          <div className="row w-100 g-2 mt-1 ">
+                            <div className="col-12 col-md-6 col-lg-3">
+                              <input
+                                type="text"
+                                placeholder="Search by product name or order id"
+                                className="shipping-input-field"
                               />
                             </div>
-                          )}
+                            <div className="col-12 col-md-6 col-lg-3">
+                              <Countries_selector label="Pick Up Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-3">
+                              <Countries_selector label="Destination Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-3 position-relative">
+                              <input
+                                type="text"
+                                readOnly
+                                className="shipping-input-field"
+                                value={
+                                  state[0].endDate
+                                    ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
+                                    : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
+                                }
+                                onClick={() => setShowCalendar(!showCalendar)}
+                                style={{ cursor: "pointer" }}
+                              />
+                              {showCalendar && (
+                                <div
+                                  className="position-absolute bg-white rounded shadow-sm p-2"
+                                  style={{ top: "40px", zIndex: 1000 }}
+                                >
+                                  <DateRange
+                                    editableDateInputs={true}
+                                    onChange={(item) => setState([item.selection])}
+                                    moveRangeOnFirstSelection={false}
+                                    ranges={state}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
+                      </div>
+                      <div className="table-responsive" style={{
+                        width: "100%",
+                        overflowX: "auto",
+                        whiteSpace: "nowrap",
+                      }}>
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th scope="col"><h6>Order Id</h6></th>
+                              <th scope="col"><h6>Product Name</h6></th>
+                              <th scope="col"><h6>Offer From</h6></th>
+                              <th scope="col"><h6>Price ($)</h6></th>
+                              <th scope="col"><h6>Pick Up Date</h6></th>
+                              <th scope="col"><h6>Offer Status</h6></th>
+                            </tr>
+                          </thead>
+                          {admin_offer && admin_offer.length > 0 ? (
+                            <tbody>
+                              {admin_offer.map((item, index) => (
+                                <tr key={index}>
+                                  <td className="text-primary">#{item.offer_id}</td>
+                                  <td className="text-secondary">{item.product_name}</td>
+                                  <td className="text-secondary">{item.sender_name}</td>
+                                  <td className="text-secondary">{item.amount}</td>
+                                  <td className="text-secondary">{item.pickup_date}</td>
+                                  <td className="text-secondary"><span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: '#9B8100' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: '#006E09' }}>{item.status}</span></td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          ) : (
+                            <tbody>
+                              <tr>
+                                <td colSpan="6" className="text-center text-secondary">No Data</td>
+                              </tr>
+                            </tbody>
+                          )}
+                        </table>
                       </div>
                     </div>
                   </div>
-                  <div className="table-responsive" style={{
-                    width: "100%",
-                    overflowX: "auto",
-                    whiteSpace: "nowrap",
-                  }}>
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th scope="col"><h6>Order Id</h6></th>
-                          <th scope="col"><h6>Product Name</h6></th>
-                          <th scope="col"><h6>Offer From</h6></th>
-                          <th scope="col"><h6>Price ($)</h6></th>
-                          <th scope="col"><h6>Delivery Duration</h6></th>
-                          <th scope="col"><h6>Actions</h6></th>
-                        </tr>
-                      </thead>
-                      {offers && offers.length > 0 ? (
-                        <tbody>
-                          {offers.map((item, index) => (
-                            <tr key={index}>
-                              <td className="text-primary">#{item.order_id}</td>
-                              <td className="text-secondary">{item.product_name}</td>
-                              <td className="text-secondary">XXXXX-XXX</td>
-                              <td className="text-secondary">{item.price}</td>
-                              <td className="text-secondary">{item.delivery_duration}</td>
-                              <td className="d-flex align-items-center justify-content-center w-100 gap-3">
-                                <button className="btn btn-sm text-light " style={{ backgroundColor: '#31b23c' }} onClick={() => handleShowOffer(item)}>
-                                  Accept
-                                </button>
-                                <button className="btn btn-sm text-light" style={{ backgroundColor: '#c63d3d' }} onClick={() => handleDeleteoffer(item.offer_id)}>
-                                  Reject
-                                </button>
-                              </td>
+                </>
+              ) : (
+                <>
+                  <div className="dashboard-wrapper-box">
+                    <div className="table-wrap">
+
+                      <div className="table-filter-wrap">
+                        <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
+                          <h5>Filter By:</h5>
+                          <div className="row w-100 g-2 mt-1 ">
+                            <div className="col-12 col-md-6 col-lg-3">
+                              <input
+                                type="text"
+                                placeholder="Search by product name or order id"
+                                className="shipping-input-field"
+                              />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-3">
+                              <Countries_selector label="Pick Up Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-3">
+                              <Countries_selector label="Destination Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-3 position-relative">
+                              <input
+                                type="text"
+                                readOnly
+                                className="shipping-input-field"
+                                value={
+                                  state[0].endDate
+                                    ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}`
+                                    : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`
+                                }
+                                onClick={() => setShowCalendar(!showCalendar)}
+                                style={{ cursor: "pointer" }}
+                              />
+                              {showCalendar && (
+                                <div
+                                  className="position-absolute bg-white rounded shadow-sm p-2"
+                                  style={{ top: "40px", zIndex: 1000 }}
+                                >
+                                  <DateRange
+                                    editableDateInputs={true}
+                                    onChange={(item) => setState([item.selection])}
+                                    moveRangeOnFirstSelection={false}
+                                    ranges={state}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="table-responsive" style={{
+                        width: "100%",
+                        overflowX: "auto",
+                        whiteSpace: "nowrap",
+                      }}>
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th scope="col"><h6>Order Id</h6></th>
+                              <th scope="col"><h6>Product Name</h6></th>
+                              <th scope="col"><h6>Offer From</h6></th>
+                              <th scope="col"><h6>Price ($)</h6></th>
+                              <th scope="col"><h6>Delivery Duration</h6></th>
+                              <th scope="col"><h6>Actions</h6></th>
                             </tr>
-                          ))}
-                        </tbody>
-                      ) : (
-                        <tbody>
-                          <tr>
-                            <td colSpan="6" className="text-center text-secondary">No Data</td>
-                          </tr>
-                        </tbody>
-                      )}
-                    </table>
+                          </thead>
+                          {offers && offers.length > 0 ? (
+                            <tbody>
+                              {offers.map((item, index) => (
+                                <tr key={index}>
+                                  <td className="text-primary">#{item.order_id}</td>
+                                  <td className="text-secondary">{item.product_name}</td>
+                                  <td className="text-secondary">XXXXX-XXX</td>
+                                  <td className="text-secondary">{item.price}</td>
+                                  <td className="text-secondary">{item.delivery_duration}</td>
+                                  <td className="d-flex align-items-center justify-content-center w-100 gap-3">
+                                    <button className="btn btn-sm text-light " style={{ backgroundColor: '#31b23c' }} onClick={() => handleShowOffer(item)}>
+                                      Accept
+                                    </button>
+                                    <button className="btn btn-sm text-light" style={{ backgroundColor: '#c63d3d' }} onClick={() => handleDeleteoffer(item.offer_id)}>
+                                      Reject
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          ) : (
+                            <tbody>
+                              <tr>
+                                <td colSpan="6" className="text-center text-secondary">No Data</td>
+                              </tr>
+                            </tbody>
+                          )}
+                        </table>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </>
+              )}
+
             </div>
           </>
         )}
@@ -2254,7 +2439,7 @@ const Dashboard = () => {
               </div>
 
               <div className="d-flex mt-3 p-3 pt-1 flex-column justify-content-start align-items-start m-2 rounded-1 dashboard-wrap-box" >
-                
+
                 <div className="d-flex flex-column align-items-start justify-content-start ps-2 my-3 w-100">
                   <h5>Filters By:</h5>
                   <div className="row w-100">
@@ -3121,77 +3306,49 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
-                <div className="d-flex ps-4 w-50 justify-content-start">
-                  <label className="fs-3"><strong>Payments</strong></label>
+              <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                <div className="d-flex ps-4 w-100 justify-content-start">
+                  <label className="fs-3"><strong>Payment History</strong></label>
                 </div>
               </div>
-
-              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-2 rounded-1"
-                style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-
-                <div className="d-flex w-50 justify-content-start">
-                  <h4>Latest Offers</h4>
-                </div>
-
-                <div className="d-flex w-50 justify-content-start mt-3">
-                  <h5>Filters By:</h5>
-                </div>
-                <div className="row w-100 mb-3">
-                  <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-start">
-                    <label className="text-secondary fs-5">Search here</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <input type="text" className="form-control mt-1" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Search here..." />
-                    </div>
+              <div className="dashboard-wrapper-box">
+                <div className="table-wrap">
+                  <div className="table-responsive" style={{
+                    width: "100%",
+                    overflowX: "auto",
+                    whiteSpace: "nowrap",
+                  }}>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col"><h6>Order Id</h6></th>
+                          <th scope="col"><h6>Transaction Id</h6></th>
+                          <th scope="col"><h6>Offer Id</h6></th>
+                          <th scope="col"><h6>Amount ($)</h6></th>
+                          <th scope="col"><h6>Status</h6></th>
+                        </tr>
+                      </thead>
+                      {S_admin_payment && S_admin_payment.length > 0 ? (
+                        <tbody>
+                          {S_admin_payment.map((item, index) => (
+                            <tr key={index}>
+                              <td className="text-secondary">{item.order_id}</td>
+                              <td className="text-secondary">{item.transaction_id}</td>
+                              <td className="text-secondary">{item.offer_id}</td>
+                              <td className="text-secondary">{item.amount}</td>
+                              <td className="text-secondary">{item.status}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      ) : (
+                        <tbody>
+                          <tr>
+                            <td colSpan="6" className="text-center text-secondary">No Data</td>
+                          </tr>
+                        </tbody>
+                      )}
+                    </table>
                   </div>
-
-                  <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-start">
-                    <label className="text-secondary fs-5">Pick up Country</label>
-                    <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <Countries_selector />
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-start">
-                    <label className="text-secondary fs-5">Destination Country</label>
-                    <div className="p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <Countries_selector />
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-start">
-                    <label className="text-secondary fs-5">Pick up date</label>
-                    <div className="d-flex p-1 rounded-3 mt-1 w-100" style={{ backgroundColor: 'rgb(214, 214, 214)' }}>
-                      <input type="date" className="form-control mt-1" style={{ backgroundColor: 'rgb(214, 214, 214)' }} placeholder="Pick up date" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="table-responsive" style={{ width: '100%', overflowX: 'auto' }}>
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col"><h6>Order Id</h6></th>
-                        <th scope="col"><h6>Company Name</h6></th>
-                        <th scope="col"><h6>Payment Date</h6></th>
-                        <th scope="col"><h6>Amount($)</h6></th>
-                        <th scope="col"><h6>Offer Received By</h6></th>
-                        <th scope="col"><h6>Status</h6></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="text-primary">#561256</td>
-                        <td className="text-secondary">Test Company</td>
-                        <td className="text-secondary">Jan 18, 2025</td>
-                        <td className="text-dark"><b>450</b></td>
-                        <td className="text-secondary">Test Company</td>
-                        <td className="text-secondary">
-                          <span className="p-2 pe-4 ps-4 text-success fw-bold" style={{ backgroundColor: 'rgb(145, 255, 128)' }}>Paid</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
               </div>
             </div>
@@ -4353,7 +4510,7 @@ const Dashboard = () => {
           </div>
         )}
       </div> */}
-    </div>
+    </div >
   );
 };
 

@@ -21,6 +21,8 @@ import { FaWeightScale } from "react-icons/fa6";
 import { RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
 import { FaRuler } from "react-icons/fa";
 import { useAlert } from "../alert/Alert_message";
+import { IoSearch } from "react-icons/io5";
+
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -205,21 +207,27 @@ const Home = () => {
                                 </p>
                             </div>
                         </div>
+
+                        <div className="d-flex flex-row justify-content-center align-items-center px-3 pickup-wrap gap-4">
+                            <span><Countryselector label='Pick Up Country' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
+
+                            <button className="" onClick={handleSearch}><IoSearch className="fs-4"/> Search</button>
+                        </div>
                     </div>
                 </div>
             </section>
-            <section className="search-wrapper">
+            {/* <section className="search-wrapper">
                 <div className="container">
                     <div className="row bg-white rounded-3 p-3 shadow border">
                         <div className="col-12 col-md-9 border-end border-1 p-3 text-center text-md-start">
                             <h5>Pick Up</h5>
                             <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px 6px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                         </div>
-                        {/* <div className="col-12 col-md-3 border-end border-1 p-3 text-center text-md-start">
+                        <div className="col-12 col-md-3 border-end border-1 p-3 text-center text-md-start">
                             <h5>Delivery</h5>
                             <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px 6px" onSelectCountry={(country) => setDestinationCountry(country)} /></span>
-                        </div> */}
-                        {/* <div className="col-12 col-md-3 p-3 text-center text-md-start">
+                        </div>
+                        <div className="col-12 col-md-3 p-3 text-center text-md-start">
                             <h5>Service</h5>
                             <span>
                                 <Form.Select
@@ -232,7 +240,7 @@ const Home = () => {
                                     <option value="car">Car</option>
                                 </Form.Select>
                             </span>
-                        </div> */}
+                        </div>
                         <div className="col-12 col-md-3 p-3 text-center">
                             <button className="btn btn-light border border-danger text-danger w-100" onClick={handleSearch}>
                                 Search Shipping Companies
@@ -240,7 +248,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             <div className="container mt-4">
                 <div className="row g-4 text-center">

@@ -59,7 +59,46 @@ const Delete_company_admin = (req, res) => {
     }
 }
 
+const Display_offers = (req, res) => {
+    if (req.user.role === 'admin') {
+        db.query(`SELECT * FROM offers WHERE created_by_email = ?`, [req.user.useremail], (err, offersResult) => {
+            if (err) {
+                console.log(err);
+                return res.json({ message: 'Error fetching offers', status: false });
+            }
+
+            if (offersResult.length === 0) {
+                return res.json({ message: [], status: true }); // No offers found
+            }
+            const groupageIds = [...new Set(offersResult.map(offer => offer.groupage_id))];
+
+            db.query('SELECT id, product_name, pickup_date, sender_name FROM groupage WHERE id IN (?)', [groupageIds], (err, groupageResult) => {
+                if (err) {
+                    console.log(err);
+                    return res.json({ message: 'Error fetching groupage data', status: false });
+                }
+
+                const groupageMap = {};
+                groupageResult.forEach(groupage => {
+                    groupageMap[groupage.id] = groupage;
+                });
+
+                const offerData = offersResult.map(offer => {
+                    const groupage = groupageMap[offer.groupage_id] || {};
+                    return {
+                        ...offer,
+                        product_name: groupage.product_name || null,
+                        pickup_date: groupage.pickup_date || null,
+                        sender_name: groupage.sender_name || null
+                    };
+                });
+
+                res.json({ message: offerData, status: true });
+            });
+        });
+    }
+}
 
 
 
-module.exports = {Display_company, Delete_company_admin};
+module.exports = { Display_company, Delete_company_admin, Display_offers };

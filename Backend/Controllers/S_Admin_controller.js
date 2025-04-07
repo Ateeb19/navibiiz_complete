@@ -156,6 +156,19 @@ const Total_User_count = (req, res) => {
         res.json({message: 'You are not authorized', status: false});
     }
 }
+
+const payment_history = (req, res) => {
+    if(req.user.role === 'Sadmin') {
+        db.query('SELECT * FROM payment_info_customers' , (err, result) => {
+            if(err){
+                res.json({message: 'error in database', status: false})
+                console.log(err);
+            }else{
+                res.json({message: result, status: true});
+            }
+        })
+    }
+}
 module.exports = {
     Display_All_company,
     Delete_any_company,
@@ -164,5 +177,6 @@ module.exports = {
     Delete_user,
     show_all_offers,
     Total_company_count,
-    Total_User_count
+    Total_User_count,
+    payment_history
 };

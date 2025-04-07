@@ -12,6 +12,7 @@ import { IoIosAddCircleOutline } from "react-icons/io"
 const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
   const token = localStorage.getItem('token');
+  // console.log(token.length,'this is length')
   const port = process.env.REACT_APP_SECRET;
   const navigate = useNavigate();
   const user_login_state = localStorage.getItem('user_logins_type');
@@ -54,7 +55,7 @@ const Navbar = () => {
         }
       }).then((response) => {
         setUserInfo(response.data.message);
-      }).catch((err) => { console.log(err) });
+      }).catch((err) => { });
     }
   }, [userRole]);
 
@@ -82,7 +83,7 @@ const Navbar = () => {
   }
   const location = useLocation();
   const navStyle = {
-    backgroundColor: location.pathname === '/dashboard' ? ' #010037' : '#0044BC',
+    backgroundColor: location.pathname === '/dashboard' ? ' #010037' : ' #010037',
     position: 'relative'
   };
   const logout = () => {
@@ -123,14 +124,25 @@ const Navbar = () => {
         </div>
 
         <div className="d-none d-lg-flex justify-content-center align-items-center gap-4 flex-grow-1">
-          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>About Us</Link>
-          <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Companies</Link>
-          <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Offers</Link>
+          <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>Home</Link>
+          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>About Us</Link>
+          <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>Companies</Link>
+          <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>Offers</Link>
           {/* <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Contact Us</Link> */}
         </div>
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-2">
-
+          {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
+            <Link to="/register_company">
+              <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
+                {(userInfo && userInfo.role === 'Sadmin') ? (
+                  <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>
+                ) : (
+                  'Register Your Company'
+                )}
+              </button>
+            </Link>
+          )}
           {token ? (
             <>
               <Link to="/send_groupage">
@@ -138,21 +150,6 @@ const Navbar = () => {
                   <BsSendFill /> <span style={{ fontSize: '1rem' }}>Send through groupage</span>
                 </button>
               </Link>
-
-
-              {/* {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
-                <>
-                  {(user_login_state === 'company' && userInfo.role === 'Sadmin') && (
-                    <>
-                      <Link to="/register_company">
-                        <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
-                          {userInfo.role === 'Sadmin'? <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>: `Register Your Company`}
-                        </button>
-                      </Link>
-                    </>
-                  )}
-                </>
-              )} */}
 
               <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
@@ -177,12 +174,7 @@ const Navbar = () => {
               </Link>
             </>
           )}
-          <Link to="/register_company">
-            <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
-            {userInfo.role === 'Sadmin'? <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>: `Register Your Company`}
-              {/* <span>Register Your Company</span> */}
-            </button>
-          </Link>
+
         </div>
 
         {isOpen && (
@@ -194,11 +186,22 @@ const Navbar = () => {
             </button>
 
             <div className="d-flex flex-column text-center py-4 text-light">
+              <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>Home</Link>
               <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>About Us</Link>
               <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Companies</Link>
               <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Offers</Link>
               {/* <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Contact Us</Link> */}
-
+              {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
+                <Link to="/register_company">
+                  <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
+                    {(userInfo && userInfo.role === 'Sadmin') ? (
+                      <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>
+                    ) : (
+                      'Register Your Company'
+                    )}
+                  </button>
+                </Link>
+              )}
               {token ? (
                 <>
                   <Link to="/send_groupage" className="py-2">
@@ -206,14 +209,6 @@ const Navbar = () => {
                       <BsSendFill /> Send through groupage
                     </button>
                   </Link>
-                  {(userInfo.company === 'no' || userInfo.role === 'Sadmin') && (
-                    <>
-                      <Link to="/regester_company">
-                        <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#FF5722" }}>
-                          {userInfo.role === 'Sadmin' ? <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span> : `Register Your Company`}                        </button>
-                      </Link>
-                    </>
-                  )}
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
                   {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                     <Link to="/dashboard">

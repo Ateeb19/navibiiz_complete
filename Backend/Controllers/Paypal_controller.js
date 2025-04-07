@@ -183,19 +183,52 @@ const capture_order_route = async (req, res) => {
 // Function to send order information
 const send_information = (req, res) => {
     const { orderId, transactionId, offerId, amount, status } = req.body;
-
-    console.log(orderId, transactionId, offerId, amount, status);
+    const user_id = req.user.userid;
+    const user_email = req.user.useremail;
+    console.log(orderId, transactionId, offerId, amount, status, user_id, user_email);
     if (!orderId || !transactionId || !offerId || !amount || !status) {
         return res.status(400).json({ error: "Missing required fields." });
     }
-
-    res.json({
-        orderid: orderId,
-        transactionid: transactionId,
-        offerid: offerId,
-        amount: amount,
-        status: status,
-    });
+    db.query(
+        `INSERT INTO payment_info_customers (user_id, user_email, transaction_id, order_id, offer_id, amount, status) VALUES (?, ?, ?, ?, ?, ?, ?)`, [user_id, user_email, transactionId, orderId, offerId, amount, status],
+        (error, result) => {
+            if (error) {
+                // console.error("Error inserting transaction:", error);
+                return res.status(500).json({ error: "Error processing data" });
+            } else {
+                db.query('UPDATE offers SET status = ? , accepted = ? WHERE offer_id = ?', ['complete', 1, offerId], (error, result) => {
+                    if (error) {
+                        console.error("Error updating offer status:", error);
+                        return res.status(500).json({ error: "Error updating offer status" });
+                    }
+                });
+                db.query('SELECT groupage_id FROM offers WHERE offer_id = ?', [offerId], (error, result) => {
+                    if (error) {
+                        console.error("Error fetching groupage ID:", error);
+                        return res.status(500).json({ error: "Error fetching groupage ID" });
+                    } else {
+                        db.query('UPDATE groupage SET payment_status = ? WHERE id = ?', ['complete', result[0].groupage_id], (error, result) => {
+                            if (error) {
+                                console.error("Error updating offer status:", error);
+                                return res.status(500).json({ error: "Error updating offer status" });
+                            }
+                        });
+                    }
+                });
+                res.json({
+                    message: 'transaction successfull',
+                    orderid: orderId,
+                    transactionid: transactionId,
+                    offerid: offerId,
+                    amount: amount,
+                    status: status,
+                    user_id: user_id,
+                    user_email: user_email
+                });
+                console.log("Transaction inserted successfully:", result);
+            }
+        }
+    );
 };
 
 module.exports = {

@@ -13,6 +13,7 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
         currency: "USD",
         components: "buttons",
     };
+    const token = localStorage.getItem('token');
 
     return (
         <div>
@@ -29,7 +30,7 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
                                 },
                                 body: JSON.stringify({
                                     offer: {
-                                        id: selected_offer.id, // Pass the selected offer ID
+                                        id: selected_offer.offer_id, // Pass the selected offer ID
                                         amount: selected_offer.price, // Pass the selected offer price
                                         name: selected_offer.product_name, // Offer name
                                     },
@@ -64,12 +65,16 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
                                 await axios.post(`${port}/paypal/api/save_transaction`, {
                                     orderId: data.orderID,
                                     transactionId: transaction.id,
-                                    offerId: selected_offer.id,
+                                    offerId: selected_offer.offer_id,
                                     amount: transaction.amount.value,
                                     status: orderData.status,
+                                }, {
+                                    headers: {
+                                        Authorization: token,
+                                    }
                                 }).then((response) => {
                                     console.log(response.data);
-                                }).catch((err) => {console.log(err)});
+                                }).catch((err) => { console.log(err) });
 
                                 setMessage(`Transaction successful: ${transaction.id}`);
                                 console.log("Capture result", orderData);
