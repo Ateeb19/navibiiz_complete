@@ -918,15 +918,15 @@ const Dashboard = () => {
     };
 
     return (
-      <div className="d-flex flex-column align-items-center position-relative" style={{ backgroundColor: ' #010037', width: "100%", }}>
+      <div className="d-flex flex-column align-items-center position-relative" style={{ backgroundColor: ' #00232f', width: "100%", }}>
         <div className="d-flex align-items-center justify-content-between p-3 w-100 text-white" onClick={() => setShowMenu(!showMenu)} style={{ cursor: "pointer", borderBottom: "1px solid white" }}>
           <span>{selectedItem}</span>
           <MdKeyboardDoubleArrowDown size={24} />
         </div>
         {showMenu && (
-          <div className="position-absolute text-white w-100 p-3" style={{ backgroundColor: ' #010037', top: "50px", zIndex: 1000 }}>
+          <div className="position-absolute text-white w-100 p-3" style={{ backgroundColor: ' #00232f', top: "50px", zIndex: 1000 }}>
             <ul className="nav flex-column mt-4 fs-4 w-100">
-              <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+              <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                 <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Dashboard"); setActiveSection("dashboard"); localStorage.setItem("activeSection", "dashboard"); setSelectedCompany(''); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                   <MdDashboard /> Dashboard
                 </Link>
@@ -934,23 +934,23 @@ const Dashboard = () => {
 
               {userRole === 'Sadmin' || userRole === 'admin' ? (
                 <>
-                  <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                     <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Companies"); setActiveSection("companies"); localStorage.setItem("activeSection", "companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <BsBuildingsFill /> Companies
                     </Link>
                   </li>
-                  <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                     <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("offers"); localStorage.setItem("activeSection", "offers"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <FaUsers /> Offers
                     </Link>
                   </li>
-                  <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                     <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payments"); setActiveSection("payments"); localStorage.setItem("activeSection", "payments"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <RiSecurePaymentFill /> Payments
                     </Link>
                   </li>
                   {userData.length > 0 && (
-                    <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                       <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Roles & Permissions"); setActiveSection("users"); localStorage.setItem("activeSection", "users"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                         <FaUserGear /> Roles & Permissions
                       </Link>
@@ -959,19 +959,19 @@ const Dashboard = () => {
                 </>
               ) : (
                 <>
-                  <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                     <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Orders"); setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <FaBoxOpen /> Orders
                     </Link>
                   </li>
 
-                  <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                     <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <MdPayment /> Offers
                     </Link>
                   </li>
 
-                  <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                  <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                     <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payment History"); setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <MdPayment /> Payment History
                     </Link>
@@ -995,7 +995,7 @@ const Dashboard = () => {
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
       />
-      <div className='navbar-wrapper' style={{ backgroundColor: '#010037' }}>
+      <div className='navbar-wrapper'>
         <div className=" d-flex justify-content-center w-100">
           <Navbar />
         </div>
@@ -1013,7 +1013,7 @@ const Dashboard = () => {
               <div className="sidebar-wrap w-100">
                 <div className="d-flex align-items-start justify-content-start mt-5">
                   <ul className="nav flex-column mt-4 fs-4 w-100">
-                    <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                    <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                       <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("dashboard"); localStorage.setItem("activeSection", "dashboard"); setSelectedCompany(''); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                         <MdDashboard /> Dashboard
                       </Link>
@@ -1021,23 +1021,23 @@ const Dashboard = () => {
 
                     {userRole === 'Sadmin' ? (
                       <>
-                        <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                           <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("companies"); localStorage.setItem("activeSection", "companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                             <BsBuildingsFill /> Companies
                           </Link>
                         </li>
-                        <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                           <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("offers"); localStorage.setItem("activeSection", "offers"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                             <FaUsers /> Offers
                           </Link>
                         </li>
-                        <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                           <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payments"); localStorage.setItem("activeSection", "payments"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                             <RiSecurePaymentFill /> Payments
                           </Link>
                         </li>
                         {userData.length > 0 && (
-                          <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                          <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                             <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("users"); localStorage.setItem("activeSection", "users"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                               <FaUserGear /> Roles & Permissions
                             </Link>
@@ -1048,7 +1048,7 @@ const Dashboard = () => {
                       <>
                         {userRole === 'user' && (
                           <>
-                            <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                            <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                               <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                                 <FaBoxOpen /> Orders
                               </Link>
@@ -1056,7 +1056,7 @@ const Dashboard = () => {
                           </>
                         )}
 
-                        <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                           <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                             <MdPayment /> Offers
                           </Link>
@@ -1064,7 +1064,7 @@ const Dashboard = () => {
 
                         {userRole === 'user' && (
                           <>
-                            <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "rgb(0, 56, 111)", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                            <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                               <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                                 <MdPayment /> Payment History
                               </Link>

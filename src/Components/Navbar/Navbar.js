@@ -83,7 +83,7 @@ const Navbar = () => {
   }
   const location = useLocation();
   const navStyle = {
-    backgroundColor: location.pathname === '/dashboard' ? ' #010037' : ' #010037',
+    backgroundColor: location.pathname === '/dashboard' ? ' #00232f' : ' #00232f',
     position: 'relative'
   };
   const logout = () => {
