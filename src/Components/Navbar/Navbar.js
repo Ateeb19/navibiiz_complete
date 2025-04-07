@@ -195,7 +195,7 @@ const Navbar = () => {
                 <Link to="/register_company">
                   <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                     {(userInfo && userInfo.role === 'Sadmin') ? (
-                      <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>
+                      <span><IoIosAddCircleOutline /> Add New Company</span>
                     ) : (
                       'Register Your Company'
                     )}

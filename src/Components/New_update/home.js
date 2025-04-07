@@ -316,7 +316,7 @@ const Home = () => {
                                             <h5>{company.company_name}</h5>
                                             <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1" /> 4.5 (20 Ratings)</span>
                                             <p className="text-secondary text-start mt-2">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                            <span className="text-danger" style={{ cursor: "pointer" }} onClick={() => View_details(company)}>View Details</span>
+                                            <span className="" style={{ cursor: "pointer", color: '#de8316' }} onClick={() => View_details(company)}>View Details</span>
                                         </div>
                                     </div>
                                 </div>
@@ -438,7 +438,7 @@ const Home = () => {
                                             <h5>{company.product_name}</h5>
                                             {/* <span className="text-secondary">4.5 (20 Ratings)</span> */}
                                             <p className="text-secondary text-start mt-1">{company.sender_description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                            <span className="text-danger" style={{ cursor: "pointer" }} onClick={() => submit_offer(company)}>Submit Offer</span>
+                                            <span className="" style={{ cursor: "pointer", color: '#de8316' }} onClick={() => submit_offer(company)}>Submit Offer</span>
                                         </div>
                                     </div>
                                 </div>
