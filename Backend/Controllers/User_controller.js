@@ -16,7 +16,7 @@ const token_check = (req, res) => {
     }
 }
 const Register = (req, res) => {
-    const { name, email, password, user_type } = req.body;
+    const { name, email, password, user_type, rememberMe } = req.body;
     db.query("SELECT email FROM users WHERE email = ?", [email], async (err, result) => {
         if (err) {
             res.json({ message: "error in databasae", err });
@@ -32,9 +32,16 @@ const Register = (req, res) => {
                         if (err) {
                             res.json({ message: "error inserting data", err })
                         } else {
-                            const token = jwt.sign({ userid: result.insertId, username: name, useremail: email, role: 'user', company: 'no', user_type: user_type }, process.env.JWT_SECRET, {
-                                expiresIn: "1day",
-                            });
+                            let token = '';
+                            if (rememberMe === false) {
+                                token = jwt.sign({ userid: result.insertId, username: name, useremail: email, role: 'user', company: 'no', user_type: user_type }, process.env.JWT_SECRET, {
+                                    expiresIn: "1day",
+                                });
+                            } else {
+                                token = jwt.sign({ userid: result.insertId, username: name, useremail: email, role: 'user', company: 'no', user_type: user_type }, process.env.JWT_SECRET, {
+                                    expiresIn: "5day",
+                                });
+                            }
                             res.json({ message: "user regester success", status: true, role: 'user', token: token, name: name, email: email, id: result.insertId });
                         }
                     })
@@ -47,9 +54,10 @@ const login = (req, res) => {
     const value = [
         req.body.email,
         req.body.password,
-        req.body.user_type
+        req.body.user_type,
+        req.body.rememberMe,
     ];
-    // console.log(value[0],value[1],value[2]);
+    console.log(value[3], '-: rememberme!');
     // res.json(value[0], value[1], value[2]);
     db.query('SELECT * FROM users WHERE email = ?', [value[0]], async (error, result) => {
         if (error) {
@@ -58,9 +66,16 @@ const login = (req, res) => {
             if (result.length > 0) {
                 const hash = await bcrypt.compare(value[1], result[0].password);
                 if (hash) {
-                    const token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role, company: result[0].company, user_type: result[0].user_type }, process.env.JWT_SECRET, {
-                        expiresIn: "4day",
-                    });
+                    let token = '';
+                    if (value[3] === false) {
+                        token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role, company: result[0].company, user_type: result[0].user_type }, process.env.JWT_SECRET, {
+                            expiresIn: "1day",
+                        });
+                    } else {
+                        token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role, company: result[0].company, user_type: result[0].user_type }, process.env.JWT_SECRET, {
+                            expiresIn: "5day",
+                        });
+                    }
                     req.session.role = result[0].role;
                     req.session.email = result[0].email;
                     if (result[0].user_type === value[2]) {
@@ -171,4 +186,66 @@ const payment_history = (req, res) => {
     })
 }
 
-module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history };
+//forget password
+const froget_password = (req, res) => {
+
+    const email = req.body.email;
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+        expiresIn: '2h'
+    });
+    db.query('INSERT INTO rest_token (email, token) VALUES (?, ?)', [email, token], async (err, result) => {
+        if (err) {
+            res.json({ message: "error in database", err });
+        } else {
+            sendMail(
+                email,
+                "Reset Password",
+                `<html>
+                <body>
+                <h3>Click on the following link to reset password</h3>
+                <h4><a href="https://novibiz.com/reset_password/${token}">Reset Password</a></h4>
+                <h4>Your token: ${token}</h4>
+                <h4>Token is valid for only 2 hours</h4>
+                </body>
+                </html>`
+            )
+                .then(info => console.log({ info }))
+                .catch(console.error);
+            res.json({ message: "email send success" });
+        }
+    })
+}
+
+//reset password
+const reset_password = (req, res) => {
+    const token = req.params.token;
+    const value = [
+        req.body.password,
+        req.body.confirmpassword,
+    ]
+
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+        if (err) {
+            res.json({ message: "invalid or expire token" });
+        } else {
+            const email = decoded.email;
+            if (value[0].length < 8) {
+                res.json({ message: "password shoud be of 8 charachers" });
+            } else
+                if (value[0] !== value[1]) {
+                    res.json({ message: "confirmpassword not match" });
+                } else {
+                    const hash = await bcrypt.hash(value[0], 8);
+                    db.query('UPDATE users SET password = ? WHERE email = ?', [hash, email], (err, result) => {
+                        if (err) {
+                            res.json({ message: "error in database" });
+                        } else {
+                            res.json({ message: "password reset success \n Login again!", status: true });
+                            db.query('DELETE FROM `rest_token` WHERE email = ?', [email]);
+                        }
+                    })
+                }
+        }
+    })
+}
+module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password };

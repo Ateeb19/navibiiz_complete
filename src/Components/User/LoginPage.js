@@ -10,7 +10,7 @@ const LoginPage = () => {
   const { showAlert } = useAlert();
   const [isMobileView, setMobileView] = useState(false);
   const [selected, setSelected] = useState("individual");
-
+  const [rememberMe, setRememberMe] = useState(false);
 
   const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
 
@@ -50,6 +50,7 @@ const LoginPage = () => {
     email: '',
     password: '',
     user_type: 'individual',
+    rememberMe: rememberMe,
   })
   useEffect(() => {
     setValue((prev) => ({ ...prev, user_type: selected }));
@@ -86,6 +87,11 @@ const LoginPage = () => {
         localStorage.setItem('userInfo', JSON.stringify(response.data));
         showAlert(response.data.message);
         if (response.data.role === 'Sadmin' || response.data.role === 'admin') {
+          if (redirectPath) {
+            localStorage.removeItem("redirectAfterLogin");
+            navigate(redirectPath, { replace: true });
+            return;
+          }
           navigate('/dashboard');
         } else {
           localStorage.setItem("userType", selected);
@@ -121,9 +127,14 @@ const LoginPage = () => {
         localStorage.setItem('userInfo', JSON.stringify(response.data));
         showAlert(response.data.message);
         if (response.data.role === 'Sadmin' || response.data.role === 'admin') {
+          if (redirectPath) {
+            localStorage.removeItem("redirectAfterLogin");
+            navigate(redirectPath, { replace: true });
+            return;
+          }
           navigate('/dashboard', { replace: true });
         } else {
-          localStorage.removeItem("redirectAfterLogin"); // Clear stored path
+          localStorage.removeItem("redirectAfterLogin");
           navigate(redirectPath, { replace: true });
         }
 
@@ -140,7 +151,35 @@ const LoginPage = () => {
   const ShwoPassword = () => {
     setShow('password');
   }
-  console.log(isSignup);
+
+  const handle_forget_password =async (evt) => {
+    evt.preventDefault();
+
+    const email = value.email;
+
+    if (email === '') {
+      showAlert('Please enter your email address!');
+      return;
+    }
+
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isValidEmail) {
+      showAlert('Please enter a valid email address!');
+      return;
+    }    
+  try {
+    const res = await axios.post(`${port}/user/forget_password`, {
+      email,
+    });
+
+    showAlert(res.data.message);
+  } catch (error) {
+    showAlert('Something went wrong. Please try again.');
+  }
+  
+    
+  }
+  // console.log(isSignup);
 
   return (
     <div className="login-bg-wrapper">
@@ -218,9 +257,13 @@ const LoginPage = () => {
                 </div>
                 <div className="d-flex flex-row w-100 mb-3 align-items-center">
                   <div className="d-flex flex-row w-50 justify-content-start">
-                    <input type="checkbox" /><label className="ms-2 fs-6 text-secondary">Remember Me</label>
+                    <input type="checkbox" checked={rememberMe}
+                      onChange={(e) => {
+                        setRememberMe(e.target.checked);
+                        setValue(prev => ({ ...prev, rememberMe: e.target.checked }));
+                      }} /><label className="ms-2 fs-6 text-secondary">Remember Me</label>
                   </div>
-                  <div className="d-flex w-50 flex-column align-items-end"><label className="text-primary">{isSignup ? "" : "Forget Your Password?"}</label></div>
+                  <div className="d-flex w-50 flex-column align-items-end"><label className="text-primary" onClick={handle_forget_password}>{isSignup ? "" : "Forget Your Password?"}</label></div>
                 </div>
                 <button type="submit" className="btn-sign">{isSignup ? "Sign Up" : "Sign In"}</button>
               </div>

@@ -596,3 +596,15 @@ svg {
     color: #fff !important;
     padding: 12px 20px !important;
 }
+
+.reset-password-wrapper{
+    background-image: url(../../../public/Images/loginBg.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+.reset-password-wrap{
+    width: 500px;
+    border-radius: 5px;
+}

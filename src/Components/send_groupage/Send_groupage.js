@@ -68,9 +68,9 @@ const Send_groupage = () => {
             if (!alertShown.current) {
                 showAlert('Login first!');
                 alertShown.current = true;
+                localStorage.setItem('redirectAfterLogin', '/send_groupage');
                 navigate('/login')
             }
-            // console.log(token.length);
         }
     }, [])
 

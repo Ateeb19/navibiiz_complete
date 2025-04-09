@@ -28,6 +28,7 @@ import ScrollToTop from "./ScrollToTop";
 import Navbar from './Components/Navbar/Navbar';
 import About_us from './Components/New_update/About_us';
 import { AlertProvider } from "./Components/alert/Alert_message";
+import ResetPassword from './Components/User/ResetPassword';
 const App = () => {
   const port = process.env.REACT_APP_SECRET;
 
@@ -127,6 +128,7 @@ const App = () => {
             <Route Component={Cars} path='/cars'></Route>
             <Route Component={SendTransport} path='/send_transport'></Route> */}
                 <Route Component={LoginPage} path='/login'></Route>
+                <Route Component={ResetPassword} path='/reset_password/:token'></Route>
                 <Route path="/company_details/:id" element={<CompanyDetails />} />
               </Routes>
             </div>

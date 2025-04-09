@@ -61,19 +61,19 @@ const Footer = () => {
                                 <strong className="mb-2 mb-md-3 fs-5">Contact Information</strong>
                                 <div>
                                     <p className="mb-1">Chat with us</p>
-                                    <p><IoLogoWhatsapp className="me-2 text-danger" />0721 / 170 5522</p>
+                                    <p><IoLogoWhatsapp className="me-2 " style={{color: ' #de8316'}} />0721 / 170 5522</p>
                                 </div>
                                 <div>
                                     <p className="mb-1">Email Us</p>
-                                    <p><MdEmail className="me-2 text-danger" />support@navibiiz.de</p>
+                                    <p><MdEmail className="me-2 " style={{color: ' #de8316'}} />support@navibiiz.de</p>
                                 </div>
                                 <div>
                                     <p className="mb-1">Call Us</p>
-                                    <p><IoCall className="me-2 text-danger" />0721 / 170 5522</p>
+                                    <p><IoCall className="me-2" style={{color: ' #de8316'}} />0721 / 170 5522</p>
                                 </div>
                                 <div>
                                     <p className="mb-1">Our Headquarters</p>
-                                    <p><FaLocationDot className="me-2 text-danger" />Demo Address</p>
+                                    <p><FaLocationDot className="me-2 " style={{color: ' #de8316'}} />Demo Address</p>
                                 </div>
                             </div>
                             <div className="col-12 col-md-7 p-3 ps-4 text-start">
