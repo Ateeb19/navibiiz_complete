@@ -332,9 +332,61 @@ const Dashboard = () => {
     total_users();
     payment_history_user();
     payment_history();
+    display_admin_total_offers();
+    display_admin_accecepted_offers();
+    total_user_orders();
     // user_requests();
   }, []);
 
+  const [admin_total_offers, setAdmin_total_offers] = useState('');
+  const display_admin_total_offers = () => {
+    if (userRole === 'admin') {
+      axios.get(`${port}/admin/total_offers_sent`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        console.log(response.data, 'this is the data 3');
+        if (response.data.status === true) {
+          setAdmin_total_offers(response.data.message);
+        } else {
+          setAdmin_total_offers('');
+        }
+      })
+    }
+  }
+  const [admin_offer_accecepted, setAdmin_offer_accecepted] = useState('');
+  const display_admin_accecepted_offers = () => {
+    if (userRole === 'admin') {
+      axios.get(`${port}/admin/total_offer_accepted`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        if (response.data.status === true) {
+          setAdmin_offer_accecepted(response.data.message);
+        } else {
+          setAdmin_offer_accecepted('');
+        }
+      })
+    }
+  }
+
+  const [user_numbers_orders, setUser_numbers_orders] = useState('');
+  const total_user_orders = () => {
+    axios.get(`${port}/user/total_orders_number`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      console.log(response.data, 'this is the data 4');
+      if (response.data.status === true) {
+        setUser_numbers_orders(response.data.message);
+      } else {
+        setUser_numbers_orders('');
+      }
+    }).catch((err) => { console.log(err) });
+  }
   const [user_payment_history, setUser_payment_history] = useState([]);
   const payment_history_user = () => {
     axios.get(`${port}/user/payment_history`, {
@@ -1084,7 +1136,7 @@ const Dashboard = () => {
 
         {activeSection === "dashboard" && (
           <>
-            {userRole === 'Sadmin' || userRole === 'admin' ? (
+            {userRole === 'Sadmin' ? (
               <>
                 <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%' }}>
                   <div className="dashbord-info-wrap">
@@ -1113,7 +1165,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                                <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                                <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                                 <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                               </div>
                             </Dropdown.Menu>
@@ -1174,6 +1226,76 @@ const Dashboard = () => {
 
                 </div>
               </>
+            ) : userRole === 'admin' ? (
+              <>
+                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%' }}>
+                  <div className="dashbord-info-wrap">
+
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                      {isMobile && (
+                        <div className="w-100 d-flex justify-content-start">
+                          <Menu />
+                        </div>
+                      )}
+                      <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                        <div className="p-3">
+                        </div>
+                        <div className="border-start p-2 border-3 border-dark">
+                          <Dropdown>
+                            <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                              <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu align="end">
+                              <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                                {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                                <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                                <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                              </div>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="d-flex justify-content-start align-items-center mt-2 rounded-1" >
+                      <div className="d-flex  w-50 justify-content-start">
+                        <label className="fs-3">Hi, <strong>{userInfo.name}</strong></label>
+                      </div>
+                      <div className="w-50 pe-3 d-flex justify-content-end">
+                        <label className="text-success fs-5">Updated 2 min ago</label>
+                      </div>
+                    </div>
+
+
+                    <div className="dashboard-wraper-box">
+                      <div className="row mt-3 g-3 justify-content-center">
+                        {[{ count: 'N/A', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
+                        { count: admin_total_offers, change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
+                        { count: admin_offer_accecepted, change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> }
+                        ].map((item, index) => (
+                          <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
+                            <div className=" dashboard-wrap-box ">
+                              <div className="rounded-circle fs-1 d-flex justify-content-center align-items-center text-primary mx-auto" style={{ width: '5rem', height: '5rem', backgroundColor: '#e1f5ff' }}>
+                                {item.icon}
+                              </div>
+                              <h3 className="mt-3 fw-bold d-block">{item.count}</h3>
+                              <label className="text-success fs-6 p-2">{item.change} Last Month</label>
+                              <label className="fs-5 d-block">{item.text}</label>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
             ) : (
               <>
                 <div style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
@@ -1199,7 +1321,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                              <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                              <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                               <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                             </div>
                           </Dropdown.Menu>
@@ -1217,7 +1339,7 @@ const Dashboard = () => {
 
                     <div className="dashboard-wraper-box">
                       <div className="row mt-3 g-3 justify-content-center">
-                        {[{ count: 20, change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
+                        {[{ count: user_numbers_orders, change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
                         { count: 15, change: "-2%", text: "Upcoming Pick up", icon: <BsCarFrontFill /> },
                         { count: 25, change: "+10%", text: "Total Spending", icon: <FaTruckLoading /> }
                         ].map((item, index) => (
@@ -1269,7 +1391,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                        <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                        <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -1948,7 +2070,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                        <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                        <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -2029,7 +2151,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                        <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                        <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -2429,7 +2551,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                          <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -2685,7 +2807,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                          <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -3305,7 +3427,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                          <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -3567,7 +3689,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
+                          <button className="btn btn-sm btn-primary mt-1">Profile information</button>
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>

@@ -248,4 +248,16 @@ const reset_password = (req, res) => {
         }
     })
 }
-module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password };
+
+const total_number_orders = (req, res) => {
+    const email = req.user.useremail;
+    db.query('SELECT COUNT(*) AS total_orders FROM groupage WHERE created_by = ?', [email], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: result[0].total_orders, status: true });
+        }
+    })  
+}
+module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password, total_number_orders };

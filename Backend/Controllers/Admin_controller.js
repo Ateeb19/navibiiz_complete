@@ -99,6 +99,34 @@ const Display_offers = (req, res) => {
     }
 }
 
+const total_offers_sent = (req, res) => {
+    if(req.user.role === 'admin'){
+        db.query(`SELECT COUNT(*) as total_offers FROM offers WHERE created_by_email = ?`, [req.user.useremail], (err, result) => {
+            if(err){
+                console.log(err);
+                return res.json({ message: 'Error fetching total offers', status: false });
+            }else{
+                res.json({ message: result[0].total_offers, status: true });
+            }
+        });
+    }else{
+        res.json({ message: "you are not Admin", status: false });
+    }
+}
 
+const total_offer_accepted = (req, res) => {
+    if(req.user.role === 'admin') {
+        db.query(`SELECT COUNT(*) as total_offers FROM offers WHERE created_by_email = ? AND accepted = 1` , [req.user.useremail], (err, result) => {
+            if(err) {
+                console.log(err);
+                return res.json({message: 'Error fetching total offers', status: false})
+            }else{
+                res.json({message: result[0].total_offers, status: true});
+            }
+        })
+    }else{
+        res.json({message: 'you are not Admin', status: false});
+    }
+}
 
-module.exports = { Display_company, Delete_company_admin, Display_offers };
+module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted };
