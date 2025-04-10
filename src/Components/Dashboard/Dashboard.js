@@ -1104,15 +1104,16 @@ const Dashboard = () => {
                               <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                             </Dropdown.Toggle>
                             <Dropdown.Menu align="end">
-                              <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                                <div className="text-capitalize">
+                              <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                                {/* <div className="text-capitalize">
                                   <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
                                 </div>
                                 <div>
                                   <strong>Email:</strong> {userInfo.email}
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
-                                <button className="btn btn-secondary btn-sm">Edit Password</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                                <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                                 <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                               </div>
                             </Dropdown.Menu>
@@ -1189,15 +1190,16 @@ const Dashboard = () => {
                             <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                           </Dropdown.Toggle>
                           <Dropdown.Menu align="end">
-                            <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                              <div className="text-capitalize">
-                                <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                              </div>
-                              <div>
-                                <strong>Email:</strong> {userInfo.email}
-                              </div>
-                              <button className="btn btn-secondary btn-sm">Edit Name</button>
-                              <button className="btn btn-secondary btn-sm">Edit Password</button>
+                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                              {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                              <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                               <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                             </div>
                           </Dropdown.Menu>
@@ -1258,15 +1260,16 @@ const Dashboard = () => {
                       <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                     </Dropdown.Toggle>
                     <Dropdown.Menu align="end">
-                      <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                        <div className="text-capitalize">
-                          <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                        </div>
-                        <div>
-                          <strong>Email:</strong> {userInfo.email}
-                        </div>
-                        <button className="btn btn-secondary btn-sm">Edit Name</button>
-                        <button className="btn btn-secondary btn-sm">Edit Password</button>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                        {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                        <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -1936,15 +1939,16 @@ const Dashboard = () => {
                       <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                     </Dropdown.Toggle>
                     <Dropdown.Menu align="end">
-                      <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                        <div className="text-capitalize">
-                          <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                        </div>
-                        <div>
-                          <strong>Email:</strong> {userInfo.email}
-                        </div>
-                        <button className="btn btn-secondary btn-sm">Edit Name</button>
-                        <button className="btn btn-secondary btn-sm">Edit Password</button>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                        {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                        <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -2016,15 +2020,16 @@ const Dashboard = () => {
                       <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                     </Dropdown.Toggle>
                     <Dropdown.Menu align="end">
-                      <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                        <div className="text-capitalize">
-                          <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                        </div>
-                        <div>
-                          <strong>Email:</strong> {userInfo.email}
-                        </div>
-                        <button className="btn btn-secondary btn-sm">Edit Name</button>
-                        <button className="btn btn-secondary btn-sm">Edit Password</button>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                        {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                        <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -2415,15 +2420,16 @@ const Dashboard = () => {
                         <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                       </Dropdown.Toggle>
                       <Dropdown.Menu align="end">
-                        <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                          <div className="text-capitalize">
-                            <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                          </div>
-                          <div>
-                            <strong>Email:</strong> {userInfo.email}
-                          </div>
-                          <button className="btn btn-secondary btn-sm">Edit Name</button>
-                          <button className="btn btn-secondary btn-sm">Edit Password</button>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                          <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -2670,15 +2676,16 @@ const Dashboard = () => {
                         <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                       </Dropdown.Toggle>
                       <Dropdown.Menu align="end">
-                        <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                          <div className="text-capitalize">
-                            <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                          </div>
-                          <div>
-                            <strong>Email:</strong> {userInfo.email}
-                          </div>
-                          <button className="btn btn-secondary btn-sm">Edit Name</button>
-                          <button className="btn btn-secondary btn-sm">Edit Password</button>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                          <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -3289,15 +3296,16 @@ const Dashboard = () => {
                         <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                       </Dropdown.Toggle>
                       <Dropdown.Menu align="end">
-                        <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                          <div className="text-capitalize">
-                            <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                          </div>
-                          <div>
-                            <strong>Email:</strong> {userInfo.email}
-                          </div>
-                          <button className="btn btn-secondary btn-sm">Edit Name</button>
-                          <button className="btn btn-secondary btn-sm">Edit Password</button>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                          <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -3550,15 +3558,16 @@ const Dashboard = () => {
                         <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
                       </Dropdown.Toggle>
                       <Dropdown.Menu align="end">
-                        <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                          <div className="text-capitalize">
-                            <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                          </div>
-                          <div>
-                            <strong>Email:</strong> {userInfo.email}
-                          </div>
-                          <button className="btn btn-secondary btn-sm">Edit Name</button>
-                          <button className="btn btn-secondary btn-sm">Edit Password</button>
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                          <button className="btn btn-sm btn-primary mt-1">Edit Profile</button>
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>

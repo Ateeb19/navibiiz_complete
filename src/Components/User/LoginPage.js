@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar'
 import { IoEyeOutline } from "react-icons/io5";
 import { useAlert } from "../alert/Alert_message";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const LoginPage = () => {
   const port = process.env.REACT_APP_SECRET;
@@ -11,7 +12,7 @@ const LoginPage = () => {
   const [isMobileView, setMobileView] = useState(false);
   const [selected, setSelected] = useState("individual");
   const [rememberMe, setRememberMe] = useState(false);
-
+  const [forget_password, setForget_password] = useState(false);
   const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
 
   useEffect(() => {
@@ -152,7 +153,11 @@ const LoginPage = () => {
     setShow('password');
   }
 
-  const handle_forget_password =async (evt) => {
+  const handle_forget_password = () => {
+    setForget_password(!forget_password);
+  }
+
+  const handle_submit_forget_password = async (evt) => {
     evt.preventDefault();
 
     const email = value.email;
@@ -166,20 +171,18 @@ const LoginPage = () => {
     if (!isValidEmail) {
       showAlert('Please enter a valid email address!');
       return;
-    }    
-  try {
-    const res = await axios.post(`${port}/user/forget_password`, {
-      email,
-    });
+    }
+    try {
+      const res = await axios.post(`${port}/user/forget_password`, {
+        email,
+      });
 
-    showAlert(res.data.message);
-  } catch (error) {
-    showAlert('Something went wrong. Please try again.');
+      showAlert(res.data.message);
+    } catch (error) {
+      showAlert('Something went wrong. Please try again.');
+    }
   }
-  
-    
-  }
-  // console.log(isSignup);
+  // console.log(forget_password);
 
   return (
     <div className="login-bg-wrapper">
@@ -192,32 +195,48 @@ const LoginPage = () => {
             </div>
             <div className="d-flex flex-column align-items-start">
               <div className="title-head">
-                <h2>Welcome!</h2>
+                <h2> {forget_password ? ` Forget Your Password!` : `Welcome!`}</h2>
               </div>
-              <label className="text-secondary">Enter your details below to sign <span>{isSignup ? 'up' : 'in'}</span></label>
+              <label className="text-secondary">{forget_password ? `Please enter your email address` : `Enter your details below to sign ${isSignup ? 'up' : 'in'}`}</label>
             </div>
 
-            <div className="login-tab-wrapper">
-              <div className="login-tab-wrap">
-                <div className="d-flex align-items-start justify-content-between p-2 ps-3 pe-3 w-100 border rounded-5">
-                  <div
-                    className={'tab-btn'}
-                    style={{ cursor: "pointer", backgroundColor: selected === "individual" ? "#de8316" : "", color: selected === "individual" ? "white" : "" }}
-                    onClick={() => setSelected("individual")}
-                  >
-                    <p onClick={() => setSelected('individual')}>As an individual</p>
-                  </div>
+            {!forget_password && (
+              <>
+                <div className="login-tab-wrapper">
+                  <div className="login-tab-wrap">
+                    <div className="d-flex align-items-start justify-content-between p-2 ps-3 pe-3 w-100 border rounded-5">
+                      <div
+                        className={'tab-btn'}
+                        style={{ cursor: "pointer", backgroundColor: selected === "individual" ? "#de8316" : "", color: selected === "individual" ? "white" : "" }}
+                        onClick={() => setSelected("individual")}
+                      >
+                        <p onClick={() => setSelected('individual')}>As an individual</p>
+                      </div>
 
-                  <div
-                    className={'tab-btn'}
-                    style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#de8316" : "", color: selected === "company" ? "white" : "" }}
-                    onClick={() => { setSelected('company'); if (isSignup) { navigate('/register_company') } }}
-                  >
-                    <p onClick={() => setSelected('company')}>As a company</p>
+                      <div
+                        className={'tab-btn'}
+                        style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#de8316" : "", color: selected === "company" ? "white" : "" }}
+                        onClick={() => { setSelected('company'); if (isSignup) { navigate('/register_company') } }}
+                      >
+                        <p onClick={() => setSelected('company')}>As a company</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
+
+            {forget_password && (
+              <>
+                <div className="login-tab-wrapper">
+                  <div className="d-flex align-items-start justify-content-start">
+                    <div className="title-head" style={{ cursor: 'pointer' }} onClick={() => setForget_password(false)}>
+                      <h3><IoMdArrowRoundBack className="mt-1" /> Back</h3>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
 
             <form onSubmit={handleOnSubmit_up} className="w-100">
               <div className="d-flex flex-column align-items-start">
@@ -243,34 +262,57 @@ const LoginPage = () => {
                   required
                   className="input-field" />
 
-                <label className="input-label">Password <span className="text-danger">*</span></label>
-                <div className="d-flex flex-row w-100 mb-2">
-                  <input
-                    onChange={handleChange_up}
-                    name="password"
-                    placeholder="Password"
-                    required
-                    type={show}
-                    className="input-field" />
-                  <span className="fs-4 rounded" onMouseDown={HidePassword} onMouseUp={ShwoPassword} style={{ backgroundColor: "#ebebeb", padding: '12px 18px', height: '64px' }}>
-                    <IoEyeOutline /></span>
-                </div>
+                {!forget_password && (
+                  <>
+                    <label className="input-label">Password <span className="text-danger">*</span></label>
+                    <div className="d-flex flex-row w-100 mb-2">
+                      <input
+                        onChange={handleChange_up}
+                        name="password"
+                        placeholder="Password"
+                        required
+                        type={show}
+                        className="input-field" />
+                      <span className="fs-4 rounded" onMouseDown={HidePassword} onMouseUp={ShwoPassword} style={{ backgroundColor: "#ebebeb", padding: '12px 18px', height: '64px' }}>
+                        <IoEyeOutline /></span>
+                    </div>
+                  </>
+                )}
+
+
                 <div className="d-flex flex-row w-100 mb-3 align-items-center">
                   <div className="d-flex flex-row w-50 justify-content-start">
-                    <input type="checkbox" checked={rememberMe}
-                      onChange={(e) => {
-                        setRememberMe(e.target.checked);
-                        setValue(prev => ({ ...prev, rememberMe: e.target.checked }));
-                      }} /><label className="ms-2 fs-6 text-secondary">Remember Me</label>
+                    {!forget_password && (
+                      <>
+                        <input type="checkbox" checked={rememberMe}
+                          onChange={(e) => {
+                            setRememberMe(e.target.checked);
+                            setValue(prev => ({ ...prev, rememberMe: e.target.checked }));
+                          }} />
+                        <label className="ms-2 fs-6 text-secondary">Remember Me</label>
+                      </>
+                    )}
                   </div>
                   <div className="d-flex w-50 flex-column align-items-end"><label className="text-primary" onClick={handle_forget_password}>{isSignup ? "" : "Forget Your Password?"}</label></div>
                 </div>
-                <button type="submit" className="btn-sign">{isSignup ? "Sign Up" : "Sign In"}</button>
+                {forget_password ? (
+                  <>
+                    <button onClick={handle_submit_forget_password} className="btn-sign">Continue</button>
+                  </>
+                ) : (
+                  <>
+                    <button type="submit" className="btn-sign">{isSignup ? "Sign Up" : "Sign In"}</button>
+                  </>
+                )}
               </div>
             </form>
             <div className="w-100">
-              <label className="fst-italic fs-6 mt-3">OR</label><br />
-              <label className="fs-6 mt-2" style={{ cursor: 'pointer' }}>{isSignup ? "Already have an account?" : "Don't have an account?"}{" "}<span className="text-primary" onClick={toggleForm}>{isSignup ? "Login" : "Sign Up"}</span></label>
+              {!forget_password && (
+                <>
+                  <label className="fst-italic fs-6 mt-3">OR</label><br />
+                  <label className="fs-6 mt-2" style={{ cursor: 'pointer' }}>{isSignup ? "Already have an account?" : "Don't have an account?"}{" "}<span className="text-primary" onClick={toggleForm}>{isSignup ? "Login" : "Sign Up"}</span></label>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -57,7 +57,7 @@ const login = (req, res) => {
         req.body.user_type,
         req.body.rememberMe,
     ];
-    console.log(value[3], '-: rememberme!');
+    // console.log(value[3], '-: rememberme!');
     // res.json(value[0], value[1], value[2]);
     db.query('SELECT * FROM users WHERE email = ?', [value[0]], async (error, result) => {
         if (error) {
