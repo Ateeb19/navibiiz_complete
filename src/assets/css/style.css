@@ -608,3 +608,18 @@ svg {
     width: 500px;
     border-radius: 5px;
 }
+
+.btn-change-password{
+    padding: 12px 30px;
+    color: #fff;
+    background-color: #de8316;
+    border: 1px solid #de8316;
+    border-radius: 6px;
+}
+.btn-logout{
+    padding: 12px 30px;
+    color: #fff;
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    border-radius: 6px;
+}

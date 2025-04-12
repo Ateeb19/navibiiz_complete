@@ -117,7 +117,7 @@ const update_user_name = (req, res) => {
             console.log(err);
             res.json({ message: 'error in database', status: false });
         } else {
-            res.json({ message: 'Name updated success', status: true });
+            res.json({ message: 'Name updated success, Login agmin to see update Name!', status: true });
         }
     })
 }
@@ -125,6 +125,7 @@ const update_user_password = (req, res) => {
     const id = req.user.userid;
     const editPasswordInputOld = req.body.editPasswordInputOld;
     const editPasswordInputNew = req.body.editPasswordInputNew;
+
     db.query(`SELECT password FROM users WHERE id = ${id}`, async (err, result) => {
         if (err) {
             console.log(err);
@@ -132,17 +133,21 @@ const update_user_password = (req, res) => {
         } else {
             const hash = await bcrypt.compare(editPasswordInputOld, result[0].password);
             if (hash) {
-                const hashpassword = await bcrypt.hash(editPasswordInputNew, 8);
-                db.query('UPDATE users SET password = ? WHERE id = ?', [hashpassword, id], (err, result) => {
-                    if (err) {
-                        console.log(err);
-                        res.json({ message: 'error in database', status: false });
-                    } else {
-                        res.json({ message: 'password updated', status: true });
-                    }
-                })
+                if (editPasswordInputNew.length < 8) {
+                    res.json({ message: "Password should be of 8 characters", status: false });
+                } else {
+                    const hashpassword = await bcrypt.hash(editPasswordInputNew, 8);
+                    db.query('UPDATE users SET password = ? WHERE id = ?', [hashpassword, id], (err, result) => {
+                        if (err) {
+                            console.log(err);
+                            res.json({ message: 'error in database', status: false });
+                        } else {
+                            res.json({ message: 'password updated', status: true });
+                        }
+                    })
+                }
             } else {
-                res.json({ message: "old password not match", status: false });
+                res.json({ message: "Previous password not match", status: false });
             }
         }
     })
@@ -258,6 +263,6 @@ const total_number_orders = (req, res) => {
         } else {
             res.json({ message: result[0].total_orders, status: true });
         }
-    })  
+    })
 }
 module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password, total_number_orders };

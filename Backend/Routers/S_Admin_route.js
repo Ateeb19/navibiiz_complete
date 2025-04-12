@@ -11,6 +11,9 @@ const {
     Total_company_count,
     Total_User_count,
     payment_history,
+    edit_company_details,
+    compnay_info_details,
+    Delete_company_details_country,
 } = require('../Controllers/S_Admin_controller.js');
 
 Routers.route('/display_company').get(AuthenticateToken, Display_All_company);
@@ -22,5 +25,7 @@ Routers.route('/show_all_offers').get(AuthenticateToken, show_all_offers);
 Routers.route('/count_companies').get(AuthenticateToken, Total_company_count);
 Routers.route('/count_users').get(AuthenticateToken, Total_User_count);
 Routers.route('/payment_history').get(AuthenticateToken, payment_history);
-
+Routers.route('/company_info_detail/:id').get(AuthenticateToken, compnay_info_details);
+Routers.route('/edit_company/:id').put(AuthenticateToken, edit_company_details);
+Routers.route('/delete_company_country').delete(AuthenticateToken, Delete_company_details_country)
 module.exports = Routers;

@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
-import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown } from "react-icons/md";
+import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown, MdSwitchAccount, MdAlternateEmail, MdOutlineKey } from "react-icons/md";
 import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag } from "react-icons/fa6";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { FaBell, FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaSearch, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle } from "react-icons/fa";
+import { FaBell, FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaSearch, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck } from "react-icons/fa";
 import { PiShippingContainerDuotone } from "react-icons/pi";
-import { BsCarFrontFill, BsFillInfoCircleFill, BsBuildingsFill, BsWindowSidebar } from "react-icons/bs";
-import { IoIosAddCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
+import { BsCarFrontFill, BsFillInfoCircleFill, BsBuildingsFill, BsWindowSidebar, BsBank2 } from "react-icons/bs";
+import { IoIosAddCircleOutline, IoMdAddCircleOutline, IoMdArrowRoundBack } from "react-icons/io";
 import Countries_selector from "./Countries_selector";
 import { IoStar, IoCall } from "react-icons/io5";
 import { RiPencilFill, RiSecurePaymentFill, RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
@@ -25,6 +25,8 @@ import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-dt';
 import { useAlert } from "../alert/Alert_message";
 import ConfirmationModal from '../alert/Conform_alert';
+import { GoPencil } from "react-icons/go";
+
 
 // import 'datatables.net-select-dt';
 // import 'datatables.net-responsive-dt';
@@ -138,6 +140,21 @@ const Dashboard = () => {
   const [activeSection, setActiveSection] = useState(() => {
     return localStorage.getItem("activeSection") || "dashboard";
   });
+  const location = useLocation();
+
+  useEffect(() => {
+    const savedCompany = localStorage.getItem("selected_company");
+    const activeSectionState = localStorage.getItem("activeSection");
+
+    if (location.pathname === '/dashboard') {
+      if (activeSectionState === 'company_detail') {
+        setActiveSection('company_detail');
+        if (savedCompany) {
+          setSelectedCompany(JSON.parse(savedCompany));
+        }
+      }
+    }
+  }, [location.pathname]);
   useEffect(() => {
     localStorage.setItem("activeSection", activeSection);
   }, [activeSection]);
@@ -379,7 +396,6 @@ const Dashboard = () => {
         Authorization: token,
       }
     }).then((response) => {
-      console.log(response.data, 'this is the data 4');
       if (response.data.status === true) {
         setUser_numbers_orders(response.data.message);
       } else {
@@ -418,12 +434,97 @@ const Dashboard = () => {
     }).catch((err) => { console.log(err) });
   }
 
-  const handleViewClick = (company) => {
-    setSelectedCompany(company);
+
+
+  const handleViewClick = async (company) => {
+    const companyId = company.id;
+
+    localStorage.setItem('selected_company_id', companyId);
+    localStorage.setItem('activeSection', 'company_detail');
+
+    try {
+      const response = await axios.get(`${port}/s_admin/company_info_detail/${companyId}`, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const data = response.data;
+
+      if (data.status && data.message.length > 0) {
+        setSelectedCompany(data.message[0]);
+        setActiveSection('company_detail');
+      } else {
+        console.error('No data received or invalid format');
+      }
+    } catch (error) {
+      console.error('Failed to fetch company details:', error);
+    }
   };
-  const handleEditClick = (company) => {
-    setEditCompany(company);
-  }
+
+  useEffect(() => {
+    const storedId = localStorage.getItem('selected_company_id');
+    const active = localStorage.getItem('activeSection');
+
+    if (storedId && active === 'company_detail') {
+      axios.get(`${port}/s_admin/company_info_detail/${storedId}`, {
+        headers: {
+          Authorization: token,
+        }
+      })
+        .then(res => {
+          const data = res.data;
+          if (data.status && data.message.length > 0) {
+            setSelectedCompany(data.message[0]);
+            setActiveSection('company_detail');
+          } else {
+            console.error('Company not found or invalid response');
+          }
+        })
+        .catch(err => console.error('Error fetching company on load:', err));
+    }
+  }, []);
+
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [editingField, setEditingField] = useState('');
+  const [previousValue, setPreviousValue] = useState('');
+  const [updatedValue, setUpdatedValue] = useState('');
+
+  const handleEditClick = (field) => {
+    setEditingField(field);
+    setPreviousValue(userInfo[field]);
+    setUpdatedValue('');
+    setShowEditPopup(true);
+  };
+
+  const handleFieldUpdate = () => {
+    if (!updatedValue) {
+      showAlert('Please enter a value to update.');
+      return;
+    }
+
+    if (editingField === 'email') {
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedValue);
+      if (!isValidEmail) {
+        showAlert('Please enter a valid email address!');
+        return;
+      }
+    }
+
+    axios.put(`${port}/user/update_name`, {
+      editNameInput: updatedValue,
+    }, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      console.log(response.data);
+      showAlert(response.data.message, '\n Login Again to see the change Name!');
+      setShowEditPopup(false);
+    }).catch((error) => {
+      console.error('Error updating field:', error);
+      showAlert('Failed to update the field.');
+    });
+  };
 
   //delete company 
   const handleDelete = (company) => {
@@ -926,6 +1027,125 @@ const Dashboard = () => {
 
   // console.log(allOffers);
 
+  const [edit_company, setEdit_company] = useState(false);
+  const handle_edit_company = (company) => {
+    setEdit_company(!edit_company);
+  }
+
+  const [editPopupOpen, setEditPopupOpen] = useState(false);
+  const [editField, setEditField] = useState({ label: '', previousValue: '' });
+  const [newValue, setNewValue] = useState('');
+
+  const handle_edit_company_query = () => {
+    axios.put(`${port}/s_admin/edit_company/${selectedCompany.id}`, { editField, newValue }, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      console.log(response.data);
+      setEditPopupOpen(false);
+      window.location.reload();
+    }
+    ).catch((err) => { console.log(err); });
+  }
+
+  const handleDeleteRow = async (index) => {
+    const row = selectedCompany.tableData[index];
+    const company_id = selectedCompany.id; // or whatever key you're using for company_id
+    const row_id = row.id;
+
+    try {
+      const response = await axios.delete(`${port}/s_admin/delete_company_country`, {
+        data: { company_id, row_id },
+        headers: {
+          Authorization: token,
+        }
+      });
+
+      if (response.data.status) {
+        const updatedData = [...selectedCompany.tableData];
+        updatedData.splice(index, 1);
+        setSelectedCompany(prev => ({
+          ...prev,
+          tableData: updatedData
+        }));
+        showAlert(response.data.message);
+      } else {
+        showAlert('Failed to delete row from the server!');
+      }
+    } catch (error) {
+      console.error('Error deleting row:', error);
+      showAlert('Something went wrong while deleting the row!');
+    }
+  };
+
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [newCountryData, setNewCountryData] = useState({
+    country: '',
+    duration: '',
+    name: []
+  });
+
+  const handleServiceCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    setNewCountryData(prev => {
+      const updatedNames = checked
+        ? [...prev.name, value]
+        : prev.name.filter(item => item !== value);
+      return { ...prev, name: updatedNames };
+    });
+  };
+
+
+  const [profile_edit, setProfile_edit] = useState(false);
+  const [change_password, setChange_password] = useState(false);
+  const handle_change_password = () => {
+    setChange_password(!change_password);
+  }
+
+  const [previous_password, setPrevious_password] = useState('');
+  const [new_password, setNew_password] = useState('');
+  const [confirm_password, setConfirm_password] = useState('');
+
+  const query_update_password = () => {
+    if (previous_password === '' || new_password === '' || confirm_password === '') {
+      showAlert('Please fill all the fields.');
+    } else {
+      if (new_password !== confirm_password) {
+        showAlert('Confirm password not matched.');
+        return;
+      }
+      axios.put(`${port}/user/update_password`, {
+        editPasswordInputOld: previous_password,
+        editPasswordInputNew: new_password,
+      }, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        showAlert(response.data.message);
+        if (response.data.status === true) {
+          setPrevious_password('');
+          setNew_password('');
+          setConfirm_password('');
+          setChange_password(false);
+        }
+      }).catch((err) => { console.log(err); });
+    }
+
+  }
+
+  const handel_forget_password = async () => {
+    try {
+      const res = await axios.post(`${port}/user/forget_password`, {
+        email: userInfo.email,
+      });
+
+      showAlert(res.data.message);
+    } catch (error) {
+      showAlert('Something went wrong. Please try again.');
+    }
+  }
 
   const tableRef = useRef(null);
 
@@ -959,6 +1179,10 @@ const Dashboard = () => {
   }
   // console.log(showOfferDetails);
   // console.log(selectedCompany)
+
+
+
+
   const Menu = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedItem, setSelectedItem] = useState('Dashboard');
@@ -1073,7 +1297,7 @@ const Dashboard = () => {
 
                     {userRole === 'Sadmin' ? (
                       <>
-                        <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <li className="nav-item mb-4 text-start" style={(activeSection === 'companies' && 'company_detail') ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                           <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("companies"); localStorage.setItem("activeSection", "companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                             <BsBuildingsFill /> Companies
                           </Link>
@@ -1165,7 +1389,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                                <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                                <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
                                 <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                               </div>
                             </Dropdown.Menu>
@@ -1255,7 +1479,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                                <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                                <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                                 <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                               </div>
                             </Dropdown.Menu>
@@ -1321,7 +1546,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                              <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                              <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                               <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                             </div>
                           </Dropdown.Menu>
@@ -1365,6 +1591,223 @@ const Dashboard = () => {
 
         )}
 
+        {activeSection === 'profile_view' && (
+          <>
+            <div className="bg-light px-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
+                  </div>
+                )}
+                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                  <div className="border-start p-2 border-3 border-dark">
+                    <Dropdown>
+                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu align="end">
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
+                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </div>
+              </div>
+
+              <div className="d-flex ps-4 w-100 justify-content-start">
+                <label className="fs-3"><strong>Profile Information</strong></label>
+              </div>
+
+
+              <div className="dashboard-wrapper-box">
+                <div className="table-wrap">
+                  <div className="table-filter-wrap">
+                    <div className="d-flex justify-content-between align-items-start mb-3">
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" onClick={() => handleEditClick('name')}>
+                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{
+                            width: '3rem',
+                            height: '3rem',
+                            backgroundColor: '#E1F5FF',
+                            aspectRatio: '1 / 1'
+                          }}>
+                          <FaUserCheck />
+                        </div>
+                        <div className="d-flex flex-column align-items-start gap-1">
+                          <span className="text-secondary fs-4">Name</span>
+                          <h5 className="text-uppercase">{userInfo.name}</h5>
+                        </div>
+                        {profile_edit && (<div className="ms-2 fs-4 text-primary" > < GoPencil /></div>)}
+                      </div>
+
+                      <div>
+                        <h4 className='text-primary' style={{ cursor: 'pointer' }} onClick={() => setProfile_edit(!profile_edit)}><RiPencilFill /> Edit Profile</h4>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 mb-3" onClick={() => handleEditClick('email')}>
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{
+                          width: '3rem',
+                          height: '3rem',
+                          backgroundColor: '#E1F5FF',
+                          aspectRatio: '1 / 1'
+                        }}>
+                        <MdAlternateEmail />
+                      </div>
+                      <div className="d-flex flex-column align-items-start gap-1">
+                        <span className="text-secondary fs-4">Email</span>
+                        <h5>{userInfo.email}</h5>
+                      </div>
+                      {/* {profile_edit && (<div className="ms-2 fs-4 text-primary" > < GoPencil /></div>)} */}
+                    </div>
+
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 mb-2">
+                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                        style={{
+                          width: '3rem',
+                          height: '3rem',
+                          backgroundColor: '#E1F5FF',
+                          aspectRatio: '1 / 1'
+                        }}>
+                        <MdOutlineKey />
+                      </div>
+                      <div className="d-flex flex-column align-items-start gap-1">
+                        <span className="text-secondary fs-4">Role</span>
+                        <h5>{userInfo.role}</h5>
+                      </div>
+                    </div>
+
+                    <div className="d-flex justify-content-start align-items-start gap-2">
+                      <button className="btn-change-password" onClick={handle_change_password}> Change Password </button>
+                      <button className="btn-logout" onClick={handel_logout}> Log Out </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              {showEditPopup && (
+                <div
+                  className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1050 }}
+                >
+                  <div className="bg-white p-4 rounded shadow" style={{ width: '90%', maxWidth: '500px' }}>
+                    <div className="title-head text-start">
+                      <h3 className="mb-3">Name {editField === 'name' ? 'Name' : 'Email'}</h3>
+                    </div>
+
+                    <div className="text-start">
+                      <label className="input-label">Previous Name</label>
+                      <input
+                        type="text"
+                        className="input-field"
+                        value={previousValue}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="text-start">
+                      <label className="input-label">New Name</label>
+                      <input
+                        type={editingField === 'email' ? 'email' : 'text'}
+                        className="input-field"
+                        placeholder={`Enter new ${editingField}`}
+                        value={updatedValue}
+                        onChange={(e) => setUpdatedValue(e.target.value)}
+                      />
+
+                    </div>
+
+                    <div className="d-flex justify-content-end gap-2">
+                      <button className="btn-change-password" onClick={handleFieldUpdate}>Change</button>
+                      <button className="btn btn-secondary" onClick={() => setShowEditPopup(false)}>Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {change_password && (
+                <div
+                  className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1050 }}
+                >
+                  <div
+                    className="bg-white p-4 rounded shadow position-relative"
+                    style={{ width: '90%', maxWidth: '500px' }}
+                  >
+                    <div className="title-head text-start">
+                      <h3>Change Password</h3>
+                    </div>
+
+                    <>
+                      <div className="text-start w-100">
+                        <label className="input-label">Previous Password</label>
+                        <input
+                          type="password"
+                          className="input-field w-100"
+                          placeholder="Enter previous password"
+                          onChange={(e) => setPrevious_password(e.target.value)}
+                          value={previous_password}
+                        />
+                      </div>
+
+                      <div className="text-start w-100">
+                        <label className="input-label">New Password</label>
+                        <input
+                          type="password"
+                          className="input-field w-100"
+                          placeholder="Enter new password"
+                          onChange={(e) => setNew_password(e.target.value)}
+                          value={new_password}
+                        />
+                      </div>
+
+                      <div className="text-start w-100">
+                        <label className="input-label">Confirm Password</label>
+                        <input
+                          type="password"
+                          className="input-field w-100"
+                          placeholder="Confirm new password"
+                          onChange={(e) => setConfirm_password(e.target.value)}
+                          value={confirm_password}
+                        />
+                      </div>
+
+                      <div className="d-flex justify-content-between align-items-center mt-3">
+                        <div className="d-flex gap-2">
+                          <button className="btn-change-password" onClick={query_update_password}>Update</button>
+                          <button className="btn btn-secondary" onClick={() => setChange_password(false)}>Cancel</button>
+                        </div>
+                        <span
+                          className="text-primary"
+                          style={{ cursor: 'pointer', fontSize: '0.9rem' }}
+                          onClick={handel_forget_password}
+                        >
+                          Forgot Password?
+                        </span>
+                      </div>
+                    </>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </>
+        )}
+
         {activeSection === 'orders' && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
@@ -1391,7 +1834,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                        <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                        <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -2070,7 +2514,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                        <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                        <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -2151,7 +2596,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                        <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                        <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
                     </Dropdown.Menu>
@@ -2551,7 +2997,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -2614,7 +3061,7 @@ const Dashboard = () => {
                             <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><FaPhoneAlt /> <span className="text-dark ms-1">{item.contect_no}</span> </label>
                             <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><MdEmail /> <span className="text-dark ms-1">{item.email}</span> </label>
                             <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><FaLocationDot /> <span className="text-dark ms-1">{item.location1}</span> </label>
-                            <button className="btn btn-primary btn-sm w-100 mt-3 fs-5" onClick={() => handleViewClick(item)}>View Details</button>
+                            <button className="btn btn-primary btn-sm w-100 mt-3 fs-5" onClick={() => { handleViewClick(item); setActiveSection('company_detail') }}>View Details</button>
                             <button className="btn btn-outline-danger btn-sm w-100 mt-3 fs-5" onClick={() => handleDelete(item)}>Delete</button>
                           </div>
                         </div>
@@ -2629,159 +3076,507 @@ const Dashboard = () => {
               </div>
 
             </div>
+          </>
+        )}
+        {activeSection === "company_detail" && (
+          <>
 
-
-
-            {selectedCompany && (
-
-              <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                  zIndex: 9999
-                }}
-              >
-                <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
-                  style={{
-                    width: '90%',
-                    maxWidth: '1100px',
-                    height: '90vh',
-                    overflowY: 'auto'
-                  }}
-                >
-                  <div className="d-flex flex-column justify-content-start align-items-start w-100">
-                    <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelectedCompany(null)}>
-                      ✕
-                    </button>
+            <div className="bg-light px-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                {isMobile && (
+                  <div className="w-100 d-flex justify-content-start">
+                    <Menu />
                   </div>
+                )}
+                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                  <div className="border-start p-2 border-3 border-dark">
+                    <Dropdown>
+                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu align="end">
+                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                          {/* <div className="text-capitalize">
+                                  <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
+                                </div>
+                                <div>
+                                  <strong>Email:</strong> {userInfo.email}
+                                </div>
+                                <button className="btn btn-secondary btn-sm">Edit Name</button>
+                                <button className="btn btn-secondary btn-sm">Edit Password</button> */}
+                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
 
-                  <div className="d-flex ps-4 w-100 justify-content-start">
-                    <label className="fs-3"><strong>Comapany Information</strong></label>
+                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </div>
-                  {selectedCompany && (
-                    <>
-                      <div className="row p-3 align-items-start">
-                        <div className="col-12 col-md-3 d-flex justify-content-center">
-                          <img src="/Images/webloon_logo.png" className="img-fluid rounded-circle" width="150px" />
-                        </div>
-                        <div className="col-12 col-md-5 text-center text-md-start mt-3 mt-md-0">
-                          <h2>{selectedCompany.company_name}</h2>
-                          <label className="d-flex align-items-center justify-content-center justify-content-md-start">
-                            <IoStar className="text-warning fs-5" />
-                            <span className="text-secondary"> 4.85</span>
-                            <span className="text-primary"> (20 Reviews)</span>
-                          </label>
-                        </div>
-                        {/* <div className="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
-                          <h3 className="text-primary"><RiPencilFill /> Edit Details</h3>
-                        </div> */}
-                      </div>
-
-                      <div className="row mt-5 text-center text-md-start">
-                        {[
-                          { icon: <FaPhoneAlt />, label: 'Contact Number', value: selectedCompany.contect_no },
-                          { icon: <MdEmail />, label: 'Email ID', value: selectedCompany.email },
-                          { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1.split(",")[0].trim() },
-                        ].map((item, index) => (
-                          <div key={index} className="col-12 col-md-4 d-flex align-items-center justify-content-center justify-content-md-start mb-3">
-                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                              style={{
-                                width: '3rem',
-                                height: '3rem',
-                                backgroundColor: '#E1F5FF',
-                                aspectRatio: '1 / 1'
-                              }}>
-                              <h5>{item.icon}</h5>
-                            </div>
-                            <label className="text-secondary ms-3 d-flex flex-column">
-                              {item.label}
-                              <h5 className="text-dark">{item.value}</h5>
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="row mt-4 text-center text-md-start">
-                        {[
-                          { icon: <FaCity />, label: 'State', value: selectedCompany.location1.split(",")[1].trim() },
-                          { icon: <FaCity />, label: 'City', value: selectedCompany.location1.split(",")[2].trim() },
-                          { icon: <FaLocationDot />, label: 'Shipping Countries', value: selectedCompany.tableData[0].countries, extra: <span className="text-primary" onClick={handleScrollToMore}> & more</span> },
-                        ].map((item, index) => (
-                          <div key={index} className="col-12 col-md-4 d-flex align-items-center justify-content-center justify-content-md-start mb-3">
-                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                              style={{
-                                width: '3rem',
-                                height: '3rem',
-                                backgroundColor: '#E1F5FF',
-                                aspectRatio: '1 / 1'
-                              }}>
-                              <h5>{item.icon}</h5>
-                            </div>
-                            <label className="text-secondary ms-3 d-flex flex-column">
-                              {item.label}
-                              <h5 className="text-dark">{item.value}{item.extra}</h5>
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-
-
-
-                      <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3">
-                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-3" style={{ width: '100%' }}>
-                          <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{
-                            width: '3rem',
-                            height: '3rem',
-                            backgroundColor: '#E1F5FF',
-                            aspectRatio: '1 / 1'
-                          }}><FaInfoCircle /></div>
-                          <div className="d-flex flex-column align-items-start">
-                            <span className="text-secondary">About Company</span>
-                            <p className="text-start"><h6>{selectedCompany.description}</h6></p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div id="more" className="d-flex mt-3 pb-5 p-1 justify-content-center align-items-center mb-5">
-                        <div className="border-top border-2" style={{ width: '85%' }}>
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th scope="col"><h6>Transport Offered</h6></th>
-                                <th scope="col"><h6>Destination Countries</h6></th>
-                                <th scope="col"><h6>Delivery Duration</h6></th>
-                              </tr>
-                            </thead>
-                            {selectedCompany.tableData ? (
-                              <tbody>
-                                {selectedCompany.tableData.map((item, index) => (
-                                  <tr key={index}>
-                                    <td className="text-secondary">{item.service_type}</td>
-                                    <td className="text-secondary">{item.countries}</td>
-                                    <td className="text-secondary">{item.duration}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            ) : (
-                              <tbody>
-                                <tr>
-                                  <td colSpan='3' className="text-secondary text-center">No Data</td>
-                                </tr>
-                              </tbody>
-                            )}
-                          </table>
-                        </div>
-                      </div>
-                    </>
-                  )}
                 </div>
               </div>
 
+              <div className="d-flex ps-4 w-100 justify-content-start">
+                <label className="fs-3"><strong>Comapany Information</strong></label>
+              </div>
+
+              <div className="dashboard-wrapper-box">
+                <div className="table-wrap">
+                  <div className="table-filter-wrap">
+
+                    {selectedCompany ? (
+                      <>
+                        <div className="row align-items-center">
+                          <div className="col-12 col-md-2 d-flex justify-content-center">
+                            <img src="/Images/webloon_logo.png" className="img-fluid rounded-circle" width="150px" />
+                          </div>
+                          <div className="col-12 col-md-6 text-center text-md-start mt-3 mt-md-0">
+                            <h2>{selectedCompany.company_name}</h2>
+                            <label className="d-flex align-items-center justify-content-center justify-content-md-start">
+                              <IoStar className="text-warning fs-5" />
+                              <span className="text-secondary"> 4.85</span>
+                              <span className="text-primary"> (20 Reviews)</span>
+                            </label>
+                          </div>
+                          <div className="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
+                            <h4 className="text-primary" style={{ cursor: 'pointer' }} onClick={handle_edit_company}><RiPencilFill /> Edit Details</h4>
+                          </div>
+                        </div>
+
+                        <div className="row mt-5 text-center text-md-start">
+                          {[
+                            { icon: <FaPhoneAlt />, label: 'Contact Number', value: selectedCompany.contect_no },
+                            { icon: <MdEmail />, label: 'Email ID', value: selectedCompany.email },
+                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1.split(",")[0].trim() },
+                          ].map((item, index) => (
+                            <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                              onClick={() => {
+                                if (!edit_company) return;
+
+                                const isLocationField = item.label === 'Country' || item.label === 'State' || item.label === 'City';
+
+                                if (isLocationField) {
+                                  const [country, state, city] = selectedCompany.location1.split(',').map(val => val.trim());
+                                  setEditField({
+                                    label: 'Location',
+                                    previousValue: { country, state, city },
+                                  });
+                                  setNewValue({ country, state, city });
+                                } else {
+                                  setEditField({
+                                    label: item.label,
+                                    previousValue: item.value,
+                                  });
+                                  setNewValue('');
+                                }
+
+                                setEditPopupOpen(true);
+                              }}>
+                              <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                style={{
+                                  width: '3rem',
+                                  height: '3rem',
+                                  backgroundColor: '#E1F5FF',
+                                  aspectRatio: '1 / 1'
+                                }}
+
+                              >
+                                <h5>{item.icon}</h5>
+                              </div>
+                              <label className="text-secondary ms-3 d-flex flex-column">
+                                {item.label}
+                                <h5 className="text-dark">{item.value}</h5>
+                              </label>
+                              {edit_company && (<div className="ms-2 fs-4 text-primary" > < GoPencil /></div>)}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="row mt-4 text-center text-md-start">
+                          {[
+                            { icon: <FaCity />, label: 'State', value: selectedCompany.location1.split(",")[1]?.trim() },
+                            { icon: <FaCity />, label: 'City', value: selectedCompany.location1.split(",")[2]?.trim() },
+                            {
+                              icon: <FaLocationDot />,
+                              label: 'Shipping Countries',
+                              value: selectedCompany.tableData[0]?.countries,
+                              extra: <span className="text-primary" onClick={handleScrollToMore}> & more</span>
+                            },
+                          ].map((item, index) => {
+                            const isEditable = edit_company && index !== 2; // disable editing for 3rd item
+
+                            return (
+                              <div
+                                key={index}
+                                className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                                onClick={() => {
+                                  if (!isEditable) return;
+
+                                  const isLocationField = item.label === 'Country' || item.label === 'State' || item.label === 'City';
+
+                                  if (isLocationField) {
+                                    const [country, state, city] = selectedCompany.location1.split(',').map(val => val.trim());
+                                    setEditField({
+                                      label: 'Location',
+                                      previousValue: { country, state, city },
+                                    });
+                                    setNewValue({ country, state, city });
+                                  } else {
+                                    setEditField({
+                                      label: item.label,
+                                      previousValue: item.value,
+                                    });
+                                    setNewValue('');
+                                  }
+
+                                  setEditPopupOpen(true);
+                                }}
+                                style={{ cursor: isEditable ? 'pointer' : 'default' }}
+                              >
+                                <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                  style={{
+                                    width: '3rem',
+                                    height: '3rem',
+                                    backgroundColor: '#E1F5FF',
+                                    aspectRatio: '1 / 1'
+                                  }}>
+                                  <h5>{item.icon}</h5>
+                                </div>
+                                <label className="text-secondary ms-3 d-flex flex-column">
+                                  {item.label}
+                                  <h5 className="text-dark">{item.value}{item.extra}</h5>
+                                </label>
+
+                                {isEditable && (
+                                  <div className="ms-2 fs-4 text-primary">
+                                    <GoPencil />
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
 
 
-            )}
+                        <div className="row mt-4 text-center text-md-start">
+                          {[
+                            { icon: <FaPaypal />, label: 'Paypal Id', value: selectedCompany?.paypal_id ? selectedCompany.paypal_id : 'N/A' },
+                            { icon: <MdSwitchAccount />, label: 'Account Holder Name', value: selectedCompany.account_holder_name ? selectedCompany.account_holder_name : 'N/A' },
+                            { icon: <BsBank2 />, label: 'IBA Number', value: selectedCompany.iban_number ? selectedCompany.iban_number : 'N/A' },
+                          ].map((item, index) => (
+                            <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                              onClick={() => {
+                                if (!edit_company) return;
+                                setEditPopupOpen(true);
+                                setEditField({
+                                  label: item.label,
+                                  previousValue: item.value,
+                                });
+                                setNewValue('');
+                              }}
+                            >
+                              <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                style={{
+                                  width: '3rem',
+                                  height: '3rem',
+                                  backgroundColor: '#E1F5FF',
+                                  aspectRatio: '1 / 1'
+                                }}>
+                                <h5>{item.icon}</h5>
+                              </div>
+                              <label className="text-secondary ms-3 d-flex flex-column">
+                                {item.label}
+                                <h5 className="text-dark">{item.value}{item.extra}</h5>
+                              </label>
+                              {edit_company && (<div className="ms-2 fs-4 text-primary"> < GoPencil /></div>)}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="row mt-5 text-center text-md-start">
+                          {[
+                            { icon: <FaPhoneAlt />, label: 'Financial Document', value: selectedCompany.financialDocument ? selectedCompany.financialDocument : 'N/A' },
+                            { icon: <MdEmail />, label: 'Passport CEO MD', value: selectedCompany.passport_CEO_MD ? selectedCompany.passport_CEO_MD : 'N/A' },
+                            { icon: <FaLocationDot />, label: 'Registration Document', value: selectedCompany.registrationDocument ? selectedCompany.registrationDocument : 'N/A' },
+                          ].map((item, index) => (
+                            <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3">
+                              <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                style={{
+                                  width: '3rem',
+                                  height: '3rem',
+                                  backgroundColor: '#E1F5FF',
+                                  aspectRatio: '1 / 1'
+                                }}>
+                                <h5>{item.icon}</h5>
+                              </div>
+                              <label className="text-secondary ms-3 d-flex flex-column">
+                                {item.label}
+                                <img className="" width='50px' src={item.value} />
+                              </label>
+                              {/* {edit_company && (<div className="ms-2 fs-4 text-primary"> < GoPencil /></div>)} */}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3"
+                          onClick={() => {
+                            if (!edit_company) return;
+                            setEditPopupOpen(true);
+                            setEditField({
+                              label: 'About Company',
+                              previousValue: selectedCompany.description,
+                            });
+                            setNewValue('');
+                          }}>
+                          <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-3" style={{ width: '100%' }}>
+                            <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary" style={{
+                              width: '3rem',
+                              height: '3rem',
+                              backgroundColor: '#E1F5FF',
+                              aspectRatio: '1 / 1'
+                            }}><FaInfoCircle /></div>
+                            <div className="d-flex flex-column align-items-start">
+                              <span className="text-secondary">About Company</span>
+                              <p className="text-start"><h6>{selectedCompany.description}</h6></p>
+                            </div>
+                          </div>
+                          {edit_company && (<div className="ms-2 fs-4 text-primary"> < GoPencil /></div>)}
+                        </div>
+
+                        <div id="more" className="d-flex mt-3 p-1 justify-content-center align-items-center">
+                          <div className="border-top border-2" style={{ width: '85%' }}>
+                            <table className="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col"><h6>Transport Offered</h6></th>
+                                  <th scope="col"><h6>Destination Countries</h6></th>
+                                  <th scope="col"><h6>Delivery Duration</h6></th>
+                                  {edit_company && <th scope="col"><h6>Action</h6></th>}
+                                </tr>
+                              </thead>
+                              {selectedCompany.tableData ? (
+                                <tbody>
+                                  {selectedCompany.tableData.map((item, index) => (
+                                    <tr key={index}>
+                                      <td className="text-secondary">{item.service_type}</td>
+                                      <td className="text-secondary">{item.countries}</td>
+                                      <td className="text-secondary">{item.duration}</td>
+                                      {edit_company && (
+                                        <td>
+                                          <button
+                                            className="btn btn-sm btn-outline-danger"
+                                            onClick={() => handleDeleteRow(index)}
+                                          >
+                                            Delete
+                                          </button>
+                                        </td>
+                                      )}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              ) : (
+                                <tbody>
+                                  <tr>
+                                    <td colSpan={edit_company ? 4 : 3} className="text-secondary text-center">
+                                      No Data
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              )}
+                            </table>
+                            {edit_company && (
+                              <div className="d-flex justify-content-center mt-3 pe-4">
+                                <button className="btn-change-password" onClick={() => setShowAddPopup(true)}>
+                                  Add more countries
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <h2> NO selected company</h2>
+                      </>
+                    )}
+
+                  </div>
+                </div>
+              </div>
+
+              {showAddPopup && (
+                <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                  <div className="modal-dialog">
+                    <div className="modal-content p-3">
+                      <div className="head-title text-start">
+                        <h3>Add New Country</h3>
+                      </div>
+                      <div className="modal-body">
+                        <div className="mb-3 text-start">
+                          <label className="input-label w-100">Country</label>
+                          <span><Countries_selector
+                            onSelectCountry={(value) =>
+                              setNewCountryData({ ...newCountryData, country: value })
+                            }
+                            label="Select the country"
+                            value={newCountryData.country}
+                            paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                            required
+                          /></span>
+                        </div>
+                        <div className="mb-3 text-start">
+                          <label className="input-label w-100">Delivary Duration</label>
+                          <input
+                            type="number"
+                            className="input-field w-100"
+                            value={newCountryData.duration}
+                            min="1"
+                            onChange={(e) => setNewCountryData({ ...newCountryData, duration: e.target.value })}
+                          />
+                        </div>
+                        <div className="mb-3 text-start">
+                          <label className="input-label w-100 mb-2">Service</label>
+                          <div className="form-check form-check-inline">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              id="container"
+                              value="container"
+                              checked={newCountryData.name.includes('container')}
+                              onChange={(e) => handleServiceCheckboxChange(e)}
+                            />
+                            <label className="form-check-label" htmlFor="container">Container</label>
+                          </div>
+                          <div className="form-check form-check-inline">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              id="cars"
+                              value="cars"
+                              checked={newCountryData.name.includes('cars')}
+                              onChange={(e) => handleServiceCheckboxChange(e)}
+                            />
+                            <label className="form-check-label" htmlFor="cars">Cars</label>
+                          </div>
+                          <div className="form-check form-check-inline">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              id="groupage"
+                              value="groupage"
+                              checked={newCountryData.name.includes('groupage')}
+                              onChange={(e) => handleServiceCheckboxChange(e)}
+                            />
+                            <label className="form-check-label" htmlFor="groupage">Groupage</label>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="bg-secondary btn-change-password"
+                          onClick={() => setShowAddPopup(false)}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-change-password"
+                          onClick={handleAddCountry}
+                        >
+                          update
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {editPopupOpen && (
+                <div
+                  className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1050 }}
+                >
+                  <div className="bg-white p-4 rounded shadow" style={{ width: '90%', maxWidth: '500px' }}>
+                    <h5 className="mb-3 text-center">Edit {editField.label}</h5>
+
+                    {editField.label === 'Location' ? (
+                      <>
+                        <div className="mb-3 text-start">
+                          <label className="input-label">Previous Value</label>
+                          <input
+                            type="text"
+                            className="input-field w-100"
+                            value={`${editField.previousValue.country}, ${editField.previousValue.state}, ${editField.previousValue.city}`}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3 text-start">
+                          <label className="input-label">New Value</label>
+                          <input
+                            type="text"
+                            className="input-field w-100 mb-2"
+                            placeholder="Country"
+                            value={newValue.country}
+                            onChange={(e) => setNewValue({ ...newValue, country: e.target.value })}
+                          />
+                          <input
+                            type="text"
+                            className="input-field w-100 mb-2"
+                            placeholder="State"
+                            value={newValue.state}
+                            onChange={(e) => setNewValue({ ...newValue, state: e.target.value })}
+                          />
+                          <input
+                            type="text"
+                            className="input-field w-100"
+                            placeholder="City"
+                            value={newValue.city}
+                            onChange={(e) => setNewValue({ ...newValue, city: e.target.value })}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="mb-3 text-start">
+                          <label className="input-label">Previous Value</label>
+                          <input type="text" className="input-field w-100" value={editField.previousValue} readOnly />
+                        </div>
+
+                        <div className="mb-3 text-start">
+                          <label className="input-label">New Value</label>
+                          <input
+                            type="text"
+                            className="input-field w-100"
+                            value={newValue}
+                            onChange={(e) => setNewValue(e.target.value)}
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    <div className="d-flex justify-content-center gap-2">
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          console.log("Updating", editField.label, "to", newValue);
+                          handle_edit_company_query();
+                          setEditPopupOpen(false);
+                        }}
+                      >
+                        Update
+                      </button>
+                      <button className="btn btn-secondary" onClick={() => setEditPopupOpen(false)}>
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
           </>
         )}
-
         {activeSection === "offers" && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
@@ -2807,7 +3602,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -3427,7 +4223,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
@@ -3485,185 +4282,6 @@ const Dashboard = () => {
           </>
         )}
 
-        {activeSection === "notification" && (
-          <>
-            {/* <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
-              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                {isMobile && (
-                  <div className="w-100 d-flex justify-content-start">
-                    <Menu />
-                  </div>
-                )}
-                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
-                  <div className="border-start p-2 border-3 border-dark">
-                    <Dropdown>
-                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu align="end">
-                        <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-                          <div className="text-capitalize">
-                            <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
-                          </div>
-                          <div>
-                            <strong>Email:</strong> {userInfo.email}
-                          </div>
-                          <button className="btn btn-secondary btn-sm">Edit Name</button>
-                          <button className="btn btn-secondary btn-sm">Edit Password</button>
-                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                        </div>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </div>
-                </div>
-              </div>
-
-              <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
-                <div className="d-flex ps-4 w-50 justify-content-start">
-                  <label className="fs-3"><strong>Notification</strong></label>
-                </div>
-              </div>
-
-              <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-5 rounded-1" style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-                <div className="d-flex flex-column align-items-start justify-content-start mt-2 p-2 w-100">
-
-                  {userRole === 'admin' ? (
-                    <>
-                      <strong>New Offers</strong>
-                      {admin_notification && (
-                        <>
-                          <div className="d-flex flex-column align-items-start justify-content-start">
-                            {admin_notification.map((item, index) => (
-                              <div className="d-flex flex-row align-items-start w-100 justify-content-start mt-3 mb-3">
-                                <div
-                                  className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center overflow-hidden"
-                                  style={{ width: '3.5rem', height: '3.5rem' }}
-                                >
-                                  <img
-                                    src={item.img01}
-                                    alt="Item"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                  />
-                                </div>
-                                <div className="ps-3 flex-grow-1">
-                                  <p className="mb-0 text-start">
-                                    A new product name <strong>{item.product_name}</strong> has been added for groupage
-                                    <br />
-                                    <span className="text-secondary">{formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}</span>
-                                  </p>
-                                </div>
-                                <div className="text-primary">
-                                  <span onClick={() => navigate('/offers')}>See Details</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                        </>
-                      )}
-                    </>
-                  ) : userRole === 'Sadmin' ? (
-                    <>
-                      <strong>New Groupage Created</strong>
-                      {notification_groupageData && (
-                        <>
-                          <div className="d-flex flex-column align-items-start justify-content-start">
-                            {notification_groupageData.map((item, index) => (
-                              <div className="d-flex flex-row align-items-start w-100 justify-content-start mt-3 mb-3">
-                                <div
-                                  className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center overflow-hidden"
-                                  style={{ width: '3.5rem', height: '3.5rem' }}
-                                >
-                                  <img
-                                    src={item.img01}
-                                    alt="Item"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                  />
-                                </div>
-                                <div className="ps-3 flex-grow-1">
-                                  <p className="mb-0 text-start">
-                                    A new product name <strong>{item.product_name}</strong> has been added for groupage
-                                    <br />
-                                    <span className="text-secondary">{formatDistanceToNow(new Date(item.groupage_created_at), { addSuffix: true })}</span>
-                                  </p>
-                                </div>
-                                <div className="text-primary">
-                                  <span onClick={() => navigate('/offers')}>See Details</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                      <strong>New Companies Regestered</strong>
-                      {notification_companyData && (
-                        <>
-                          <div className="d-flex flex-column align-items-start justify-content-start">
-                            {notification_companyData.map((item, index) => (
-                              <div className="d-flex flex-row align-items-start w-100 justify-content-start mt-3 mb-3" key={index}>
-                                <div
-                                  className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center overflow-hidden"
-                                  style={{ width: '3.5rem', height: '3.5rem' }}
-                                >
-                                  <img
-                                    src={item.comapny_info_logo}
-                                    alt="Logo"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                  />
-                                </div>
-                                <div className="ps-3 flex-grow-1">
-                                  <p className="mb-0 text-start">
-                                    A new company name <strong>{item.company_info_name}</strong> has been regestered
-                                  </p>
-                                </div>
-                                <div className="text-primary">
-                                  <span onClick={() => navigate('/companies_list')}>See Details</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {user_notification && (
-                        <>
-                          <div className="d-flex flex-column align-items-start justify-content-start w-100">
-                            {user_notification.map((item, index) => (
-                              <div className="d-flex flex-row align-items-start w-100 justify-content-start mt-3 mb-3">
-                                <div
-                                  className="rounded-circle border border-1 border-secondary d-flex align-items-center justify-content-center overflow-hidden"
-                                  style={{ width: '3.5rem', height: '3.5rem' }}
-                                >
-                                  <img
-                                    src={item.logo}
-                                    alt="logo"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                  />
-                                </div>
-                                <div className="ps-3 flex-grow-1">
-                                  <p className="mb-0 text-start">
-                                    A new company name <strong>{item.company_name}</strong> has been added
-                                  </p>
-                                </div>
-                                <div className="text-primary">
-                                  <span onClick={() => navigate('/companies_list')}>See Details</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </>
-                  )}
-
-                </div>
-              </div>
-            </div> */}
-          </>
-        )}
-
         {activeSection === "users" && (
           <>
             <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
@@ -3689,7 +4307,8 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1">Profile information</button>
+                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
                       </Dropdown.Menu>
