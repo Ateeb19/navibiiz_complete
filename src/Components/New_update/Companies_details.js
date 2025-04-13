@@ -193,9 +193,12 @@ const CompanyDetails = () => {
                                     {company.car_service ? " & Cars" : ""}
                                 </span>
                                 <span className="text-secondary d-block">
-                                    <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to -{" "}
-                                    {company.Countries.map((item, index) => (
-                                        <span key={index}>{item.countries}, </span>
+                                    <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to –{" "}
+                                    {[...new Set(company.Countries.map(item => item.countries.trim()))].map((country, index, arr) => (
+                                        <span key={index}>
+                                            {country}
+                                            {index < arr.length - 1 ? ", " : ""}
+                                        </span>
                                     ))}
                                 </span>
                             </div>

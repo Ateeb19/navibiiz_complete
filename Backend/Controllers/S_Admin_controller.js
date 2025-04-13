@@ -231,84 +231,112 @@ const edit_company_details = (req, res) => {
                     res.json({ message: 'Updated!', status: true });
                 }
             })
-        }else
+        } else
 
-        if (editField.label === 'Location') {
-            const locationString = `${newValue.country}, ${newValue.state}, ${newValue.city}`;
-        
-            db.query(`UPDATE companies_info SET location1 = '${locationString}' WHERE id = ${company_id}`, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    res.json({ message: 'error in database' });
-                } else {
-                    res.json({ message: 'Updated!', status: true });
-                }
-            });
-        }else
+            if (editField.label === 'Location') {
+                const locationString = `${newValue.country}, ${newValue.state}, ${newValue.city}`;
 
-        if (editField.label === 'Paypal Id') {
-            db.query(`UPDATE companies_info SET paypal_id = '${newValue}' WHERE id = ${company_id}`, (err, result) => {
-                if (err) {
-                    console.log(err, 'this is the error ');
-                    res.json({ message: 'error in database' });
-                } else {
-                    res.json({ message: 'Updated!', status: true });
-                }
-            })
-        }else
+                db.query(`UPDATE companies_info SET location1 = '${locationString}' WHERE id = ${company_id}`, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.json({ message: 'error in database' });
+                    } else {
+                        res.json({ message: 'Updated!', status: true });
+                    }
+                });
+            } else
 
-        if (editField.label === 'Account Holder Name') {
-            db.query(`UPDATE companies_info SET account_holder_name = '${newValue}' WHERE id = ${company_id}`, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    res.json({ message: 'error in database' });
-                } else {
-                    res.json({ message: 'Updated!', status: true });
-                }
-            })
-        }else
+                if (editField.label === 'Paypal Id') {
+                    db.query(`UPDATE companies_info SET paypal_id = '${newValue}' WHERE id = ${company_id}`, (err, result) => {
+                        if (err) {
+                            console.log(err, 'this is the error ');
+                            res.json({ message: 'error in database' });
+                        } else {
+                            res.json({ message: 'Updated!', status: true });
+                        }
+                    })
+                } else
 
-        if (editField.label === 'IBA Number') {
-            db.query(`UPDATE companies_info SET iban_number = '${newValue}' WHERE id = ${company_id}`, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    res.json({ message: 'error in database' });
-                } else {
-                    res.json({ message: 'Updated!', status: true });
-                }
-            })
-        }else
+                    if (editField.label === 'Account Holder Name') {
+                        db.query(`UPDATE companies_info SET account_holder_name = '${newValue}' WHERE id = ${company_id}`, (err, result) => {
+                            if (err) {
+                                console.log(err);
+                                res.json({ message: 'error in database' });
+                            } else {
+                                res.json({ message: 'Updated!', status: true });
+                            }
+                        })
+                    } else
 
-        if (editField.label === 'About Company') {
-            db.query(`UPDATE companies_info SET description = '${newValue}' WHERE id = ${company_id}`, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    res.json({ message: 'error in database' });
-                } else {
-                    res.json({ message: 'Updated!', status: true });
-                }
-            })
-        }
+                        if (editField.label === 'IBA Number') {
+                            db.query(`UPDATE companies_info SET iban_number = '${newValue}' WHERE id = ${company_id}`, (err, result) => {
+                                if (err) {
+                                    console.log(err);
+                                    res.json({ message: 'error in database' });
+                                } else {
+                                    res.json({ message: 'Updated!', status: true });
+                                }
+                            })
+                        } else
 
-        else {
-            res.json('nothing');
-        }
+                            if (editField.label === 'About Company') {
+                                db.query(`UPDATE companies_info SET description = '${newValue}' WHERE id = ${company_id}`, (err, result) => {
+                                    if (err) {
+                                        console.log(err);
+                                        res.json({ message: 'error in database' });
+                                    } else {
+                                        res.json({ message: 'Updated!', status: true });
+                                    }
+                                })
+                            }
+
+                            else {
+                                res.json('nothing');
+                            }
     } else {
         res.json({ message: 'You are not Super Admin', status: false });
     }
 }
 const Delete_company_details_country = (req, res) => {
-    if(req.user.role === 'Sadmin'){
+    if (req.user.role === 'Sadmin') {
         const company_id = req.body.company_id;
         const row_id = req.body.row_id;
         db.query(`DELETE FROM company_${company_id} WHERE id = ${row_id}`, (err, result) => {
-            if(err){
+            if (err) {
                 console.log(err);
-                res.json({message: 'error in database', status: false})
-            }else{
-                res.json({message: 'Deleted!', status: true})
+                res.json({ message: 'error in database', status: false })
+            } else {
+                res.json({ message: 'Deleted!', status: true })
             }
         })
+    }
+}
+
+const add_company_country = (req, res) => {
+    if (req.user.role === 'Sadmin') {
+        const company_id = req.params.id;
+        const newCountryData = {
+            country: req.body.country,
+            duration: req.body.duration,
+            name: req.body.name,
+        }
+        db.query(
+            `INSERT INTO company_${company_id} (countries, duration, service_type) VALUES (?, ?, ?)`,
+            [req.body.country, req.body.duration, req.body.name],
+            (err, result) => {
+                if (err) {
+                    console.error('Insert error:', err);
+                    return res.status(500).json({ status: false, message: 'Insert failed', error: err });
+                }
+                res.json({
+                    status: true,
+                    message: 'New country added successfully',
+                    insertedId: result.insertId
+                });
+            }
+        );
+    } else {
+        res.json({ message: 'You are not Super Admin', status: false })
     }
 }
 module.exports = {
@@ -324,4 +352,5 @@ module.exports = {
     compnay_info_details,
     edit_company_details,
     Delete_company_details_country,
+    add_company_country,
 };

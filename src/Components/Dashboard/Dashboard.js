@@ -142,19 +142,19 @@ const Dashboard = () => {
   });
   const location = useLocation();
 
-  useEffect(() => {
-    const savedCompany = localStorage.getItem("selected_company");
-    const activeSectionState = localStorage.getItem("activeSection");
+  // useEffect(() => {
+  //   const savedCompany = localStorage.getItem("selected_company");
+  //   const activeSectionState = localStorage.getItem("activeSection");
 
-    if (location.pathname === '/dashboard') {
-      if (activeSectionState === 'company_detail') {
-        setActiveSection('company_detail');
-        if (savedCompany) {
-          setSelectedCompany(JSON.parse(savedCompany));
-        }
-      }
-    }
-  }, [location.pathname]);
+  //   if (location.pathname === '/dashboard') {
+  //     if (activeSectionState === 'company_detail') {
+  //       setActiveSection('company_detail');
+  //       if (savedCompany) {
+  //         setSelectedCompany(JSON.parse(savedCompany));
+  //       }
+  //     }
+  //   }
+  // }, [location.pathname]);
   useEffect(() => {
     localStorage.setItem("activeSection", activeSection);
   }, [activeSection]);
@@ -462,27 +462,66 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const storedId = localStorage.getItem('selected_company_id');
-    const active = localStorage.getItem('activeSection');
-
-    if (storedId && active === 'company_detail') {
-      axios.get(`${port}/s_admin/company_info_detail/${storedId}`, {
-        headers: {
-          Authorization: token,
+    const initializeCompany = async () => {
+      if (userRole === 'admin') {
+        try {
+          const res = await axios.get(`${port}/admin/display_company`, {
+            headers: { Authorization: token },
+          });
+          console.log(res.data, 'this is the data 4');
+          setSelectedCompany(res.data.message[0]);
+          setActiveSection('company_detail');
+        } catch (err) {
+          console.error('Failed to fetch admin company details:', err);
         }
-      })
-        .then(res => {
-          const data = res.data;
-          if (data.status && data.message.length > 0) {
-            setSelectedCompany(data.message[0]);
-            setActiveSection('company_detail');
-          } else {
-            console.error('Company not found or invalid response');
+        return
+      }
+      const storedId = localStorage.getItem('selected_company_id');
+      const active = localStorage.getItem('activeSection');
+
+      if (storedId && active === 'company_detail') {
+        axios.get(`${port}/s_admin/company_info_detail/${storedId}`, {
+          headers: {
+            Authorization: token,
           }
         })
-        .catch(err => console.error('Error fetching company on load:', err));
-    }
-  }, []);
+          .then(res => {
+            const data = res.data;
+            if (data.status && data.message.length > 0) {
+              setSelectedCompany(data.message[0]);
+              setActiveSection('company_detail');
+            } else {
+              console.error('Company not found or invalid response');
+            }
+          })
+          .catch(err => console.error('Error fetching company on load:', err));
+      }
+    };
+
+    initializeCompany();
+
+
+    // const storedId = localStorage.getItem('selected_company_id');
+    // const active = localStorage.getItem('activeSection');
+
+    // if (storedId && active === 'company_detail') {
+    //   axios.get(`${port}/s_admin/company_info_detail/${storedId}`, {
+    //     headers: {
+    //       Authorization: token,
+    //     }
+    //   })
+    //     .then(res => {
+    //       const data = res.data;
+    //       if (data.status && data.message.length > 0) {
+    //         setSelectedCompany(data.message[0]);
+    //         setActiveSection('company_detail');
+    //       } else {
+    //         console.error('Company not found or invalid response');
+    //       }
+    //     })
+    //     .catch(err => console.error('Error fetching company on load:', err));
+    // }
+  }, [userRole]);
 
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [editingField, setEditingField] = useState('');
@@ -846,16 +885,34 @@ const Dashboard = () => {
     setFilter_selectedCountry(country);
   }
 
-  const filteredCompanies = companyData.filter((company) => {
-    const providesService = (service) => company[`${service}_service`] === "1";
-    const shipsToCountry = (country) => company.tableData.some((data) => data.countries.toLowerCase().includes(country.toLowerCase()));
+  let filteredCompanies = [];
 
-    return (
-      (filter_companyName === '' || company.company_name.toLowerCase().includes(filter_companyName.toLowerCase())) &&
-      (filter_selectedCountry === '' || shipsToCountry(filter_selectedCountry)) &&
-      (filter_selectedService === '' || providesService(filter_selectedService))
-    );
-  });
+  if (userRole === 'Sadmin' && Array.isArray(companyData)) {
+    filteredCompanies = companyData.filter((company) => {
+      const providesService = (service) => company[`${service}_service`] === "1";
+      const shipsToCountry = (country) =>
+        company.tableData?.some((data) =>
+          data.countries.toLowerCase().includes(country.toLowerCase())
+        );
+
+      return (
+        (filter_companyName === '' || company.company_name.toLowerCase().includes(filter_companyName.toLowerCase())) &&
+        (filter_selectedCountry === '' || shipsToCountry(filter_selectedCountry)) &&
+        (filter_selectedService === '' || providesService(filter_selectedService))
+      );
+    });
+  }
+
+  // const filteredCompanies = companyData.filter((company) => {
+  //   const providesService = (service) => company[`${service}_service`] === "1";
+  //   const shipsToCountry = (country) => company.tableData.some((data) => data.countries.toLowerCase().includes(country.toLowerCase()));
+
+  //   return (
+  //     (filter_companyName === '' || company.company_name.toLowerCase().includes(filter_companyName.toLowerCase())) &&
+  //     (filter_selectedCountry === '' || shipsToCountry(filter_selectedCountry)) &&
+  //     (filter_selectedService === '' || providesService(filter_selectedService))
+  //   );
+  // });
   const handleScrollToMore = () => {
     const targetDiv = document.getElementById("more");
     if (targetDiv) {
@@ -1037,6 +1094,19 @@ const Dashboard = () => {
   const [newValue, setNewValue] = useState('');
 
   const handle_edit_company_query = () => {
+    if (userRole === 'admin') {
+      axios.put(`${port}/admin/edit_company/${selectedCompany.id}`, { editField, newValue }, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        console.log(response.data);
+        setEditPopupOpen(false);
+        window.location.reload();
+      }
+      ).catch((err) => { console.log(err); });
+      return;
+    }
     axios.put(`${port}/s_admin/edit_company/${selectedCompany.id}`, { editField, newValue }, {
       headers: {
         Authorization: token,
@@ -1050,6 +1120,36 @@ const Dashboard = () => {
   }
 
   const handleDeleteRow = async (index) => {
+    if (userRole === 'admin') {
+      const row = selectedCompany.tableData[index];
+      const company_id = selectedCompany.id; // or whatever key you're using for company_id
+      const row_id = row.id;
+
+      try {
+        const response = await axios.delete(`${port}/admin/delete_company_country`, {
+          data: { company_id, row_id },
+          headers: {
+            Authorization: token,
+          }
+        });
+
+        if (response.data.status) {
+          const updatedData = [...selectedCompany.tableData];
+          updatedData.splice(index, 1);
+          setSelectedCompany(prev => ({
+            ...prev,
+            tableData: updatedData
+          }));
+          showAlert(response.data.message);
+        } else {
+          showAlert('Failed to delete row from the server!');
+        }
+      } catch (error) {
+        console.error('Error deleting row:', error);
+        showAlert('Something went wrong while deleting the row!');
+      }
+      return;
+    }
     const row = selectedCompany.tableData[index];
     const company_id = selectedCompany.id; // or whatever key you're using for company_id
     const row_id = row.id;
@@ -1083,16 +1183,92 @@ const Dashboard = () => {
   const [newCountryData, setNewCountryData] = useState({
     country: '',
     duration: '',
-    name: []
+    name: ''
   });
 
   const handleServiceCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-    setNewCountryData(prev => {
-      const updatedNames = checked
-        ? [...prev.name, value]
-        : prev.name.filter(item => item !== value);
-      return { ...prev, name: updatedNames };
+    const { value } = e.target;
+    setNewCountryData(prev => ({
+      ...prev,
+      name: value
+    }));
+  };
+
+  const handle_add_new_country = () => {
+    if (!newCountryData.country || !newCountryData.duration || !newCountryData.name) {
+      showAlert('Please select all the fields.');
+      return;
+    }
+
+    if (userRole === 'admin') {
+      axios.post(`${port}/admin/add_new_country/${selectedCompany.id}`, newCountryData, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        if (response.data.status) {
+          showAlert(response.data.message);
+          setShowAddPopup(false);
+          const newRow = {
+            id: response.data.insertedId, 
+            countries: newCountryData.country,
+            duration: newCountryData.duration,
+            service_type: newCountryData.name
+          };
+
+          setSelectedCompany(prev => ({
+            ...prev,
+            tableData: [...prev.tableData, newRow]
+          }));
+
+          setNewCountryData({
+            country: '',
+            duration: '',
+            name: '',
+          });
+
+        } else {
+          showAlert('Failed to add new country!');
+        }
+      }).catch((err) => {
+        console.error('Error adding new country:', err);
+        showAlert('Something went wrong!');
+      });
+      return;
+    }
+
+    axios.post(`${port}/s_admin/add_new_country/${selectedCompany.id}`, newCountryData, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      if (response.data.status) {
+        showAlert(response.data.message);
+        setShowAddPopup(false);
+        const newRow = {
+          id: response.data.insertedId, 
+          countries: newCountryData.country,
+          duration: newCountryData.duration,
+          service_type: newCountryData.name
+        };
+
+        setSelectedCompany(prev => ({
+          ...prev,
+          tableData: [...prev.tableData, newRow]
+        }));
+
+        setNewCountryData({
+          country: '',
+          duration: '',
+          name: '',
+        });
+
+      } else {
+        showAlert('Failed to add new country!');
+      }
+    }).catch((err) => {
+      console.error('Error adding new country:', err);
+      showAlert('Something went wrong!');
     });
   };
 
@@ -1203,7 +1379,7 @@ const Dashboard = () => {
           <div className="position-absolute text-white w-100 p-3" style={{ backgroundColor: ' #00232f', top: "50px", zIndex: 1000 }}>
             <ul className="nav flex-column mt-4 fs-4 w-100">
               <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Dashboard"); setActiveSection("dashboard"); localStorage.setItem("activeSection", "dashboard"); setSelectedCompany(''); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Dashboard"); setActiveSection("dashboard"); localStorage.setItem("activeSection", "dashboard"); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                   <MdDashboard /> Dashboard
                 </Link>
               </li>
@@ -1211,23 +1387,23 @@ const Dashboard = () => {
               {userRole === 'Sadmin' || userRole === 'admin' ? (
                 <>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Companies"); setActiveSection("companies"); localStorage.setItem("activeSection", "companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Companies"); setActiveSection("companies"); localStorage.setItem("activeSection", "companies"); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <BsBuildingsFill /> Companies
                     </Link>
                   </li>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("offers"); localStorage.setItem("activeSection", "offers"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("offers"); localStorage.setItem("activeSection", "offers"); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <FaUsers /> Offers
                     </Link>
                   </li>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payments"); setActiveSection("payments"); localStorage.setItem("activeSection", "payments"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payments"); setActiveSection("payments"); localStorage.setItem("activeSection", "payments"); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                       <RiSecurePaymentFill /> Payments
                     </Link>
                   </li>
                   {userData.length > 0 && (
                     <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                      <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Roles & Permissions"); setActiveSection("users"); localStorage.setItem("activeSection", "users"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                      <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Roles & Permissions"); setActiveSection("users"); localStorage.setItem("activeSection", "users"); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                         <FaUserGear /> Roles & Permissions
                       </Link>
                     </li>
@@ -1236,19 +1412,19 @@ const Dashboard = () => {
               ) : (
                 <>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Orders"); setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Orders"); setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <FaBoxOpen /> Orders
                     </Link>
                   </li>
 
                   <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <MdPayment /> Offers
                     </Link>
                   </li>
 
                   <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payment History"); setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payment History"); setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                       <MdPayment /> Payment History
                     </Link>
                   </li>
@@ -1290,7 +1466,7 @@ const Dashboard = () => {
                 <div className="d-flex align-items-start justify-content-start mt-5">
                   <ul className="nav flex-column mt-4 fs-4 w-100">
                     <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                      <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("dashboard"); localStorage.setItem("activeSection", "dashboard"); setSelectedCompany(''); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                      <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("dashboard"); localStorage.setItem("activeSection", "dashboard"); setShowOfferDetails(null); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                         <MdDashboard /> Dashboard
                       </Link>
                     </li>
@@ -1298,23 +1474,23 @@ const Dashboard = () => {
                     {userRole === 'Sadmin' ? (
                       <>
                         <li className="nav-item mb-4 text-start" style={(activeSection === 'companies' && 'company_detail') ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("companies"); localStorage.setItem("activeSection", "companies"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("companies"); localStorage.setItem("activeSection", "companies"); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                             <BsBuildingsFill /> Companies
                           </Link>
                         </li>
                         <li className="nav-item mb-4 text-start" style={activeSection === 'offers' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("offers"); localStorage.setItem("activeSection", "offers"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("offers"); localStorage.setItem("activeSection", "offers"); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                             <FaUsers /> Offers
                           </Link>
                         </li>
                         <li className="nav-item mb-4 text-start" style={activeSection === 'payments' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payments"); localStorage.setItem("activeSection", "payments"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payments"); localStorage.setItem("activeSection", "payments"); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                             <RiSecurePaymentFill /> Payments
                           </Link>
                         </li>
                         {userData.length > 0 && (
                           <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                            <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("users"); localStorage.setItem("activeSection", "users"); setSelectedCompany(''); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
+                            <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("users"); localStorage.setItem("activeSection", "users"); setShowOfferDetails(null); setShowRegisterPopup(false) }}>
                               <FaUserGear /> Roles & Permissions
                             </Link>
                           </li>
@@ -1325,7 +1501,7 @@ const Dashboard = () => {
                         {userRole === 'user' && (
                           <>
                             <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                                 <FaBoxOpen /> Orders
                               </Link>
                             </li>
@@ -1333,15 +1509,25 @@ const Dashboard = () => {
                         )}
 
                         <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                             <MdPayment /> Offers
                           </Link>
                         </li>
 
+                        {userRole === 'admin' && (
+                          <>
+                            <li className="nav-item mb-4 text-start" style={activeSection === 'company_detail' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("company_detail"); localStorage.setItem("activeSection", "company_detail"); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                                <FaBoxOpen /> Company Details
+                              </Link>
+                            </li>
+                          </>
+                        )}
+
                         {userRole === 'user' && (
                           <>
                             <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelectedCompany(''); setSelected_groupage(null); setShowRegisterPopup(false) }}>
+                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelected_groupage(null); setShowRegisterPopup(false) }}>
                                 <MdPayment /> Payment History
                               </Link>
                             </li>
@@ -1502,8 +1688,8 @@ const Dashboard = () => {
                     <div className="dashboard-wraper-box">
                       <div className="row mt-3 g-3 justify-content-center">
                         {[{ count: 'N/A', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
-                        { count: admin_total_offers, change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
-                        { count: admin_offer_accecepted, change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> }
+                        { count: admin_total_offers? admin_total_offers: 'N/A', change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
+                        { count: admin_offer_accecepted? admin_offer_accecepted: 'N/A', change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> }
                         ].map((item, index) => (
                           <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                             <div className=" dashboard-wrap-box ">
@@ -1565,7 +1751,7 @@ const Dashboard = () => {
 
                     <div className="dashboard-wraper-box">
                       <div className="row mt-3 g-3 justify-content-center">
-                        {[{ count: user_numbers_orders, change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
+                        {[{ count: user_numbers_orders? user_numbers_orders: 'N/A', change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
                         { count: 15, change: "-2%", text: "Upcoming Pick up", icon: <BsCarFrontFill /> },
                         { count: 25, change: "+10%", text: "Total Spending", icon: <FaTruckLoading /> }
                         ].map((item, index) => (
@@ -1635,7 +1821,7 @@ const Dashboard = () => {
                 <div className="table-wrap">
                   <div className="table-filter-wrap">
                     <div className="d-flex justify-content-between align-items-start mb-3">
-                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" onClick={() => handleEditClick('name')}>
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" onClick={() => {if(profile_edit){handleEditClick('name')}}}>
                         <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                           style={{
                             width: '3rem',
@@ -1657,7 +1843,9 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 mb-3" onClick={() => handleEditClick('email')}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 mb-3"
+                    //  onClick={() =>{if(profile_edit){ handleEditClick('email')}}}
+                     >
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -2974,22 +3162,24 @@ const Dashboard = () => {
 
         {activeSection === "companies" && (
           <>
-            <div className="bg-light px-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
-              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                {isMobile && (
-                  <div className="w-100 d-flex justify-content-start">
-                    <Menu />
-                  </div>
-                )}
-                <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
-                  <div className="border-start p-2 border-3 border-dark">
-                    <Dropdown>
-                      <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
-                        <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu align="end">
-                        <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                          {/* <div className="text-capitalize">
+            {userRole === 'Sadmin' && (
+              <>
+                <div className="bg-light px-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+                  <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
+                    {isMobile && (
+                      <div className="w-100 d-flex justify-content-start">
+                        <Menu />
+                      </div>
+                    )}
+                    <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
+                      <div className="border-start p-2 border-3 border-dark">
+                        <Dropdown>
+                          <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
+                            <FaUserTie /> <strong className="text-capitalize">{userInfo.name}</strong>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu align="end">
+                            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                              {/* <div className="text-capitalize">
                                   <strong>Role:</strong> {userInfo.role === 'Sadmin' ? 'Super Admin' : userInfo.role === 'admin' ? 'Admin' : 'User'}
                                 </div>
                                 <div>
@@ -2997,85 +3187,87 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+                              <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
 
-                          <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
-                        </div>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </div>
-                </div>
-              </div>
-
-              <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
-                <div className="d-flex ps-4 w-50 justify-content-start">
-                  <label className="fs-3"><strong>Companies List</strong></label>
-                </div>
-              </div>
-
-              <div className="d-flex mt-3 p-3 pt-1 flex-column justify-content-start align-items-start m-2 rounded-1 dashboard-wrap-box" >
-
-                <div className="d-flex flex-column align-items-start justify-content-start ps-2 my-3 w-100">
-                  <h5>Filters By:</h5>
-                  <div className="row w-100">
-                    <div className="col-12 col-md-4 d-flex flex-column align-items-start">
-                      <input
-                        type="text"
-                        className="shipping-input-field"
-                        placeholder="Search company name here..."
-                        value={filter_companyName}
-                        onChange={(e) => setFilter_companyName(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="col-12 col-md-4 d-flex flex-column align-items-start">
-                      <Countries_selector onSelectCountry={handleSelectCountry} label="Destination Countries" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
-                    </div>
-
-                    {/* Services Offered Filter */}
-                    <div className="col-12 col-md-4 d-flex flex-column align-items-start">
-                      <Form.Select
-                        value={filter_selectedService}
-                        onChange={(e) => setFilter_selectedService(e.target.value)}
-                        style={{ backgroundColor: '#ebebeb', border: '#ebebeb', padding: '12px 18px' }}
-                      >
-                        <option value="">Select Services Offered</option>
-                        <option value="container">Container</option>
-                        <option value="groupage">Groupage</option>
-                        <option value="car">Car</option>
-                      </Form.Select>
+                              <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div className="container mt-4">
-                <div className="row justify-content-center">
-                  {filteredCompanies ? (
-                    filteredCompanies.length > 0 ? (
-                      filteredCompanies.map((item, index) => (
-                        <div className="col-12 col-md-6 col-lg-4 mb-4" key={index}>
-                          <div className="dashboard-wrap-box ">
-                            <h5>{item.company_name}</h5>
-                            <p className="text-start" style={{ fontSize: '0.9rem' }}>description-: Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                            <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><FaPhoneAlt /> <span className="text-dark ms-1">{item.contect_no}</span> </label>
-                            <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><MdEmail /> <span className="text-dark ms-1">{item.email}</span> </label>
-                            <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><FaLocationDot /> <span className="text-dark ms-1">{item.location1}</span> </label>
-                            <button className="btn btn-primary btn-sm w-100 mt-3 fs-5" onClick={() => { handleViewClick(item); setActiveSection('company_detail') }}>View Details</button>
-                            <button className="btn btn-outline-danger btn-sm w-100 mt-3 fs-5" onClick={() => handleDelete(item)}>Delete</button>
-                          </div>
+                  <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
+                    <div className="d-flex ps-4 w-50 justify-content-start">
+                      <label className="fs-3"><strong>Companies List</strong></label>
+                    </div>
+                  </div>
+
+                  <div className="d-flex mt-3 p-3 pt-1 flex-column justify-content-start align-items-start m-2 rounded-1 dashboard-wrap-box" >
+
+                    <div className="d-flex flex-column align-items-start justify-content-start ps-2 my-3 w-100">
+                      <h5>Filters By:</h5>
+                      <div className="row w-100">
+                        <div className="col-12 col-md-4 d-flex flex-column align-items-start">
+                          <input
+                            type="text"
+                            className="shipping-input-field"
+                            placeholder="Search company name here..."
+                            value={filter_companyName}
+                            onChange={(e) => setFilter_companyName(e.target.value)}
+                          />
                         </div>
-                      ))
-                    ) : (
-                      <div>No company data available</div>
-                    )
-                  ) : (
-                    <div>Loading...</div>
-                  )}
-                </div>
-              </div>
 
-            </div>
+                        <div className="col-12 col-md-4 d-flex flex-column align-items-start">
+                          <Countries_selector onSelectCountry={handleSelectCountry} label="Destination Countries" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                        </div>
+
+                        {/* Services Offered Filter */}
+                        <div className="col-12 col-md-4 d-flex flex-column align-items-start">
+                          <Form.Select
+                            value={filter_selectedService}
+                            onChange={(e) => setFilter_selectedService(e.target.value)}
+                            style={{ backgroundColor: '#ebebeb', border: '#ebebeb', padding: '12px 18px' }}
+                          >
+                            <option value="">Select Services Offered</option>
+                            <option value="container">Container</option>
+                            <option value="groupage">Groupage</option>
+                            <option value="car">Car</option>
+                          </Form.Select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="container mt-4">
+                    <div className="row justify-content-center">
+                      {filteredCompanies ? (
+                        filteredCompanies.length > 0 ? (
+                          filteredCompanies.map((item, index) => (
+                            <div className="col-12 col-md-6 col-lg-4 mb-4" key={index}>
+                              <div className="dashboard-wrap-box ">
+                                <h5>{item.company_name}</h5>
+                                <p className="text-start" style={{ fontSize: '0.9rem' }}>description-: Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><FaPhoneAlt /> <span className="text-dark ms-1">{item.contect_no}</span> </label>
+                                <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><MdEmail /> <span className="text-dark ms-1">{item.email}</span> </label>
+                                <label className="text-primary w-100 text-start my-1" style={{ fontSize: '1rem' }}><FaLocationDot /> <span className="text-dark ms-1">{item.location1}</span> </label>
+                                <button className="btn btn-primary btn-sm w-100 mt-3 fs-5" onClick={() => { handleViewClick(item); setActiveSection('company_detail') }}>View Details</button>
+                                <button className="btn btn-outline-danger btn-sm w-100 mt-3 fs-5" onClick={() => handleDelete(item)}>Delete</button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div>No company data available</div>
+                        )
+                      ) : (
+                        <div>Loading...</div>
+                      )}
+                    </div>
+                  </div>
+
+                </div>
+              </>
+            )}
           </>
         )}
         {activeSection === "company_detail" && (
@@ -3146,48 +3338,59 @@ const Dashboard = () => {
                             { icon: <FaPhoneAlt />, label: 'Contact Number', value: selectedCompany.contect_no },
                             { icon: <MdEmail />, label: 'Email ID', value: selectedCompany.email },
                             { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1.split(",")[0].trim() },
-                          ].map((item, index) => (
-                            <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
-                              onClick={() => {
-                                if (!edit_company) return;
+                          ].map((item, index) => {
+                            const isEditable = edit_company && index !== 1;
+                            return (
+                              <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                                onClick={() => {
+                                  if (!isEditable) return;
 
-                                const isLocationField = item.label === 'Country' || item.label === 'State' || item.label === 'City';
+                                  const isLocationField = item.label === 'Country' || item.label === 'State' || item.label === 'City';
 
-                                if (isLocationField) {
-                                  const [country, state, city] = selectedCompany.location1.split(',').map(val => val.trim());
-                                  setEditField({
-                                    label: 'Location',
-                                    previousValue: { country, state, city },
-                                  });
-                                  setNewValue({ country, state, city });
-                                } else {
-                                  setEditField({
-                                    label: item.label,
-                                    previousValue: item.value,
-                                  });
-                                  setNewValue('');
-                                }
+                                  if (isLocationField) {
+                                    const [country, state, city] = selectedCompany.location1.split(',').map(val => val.trim());
+                                    setEditField({
+                                      label: 'Location',
+                                      previousValue: { country, state, city },
+                                    });
+                                    setNewValue({ country, state, city });
+                                  } else {
+                                    setEditField({
+                                      label: item.label,
+                                      previousValue: item.value,
+                                    });
+                                    setNewValue('');
+                                  }
 
-                                setEditPopupOpen(true);
-                              }}>
-                              <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                                style={{
-                                  width: '3rem',
-                                  height: '3rem',
-                                  backgroundColor: '#E1F5FF',
-                                  aspectRatio: '1 / 1'
-                                }}
+                                  setEditPopupOpen(true);
+                                }}>
+                                <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                  style={{
+                                    width: '3rem',
+                                    height: '3rem',
+                                    backgroundColor: '#E1F5FF',
+                                    aspectRatio: '1 / 1'
+                                  }}
 
-                              >
-                                <h5>{item.icon}</h5>
+                                >
+                                  <h5>{item.icon}</h5>
+                                </div>
+                                <label className="text-secondary ms-3 d-flex flex-column">
+                                  {item.label}
+                                  <h5 className="text-dark">{item.value}</h5>
+                                </label>
+                                {isEditable ? (
+                                  item.label !== 'Email ID' ? (
+                                    <div className="ms-2 fs-4 text-primary">
+                                      <GoPencil />
+                                    </div>
+                                  ) : (
+                                    <div className="ms-2 fs-4" style={{ width: '1.5rem' }}></div> // placeholder to keep layout
+                                  )
+                                ) : null}
                               </div>
-                              <label className="text-secondary ms-3 d-flex flex-column">
-                                {item.label}
-                                <h5 className="text-dark">{item.value}</h5>
-                              </label>
-                              {edit_company && (<div className="ms-2 fs-4 text-primary" > < GoPencil /></div>)}
-                            </div>
-                          ))}
+                            )
+                          })}
                         </div>
 
                         <div className="row mt-4 text-center text-md-start">
@@ -3405,7 +3608,7 @@ const Dashboard = () => {
               {showAddPopup && (
                 <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
                   <div className="modal-dialog">
-                    <div className="modal-content p-3">
+                    <div className="modal-content p-4">
                       <div className="head-title text-start">
                         <h3>Add New Country</h3>
                       </div>
@@ -3434,56 +3637,63 @@ const Dashboard = () => {
                         </div>
                         <div className="mb-3 text-start">
                           <label className="input-label w-100 mb-2">Service</label>
+
                           <div className="form-check form-check-inline">
                             <input
                               className="form-check-input"
-                              type="checkbox"
+                              type="radio"
                               id="container"
+                              name="service"
                               value="container"
-                              checked={newCountryData.name.includes('container')}
+                              checked={newCountryData.name === 'container'}
                               onChange={(e) => handleServiceCheckboxChange(e)}
                             />
                             <label className="form-check-label" htmlFor="container">Container</label>
                           </div>
+
                           <div className="form-check form-check-inline">
                             <input
                               className="form-check-input"
-                              type="checkbox"
+                              type="radio"
                               id="cars"
+                              name="service"
                               value="cars"
-                              checked={newCountryData.name.includes('cars')}
+                              checked={newCountryData.name === 'cars'}
                               onChange={(e) => handleServiceCheckboxChange(e)}
                             />
                             <label className="form-check-label" htmlFor="cars">Cars</label>
                           </div>
+
                           <div className="form-check form-check-inline">
                             <input
                               className="form-check-input"
-                              type="checkbox"
+                              type="radio"
                               id="groupage"
+                              name="service"
                               value="groupage"
-                              checked={newCountryData.name.includes('groupage')}
+                              checked={newCountryData.name === 'groupage'}
                               onChange={(e) => handleServiceCheckboxChange(e)}
                             />
                             <label className="form-check-label" htmlFor="groupage">Groupage</label>
                           </div>
                         </div>
-
                       </div>
-                      <div className="modal-footer">
-                        <button
-                          type="button"
-                          className="bg-secondary btn-change-password"
-                          onClick={() => setShowAddPopup(false)}
-                        >
-                          Cancel
-                        </button>
+                      <div className="d-flex justify-content-start gap-3
+                      ">
                         <button
                           type="button"
                           className="btn-change-password"
-                          onClick={handleAddCountry}
+                          onClick={handle_add_new_country}
                         >
                           update
+                        </button>
+                        <button
+                          type="button"
+                          style={{ border: '1px solid #6c757d', backgroundColor: '#6c757d' }}
+                          className="btn-change-password"
+                          onClick={() => setShowAddPopup(false)}
+                        >
+                          Cancel
                         </button>
                       </div>
                     </div>

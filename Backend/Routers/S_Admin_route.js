@@ -14,6 +14,7 @@ const {
     edit_company_details,
     compnay_info_details,
     Delete_company_details_country,
+    add_company_country,
 } = require('../Controllers/S_Admin_controller.js');
 
 Routers.route('/display_company').get(AuthenticateToken, Display_All_company);
@@ -28,4 +29,5 @@ Routers.route('/payment_history').get(AuthenticateToken, payment_history);
 Routers.route('/company_info_detail/:id').get(AuthenticateToken, compnay_info_details);
 Routers.route('/edit_company/:id').put(AuthenticateToken, edit_company_details);
 Routers.route('/delete_company_country').delete(AuthenticateToken, Delete_company_details_country)
+Routers.route('/add_new_country/:id').post(AuthenticateToken, add_company_country);
 module.exports = Routers;
