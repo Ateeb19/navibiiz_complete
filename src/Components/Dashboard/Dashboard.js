@@ -4565,11 +4565,13 @@ const Dashboard = () => {
                             <td className="text-secondary">
                               <button className="btn btn-sm btn-light text-primary pt-0 pb-0"
                                 onClick={() => handleEditUser(item)}
+                                disabled={item.role === 'Sadmin'}
                                 style={{ fontSize: '1.5rem' }}>
                                 <RiPencilFill />
                               </button>
                               <button className="btn btn-sm btn-light text-danger pt-0 pb-0"
                                 onClick={() => handleDeleteUser(item)}
+                                disabled={item.role === 'Sadmin'}
                                 style={{ fontSize: '1.5rem' }}>
                                 <MdDelete />
                               </button>
