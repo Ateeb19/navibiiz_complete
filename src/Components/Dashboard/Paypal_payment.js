@@ -9,7 +9,7 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
     const [message, setMessage] = useState("");
 
     const initialOptions = {
-        "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY",
+        "client-id": "Ae-QJja_9j4sH-PmGLdd6ghIT_9_A1IUicHytfy9i0sV4ZDZLsUn8bcfyW1SBF_3CNc0OGQoGZGOZ_8a",
         currency: "USD",
         components: "buttons",
     };

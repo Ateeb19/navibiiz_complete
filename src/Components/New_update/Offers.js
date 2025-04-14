@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useAlert } from "../alert/Alert_message";
+import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 
 const Offers = () => {
     const navigate = useNavigate();
@@ -321,6 +322,22 @@ const Offers = () => {
                                                                     backgroundColor: '#E1F5FF',
                                                                     aspectRatio: '1 / 1'
                                                                 }}
+                                                            ><MdOutlineDriveFileRenameOutline /></div>
+                                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                                <span className="text-secondary offer-submit-sub-head">Product Name</span>
+                                                                <h6>{groupage_detail.product_name}</h6>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                            <div
+                                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                                style={{
+                                                                    width: '3rem',
+                                                                    height: '3rem',
+                                                                    backgroundColor: '#E1F5FF',
+                                                                    aspectRatio: '1 / 1'
+                                                                }}
                                                             >
                                                                 <SiAnytype />
                                                             </div>
@@ -346,6 +363,9 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
+                                                    </div>
+                                                    <div className="d-flex flex-wrap gap-3 mt-3 w-100">
+
                                                         <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -361,8 +381,7 @@ const Offers = () => {
                                                                 <h6>{groupage_detail.p_height} Cm</h6>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="d-flex flex-wrap gap-3 mt-3 w-100">
+
                                                         <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"

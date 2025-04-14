@@ -61,19 +61,34 @@ const Footer = () => {
                                 <strong className="mb-2 mb-md-3 fs-5">Contact Information</strong>
                                 <div>
                                     <p className="mb-1">Chat with us</p>
-                                    <p><IoLogoWhatsapp className="me-2 " style={{color: ' #de8316'}} />0721 / 170 5522</p>
+                                    <p><IoLogoWhatsapp className="me-2 " style={{ color: ' #de8316' }} />+49 178 9386741</p>
                                 </div>
                                 <div>
                                     <p className="mb-1">Email Us</p>
-                                    <p><MdEmail className="me-2 " style={{color: ' #de8316'}} />support@navibiiz.de</p>
+                                    <p>
+                                        <MdEmail className="me-2" style={{ color: '#de8316' }} />
+                                        <a
+                                            href="mailto:info@novibiz.com"
+                                            style={{ textDecoration: 'none', color: 'inherit' }}
+                                        >
+                                            info@novibiz.com
+                                        </a>
+                                    </p>
                                 </div>
                                 <div>
                                     <p className="mb-1">Call Us</p>
-                                    <p><IoCall className="me-2" style={{color: ' #de8316'}} />0721 / 170 5522</p>
+                                    <p><IoCall className="me-2" style={{ color: ' #de8316' }} />+49 178 9386741</p>
                                 </div>
                                 <div>
                                     <p className="mb-1">Our Headquarters</p>
-                                    <p><FaLocationDot className="me-2 " style={{color: ' #de8316'}} />Demo Address</p>
+                                    <p><FaLocationDot className="me-2 " style={{ color: ' #de8316' }} /><a
+                                        href="https://www.google.com/maps/place/Kaiserswerther+Str.+135,+40474+D%C3%BCsseldorf,+Germany/@51.2456278,6.7672824,17z/data=!3m1!4b1!4m6!3m5!1s0x47b8c9f01ec81eb7:0x6364618294734dc5!8m2!3d51.2456278!4d6.7698573!16s%2Fg%2F11c5bw0ls3?entry=ttu&g_ep=EgoyMDI1MDQwOS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ textDecoration: 'none', color: '#fff' }}
+                                    >
+                                        Kaiserswerther Straße 135, Düsseldorf, Germany
+                                    </a></p>
                                 </div>
                             </div>
                             <div className="col-12 col-md-7 p-3 ps-4 text-start">
