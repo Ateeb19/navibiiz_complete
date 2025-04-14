@@ -3412,7 +3412,7 @@ const Dashboard = () => {
               </div>
 
               <div className="d-flex ps-4 w-100 justify-content-start">
-                <label className="fs-3"><strong>Comapany Information</strong></label>
+                <label className="fs-3"><strong>Company Information</strong></label>
               </div>
 
               <div className="dashboard-wrapper-box">
