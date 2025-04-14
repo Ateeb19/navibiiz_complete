@@ -112,7 +112,7 @@ const Offers = () => {
             },
         }).then((response) => {
             if (response.data.status === false) {
-                showAlert('Login with a company account to submit an offer');
+                showAlert('Login as a company to submit an offer');
                 navigate('/login');
             } else {
                 console.log(response.data);
@@ -122,7 +122,7 @@ const Offers = () => {
                 setExpetedDate('');
             }
         }).catch((err) => {
-            showAlert('Login to submit offer');
+            showAlert('Login as a company to submit an offer');
             navigate('/login');
             console.log(err);
         });
