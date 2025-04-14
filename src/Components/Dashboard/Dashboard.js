@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { Form } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -38,6 +39,42 @@ import "datatables.net";
 
 DataTable.use(DT);
 
+
+const DragAndDrop = ({ accept, onFileDrop, label }) => {
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
+        onFileDrop(file);
+      }
+    },
+    [onFileDrop]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept,
+    multiple: false,
+  });
+
+  return (
+    <div
+      {...getRootProps()}
+      style={{
+        border: "2px dashed #ddd",
+        padding: "20px",
+        textAlign: "center",
+        cursor: "pointer",
+        backgroundColor: isDragActive ? "#f0f8ff" : "white",
+        marginBottom: "20px",
+      }}
+    >
+      <input {...getInputProps()} />
+      <p>{label}</p>
+    </div>
+  );
+};
+
 const Dashboard = () => {
   const port = process.env.REACT_APP_SECRET;
   const { showAlert } = useAlert();
@@ -49,6 +86,50 @@ const Dashboard = () => {
   const [admin_notification, setAdmin_notification] = useState([]);
   const [super_admin_notification, setSuper_admin_notification] = useState([]);
   const [user_notification, setUser_notification] = useState([]);
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileDrop = (file) => {
+    setSelectedFile(file);
+    setSelectedImage(URL.createObjectURL(file));
+  };
+
+  const handle_logo_update = async () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+
+      try {
+        const response = await fetch(`${port}/admin/edit_logo/${selectedCompany.id}`, {
+          method: "POST",
+          headers: {
+            Authorization: token, 
+          },
+          body: formData, 
+        });
+
+        console.log(response.ok);
+        if (response) {
+          const result = await response.json();
+          showAlert(result.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2500);
+          setHandle_profile_edit(false);
+          setSelectedFile('');
+          setSelectedImage('');
+        } else {
+          console.error("Failed to upload image");
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    } else {
+      showAlert('Please select a Logo');
+    }
+  }
+
   useEffect(() => {
     const notification = () => {
       if (userRole === 'admin') {
@@ -1089,6 +1170,7 @@ const Dashboard = () => {
     setEdit_company(!edit_company);
   }
 
+  const [handle_profile_edit, setHandle_profile_edit] = useState(false);
   const [editPopupOpen, setEditPopupOpen] = useState(false);
   const [editField, setEditField] = useState({ label: '', previousValue: '' });
   const [newValue, setNewValue] = useState('');
@@ -1210,7 +1292,7 @@ const Dashboard = () => {
           showAlert(response.data.message);
           setShowAddPopup(false);
           const newRow = {
-            id: response.data.insertedId, 
+            id: response.data.insertedId,
             countries: newCountryData.country,
             duration: newCountryData.duration,
             service_type: newCountryData.name
@@ -1246,7 +1328,7 @@ const Dashboard = () => {
         showAlert(response.data.message);
         setShowAddPopup(false);
         const newRow = {
-          id: response.data.insertedId, 
+          id: response.data.insertedId,
           countries: newCountryData.country,
           duration: newCountryData.duration,
           service_type: newCountryData.name
@@ -1279,6 +1361,10 @@ const Dashboard = () => {
     setChange_password(!change_password);
   }
 
+  const [change_password_admin, setChange_password_admin] = useState(false);
+  const handle_change_password_admin = () => {
+    setChange_password_admin(!change_password_admin)
+  }
   const [previous_password, setPrevious_password] = useState('');
   const [new_password, setNew_password] = useState('');
   const [confirm_password, setConfirm_password] = useState('');
@@ -1305,6 +1391,7 @@ const Dashboard = () => {
           setNew_password('');
           setConfirm_password('');
           setChange_password(false);
+          setChange_password_admin(false);
         }
       }).catch((err) => { console.log(err); });
     }
@@ -1514,7 +1601,7 @@ const Dashboard = () => {
                           </Link>
                         </li>
 
-                        {userRole === 'admin' && (
+                        {/* {userRole === 'admin' && (
                           <>
                             <li className="nav-item mb-4 text-start" style={activeSection === 'company_detail' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                               <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("company_detail"); localStorage.setItem("activeSection", "company_detail"); setSelected_groupage(null); setShowRegisterPopup(false) }}>
@@ -1522,7 +1609,7 @@ const Dashboard = () => {
                               </Link>
                             </li>
                           </>
-                        )}
+                        )} */}
 
                         {userRole === 'user' && (
                           <>
@@ -1665,7 +1752,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                                <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+                                <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('company_detail') }}>Profile information</button>
 
                                 <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                               </div>
@@ -1688,8 +1775,8 @@ const Dashboard = () => {
                     <div className="dashboard-wraper-box">
                       <div className="row mt-3 g-3 justify-content-center">
                         {[{ count: 'N/A', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
-                        { count: admin_total_offers? admin_total_offers: 'N/A', change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
-                        { count: admin_offer_accecepted? admin_offer_accecepted: 'N/A', change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> }
+                        { count: admin_total_offers ? admin_total_offers : 'N/A', change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
+                        { count: admin_offer_accecepted ? admin_offer_accecepted : 'N/A', change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> }
                         ].map((item, index) => (
                           <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                             <div className=" dashboard-wrap-box ">
@@ -1751,7 +1838,7 @@ const Dashboard = () => {
 
                     <div className="dashboard-wraper-box">
                       <div className="row mt-3 g-3 justify-content-center">
-                        {[{ count: user_numbers_orders? user_numbers_orders: 'N/A', change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
+                        {[{ count: user_numbers_orders ? user_numbers_orders : 'N/A', change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
                         { count: 15, change: "-2%", text: "Upcoming Pick up", icon: <BsCarFrontFill /> },
                         { count: 25, change: "+10%", text: "Total Spending", icon: <FaTruckLoading /> }
                         ].map((item, index) => (
@@ -1820,65 +1907,83 @@ const Dashboard = () => {
               <div className="dashboard-wrapper-box">
                 <div className="table-wrap">
                   <div className="table-filter-wrap">
-                    <div className="d-flex justify-content-between align-items-start mb-3">
-                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" onClick={() => {if(profile_edit){handleEditClick('name')}}}>
-                        <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                    <div className="d-flex justify-content-end align-items-start mb-3">
+                      <div>
+                        <h4 className='text-primary' style={{ cursor: 'pointer' }} onClick={() => setProfile_edit(!profile_edit)}><RiPencilFill /> Edit Profile</h4>
+                      </div>
+                    </div>
+
+                    <div className={`d-flex flex-wrap justify-content-between ${userRole === 'Sadmin' ? 'w-100' : 'w-75'}`}>
+                      <div
+                        className="d-flex flex-row align-items-start justify-content-start p-2 gap-2"
+                        onClick={() => {
+                          if (profile_edit) {
+                            handleEditClick('name');
+                          }
+                        }}
+                      >
+                        <div
+                          className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                           style={{
                             width: '3rem',
                             height: '3rem',
                             backgroundColor: '#E1F5FF',
-                            aspectRatio: '1 / 1'
-                          }}>
+                            aspectRatio: '1 / 1',
+                          }}
+                        >
                           <FaUserCheck />
                         </div>
                         <div className="d-flex flex-column align-items-start gap-1">
                           <span className="text-secondary fs-4">Name</span>
                           <h5 className="text-uppercase">{userInfo.name}</h5>
                         </div>
-                        {profile_edit && (<div className="ms-2 fs-4 text-primary" > < GoPencil /></div>)}
+                        {profile_edit && (
+                          <div className="ms-2 fs-4 text-primary">
+                            <GoPencil />
+                          </div>
+                        )}
                       </div>
 
-                      <div>
-                        <h4 className='text-primary' style={{ cursor: 'pointer' }} onClick={() => setProfile_edit(!profile_edit)}><RiPencilFill /> Edit Profile</h4>
+                      <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 mb-3">
+                        <div
+                          className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                          style={{
+                            width: '3rem',
+                            height: '3rem',
+                            backgroundColor: '#E1F5FF',
+                            aspectRatio: '1 / 1',
+                          }}
+                        >
+                          <MdAlternateEmail />
+                        </div>
+                        <div className="d-flex flex-column align-items-start gap-1">
+                          <span className="text-secondary fs-4">Email</span>
+                          <h5>{userInfo.email}</h5>
+                        </div>
                       </div>
+
+                      {userRole === 'Sadmin' && (
+                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 mb-2">
+                          <div
+                            className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                            style={{
+                              width: '3rem',
+                              height: '3rem',
+                              backgroundColor: '#E1F5FF',
+                              aspectRatio: '1 / 1',
+                            }}
+                          >
+                            <MdOutlineKey />
+                          </div>
+                          <div className="d-flex flex-column align-items-start gap-1">
+                            <span className="text-secondary fs-4">Role</span>
+                            <h5>{userInfo.role}</h5>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 mb-3"
-                    //  onClick={() =>{if(profile_edit){ handleEditClick('email')}}}
-                     >
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{
-                          width: '3rem',
-                          height: '3rem',
-                          backgroundColor: '#E1F5FF',
-                          aspectRatio: '1 / 1'
-                        }}>
-                        <MdAlternateEmail />
-                      </div>
-                      <div className="d-flex flex-column align-items-start gap-1">
-                        <span className="text-secondary fs-4">Email</span>
-                        <h5>{userInfo.email}</h5>
-                      </div>
-                      {/* {profile_edit && (<div className="ms-2 fs-4 text-primary" > < GoPencil /></div>)} */}
-                    </div>
-
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 mb-2">
-                      <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
-                        style={{
-                          width: '3rem',
-                          height: '3rem',
-                          backgroundColor: '#E1F5FF',
-                          aspectRatio: '1 / 1'
-                        }}>
-                        <MdOutlineKey />
-                      </div>
-                      <div className="d-flex flex-column align-items-start gap-1">
-                        <span className="text-secondary fs-4">Role</span>
-                        <h5>{userInfo.role}</h5>
-                      </div>
-                    </div>
-
-                    <div className="d-flex justify-content-start align-items-start gap-2">
+                    <div className="d-flex justify-content-start align-items-start gap-2 mt-3">
                       <button className="btn-change-password" onClick={handle_change_password}> Change Password </button>
                       <button className="btn-logout" onClick={handel_logout}> Log Out </button>
                     </div>
@@ -2784,7 +2889,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                        <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+                        <button className="btn btn-sm btn-primary mt-1" onClick={() => { userRole === 'admin' ? setActiveSection('company_detail') : setActiveSection('profile_view') }}>Profile information</button>
 
                         <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                       </div>
@@ -3317,8 +3422,15 @@ const Dashboard = () => {
                     {selectedCompany ? (
                       <>
                         <div className="row align-items-center">
-                          <div className="col-12 col-md-2 d-flex justify-content-center">
-                            <img src="/Images/webloon_logo.png" className="img-fluid rounded-circle" width="150px" />
+                          <div className="col-12 col-md-2 d-flex justify-content-center" onClick={() => setHandle_profile_edit(!handle_profile_edit)}>
+                            <img src={selectedCompany.logo ? selectedCompany.logo : '/Images/avtar_webloon.webp'} className="img-fluid rounded-circle" width="150px" />
+                            {edit_company && (
+                              <>
+                                <div className="ms-2 fs-4 text-primary">
+                                  <GoPencil />
+                                </div>
+                              </>
+                            )}
                           </div>
                           <div className="col-12 col-md-6 text-center text-md-start mt-3 mt-md-0">
                             <h2>{selectedCompany.company_name}</h2>
@@ -3594,6 +3706,10 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
+
+                        <div className="d-flex justify-content-end align-items-start  mt-3">
+                          <button className="btn-change-password" onClick={handle_change_password_admin}> Change Password </button>
+                        </div>
                       </>
                     ) : (
                       <>
@@ -3604,6 +3720,114 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
+
+              {handle_profile_edit && (
+                <div
+                  className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1050 }}
+                >
+                  <div
+                    className="bg-white p-4 rounded shadow position-relative"
+                    style={{ width: '90%', maxWidth: '500px' }}
+                  >
+                    <div className="title-head text-start">
+                      <h3>Change Logo</h3>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="border-2 border-dashed surface-border border-round surface-ground p-3 text-center">
+                          <DragAndDrop
+                            accept="image/*"
+                            onFileDrop={handleFileDrop}
+                            label="Drag and drop an image here, or click to select (only one image allowed)"
+                          />
+                          {selectedImage && (
+                            <div className="mt-3">
+                              <h4>Preview:</h4>
+                              <img
+                                src={selectedImage}
+                                alt="Selected"
+                                className="rounded-circle border border-1 border-dark"
+                                style={{ width: "150px", height: '150px' }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="d-flex gap-2">
+                      <button className="btn-change-password" onClick={handle_logo_update}>Update</button>
+                      <button className="btn btn-secondary" onClick={() => setHandle_profile_edit(false)}>Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {change_password_admin && (
+                <div
+                  className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1050 }}
+                >
+                  <div
+                    className="bg-white p-4 rounded shadow position-relative"
+                    style={{ width: '90%', maxWidth: '500px' }}
+                  >
+                    <div className="title-head text-start">
+                      <h3>Change Password</h3>
+                    </div>
+
+                    <>
+                      <div className="text-start w-100">
+                        <label className="input-label">Previous Password</label>
+                        <input
+                          type="password"
+                          className="input-field w-100"
+                          placeholder="Enter previous password"
+                          onChange={(e) => setPrevious_password(e.target.value)}
+                          value={previous_password}
+                        />
+                      </div>
+
+                      <div className="text-start w-100">
+                        <label className="input-label">New Password</label>
+                        <input
+                          type="password"
+                          className="input-field w-100"
+                          placeholder="Enter new password"
+                          onChange={(e) => setNew_password(e.target.value)}
+                          value={new_password}
+                        />
+                      </div>
+
+                      <div className="text-start w-100">
+                        <label className="input-label">Confirm Password</label>
+                        <input
+                          type="password"
+                          className="input-field w-100"
+                          placeholder="Confirm new password"
+                          onChange={(e) => setConfirm_password(e.target.value)}
+                          value={confirm_password}
+                        />
+                      </div>
+
+                      <div className="d-flex justify-content-between align-items-center mt-3">
+                        <div className="d-flex gap-2">
+                          <button className="btn-change-password" onClick={query_update_password}>Update</button>
+                          <button className="btn btn-secondary" onClick={() => { setChange_password(false); setChange_password_admin(false) }}>Cancel</button>
+                        </div>
+                        <span
+                          className="text-primary"
+                          style={{ cursor: 'pointer', fontSize: '0.9rem' }}
+                          onClick={handel_forget_password}
+                        >
+                          Forgot Password?
+                        </span>
+                      </div>
+                    </>
+                  </div>
+                </div>
+              )}
 
               {showAddPopup && (
                 <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>

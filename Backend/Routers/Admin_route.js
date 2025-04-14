@@ -1,7 +1,7 @@
 const express = require('express');
 const Routers = express.Router();
 const AuthenticateToken = require('../Middleware/Authenticate.js');
-const { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country } = require('../Controllers/Admin_controller.js');
+const { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country, edit_logo } = require('../Controllers/Admin_controller.js');
 
 Routers.route('/display_company').get(AuthenticateToken, Display_company);
 Routers.route('/display_offer').get(AuthenticateToken, Display_offers);
@@ -11,5 +11,5 @@ Routers.route('/total_offer_accepted').get(AuthenticateToken, total_offer_accept
 Routers.route('/edit_company/:id').put(AuthenticateToken, edit_company_details);
 Routers.route('/delete_company_country').delete(AuthenticateToken, Delete_company_details_country)
 Routers.route('/add_new_country/:id').post(AuthenticateToken, add_company_country);
-
+Routers.route('/edit_logo/:id').post(AuthenticateToken, edit_logo);
 module.exports = Routers;

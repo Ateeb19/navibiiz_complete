@@ -1,4 +1,10 @@
 const db = require('../Db_Connection');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+require('dotenv').config({ path: './.env' });
+
 
 const Display_company = (req, res) => {
     db.query(`SELECT * FROM companies_info WHERE created_by = ?`, [req.user.useremail], (err, result) => {
@@ -301,4 +307,91 @@ const add_company_country = (req, res) => {
         res.json({ message: 'You are not Super Admin', status: false })
     }
 }
-module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country };
+
+
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+});
+
+const directoryPath = './send_transport_img';
+const deleteAllFilse = (directoryPath) => {
+    fs.readdir(directoryPath, (err, files) => {
+        if (err) {
+            console.log(`could not list the directory ${err}`);
+            return;
+        }
+        files.forEach((file) => {
+            const filePath = path.join(directoryPath, file);
+            fs.stat(filePath, (err, stats) => {
+                if (err) {
+                    console.log(`could not stat file ${err}`);
+                    return;
+                }
+                if (stats.isFile()) {
+                    fs.unlink(filePath, (err) => {
+                        if (err) {
+                            console.error(`Could not delete file: ${err}`);
+                            return;
+                        }
+                    });
+                }
+            })
+        })
+    })
+};
+const uploadDir = path.join(__dirname, '../send_transport_img');
+
+if (!fs.existsSync(uploadDir)) {
+    try {
+        fs.mkdirSync(uploadDir, { recursive: true }); // Ensure all intermediate directories are created
+    } catch (err) {
+        console.error('Error creating upload directory:', err);
+    }
+}
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
+
+
+const edit_logo = [
+    upload.single("image"),
+    async (req, res) => {
+      try {
+        const filePath = req.file.path;
+        const id = req.params.id;
+        // Upload the file to Cloudinary
+        const result = await cloudinary.uploader.upload(filePath, {
+          folder: "uploads", // Optional: specify a folder in Cloudinary
+        });
+  
+        // Log the URL of the uploaded image
+        console.log("Uploaded Image URL:", result.secure_url);
+  
+        db.query(`UPDATE companies_info SET logo = ? WHERE id = ?`, [result.secure_url, id], (err, result) => {
+            if(err){
+                console.log(err);
+                res.json({message: 'Error in database', status: false});
+            }else{
+                res.json({message: 'Updated success', status: true});
+            }
+        })
+        // Delete the file from the local server
+        fs.unlinkSync(filePath);
+        } catch (error) {
+        console.error("Error uploading image to Cloudinary:", error);
+        res.status(500).json({ error: "Failed to upload image" });
+      }
+    },
+  ];
+
+module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country, edit_logo };

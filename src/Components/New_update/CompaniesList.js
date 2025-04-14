@@ -15,7 +15,11 @@ const CompaniesList = () => {
     const navigate = useNavigate();
     const itemsPerPage = 5;
 
-    const companies = JSON.parse(localStorage.getItem('companyInfo'));
+    const data = JSON.parse(localStorage.getItem('companyInfo'));
+
+    const sortedCompanies= Object.values(data).filter(item => typeof item === 'object' && item.id);
+    const companies = sortedCompanies.sort((a, b) => b.id - a.id);
+
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedServices, setSelectedServices] = useState([]);
     const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
