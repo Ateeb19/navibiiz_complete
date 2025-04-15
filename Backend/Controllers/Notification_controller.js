@@ -18,7 +18,7 @@ const admin_notificaiton = (req, res) => {
 
 const Sadmin_notificaiton = (req, res) => {
     if (req.user.role === 'Sadmin') {
-        db.query('(SELECT created_by AS groupage_created_by, created_at AS groupage_created_at, img01, NULL AS company_info_name, NULL AS comapny_info_logo FROM groupage ORDER BY created_at DESC LIMIT 4) UNION ALL (SELECT NULL AS groupage_created_by, NULL AS groupage_created_at, NULL AS img01, company_name AS company_info_name, logo AS comapny_info_logo FROM companies_info ORDER BY id DESC LIMIT 4);', (err, result) => {
+        db.query('(SELECT groupage_created_by AS groupage_created_by, created_at AS groupage_created_at, img01, NULL AS company_info_name, NULL AS comapny_info_logo FROM groupage ORDER BY created_at DESC LIMIT 4) UNION ALL (SELECT NULL AS groupage_created_by, NULL AS groupage_created_at, NULL AS img01, company_name AS company_info_name, logo AS comapny_info_logo FROM companies_info ORDER BY id DESC LIMIT 4);', (err, result) => {
             if (err) {
                 console.log(err);
                 res.json({ message: 'error in database', status: false });

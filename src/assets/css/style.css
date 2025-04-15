@@ -623,3 +623,14 @@ svg {
     border: 1px solid #dc3545;
     border-radius: 6px;
 }
+
+.image-wrapper-offers {
+    width: 18%;         /* Approx 5 per row with gaps */
+    min-width: 100px;
+  }
+  
+  .image-wrapper-offers img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }

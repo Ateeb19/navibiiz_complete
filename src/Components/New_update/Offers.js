@@ -116,7 +116,7 @@ const Offers = () => {
                 navigate('/login');
             } else {
                 console.log(response.data);
-                showAlert(response.data.message);
+                showAlert("Offer Created Successfully!");
                 setGroupage_detail(null);
                 setBidAmount('');
                 setExpetedDate('');

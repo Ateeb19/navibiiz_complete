@@ -161,7 +161,7 @@ const send_groupage_submit = (req, res) => {
             const safeNumber = (num) => (num == '' || num === 'null' ? 0 : num);
 
             db.query('INSERT INTO groupage SET ?', {
-                created_by: req.user.useremail,
+                groupage_created_by: req.user.useremail,
                 payment_status: 'panding',
                 product_name: responseData.productInfo.productName,
                 product_type: responseData.productInfo.productType,
@@ -222,7 +222,7 @@ const send_groupage_submit = (req, res) => {
 //display to the user dashboard
 const display_user_dashboard = (req, res) => {
     if (req.user.useremail) {
-        db.query('SELECT * FROM groupage WHERE created_by = ?', [req.user.useremail], (err, result) => {
+        db.query('SELECT * FROM groupage WHERE groupage_created_by = ?', [req.user.useremail], (err, result) => {
             if (err) {
                 res.json({ message: "error in database", status: false });
             } else {
@@ -282,25 +282,27 @@ const create_offer = (req, res) => {
                 res.json({ message: 'error in database', status: false });
             } else {
                 if (result.length === 0) {
-                    db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, expeted_date: data.expected_date, accepted: 0, status: 'pending' }, (err, result) => {
+                    const commission = (data.offer_amount * 30) / 100;
+                    db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, commission: commission, expeted_date: data.expected_date, accepted: 0, status: 'pending' }, (err, result) => {
                         if (err) {
                             console.log(err, '12')
                             res.json({ message: 'error in database', status: false });
                         } else {
-                            db.query('SELECT created_by FROM groupage WHERE id = ?', [data.offer_id], (err, result) => {
+                            db.query('SELECT groupage_created_by FROM groupage WHERE id = ?', [data.offer_id], (err, result) => {
                                 if (err) {
                                     console.log(err, '123')
                                     res.json({ message: 'error in database', status: false });
                                 }
                                 else {
                                     res.json({ message: 'Data inserted successfully', status: true });
-                                    console.log('email', result[0].created_by)
-
+                                    console.log('email', result[0].groupage_created_by)
+                                    const amount = parseFloat(data.offer_amount) + parseFloat(commission);
+                                    console.log(amount, '-: Amount');
                                     sendMail(
-                                        result[0].created_by,
+                                        result[0].groupage_created_by,
                                         "Offer received from a company",
                                         `<h3>There is a new offer from a company.</h3>
-                                        <br><br><br><h4>Details-:</h4><p>Amount: $${data.offer_amount}</p><p>Expected Date: ${data.expected_date}</p>`
+                                        <br><br><br><h4>Details-:</h4><p>Amount: $${amount}</p><p>Expected Date: ${data.expected_date}</p>`
                                     )
                                         .then(info => console.log({ info }))
                                         .catch(console.error);
@@ -318,7 +320,8 @@ const create_offer = (req, res) => {
                         }
                     });
                 } else {
-                    db.query('UPDATE offers SET amount = ?, expeted_date = ? WHERE groupage_id = ? AND created_by_id = ?', [data.offer_amount, data.expected_date, data.offer_id, req.user.userid], (err, result) => {
+                    const commission = (data.offer_amount * 30) / 100;
+                    db.query('UPDATE offers SET amount = ?, commission = ? expeted_date = ? WHERE groupage_id = ? AND created_by_id = ?', [data.offer_amount, commission, data.expected_date, data.offer_id, req.user.userid], (err, result) => {
                         if (err) {
                             console.log(err, '123')
                             res.json({ message: 'error in database', status: false });
@@ -339,7 +342,7 @@ const show_offers_user = (req, res) => {
     const userEmail = req.user.useremail;
 
     // Get groupage data for the user
-    db.query('SELECT * FROM groupage WHERE created_by = ?', [userEmail], (err, groupageResults) => {
+    db.query('SELECT * FROM groupage WHERE groupage_created_by = ?', [userEmail], (err, groupageResults) => {
         if (err) {
             console.log(err);
             return res.json({ message: 'Database error', status: false });
@@ -367,7 +370,7 @@ const show_offers_user = (req, res) => {
                     product_name: groupage.product_name || "N/A",
                     offer_id: offer.offer_id,
                     created_date: offer.created_at,
-                    price: offer.amount,
+                    price: parseFloat(offer.amount) + parseFloat(offer.commission),
                     delivery_duration: offer.expeted_date,
                 };
             });

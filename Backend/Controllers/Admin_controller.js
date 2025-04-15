@@ -394,4 +394,20 @@ const edit_logo = [
     },
   ];
 
-module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country, edit_logo };
+  const selected_offer = (req, res) => {
+    if(req.user.role === 'admin'){     
+        const { offer_id, groupage_id } = req.query;
+
+        db.query(`SELECT o.*, g.* FROM offers o LEFT JOIN groupage g ON g.id = o.groupage_id WHERE o.offer_id = ?`, [offer_id], (err, result) => {
+            if(err){
+                res.json({message: "error in database", status: false});
+                console.log(err);
+            }else{
+                res.json({message: result[0], status: true});
+            }
+        })
+    }else{
+        res.json({message: 'Not an admin', status: false});
+    }
+  }
+module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country, edit_logo, selected_offer };

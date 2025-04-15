@@ -182,15 +182,15 @@ const capture_order_route = async (req, res) => {
 
 // Function to send order information
 const send_information = (req, res) => {
-    const { orderId, transactionId, offerId, amount, status } = req.body;
+    const { orderId, transactionId, offerId, amount, status, paypal_id } = req.body;
     const user_id = req.user.userid;
     const user_email = req.user.useremail;
-    console.log(orderId, transactionId, offerId, amount, status, user_id, user_email);
-    if (!orderId || !transactionId || !offerId || !amount || !status) {
+    console.log(orderId, transactionId, paypal_id, offerId, amount, status, user_id, user_email);
+    if (!orderId || !transactionId || !paypal_id || !offerId || !amount || !status) {
         return res.status(400).json({ error: "Missing required fields." });
     }
     db.query(
-        `INSERT INTO payment_info_customers (user_id, user_email, transaction_id, order_id, offer_id, amount, status) VALUES (?, ?, ?, ?, ?, ?, ?)`, [user_id, user_email, transactionId, orderId, offerId, amount, status],
+        `INSERT INTO payment_info_customers (user_id, user_email, transaction_id, order_id, paypal_id, offer_id, payment_info_amount, payment_info_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [user_id, user_email, transactionId, orderId, paypal_id, offerId, amount, status],
         (error, result) => {
             if (error) {
                 // console.error("Error inserting transaction:", error);
@@ -219,6 +219,7 @@ const send_information = (req, res) => {
                     message: 'transaction successfull',
                     orderid: orderId,
                     transactionid: transactionId,
+                    paypal_id: paypal_id,
                     offerid: offerId,
                     amount: amount,
                     status: status,

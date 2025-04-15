@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
+import { useAlert } from "../alert/Alert_message";
 
 const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
     const port = process.env.REACT_APP_SECRET;
     // console.log(selected_offer, handleAcceptOffer);
-
+    const { showAlert } = useAlert();
     const [message, setMessage] = useState("");
 
     const initialOptions = {
@@ -47,7 +48,8 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
                                 return ""; // Return an empty string if order creation fails
                             }
                         } catch (error) {
-                            console.error("Error in createOrder:", error);
+                            console.error("Error in createOrder:", error);                            
+                            showAlert(`Could not initiate PayPal Checkout: ${error.message}`);
                             setMessage(`Could not initiate PayPal Checkout: ${error.message}`);
                             return ""; // Ensure a return value even in case of failure
                         }
@@ -58,6 +60,7 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
                             const response = await axios.post(`${port}/paypal/api/orders/${data.orderID}/capture`);
                             const orderData = response.data;
 
+                            // console.log(response, 'Paypal response');
                             if (orderData.status === "COMPLETED") {
                                 const transaction = orderData.purchase_units[0].payments.captures[0];
 
@@ -68,6 +71,7 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
                                     offerId: selected_offer.offer_id,
                                     amount: transaction.amount.value,
                                     status: orderData.status,
+                                    paypal_id: orderData.payer.payer_id,
                                 }, {
                                     headers: {
                                         Authorization: token,
@@ -77,6 +81,7 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
                                 }).catch((err) => { console.log(err) });
 
                                 setMessage(`Transaction successful: ${transaction.id}`);
+                                showAlert(`Transaction successfull: ${transaction.id}`)
                                 console.log("Capture result", orderData);
 
                                 // Accept the offer after a successful transaction
@@ -85,6 +90,7 @@ const Paypal_payment = ({ selected_offer, handleAcceptOffer }) => {
                         } catch (error) {
                             console.error(error);
                             setMessage(`Transaction failed: ${error.message}`);
+                            showAlert(`Transaction failed: ${error.message}`);
                         }
                     }}
                 />

@@ -104,9 +104,9 @@ const Dashboard = () => {
         const response = await fetch(`${port}/admin/edit_logo/${selectedCompany.id}`, {
           method: "POST",
           headers: {
-            Authorization: token, 
+            Authorization: token,
           },
-          body: formData, 
+          body: formData,
         });
 
         console.log(response.ok);
@@ -433,8 +433,73 @@ const Dashboard = () => {
     display_admin_total_offers();
     display_admin_accecepted_offers();
     total_user_orders();
+    total_sadmin_amount();
+    total_sadmin_commission();
+    total_sadmin_amount_to_pay();
     // user_requests();
   }, []);
+
+  const [total_amount_received, setTotal_amount_received] = useState('');
+  const [total_commission, setTotal_commission] = useState('');
+  const [amount_to_pay, setAmount_to_pay] = useState('');
+  const total_sadmin_amount = async () => {
+    if (userRole === 'Sadmin') {
+      axios.get(`${port}/s_admin/total_amount_received`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((res) => {
+        let amount = 0;
+        if (res.data.status) {
+          const data = res.data.message;
+          data.forEach(item => {
+            amount += parseFloat(item.payment_info_amount || 0);
+          });
+        }
+        console.log(amount, 'received');
+        setTotal_amount_received(amount);
+      });
+    }
+  }
+
+  const total_sadmin_commission = () => {
+    if (userRole === 'Sadmin') {
+      axios.get(`${port}/s_admin/total_commission`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((res) => {
+        let commission = 0;
+        if (res.data.status) {
+          const data = res.data.message;
+          data.forEach(item => {
+            commission += parseFloat(item.commission || 0);
+          });
+        }
+        setTotal_commission(commission);
+      })
+    }
+  }
+
+  const total_sadmin_amount_to_pay = () => {
+    if (userRole === 'Sadmin') {
+      axios.get(`${port}/s_admin/amount_to_pay`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((res) => {
+        let pay = 0;
+        if (res.data.status) {
+          const data = res.data.message;
+          data.forEach(item => {
+            pay += parseFloat(item.amount || 0);
+          });
+        }
+        setAmount_to_pay(pay);
+      })
+    }
+  }
+
 
   const [admin_total_offers, setAdmin_total_offers] = useState('');
   const display_admin_total_offers = () => {
@@ -1151,6 +1216,24 @@ const Dashboard = () => {
       // console.log(response.data);
     }).catch((err) => { });
   }
+  const [show_admin_offer, setShow_admin_offer] = useState('');
+  const handle_admin_selected_offer = (offer_id, groupage_id) => {
+    axios.get(`${port}/admin/selected_offer`, {
+      params: {
+        offer_id: offer_id,
+        groupage_id: groupage_id,
+      },
+      headers: {
+        Authorization: token,
+      }
+    }).then((res) => {
+      console.log(res.data);
+      setShow_admin_offer(res.data.message);
+    })
+      .catch((err) => console.log(err));
+  }
+
+  console.log(show_admin_offer, 'this is in the variable');
   const [allOffers, setAllOffers] = useState([]);
   const displayallOffers = () => {
     axios.get(`${port}/s_admin/show_all_offers`, {
@@ -1158,7 +1241,7 @@ const Dashboard = () => {
         Authorization: token,
       }
     }).then((response) => {
-      // console.log(response.data);
+      console.log(response.data);
       setAllOffers(response.data.data);
     }).catch((err) => { });
   }
@@ -1683,9 +1766,9 @@ const Dashboard = () => {
 
                     <div className="dashboard-wraper-box">
                       <div className="row mt-3 g-3 justify-content-center">
-                        {[{ count: 'N/A', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
-                        { count: 'N/A', change: "-2%", text: "Commission Earned", icon: <BsCarFrontFill /> },
-                        { count: 'N/A', change: "+10%", text: "Total Amount Paid", icon: <FaTruckLoading /> }
+                        {[{ count: total_amount_received, change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
+                        { count: total_commission, change: "-2%", text: "Commission Earned", icon: <BsCarFrontFill /> },
+                        { count: amount_to_pay, change: "+10%", text: "Total Amount Paid", icon: <FaTruckLoading /> }
                         ].map((item, index) => (
                           <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                             <div className=" dashboard-wrap-box ">
@@ -2833,6 +2916,7 @@ const Dashboard = () => {
                         <tr>
                           <th scope="col"><h6>Order Id</h6></th>
                           <th scope="col"><h6>Transaction Id</h6></th>
+                          <th scope="col"><h6>Paypal Id</h6></th>
                           <th scope="col"><h6>Offer Id</h6></th>
                           <th scope="col"><h6>Amount ($)</h6></th>
                           <th scope="col"><h6>Status</h6></th>
@@ -2844,9 +2928,10 @@ const Dashboard = () => {
                             <tr key={index}>
                               <td className="text-secondary">{item.order_id}</td>
                               <td className="text-secondary">{item.transaction_id}</td>
+                              <td className="text-secondary">{item.paypal_id}</td>
                               <td className="text-secondary">{item.offer_id}</td>
-                              <td className="text-secondary">{item.amount}</td>
-                              <td className="text-secondary">{item.status}</td>
+                              <td className="text-secondary">{item.payment_info_amount}</td>
+                              <td className="text-secondary">{item.payment_info_status}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -2966,7 +3051,7 @@ const Dashboard = () => {
                             <tr>
                               <th scope="col"><h6>Order Id</h6></th>
                               <th scope="col"><h6>Product Name</h6></th>
-                              <th scope="col"><h6>Offer From</h6></th>
+                              <th scope="col"><h6>Offer To</h6></th>
                               <th scope="col"><h6>Price ($)</h6></th>
                               <th scope="col"><h6>Pick Up Date</h6></th>
                               <th scope="col"><h6>Offer Status</h6></th>
@@ -2976,7 +3061,13 @@ const Dashboard = () => {
                             <tbody>
                               {admin_offer.map((item, index) => (
                                 <tr key={index}>
-                                  <td className="text-primary">#{item.offer_id}</td>
+                                  <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => {
+                                    if (item.status === 'pending') {
+                                      showAlert("The status is Panding");
+                                    } else {
+                                      handle_admin_selected_offer(item.offer_id, item.groupage_id);
+                                    }
+                                  }}>#{item.offer_id}</td>
                                   <td className="text-secondary">{item.product_name}</td>
                                   <td className="text-secondary">{item.sender_name}</td>
                                   <td className="text-secondary">{item.amount}</td>
@@ -3103,6 +3194,185 @@ const Dashboard = () => {
           </>
         )}
 
+        {show_admin_offer && (
+          <>
+            <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                zIndex: 9999
+              }}
+            >
+              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+                style={{
+                  width: '55%',
+                  height: '90vh',
+                  overflowY: 'auto'
+                }}
+              >
+                <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                  <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setShow_admin_offer('')}>
+                    ✕
+                  </button>
+
+                  <strong className="fs-4">Offer Details</strong>
+
+                  <h5 className="mt-3">Product Information</h5>
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                    <div className=" d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Product ID : </span>
+                      <span>{show_admin_offer.id}</span>
+                    </div>
+                    <div className={show_admin_offer.img01 ? 'd-flex flex-column align-items-start justify-content-between w-100' : 'd-flex flex-row align-items-start justify-content-between w-100'}>
+                      <span className="text-secondary">Product Image : </span>
+                      {!show_admin_offer.img01 ? (
+                        <>
+                          <span>N/A</span>
+                        </>
+                      ) : (
+                        <>
+                          <div className="d-flex flex-wrap justify-content-center gap-3 w-100 ms-3">
+                            {Object.keys(show_admin_offer)
+                              .filter(key => key.startsWith('img') && show_admin_offer[key])
+                              .slice(0, 10)
+                              .map((key, index) => (
+                                <div key={index} className="image-wrapper-offers">
+                                  <img
+                                    src={show_admin_offer[key]}
+                                    alt={`preview-${index}`}
+                                    className="img-fluid rounded shadow-sm"
+                                  />
+                                </div>
+                              ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Product Name : </span>
+                      <span>{show_admin_offer.product_name}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Product Type : </span>
+                      <span>{show_admin_offer.product_type}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Weight : </span>
+                      <span>{show_admin_offer.p_weight}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Height :  </span>
+                      <span>{show_admin_offer.p_height}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Length : </span>
+                      <span>{show_admin_offer.p_length}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Width : </span>
+                      <span>{show_admin_offer.p_width}</span>
+                    </div>
+                  </div>
+
+                  {/* <h5 className="mt-3">Company Information</h5>
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Company Name : </span>
+                      <span>XXXX-XX</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Price Offered : </span>
+                      <span className="fw-bold">${show_admin_offer.price}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Offer Received Date : </span>
+                      <span>{show_admin_offer.created_at.split("T")[0]}</span>
+                    </div>
+                  </div> */}
+
+                  <h5 className="mt-3">Pick Up Information</h5>
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Full Name : </span>
+                      <span>{show_admin_offer.sender_name}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Contact Number : </span>
+                      <span>{show_admin_offer.sender_contact}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Email ID : </span>
+                      <span>{show_admin_offer.sender_email}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Country : </span>
+                      <span>{show_admin_offer.sender_country}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">State : </span>
+                      <span>{show_admin_offer.sender_state}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">City : </span>
+                      <span>{show_admin_offer.sender_city}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Street Address : </span>
+                      <span>{show_admin_offer.sender_address}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Zip Code : </span>
+                      <span>{show_admin_offer.sender_zipcode}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Pick Up Date : </span>
+                      <span>{show_admin_offer.pickup_date.includes('Select End Date') ? show_admin_offer.pickup_date.split(' - ')[0] : show_admin_offer.pickup_date}</span>
+                    </div>
+                  </div>
+
+                  <h5 className="mt-3">Delivery Information</h5>
+                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Full Name : </span>
+                      <span>{show_admin_offer.receiver_name}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Contact Number : </span>
+                      <span>{show_admin_offer.receiver_contact}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Email ID : </span>
+                      <span>{show_admin_offer.receiver_email}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Country : </span>
+                      <span>{show_admin_offer.receiver_country}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">State : </span>
+                      <span>{show_admin_offer.receiver_state}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">City : </span>
+                      <span>{show_admin_offer.receiver_city}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Street Address : </span>
+                      <span>{show_admin_offer.receiver_address}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Zip Code : </span>
+                      <span>{show_admin_offer.receiver_zipcode}</span>
+                    </div>
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      <span className="text-secondary">Delivery Duration : </span>
+                      <span>{show_admin_offer.expeted_date}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
         {selected_offer && (
           <>
             <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
@@ -3401,7 +3671,7 @@ const Dashboard = () => {
                                 </div>
                                 <button className="btn btn-secondary btn-sm">Edit Name</button>
                                 <button className="btn btn-secondary btn-sm">Edit Password</button> */}
-                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { setActiveSection('profile_view') }}>Profile information</button>
+                          <button className="btn btn-sm btn-primary mt-1" onClick={() => { userRole === 'admin' ? setActiveSection('company_detail') : setActiveSection('profile_view') }}>Profile information</button>
 
                           <button className="btn btn-danger btn-sm mt-1" onClick={handel_logout}>Logout</button>
                         </div>
@@ -4120,8 +4390,8 @@ const Dashboard = () => {
                               <tr key={index}>
                                 <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => show_offer_details(item)}>#{item.offer_id}</td>
                                 <td className="text-secondary">{item.product_name}</td>
-                                <td className="text-secondary">{item.created_by}</td>
-                                <td className="text-dark"><b>{item.amount}</b></td>
+                                <td className="text-secondary">{item.groupage_created_by}</td>
+                                <td className="text-dark"><b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></td>
                                 <td className="text-secondary">{item.created_by_email}</td>
                                 <td className="text-secondary">
                                   <span
@@ -4192,19 +4462,19 @@ const Dashboard = () => {
                   <h5 className="text-start w-100 mb-3" >Payment Information</h5>
                   {[
                     [
-                      { icon: <SiAnytype />, label: "Amount Received", value: "Testing" },
-                      { icon: <FaWeightScale />, label: "Commission Earned", value: "Testing" },
-                      { icon: <RiExpandHeightFill />, label: "Payment Status", value: "Testing" }
+                      { icon: <SiAnytype />, label: "Amount Received", value: showOfferDetails.payment_info_amount ? showOfferDetails.payment_info_amount : 'N/A' },
+                      { icon: <FaWeightScale />, label: "Commission Earned", value: showOfferDetails.commission },
+                      { icon: <RiExpandHeightFill />, label: "Payment Status", value: showOfferDetails.payment_info_status ? showOfferDetails.payment_info_status : 'N/A' }
                     ],
                     [
-                      { icon: <SiAnytype />, label: "Paid By", value: "Testing" },
-                      { icon: <FaWeightScale />, label: "Paypal ID", value: "Testing" },
-                      { icon: <RiExpandHeightFill />, label: "Offers Received", value: "Testing" }
+                      { icon: <SiAnytype />, label: "Paid By", value: showOfferDetails.user_email ? showOfferDetails.user_email : 'N/A' },
+                      { icon: <FaWeightScale />, label: "Paypal ID", value: showOfferDetails.paypal_id ? showOfferDetails.paypal_id : 'N/A' },
+                      { icon: <RiExpandHeightFill />, label: "Offers Received ", value: showOfferDetails.accepted === '1' ? 'Yes' : 'No' }
                     ],
                     [
-                      { icon: <SiAnytype />, label: "Company Name", value: "Testing" },
-                      { icon: <FaWeightScale />, label: "Contact Number", value: "Testing" },
-                      { icon: <RiExpandHeightFill />, label: "Company Email ID", value: "Testing" }
+                      { icon: <SiAnytype />, label: "Company Name", value: showOfferDetails.company_name },
+                      { icon: <FaWeightScale />, label: "Contact Number", value: showOfferDetails.contect_no },
+                      { icon: <RiExpandHeightFill />, label: "Company Email ID", value: showOfferDetails.created_by_email ? showOfferDetails.created_by_email : 'N/A' }
                     ]
                   ].map((row, index) => (
                     <div key={index} className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
@@ -4684,6 +4954,7 @@ const Dashboard = () => {
                         <tr>
                           <th scope="col"><h6>Order Id</h6></th>
                           <th scope="col"><h6>Transaction Id</h6></th>
+                          <th scope="col"><h6>Paypal Id</h6></th>
                           <th scope="col"><h6>Offer Id</h6></th>
                           <th scope="col"><h6>Amount ($)</h6></th>
                           <th scope="col"><h6>Status</h6></th>
@@ -4695,9 +4966,10 @@ const Dashboard = () => {
                             <tr key={index}>
                               <td className="text-secondary">{item.order_id}</td>
                               <td className="text-secondary">{item.transaction_id}</td>
+                              <td className="text-secondary">{item.paypal_id}</td>
                               <td className="text-secondary">{item.offer_id}</td>
-                              <td className="text-secondary">{item.amount}</td>
-                              <td className="text-secondary">{item.status}</td>
+                              <td className="text-secondary">{item.payment_info_amount}</td>
+                              <td className="text-secondary">{item.payment_info_status}</td>
                             </tr>
                           ))}
                         </tbody>

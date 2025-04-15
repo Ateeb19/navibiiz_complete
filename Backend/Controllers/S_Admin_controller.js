@@ -112,19 +112,54 @@ const Delete_user = (req, res) => {
 //show all offers
 const show_all_offers = (req, res) => {
     if (req.user.role === "Sadmin") {
-        const query = `
-            SELECT o.*, g.*
-            FROM offers o
-            LEFT JOIN groupage g ON o.groupage_id = g.id
-        `;
+        db.query(
+            `SELECT o.*, 
+                    g.*, 
+                    p.database_id, p.user_id, p.user_email, p.transaction_id, p.order_id, p.paypal_id, p.payment_info_amount, p.payment_info_status 
+             FROM offers o 
+             LEFT JOIN groupage g ON o.groupage_id = g.id 
+             LEFT JOIN payment_info_customers p ON p.offer_id = o.offer_id`,
+            (err, offerData) => {
+                if (err) {
+                    console.error("Error fetching offers:", err);
+                    return res.status(500).json({ message: "Error fetching offers", error: err });
+                }
 
-        db.query(query, (err, result) => {
-            if (err) {
-                console.error("Database query error:", err);
-                return res.status(500).json({ message: "Internal Server Error" });
+                const offerWithCompanyPromises = offerData.map((offer) => {
+                    return new Promise((resolve) => {
+                        db.query(
+                            `SELECT company_name, contect_no FROM companies_info WHERE created_by = ? LIMIT 1`,
+                            [offer.created_by_email],
+                            (err, companyResult) => {
+                                if (err) {
+                                    console.error("Error fetching company info:", err);
+                                    resolve({ ...offer, company_name: null, contect_no: null });
+                                } else {
+                                    const company = companyResult[0] || {};
+                                    resolve({
+                                        ...offer,
+                                        company_name: company.company_name || null,
+                                        contect_no: company.contect_no || null,
+                                    });
+                                }
+                            }
+                        );
+                    });
+                });
+
+                Promise.all(offerWithCompanyPromises)
+                    .then((finalData) => {
+                        res.json({
+                            message: "Merged offers with company info",
+                            data: finalData,
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error processing company merges:", error);
+                        res.status(500).json({ message: "Internal error", error });
+                    });
             }
-            res.json({ message: "All offers with groupage details", data: result });
-        });
+        );
     } else {
         res.status(403).json({ message: "You are not authorized" });
     }
@@ -339,6 +374,48 @@ const add_company_country = (req, res) => {
         res.json({ message: 'You are not Super Admin', status: false })
     }
 }
+
+const total_amount_received = (req, res) => {
+    if (req.user.role === 'Sadmin') {
+        db.query(`SELECT payment_info_amount FROM payment_info_customers`, (err, result) => {
+            if (err) {
+                res.json({ message: 'error in database', status: false });
+            } else {
+                res.json({ message: result, status: true });
+            }
+        })
+    } else {
+        res.json({ message: 'You are not super admin', status: false })
+    }
+}
+
+const total_commission = (req, res) => {
+    if (req.user.role === 'Sadmin') {
+        db.query(`SELECT commission FROM offers WHERE status = 'complete'`, (err, result) => {
+            if (err) {
+                res.json({ message: 'error in database', status: false });
+            } else {
+                res.json({ message: result, status: true });
+            }
+        })
+    } else {
+        res.json({ message: 'You are not super admin', status: false });
+    }
+}
+
+const amount_to_pay = (req, res) => {
+    if (req.user.role === 'Sadmin') {
+        db.query(`SELECT amount FROM offers WHERE status = 'complete'`, (err, result) => {
+            if (err) {
+                res.json({ message: 'error in database', status: false });
+            } else {
+                res.json({ message: result, status: true });
+            }
+        })
+    } else {
+        res.json({ message: 'You are not super amdin', status: false });
+    }
+}
 module.exports = {
     Display_All_company,
     Delete_any_company,
@@ -353,4 +430,7 @@ module.exports = {
     edit_company_details,
     Delete_company_details_country,
     add_company_country,
+    total_amount_received,
+    total_commission,
+    amount_to_pay,
 };

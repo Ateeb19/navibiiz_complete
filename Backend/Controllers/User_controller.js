@@ -256,7 +256,7 @@ const reset_password = (req, res) => {
 
 const total_number_orders = (req, res) => {
     const email = req.user.useremail;
-    db.query('SELECT COUNT(*) AS total_orders FROM groupage WHERE created_by = ?', [email], (err, result) => {
+    db.query('SELECT COUNT(*) AS total_orders FROM groupage WHERE groupage_created_by = ?', [email], (err, result) => {
         if (err) {
             console.log(err);
             res.json({ message: 'error in database', status: false });
