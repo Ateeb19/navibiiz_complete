@@ -55,11 +55,8 @@ const Home = () => {
     }
     useEffect(() => {
         displayCompany();
-        // offers();
-    }, []);
-    useEffect(() => {
         offers();
-    })
+    }, []);
 
     const [company_info, setCompany_info] = useState([]);
     const companies = () => {
@@ -69,17 +66,22 @@ const Home = () => {
     }
     useEffect(() => {
         companies();
-        last_companies_fetch();
     }, [])
+
     const [last_companies, setLast_companies] = useState([]);
+
     const last_companies_fetch = () => {
         if (company_info.length > 0) {
-            setLast_companies(company_info.slice(-4));
+            setLast_companies(company_info.slice(-4)); 
         } else {
             setLast_companies([]);
         }
-    }
-    // console.log(last_companies);
+    };
+
+    useEffect(() => {
+        last_companies_fetch();
+    }, [company_info]); 
+    
     const navigate = useNavigate();
 
     const settings = {
@@ -314,7 +316,7 @@ const Home = () => {
                         </div>
 
                         <div className="row justify-content-center w-100">
-                            {last_companies.length > 0 ? (
+                            {company_info.length > 0 ? (
                                 <>
                                     {last_companies.map((company, index) => (
                                         <div key={index} className="col-12 col-sm-6 col-md-4 col-xl-3" onClick={() => View_details(company)}>
