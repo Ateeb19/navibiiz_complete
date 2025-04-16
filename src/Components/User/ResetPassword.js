@@ -35,7 +35,7 @@ const ResetPassword = () => {
                 // setTimeout(() => navigate('/login'), 2000);
             }
         } catch (err) {
-            showAlert('An error occurred');
+            showAlert('You are Offline! Please Connect to Internet');
         }
     };
 

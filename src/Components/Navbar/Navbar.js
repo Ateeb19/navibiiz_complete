@@ -9,14 +9,19 @@ import { FaBell } from "react-icons/fa"
 import Registration from "../Dashboard/Registration";
 import axios from "axios";
 import { IoIosAddCircleOutline } from "react-icons/io"
+import { useAlert } from "../alert/Alert_message";
+
+
 const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
+  const { showAlert } = useAlert();
   const token = localStorage.getItem('token');
   // console.log(token.length,'this is length')
   const port = process.env.REACT_APP_SECRET;
   const navigate = useNavigate();
   const user_login_state = localStorage.getItem('user_logins_type');
 
+  const [mode, setMode] = useState(false);
   useEffect(() => {
     const fetchToken = () => {
       axios
@@ -35,6 +40,7 @@ const Navbar = () => {
           }
         }).catch((err) => {
           console.log(err);
+          setMode(true);
         });
     };
     const userType = localStorage.getItem("userType");
@@ -55,7 +61,7 @@ const Navbar = () => {
         }
       }).then((response) => {
         setUserInfo(response.data.message);
-      }).catch((err) => { });
+      }).catch((err) => { setMode(true)});
     }
   }, [userRole]);
 
@@ -96,7 +102,7 @@ const Navbar = () => {
         style={navStyle}>
 
         <div className="d-flex justify-content-start align-items-center ms-3">
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/" style={{ textDecoration: "none" }} onClick={() => {if(mode){showAlert("You are Offline! Please Connect to Internet")}}}>
             <div
               className="d-flex justify-content-center align-items-center"
               style={{
@@ -124,16 +130,16 @@ const Navbar = () => {
         </div>
 
         <div className="d-none d-lg-flex justify-content-center align-items-center gap-4 flex-grow-1">
-          <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>Home</Link>
-          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>About Us</Link>
-          <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>Companies</Link>
-          <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>Offers</Link>
+          <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>Home</Link>
+          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>About Us</Link>
+          <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>Companies</Link>
+          <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>Offers</Link>
           {/* <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Contact Us</Link> */}
         </div>
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-2">
           {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
-            <Link to="/register_company">
+            <Link to="/register_company" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
               <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                 {(userInfo && userInfo.role === 'Sadmin') ? (
                   <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>
@@ -145,15 +151,15 @@ const Navbar = () => {
           )}
           {token ? (
             <>
-              <Link to="/send_groupage">
+              <Link to="/send_groupage" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
                 <button className="btn text-light m-1" style={{ backgroundColor: "#de8316" }}>
                   <BsSendFill /> <span style={{ fontSize: '1rem' }}>Send through groupage</span>
                 </button>
               </Link>
 
-              <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
+              <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => {navigate('/notification'); if(mode){showAlert("You are Offline! Please Connect to Internet")}}} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
-                <Link to="/dashboard">
+                <Link to="/dashboard" onClick={() => {if(mode){showAlert("You are Offline! Please Connect to Internet")}}}>
                   <button className="btn btn-light m-1" style={{ fontSize: '1rem', color: "#de8316" }}>
                     <MdDashboardCustomize />
                   </button>
@@ -162,12 +168,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/send_groupage">
+              <Link to="/send_groupage" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
                 <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                   <BsSendFill /> Send through groupage
                 </button>
               </Link>
-              <Link to="/login">
+              <Link to="/login" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
                 <button className="btn btn-light m-1" style={{ fontSize: "1rem", color: "#de8316" }}>
                   <FaUser /> Login
                 </button>
@@ -181,18 +187,18 @@ const Navbar = () => {
           <div className="d-flex justify-content-end position-fixed top-0 end-0 ps-3 pe-3 rounded-4 shadow-lg"
             style={{ zIndex: 1050, paddingTop: "30px", backgroundColor: " rgba(0, 0, 0, 0.71)" }}>
 
-            <button className="btn position-absolute text-light top-2 end-2" onClick={() => setIsOpen(false)}>
+            <button className="btn position-absolute text-light top-2 end-2" onClick={() => {setIsOpen(false); if(mode){showAlert("You are Offline! Please Connect to Internet")}}}>
               <FaTimes size={30} />
             </button>
 
             <div className="d-flex flex-column text-center py-4 text-light">
-              <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1rem" }}>Home</Link>
-              <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>About Us</Link>
-              <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Companies</Link>
-              <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Offers</Link>
+              <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>Home</Link>
+              <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => {setIsOpen(false); if(mode){showAlert("You are Offline! Please Connect to Internet")}}}>About Us</Link>
+              <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => {setIsOpen(false); if(mode){showAlert("You are Offline! Please Connect to Internet")}}}>Companies</Link>
+              <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => {setIsOpen(false); if(mode){showAlert("You are Offline! Please Connect to Internet")}}}>Offers</Link>
               {/* <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Contact Us</Link> */}
               {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
-                <Link to="/register_company">
+                <Link to="/register_company" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
                   <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                     {(userInfo && userInfo.role === 'Sadmin') ? (
                       <span><IoIosAddCircleOutline /> Add New Company</span>
@@ -204,14 +210,14 @@ const Navbar = () => {
               )}
               {token ? (
                 <>
-                  <Link to="/send_groupage" className="py-2">
+                  <Link to="/send_groupage" className="py-2" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
                     <button className="btn text-light w-100" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                       <BsSendFill /> Send through groupage
                     </button>
                   </Link>
-                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
+                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => {navigate('/notification'); if(mode){showAlert("You are Offline! Please Connect to Internet")}}} />
                   {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
-                    <Link to="/dashboard">
+                    <Link to="/dashboard" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
                       <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#de8316" }}>
                         <MdDashboardCustomize />
                       </button>
@@ -221,13 +227,13 @@ const Navbar = () => {
               ) : (
                 <>
 
-                  <Link to="/send_groupage">
+                  <Link to="/send_groupage" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
                     <button className="btn text-light w-100 mt-2" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
                       <BsSendFill /> Send through groupage
                     </button>
                   </Link>
-                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => navigate('/notification')} />
-                  <Link to="/login">
+                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => {navigate('/notification'); if(mode){showAlert("You are Offline! Please Connect to Internet")}}} />
+                  <Link to="/login" onClick={() => {if(mode) showAlert("You are Offline! Please Connect to Internet")}}>
                     <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#de8316" }}>
                       <FaUser /> Login
                     </button>

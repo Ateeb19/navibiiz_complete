@@ -120,8 +120,12 @@ const App = () => {
   const displayCompany = () => {
     axios.get(`${port}/company/display_company`)
       .then((response) => {
-        localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
-      }).catch((err) => { console.log('error', err) });
+        if(response.data.status){
+          localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
+        }else{
+          localStorage.setItem('companyInfo', '');
+        }
+      }).catch((err) => { console.log('error', err); localStorage.setItem('companyInfo', ''); });
   }
   useEffect(() => {
     displayCompany();

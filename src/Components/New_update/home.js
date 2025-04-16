@@ -31,13 +31,17 @@ const Home = () => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
     const [offers_details, setOffers_details] = useState([]);
+    const [mode, setMode] = useState(false);
     const displayCompany = () => {
         // localStorage.setItem('companyInfo');
         axios.get(`${port}/company/display_company`)
             .then((response) => {
-                // console.log(response.data.message);
-                localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
-            }).catch((err) => { console.log('error', err) });
+                if (response.data.status) {
+                    localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
+                } else {
+                    localStorage.setItem('companyInfo', '');
+                }
+            }).catch((err) => { console.log('error', err); localStorage.setItem('companyInfo', ''); setMode(true); });
     }
     const offers = () => {
         axios.get(`${port}/send_groupage/show_only_grouage`)
@@ -47,7 +51,7 @@ const Home = () => {
                 } else {
                     setOffers_details([]);
                 }
-            }).catch((err) => { console.log(err) });
+            }).catch((err) => { console.log(err); setMode(true) });
     }
     useEffect(() => {
         displayCompany();
@@ -65,8 +69,16 @@ const Home = () => {
     }
     useEffect(() => {
         companies();
+        last_companies_fetch();
     }, [])
-    const last_companies = company_info.slice(-4);
+    const [last_companies, setLast_companies] = useState([]);
+    const last_companies_fetch = () => {
+        if (company_info.length > 0) {
+            setLast_companies(company_info.slice(-4));
+        } else {
+            setLast_companies([]);
+        }
+    }
     // console.log(last_companies);
     const navigate = useNavigate();
 
@@ -211,7 +223,7 @@ const Home = () => {
                         <div className="d-flex flex-row justify-content-center align-items-center px-3 pickup-wrap gap-4">
                             <span><Countryselector label='Pick Up Country' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
 
-                            <button className="" onClick={handleSearch}><IoSearch/> Search Companies</button>
+                            <button className="" onClick={handleSearch}><IoSearch /> Search Companies</button>
                         </div>
                     </div>
                 </div>
@@ -302,25 +314,50 @@ const Home = () => {
                         </div>
 
                         <div className="row justify-content-center w-100">
-                            {last_companies.map((company, index) => (
-                                <div key={index} className="col-12 col-sm-6 col-md-4 col-xl-3" onClick={() => View_details(company)}>
-                                    <div className="company-box-wrap">
-                                        <div className="d-flex flex-column align-items-start">
-                                            <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
-                                                <img
-                                                    src={company.logo ? company.logo : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
-                                                    alt="Logo"
-                                                    className="w-100 h-100 object-fit-cover"
-                                                />
+                            {last_companies.length > 0 ? (
+                                <>
+                                    {last_companies.map((company, index) => (
+                                        <div key={index} className="col-12 col-sm-6 col-md-4 col-xl-3" onClick={() => View_details(company)}>
+                                            <div className="company-box-wrap">
+                                                <div className="d-flex flex-column align-items-start">
+                                                    <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
+                                                        <img
+                                                            src={company.logo ? company.logo : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
+                                                            alt="Logo"
+                                                            className="w-100 h-100 object-fit-cover"
+                                                        />
+                                                    </div>
+                                                    <h5>{company.company_name}</h5>
+                                                    <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1" /> 4.5 (20 Ratings)</span>
+                                                    <p className="text-secondary text-start mt-2">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
+                                                    <span className="" style={{ cursor: "pointer", color: '#de8316' }} onClick={() => View_details(company)}>View Details</span>
+                                                </div>
                                             </div>
-                                            <h5>{company.company_name}</h5>
-                                            <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1" /> 4.5 (20 Ratings)</span>
-                                            <p className="text-secondary text-start mt-2">{company.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                            <span className="" style={{ cursor: "pointer", color: '#de8316' }} onClick={() => View_details(company)}>View Details</span>
+                                        </div>
+                                    ))}
+                                </>
+                            ) : (
+                                <>
+                                    <div className="col-12 col-sm-6 col-md-4 col-xl-3" >
+                                        <div className="company-box-wrap">
+                                            <div className="d-flex flex-column align-items-start">
+                                                <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
+                                                    <img
+                                                        src={"https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
+                                                        alt="Logo"
+                                                        className="w-100 h-100 object-fit-cover"
+                                                    />
+                                                </div>
+                                                <h5> No Data Fetch</h5>
+                                                <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1" /> 4.5 (20 Ratings)</span>
+                                                <p className="text-secondary text-start mt-2"></p>
+                                                <span className="" style={{ cursor: "pointer", color: '#de8316' }} >View Details</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                </>
+                            )}
+
                         </div>
                         <button className="btn-main" onClick={() => navigate('/companies_list')}>
                             View All
@@ -424,25 +461,50 @@ const Home = () => {
                         </div>
 
                         <div className="row justify-content-center w-100">
-                            {offers_details.map((company, index) => (
-                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" onClick={() => submit_offer(company)}>
-                                    <div className="company-box-wrap">
-                                        <div className="d-flex flex-column align-items-start">
-                                            <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
-                                                <img
-                                                    src={company.img01 ? company.img01 : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
-                                                    alt="Logo"
-                                                    className="w-100 h-100 object-fit-cover"
-                                                />
+                            {offers_details.length > 0 ? (
+                                <>
+                                    {offers_details.map((company, index) => (
+                                        <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" onClick={() => submit_offer(company)}>
+                                            <div className="company-box-wrap">
+                                                <div className="d-flex flex-column align-items-start">
+                                                    <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
+                                                        <img
+                                                            src={company.img01 ? company.img01 : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
+                                                            alt="Logo"
+                                                            className="w-100 h-100 object-fit-cover"
+                                                        />
+                                                    </div>
+                                                    <h5>{company.product_name}</h5>
+                                                    {/* <span className="text-secondary">4.5 (20 Ratings)</span> */}
+                                                    <p className="text-secondary text-start mt-1">{company.sender_description.split(" ").slice(0, 10).join(" ") + "..."}</p>
+                                                    <span className="" style={{ cursor: "pointer", color: '#de8316' }} onClick={() => submit_offer(company)}>Submit Offer</span>
+                                                </div>
                                             </div>
-                                            <h5>{company.product_name}</h5>
-                                            {/* <span className="text-secondary">4.5 (20 Ratings)</span> */}
-                                            <p className="text-secondary text-start mt-1">{company.sender_description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                            <span className="" style={{ cursor: "pointer", color: '#de8316' }} onClick={() => submit_offer(company)}>Submit Offer</span>
+                                        </div>
+                                    ))}
+                                </>
+                            ) : (
+                                <>
+                                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" >
+                                        <div className="company-box-wrap">
+                                            <div className="d-flex flex-column align-items-start">
+                                                <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
+                                                    <img
+                                                        src="https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"
+                                                        alt="Logo"
+                                                        className="w-100 h-100 object-fit-cover"
+                                                    />
+                                                </div>
+                                                <h5>No Data fetch</h5>
+                                                {/* <span className="text-secondary">4.5 (20 Ratings)</span> */}
+                                                <p className="text-secondary text-start mt-1"></p>
+                                                <span className="" style={{ cursor: "pointer", color: '#de8316' }} >Submit Offer</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                </>
+                            )}
+
                         </div>
                         <button className="btn-main" onClick={() => navigate('/offers')}>
                             View All

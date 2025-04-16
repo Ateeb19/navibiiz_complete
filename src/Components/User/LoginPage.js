@@ -101,6 +101,7 @@ const LoginPage = () => {
         }
       } catch (err) {
         console.log(err);
+        showAlert('You are Offline! Please Connect to Internet');
       }
     } else {
       evt.preventDefault();
@@ -141,6 +142,7 @@ const LoginPage = () => {
 
       } catch (err) {
         console.log(err);
+        showAlert('You are Offline! Please Connect to Internet');
       }
     }
   };
@@ -179,7 +181,7 @@ const LoginPage = () => {
 
       showAlert(res.data.message);
     } catch (error) {
-      showAlert('Something went wrong. Please try again.');
+      showAlert('You are Offline! Please Connect to Internet');
     }
   }
   // console.log(forget_password);

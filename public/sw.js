@@ -9,8 +9,16 @@ this.addEventListener("install", (event) => {
                 "/sw.js",
                 "/index.html",
                 "/",
+                "/dashboard",
+                "/offers",
+                "/companies_list",
+                "/send_groupage",
+                "/notification",
+                "/register_company",
+                "/about_us",
                 "/login",
-                "/regester_company"
+                "/reset_password/:token",
+                "/company_details/:id",
             ])
         })
     )

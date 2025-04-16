@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Regester from '../Dashboard/Registration';
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 const Regester_company = () => {
-
 
     return (
         <div className="regester-wrapper w-100">

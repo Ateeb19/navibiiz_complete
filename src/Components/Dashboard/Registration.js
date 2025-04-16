@@ -53,6 +53,8 @@ const DragAndDrop = ({ accept, onFileDrop, label }) => {
 
 const Registration = () => {
     const token = localStorage.getItem('token');
+    const [mode, setMode] = useState(false);
+
     const { showAlert } = useAlert();
     const port = process.env.REACT_APP_SECRET;
     const navigate = useNavigate();
@@ -69,12 +71,32 @@ const Registration = () => {
         };
         localStorage.setItem('valid', 'false');
         window.addEventListener("beforeunload", handleBeforeUnload);
-
+        fetchToken();
+        if (mode) {
+            navigate('/');
+        }
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
         };
     }, []);
 
+    const fetchToken = () => {
+        axios
+            .get(`${port}/user/check_token`, {
+                headers: {
+                    Authorization: token,
+                },
+            }).then((response) => {
+                
+            }).catch((err) => {
+                console.log(err);
+                setMode(true);
+                // showAlert('You are Offline! Please Connect to Internet')
+                setTimeout(() => {
+                    navigate('/')
+                }, 2500);
+            });
+    };
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
 
@@ -251,6 +273,8 @@ const Registration = () => {
         } catch (err) {
             console.log(err);
             localStorage.setItem('valid', 'false');
+            setMode(true);
+            showAlert('You are Offline! Please Connect to Internet');
             return false;
         }
     };
@@ -391,7 +415,7 @@ const Registration = () => {
             })
             .catch(error => {
                 console.error('Error:', error);
-                showAlert('Error submittion Data');
+                showAlert('You are Offline! Please Connect to Internet');
             });
     };
 
@@ -628,7 +652,7 @@ const Registration = () => {
                                             setStep((prev) => prev + 1);
                                         }
                                     }
-                                    window.scrollTo({ top: 0});
+                                    window.scrollTo({ top: 0 });
                                 }}
                             />
                         </div>
@@ -829,14 +853,14 @@ const Registration = () => {
                             className="btn rounded-2 me-3"
                             style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center"
-                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1);window.scrollTo({ top: 0}); }} />
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); window.scrollTo({ top: 0 }); }} />
                         <Button label="Next"
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                             iconPos="center"
                             disabled={!isTransportationValid()}
-                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1);window.scrollTo({ top: 0}); }} />
+                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1); window.scrollTo({ top: 0 }); }} />
                     </div>
                 </StepperPanel>
 
@@ -930,14 +954,14 @@ const Registration = () => {
                             className="btn rounded-2 me-3"
                             style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center"
-                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1);window.scrollTo({ top: 0}); }} />
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); window.scrollTo({ top: 0 }); }} />
                         <Button label="Next"
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
                             iconPos="center"
                             disabled={!isPaymentValid()}
-                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1);window.scrollTo({ top: 0}); }} />
+                            onClick={() => { stepperRef.current.nextCallback(); setStep((prev) => prev + 1); window.scrollTo({ top: 0 }); }} />
                     </div>
                 </StepperPanel>
 
@@ -989,9 +1013,9 @@ const Registration = () => {
                             className="btn rounded-2"
                             style={{ backgroundColor: 'transparent', width: '100px', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
                             iconPos="center" icon="pi pi-arrow-left"
-                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1);window.scrollTo({ top: 0}); }} />
+                            onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); window.scrollTo({ top: 0 }); }} />
                         <Button label="Submit"
-                            onClick={() => { handleSubmit(); setStep((prev) => prev + 1);window.scrollTo({ top: 0}); }}
+                            onClick={() => { handleSubmit(); setStep((prev) => prev + 1); window.scrollTo({ top: 0 }); }}
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
