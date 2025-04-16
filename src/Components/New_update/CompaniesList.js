@@ -15,13 +15,13 @@ const CompaniesList = () => {
     const navigate = useNavigate();
     const itemsPerPage = 5;
 
-    const data = [];
+    let data = [];
 
     if(localStorage.getItem('companyInfo').length > 0){
         data = JSON.parse(localStorage.getItem('companyInfo'));
     }
-    const sortedCompanies= Object.values(data).filter(item => typeof item === 'object' && item.id);
-    const companies = sortedCompanies.sort((a, b) => b.id - a.id);
+    let sortedCompanies= Object.values(data).filter(item => typeof item === 'object' && item.id);
+    let companies = sortedCompanies.sort((a, b) => b.id - a.id);
 
     console.log(companies, 'this is company');
     const [currentPage, setCurrentPage] = useState(0);

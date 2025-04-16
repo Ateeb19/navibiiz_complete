@@ -31,7 +31,7 @@ const Home = () => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
     const [offers_details, setOffers_details] = useState([]);
-    const [mode, setMode] = useState(false);
+    // const [mode, setMode] = useState(false);
     const displayCompany = () => {
         // localStorage.setItem('companyInfo');
         axios.get(`${port}/company/display_company`)
@@ -41,7 +41,7 @@ const Home = () => {
                 } else {
                     localStorage.setItem('companyInfo', '');
                 }
-            }).catch((err) => { console.log('error', err); localStorage.setItem('companyInfo', ''); setMode(true); });
+            }).catch((err) => { console.log('error', err); localStorage.setItem('companyInfo', '') });
     }
     const offers = () => {
         axios.get(`${port}/send_groupage/show_only_grouage`)
@@ -51,7 +51,7 @@ const Home = () => {
                 } else {
                     setOffers_details([]);
                 }
-            }).catch((err) => { console.log(err); setMode(true) });
+            }).catch((err) => { console.log(err) });
     }
     useEffect(() => {
         displayCompany();

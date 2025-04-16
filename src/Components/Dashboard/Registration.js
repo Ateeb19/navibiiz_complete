@@ -53,7 +53,7 @@ const DragAndDrop = ({ accept, onFileDrop, label }) => {
 
 const Registration = () => {
     const token = localStorage.getItem('token');
-    const [mode, setMode] = useState(false);
+    // const [mode, setMode] = useState(false);
 
     const { showAlert } = useAlert();
     const port = process.env.REACT_APP_SECRET;
@@ -72,9 +72,9 @@ const Registration = () => {
         localStorage.setItem('valid', 'false');
         window.addEventListener("beforeunload", handleBeforeUnload);
         fetchToken();
-        if (mode) {
-            navigate('/');
-        }
+        // if (mode) {
+        //     navigate('/');
+        // }
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
         };
@@ -90,11 +90,11 @@ const Registration = () => {
                 
             }).catch((err) => {
                 console.log(err);
-                setMode(true);
+                // setMode(true);
                 // showAlert('You are Offline! Please Connect to Internet')
-                setTimeout(() => {
-                    navigate('/')
-                }, 2500);
+                // setTimeout(() => {
+                //     navigate('/')
+                // }, 2500);
             });
     };
     const [selectedImage, setSelectedImage] = useState(null);
@@ -273,7 +273,7 @@ const Registration = () => {
         } catch (err) {
             console.log(err);
             localStorage.setItem('valid', 'false');
-            setMode(true);
+            // setMode(true);
             showAlert('You are Offline! Please Connect to Internet');
             return false;
         }

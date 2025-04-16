@@ -82,7 +82,7 @@ const Dashboard = () => {
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
   // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  const [mode, setMode] = useState(false);
+  // const [mode, setMode] = useState(false);
   const [userInfo, setUserInfo] = useState('');
   const [admin_notification, setAdmin_notification] = useState([]);
   const [super_admin_notification, setSuper_admin_notification] = useState([]);
@@ -125,7 +125,7 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error("Error uploading image:", error);
-        setMode(true);
+        // setMode(true);
       }
     } else {
       showAlert('Please select a Logo');
@@ -143,7 +143,9 @@ const Dashboard = () => {
           if (response.data.status === true) {
             setAdmin_notification(response.data.message);
           }
-        }).catch((err) => { console.log(err); setMode(true); })
+        }).catch((err) => { console.log(err); 
+          // setMode(true); 
+        })
       }
       if (userRole === 'Sadmin') {
         axios.get(`${port}/notification/SuperAdmin_notification`, {
@@ -154,7 +156,9 @@ const Dashboard = () => {
           if (response.data.status === true) {
             setSuper_admin_notification(response.data.message);
           }
-        }).catch((err) => { console.log(err); setMode(true); });
+        }).catch((err) => { console.log(err); 
+          // setMode(true);
+         });
       }
       if (userRole === 'user') {
         axios.get(`${port}/notification/user_notification`, {
@@ -165,7 +169,9 @@ const Dashboard = () => {
           if (response.data.status === true) {
             setUser_notification(response.data.message);
           }
-        }).catch((err) => { console.log(err); setMode(true); });
+        }).catch((err) => { console.log(err); 
+          // setMode(true);
+         });
       }
     }
     notification();
@@ -185,10 +191,10 @@ const Dashboard = () => {
       }).catch((err) => { console.log(err) });
     }
 
-    if(showAlert){
-      navigate('/');
-      showAlert('You are Offline! Please Connect to Internet');
-    }
+    // if(mode){
+    //   navigate('/');
+    //   showAlert('You are Offline! Please Connect to Internet');
+    // }
   }, [userRole]);
 
 
