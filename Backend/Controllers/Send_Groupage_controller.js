@@ -321,7 +321,7 @@ const create_offer = (req, res) => {
                     });
                 } else {
                     const commission = (data.offer_amount * 30) / 100;
-                    db.query('UPDATE offers SET amount = ?, commission = ? expeted_date = ? WHERE groupage_id = ? AND created_by_id = ?', [data.offer_amount, commission, data.expected_date, data.offer_id, req.user.userid], (err, result) => {
+                    db.query('UPDATE offers SET amount = ?, commission = ?, expeted_date = ? WHERE groupage_id = ? AND created_by_id = ?', [data.offer_amount, commission, data.expected_date, data.offer_id, req.user.userid], (err, result) => {
                         if (err) {
                             console.log(err, '123')
                             res.json({ message: 'error in database', status: false });
