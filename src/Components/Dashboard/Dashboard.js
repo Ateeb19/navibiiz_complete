@@ -22,6 +22,7 @@ import { format } from "date-fns";
 import Registration from "./Registration";
 import { formatDistanceToNow } from "date-fns";
 import Paypal_payment from "./Paypal_payment";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-dt';
 import { useAlert } from "../alert/Alert_message";
@@ -143,7 +144,8 @@ const Dashboard = () => {
           if (response.data.status === true) {
             setAdmin_notification(response.data.message);
           }
-        }).catch((err) => { console.log(err); 
+        }).catch((err) => {
+          console.log(err);
           // setMode(true); 
         })
       }
@@ -156,9 +158,10 @@ const Dashboard = () => {
           if (response.data.status === true) {
             setSuper_admin_notification(response.data.message);
           }
-        }).catch((err) => { console.log(err); 
+        }).catch((err) => {
+          console.log(err);
           // setMode(true);
-         });
+        });
       }
       if (userRole === 'user') {
         axios.get(`${port}/notification/user_notification`, {
@@ -169,9 +172,10 @@ const Dashboard = () => {
           if (response.data.status === true) {
             setUser_notification(response.data.message);
           }
-        }).catch((err) => { console.log(err); 
+        }).catch((err) => {
+          console.log(err);
           // setMode(true);
-         });
+        });
       }
     }
     notification();
@@ -1538,7 +1542,11 @@ const Dashboard = () => {
   }
   // console.log(showOfferDetails);
   // console.log(selectedCompany)
-
+  const initialOptions = {
+    "client-id": "Ae-QJja_9j4sH-PmGLdd6ghIT_9_A1IUicHytfy9i0sV4ZDZLsUn8bcfyW1SBF_3CNc0OGQoGZGOZ_8a",
+    currency: "USD",
+    components: "buttons",
+  };
 
 
 
@@ -3401,148 +3409,153 @@ const Dashboard = () => {
                   overflowY: 'auto'
                 }}
               >
-                <div className="d-flex flex-column justify-content-start align-items-start w-100">
-                  <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
-                    ✕
-                  </button>
 
-                  <strong className="fs-4">Offer Details</strong>
-
-                  <h5 className="mt-3">Product Information</h5>
-                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
-                    <div className=" d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Product ID : </span>
-                      <span>{selected_offer.id}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Product Name : </span>
-                      <span>{selected_offer.product_name}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Weight : </span>
-                      <span>{selected_offer.p_weight}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Height :  </span>
-                      <span>{selected_offer.p_height}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Length : </span>
-                      <span>{selected_offer.p_length}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Width : </span>
-                      <span>{selected_offer.p_width}</span>
-                    </div>
-                  </div>
-
-                  <h5 className="mt-3">Company Information</h5>
-                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Company Name : </span>
-                      <span>XXXX-XX</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Price Offered : </span>
-                      <span className="fw-bold">${selected_offer.price}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Offer Received Date : </span>
-                      <span>{selected_offer.created_at.split("T")[0]}</span>
-                    </div>
-                  </div>
-
-                  <h5 className="mt-3">Pick Up Information</h5>
-                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Full Name : </span>
-                      <span>{selected_offer.sender_name}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Contact Number : </span>
-                      <span>{selected_offer.sender_contact}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Email ID : </span>
-                      <span>{selected_offer.sender_email}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Country : </span>
-                      <span>{selected_offer.sender_country}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">State : </span>
-                      <span>{selected_offer.sender_state}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">City : </span>
-                      <span>{selected_offer.sender_city}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Street Address : </span>
-                      <span>{selected_offer.sender_address}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Zip Code : </span>
-                      <span>{selected_offer.sender_zipcode}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Pick Up Date : </span>
-                      <span>{selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date}</span>
-                    </div>
-                  </div>
-
-                  <h5 className="mt-3">Delivery Information</h5>
-                  <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Full Name : </span>
-                      <span>{selected_offer.receiver_name}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Contact Number : </span>
-                      <span>{selected_offer.receiver_contact}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Email ID : </span>
-                      <span>{selected_offer.receiver_email}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Country : </span>
-                      <span>{selected_offer.receiver_country}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">State : </span>
-                      <span>{selected_offer.receiver_state}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">City : </span>
-                      <span>{selected_offer.receiver_city}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Street Address : </span>
-                      <span>{selected_offer.receiver_address}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Zip Code : </span>
-                      <span>{selected_offer.receiver_zipcode}</span>
-                    </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                      <span className="text-secondary">Delivery Duration : </span>
-                      <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
-                    </div>
-                  </div>
-
-                  <div className="d-flex flex-column w-100 justify-content-center align-items-center">
-                    <button className="btn btn-light border border-2 border-dark mt-3 w-100"><strong>Accept</strong> <br></br>
-                      <Paypal_payment
-                        selected_offer={selected_offer}
-                        handleAcceptOffer={handleAcceptOffer}
-                      />
+                <PayPalScriptProvider options={initialOptions}>
+                  <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                    <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
+                      ✕
                     </button>
 
-                    <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
+                    <strong className="fs-4">Offer Details</strong>
+
+                    <h5 className="mt-3">Product Information</h5>
+                    <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                      <div className=" d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Product ID : </span>
+                        <span>{selected_offer.id}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Product Name : </span>
+                        <span>{selected_offer.product_name}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Weight : </span>
+                        <span>{selected_offer.p_weight}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Height :  </span>
+                        <span>{selected_offer.p_height}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Length : </span>
+                        <span>{selected_offer.p_length}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Width : </span>
+                        <span>{selected_offer.p_width}</span>
+                      </div>
+                    </div>
+
+                    <h5 className="mt-3">Company Information</h5>
+                    <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Company Name : </span>
+                        <span>XXXX-XX</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Price Offered : </span>
+                        <span className="fw-bold">${selected_offer.price}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Offer Received Date : </span>
+                        <span>{selected_offer.created_at.split("T")[0]}</span>
+                      </div>
+                    </div>
+
+                    <h5 className="mt-3">Pick Up Information</h5>
+                    <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Full Name : </span>
+                        <span>{selected_offer.sender_name}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Contact Number : </span>
+                        <span>{selected_offer.sender_contact}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Email ID : </span>
+                        <span>{selected_offer.sender_email}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Country : </span>
+                        <span>{selected_offer.sender_country}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">State : </span>
+                        <span>{selected_offer.sender_state}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">City : </span>
+                        <span>{selected_offer.sender_city}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Street Address : </span>
+                        <span>{selected_offer.sender_address}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Zip Code : </span>
+                        <span>{selected_offer.sender_zipcode}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Pick Up Date : </span>
+                        <span>{selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date}</span>
+                      </div>
+                    </div>
+
+                    <h5 className="mt-3">Delivery Information</h5>
+                    <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Full Name : </span>
+                        <span>{selected_offer.receiver_name}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Contact Number : </span>
+                        <span>{selected_offer.receiver_contact}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Email ID : </span>
+                        <span>{selected_offer.receiver_email}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Country : </span>
+                        <span>{selected_offer.receiver_country}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">State : </span>
+                        <span>{selected_offer.receiver_state}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">City : </span>
+                        <span>{selected_offer.receiver_city}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Street Address : </span>
+                        <span>{selected_offer.receiver_address}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Zip Code : </span>
+                        <span>{selected_offer.receiver_zipcode}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Delivery Duration : </span>
+                        <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-column w-100 justify-content-center align-items-center">
+                      <div className="btn btn-light border border-2 border-dark mt-3 w-100"><strong>Accept</strong> <br></br>
+                        <Paypal_payment
+                          key={selected_offer?.offer_id}
+                          selected_offer={selected_offer}
+                          handleAcceptOffer={handleAcceptOffer}
+                        />
+                      </div>
+
+                      <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
+                    </div>
                   </div>
-                </div>
+                </PayPalScriptProvider>
+
               </div>
             </div>
           </>
