@@ -58,10 +58,13 @@ const Home = () => {
         offers();
     }, []);
 
+    const company_data = localStorage.getItem('companyInfo');
     const [company_info, setCompany_info] = useState([]);
     const companies = () => {
-        if (localStorage.getItem('companyInfo').length > 0) {
-            setCompany_info(JSON.parse(localStorage.getItem('companyInfo')));
+        if (company_data) {
+            if (company_data.length > 0) {
+                setCompany_info(JSON.parse(localStorage.getItem('companyInfo')));
+            }
         }
     }
     useEffect(() => {
@@ -72,7 +75,7 @@ const Home = () => {
 
     const last_companies_fetch = () => {
         if (company_info.length > 0) {
-            setLast_companies(company_info.slice(-4)); 
+            setLast_companies(company_info.slice(-4));
         } else {
             setLast_companies([]);
         }
@@ -80,8 +83,8 @@ const Home = () => {
 
     useEffect(() => {
         last_companies_fetch();
-    }, [company_info]); 
-    
+    }, [company_info]);
+
     const navigate = useNavigate();
 
     const settings = {
