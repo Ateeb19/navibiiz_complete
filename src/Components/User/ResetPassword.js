@@ -41,7 +41,7 @@ const ResetPassword = () => {
 
     return (
         <div
-            className="d-flex justify-content-center align-items-center reset-password-wrapper  mt-5 pt-5"
+            className="d-flex justify-content-center align-items-center reset-password-wrapper"
         >
             <div className="p-4 shadow bg-white rounded reset-password-wrap">
                 <div className='title-head w-100'>

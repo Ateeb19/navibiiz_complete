@@ -187,7 +187,7 @@ const LoginPage = () => {
   // console.log(forget_password);
 
   return (
-    <div className="login-bg-wrapper  mt-5 pt-5">
+    <div className="login-bg-wrapper">
       {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
       <div className="d-flex align-items-center justify-content-end" style={{ height: "100vh" }}>
         <div className="login-wrap">

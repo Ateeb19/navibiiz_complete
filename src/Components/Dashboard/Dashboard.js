@@ -1630,7 +1630,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="vh-100" style={{marginTop: '80px'}}>
+    <div className="" style={{marginTop: '80px', height: '89vh', overflow: 'hidden'}}>
       {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
       <ConfirmationModal
         show={showModal}
@@ -1739,7 +1739,7 @@ const Dashboard = () => {
           <>
             {userRole === 'Sadmin' ? (
               <>
-                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%' }}>
+                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%', paddingBottom: '40px', overflow:'auto' }}>
                   <div className="dashbord-info-wrap">
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
@@ -1829,7 +1829,7 @@ const Dashboard = () => {
               </>
             ) : userRole === 'admin' ? (
               <>
-                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%' }}>
+                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%', paddingBottom: '40px', overflow:'auto' }}>
                   <div className="dashbord-info-wrap">
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
@@ -1900,7 +1900,7 @@ const Dashboard = () => {
               </>
             ) : (
               <>
-                <div style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+                <div style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto', marginTop: '80px', paddingBottom: '40px', overflow:'auto' }}>
                   <div className="dashbord-info-wrap">
                     <div className="d-flex flex-wrap justify-content-end align-items-center mt-2 gap-3">
                       {isMobile && (
@@ -1970,7 +1970,7 @@ const Dashboard = () => {
 
         {activeSection === 'profile_view' && (
           <>
-            <div className="bg-light px-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light px-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                 {isMobile && (
                   <div className="w-100 d-flex justify-content-start">
@@ -2207,7 +2207,7 @@ const Dashboard = () => {
 
         {activeSection === 'orders' && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               {isMobile && (
                 <div className="w-100 d-flex justify-content-start">
                   <Menu />
@@ -2889,7 +2889,7 @@ const Dashboard = () => {
 
         {activeSection === 'payment_history' && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{marginTop: '80px', paddingBottom: '90px',  width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               {isMobile && (
                 <div className="w-100 d-flex justify-content-start">
                   <Menu />
@@ -2973,7 +2973,7 @@ const Dashboard = () => {
 
         {activeSection === 'user_offers' && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{marginTop: '80px', paddingBottom: '90px',  width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               {isMobile && (
                 <div className="w-100 d-flex justify-content-start">
                   <Menu />
@@ -3565,7 +3565,7 @@ const Dashboard = () => {
           <>
             {userRole === 'Sadmin' && (
               <>
-                <div className="bg-light px-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+                <div className="bg-light px-3" style={{marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
                   <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                     {isMobile && (
                       <div className="w-100 d-flex justify-content-start">
@@ -3674,7 +3674,7 @@ const Dashboard = () => {
         {activeSection === "company_detail" && (
           <>
 
-            <div className="bg-light px-3" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light px-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                 {isMobile && (
                   <div className="w-100 d-flex justify-content-start">
@@ -4309,7 +4309,7 @@ const Dashboard = () => {
         )}
         {activeSection === "offers" && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{marginTop: '80px', paddingBottom: '90px',  width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                 {isMobile && (
                   <div className="w-100 d-flex justify-content-start">
@@ -4930,7 +4930,7 @@ const Dashboard = () => {
 
         {activeSection === "payments" && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                 {isMobile && (
                   <div className="w-100 d-flex justify-content-start">
@@ -5016,7 +5016,7 @@ const Dashboard = () => {
 
         {activeSection === "users" && (
           <>
-            <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{marginTop: '80px', paddingBottom: '90px',  width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                 {isMobile && (
                   <div className="w-100 d-flex justify-content-start">
