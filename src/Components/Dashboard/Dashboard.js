@@ -1630,7 +1630,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="vh-100">
+    <div className="vh-100" style={{marginTop: '80px'}}>
       {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
       <ConfirmationModal
         show={showModal}
@@ -1650,7 +1650,7 @@ const Dashboard = () => {
           </>
         ) : (
           <>
-            <section className="d-flex flex-column align-items-start sidebar-wrapper"
+            <section className="d-flex flex-column align-items-start sidebar-wrapper mt-5 pt-5"
             // style={{ backgroundColor: ' #010037', width: "100%", maxWidth: "20%", height: '100vh' }}
             >
               <div className="sidebar-wrap w-100">

@@ -5,7 +5,7 @@ import Footer from "../Footer/Footer";
 const Regester_company = () => {
 
     return (
-        <div className="regester-wrapper w-100">
+        <div className="regester-wrapper w-100  mt-5 pt-5">
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />

@@ -90,7 +90,11 @@ const Navbar = () => {
   const location = useLocation();
   const navStyle = {
     backgroundColor: location.pathname === '/dashboard' ? ' #00232f' : ' #00232f',
-    position: 'relative'
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 1050,
   };
   const logout = () => {
     localStorage.removeItem('token');
@@ -157,7 +161,7 @@ const Navbar = () => {
                 </button>
               </Link>
 
-              <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => {navigate('/notification')}} />
+              <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard" >
                   <button className="btn btn-light m-1" style={{ fontSize: '1rem', color: "#de8316" }}>
@@ -187,15 +191,15 @@ const Navbar = () => {
           <div className="d-flex justify-content-end position-fixed top-0 end-0 ps-3 pe-3 rounded-4 shadow-lg"
             style={{ zIndex: 1050, paddingTop: "30px", backgroundColor: " rgba(0, 0, 0, 0.71)" }}>
 
-            <button className="btn position-absolute text-light top-2 end-2" onClick={() => {setIsOpen(false)}}>
+            <button className="btn position-absolute text-light top-2 end-2" onClick={() => { setIsOpen(false) }}>
               <FaTimes size={30} />
             </button>
 
             <div className="d-flex flex-column text-center py-4 text-light">
               <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} >Home</Link>
-              <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => {setIsOpen(false) }}>About Us</Link>
-              <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => {setIsOpen(false)}}>Companies</Link>
-              <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => {setIsOpen(false)}}>Offers</Link>
+              <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About Us</Link>
+              <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Companies</Link>
+              <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Offers</Link>
               {/* <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Contact Us</Link> */}
               {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
                 <Link to="/register_company" >
@@ -215,7 +219,7 @@ const Navbar = () => {
                       <BsSendFill /> Send through groupage
                     </button>
                   </Link>
-                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => {navigate('/notification')}} />
+                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
                   {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                     <Link to="/dashboard" >
                       <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#de8316" }}>
@@ -232,7 +236,7 @@ const Navbar = () => {
                       <BsSendFill /> Send through groupage
                     </button>
                   </Link>
-                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => {navigate('/notification')}} />
+                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
                   <Link to="/login" >
                     <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#de8316" }}>
                       <FaUser /> Login

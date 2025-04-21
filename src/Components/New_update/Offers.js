@@ -150,7 +150,7 @@ const Offers = () => {
         setCurrentPage(selected);
     };
     return (
-        <div className="d-flex flex-column align-items-center justify-content-center">
+        <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
             {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
@@ -707,7 +707,7 @@ const Offers = () => {
             <div className="d-flex flex-column align-items-center mt-4 mt-md-5 text-white p-3 p-md-5 w-100" style={{ backgroundColor: "#0044BC" }}>
                 <strong className="fs-3 fs-md-4 text-center">Unable to Find Your Preferred Shipping Companies?</strong>
                 <p className="w-100 w-md-50 p-2 p-md-4 text-center">Reach out to us for tailored shipping solutions that meet<br /> your needs</p>
-                <button className="btn-register">Ship Your Goods with Us</button>
+                <button className="btn-register" onClick={() => navigate('/send_groupage')}>Ship Your Goods with Us</button>
             </div>
 
             <div className="w-100 mt-5">

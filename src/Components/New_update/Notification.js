@@ -82,7 +82,7 @@ const Notification = () => {
                     <Navbar />
                 </div>
             </div>
-            <div className="bg-light" style={{ width: '100%', overflow: 'auto' }}>
+            <div className="bg-light  mt-5 pt-5" style={{ width: '100%', overflow: 'auto' }}>
                 {/* <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                     {isMobile && (
                         <div className="w-100 d-flex justify-content-start">

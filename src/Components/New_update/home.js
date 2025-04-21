@@ -75,7 +75,8 @@ const Home = () => {
 
     const last_companies_fetch = () => {
         if (company_info.length > 0) {
-            setLast_companies(company_info.slice(-4));
+            const lastFourReversed = company_info.slice(-4).reverse();
+            setLast_companies(lastFourReversed);
         } else {
             setLast_companies([]);
         }
@@ -205,7 +206,7 @@ const Home = () => {
     };
 
     return (
-        <div className="d-flex flex-column align-items-center justify-content-center">
+        <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
             {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">

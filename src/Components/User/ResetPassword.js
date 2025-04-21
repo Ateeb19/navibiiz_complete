@@ -7,8 +7,8 @@ const ResetPassword = () => {
     const port = process.env.REACT_APP_SECRET;
     const { token } = useParams();
     const navigate = useNavigate();
-      const { showAlert } = useAlert();
-    
+    const { showAlert } = useAlert();
+
 
     const [form, setForm] = useState({
         password: '',
@@ -41,7 +41,7 @@ const ResetPassword = () => {
 
     return (
         <div
-            className="d-flex justify-content-center align-items-center reset-password-wrapper"
+            className="d-flex justify-content-center align-items-center reset-password-wrapper  mt-5 pt-5"
         >
             <div className="p-4 shadow bg-white rounded reset-password-wrap">
                 <div className='title-head w-100'>
