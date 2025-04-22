@@ -1,6 +1,8 @@
 // import logo from './logo.svg';
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
+import '../src/assets/css/style.css'
+import '../src/assets/css/responsive.css'
 // import { Nav } from 'react-bootstrap';
 import { IoMdHome } from "react-icons/io";
 import { MdDashboardCustomize } from "react-icons/md";

@@ -115,7 +115,7 @@ const Navbar = () => {
               }}
             >
               <img
-                src="/Images/novibiz/fulllogo_transparent_nobuffer.png"
+                src="/Images/novibiz/icononly_transparent_nobuffer.png"
                 alt="logo"
                 className="img-fluid"
                 style={{ maxHeight: "100%", objectFit: "contain" }} // Prevents cropping

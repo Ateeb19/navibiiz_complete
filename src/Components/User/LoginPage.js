@@ -5,7 +5,7 @@ import Navbar from '../Navbar/Navbar'
 import { IoEyeOutline } from "react-icons/io5";
 import { useAlert } from "../alert/Alert_message";
 import { IoMdArrowRoundBack } from "react-icons/io";
-
+import '../../assets/css/responsive.css'
 const LoginPage = () => {
   const port = process.env.REACT_APP_SECRET;
   const { showAlert } = useAlert();
@@ -188,8 +188,8 @@ const LoginPage = () => {
 
   return (
     <div className="login-bg-wrapper">
-      {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
-      <div className="d-flex align-items-center justify-content-end" style={{ height: "100vh" }}>
+      {/* <div className="d-flex align-items-center justify-content-end" style={{ height: "100vh" }}> */}
+      <div className="d-flex align-items-center justify-content-center justify-content-md-end" style={{ minHeight: "100vh"}}>
         <div className="login-wrap">
           <div className="d-flex flex-column align-items-start">
             <div className="login-logo-wrap">

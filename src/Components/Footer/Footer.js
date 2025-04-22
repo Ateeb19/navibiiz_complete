@@ -53,7 +53,6 @@ const Footer = () => {
     return (
         <>
             <section className="contact-form-wrapper">
-                {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
                 <div className="container">
                     <div className="contact-form-wrap">
                         <div className="row mt-2 w-100">
@@ -126,11 +125,11 @@ const Footer = () => {
             </section>
 
             <section className="promo-wrapper">
-                <div className="d-flex flex-column align-items-center mt-4 mt-md-5 text-white p-3 p-md-5 w-100" style={{ backgroundColor: "#0044BC" }}>
+                <div className="d-flex flex-column align-items-center mt-4 mt-md-5 text-white p-3 p-md-5 w-100 text-center" style={{ backgroundColor: "#0044BC" }}>
                     <div className="title-head">
                         <h2>Partner With Us and Grow Your Reach</h2>
                     </div>
-                    <p className="">Join our platform to connect with global customers and expand your logistics business</p>
+                    <p>Join our platform to connect with global customers and expand your logistics business</p>
                     <button className="btn-register" onClick={() => navigate('/register_company')}>Register your Company</button>
                 </div>
             </section>
@@ -138,13 +137,13 @@ const Footer = () => {
             <section className="footer-wrapper">
                 <div className="container">
                     <div className="footer-wrap">
-                        <div className="d-flex flex-row">
-                            <div className="col-12 col-md-3 footer-logo-wrap">
-                                <img src="/Images/novibiz/fulllogo_nobuffer.jpg" alt="Novibiiz" onClick={() => navigate('/')} />
+                        <div className="row">
+                            <div className="col-12 col-md-3 footer-logo-wrap mb-3 mb-md-0">
+                                <img src="/Images/novibiz/fulllogo_nobuffer.jpg" alt="Novibiiz" onClick={() => navigate('/')} className="img-fluid" />
                             </div>
 
-                            <div className="col-12 col-md-3">
-                                <h3 >Company</h3>
+                            <div className="col-12 col-md-3 mb-3 mb-md-0">
+                                <h3>Company</h3>
                                 <ul>
                                     <li>About Us</li>
                                     <li>Contact Us</li>
@@ -154,8 +153,8 @@ const Footer = () => {
                                 </ul>
                             </div>
 
-                            <div className="col-12 col-md-3">
-                                <h3 >Resources</h3>
+                            <div className="col-12 col-md-3 mb-3 mb-md-0">
+                                <h3>Resources</h3>
                                 <ul>
                                     <li>Blog</li>
                                     <li>Company Profiles</li>
@@ -165,8 +164,8 @@ const Footer = () => {
 
                             <div className="col-12 col-md-3">
                                 <h3>Follow Us</h3>
-                                <ul className="follow">
-                                    <li> <FaFacebook /></li>
+                                <ul className="follow d-flex gap-3 ps-0">
+                                    <li><FaFacebook /></li>
                                     <li><FaInstagramSquare /></li>
                                     <li><FaLinkedin /></li>
                                 </ul>
@@ -180,6 +179,135 @@ const Footer = () => {
                 </div>
             </section>
         </>
+        // <>
+        //     <section className="contact-form-wrapper">
+        //         {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
+        //         <div className="container">
+        //             <div className="contact-form-wrap">
+        //                 <div className="row mt-2 w-100">
+        //                     <div className="col-12 col-md-5 d-flex flex-column p-3 p-md-4 text-white text-start rounded-4 gap-3 mb-3 mb-md-0" style={{ backgroundColor: '#0044BC' }}>
+        //                         <strong className="mb-2 mb-md-3 fs-5">Contact Information</strong>
+        //                         <div>
+        //                             <p className="mb-1">Chat with us</p>
+        //                             <p><IoLogoWhatsapp className="me-2 " style={{ color: ' #de8316' }} />+49 178 9386741</p>
+        //                         </div>
+        //                         <div>
+        //                             <p className="mb-1">Email Us</p>
+        //                             <p>
+        //                                 <MdEmail className="me-2" style={{ color: '#de8316' }} />
+        //                                 <a
+        //                                     href="mailto:info@novibiz.com"
+        //                                     style={{ textDecoration: 'none', color: 'inherit' }}
+        //                                 >
+        //                                     info@novibiz.com
+        //                                 </a>
+        //                             </p>
+        //                         </div>
+        //                         <div>
+        //                             <p className="mb-1">Call Us</p>
+        //                             <p><IoCall className="me-2" style={{ color: ' #de8316' }} />+49 178 9386741</p>
+        //                         </div>
+        //                         <div>
+        //                             <p className="mb-1">Our Headquarters</p>
+        //                             <p><FaLocationDot className="me-2 " style={{ color: ' #de8316' }} /><a
+        //                                 href="https://www.google.com/maps/place/Kaiserswerther+Str.+135,+40474+D%C3%BCsseldorf,+Germany/@51.2456278,6.7672824,17z/data=!3m1!4b1!4m6!3m5!1s0x47b8c9f01ec81eb7:0x6364618294734dc5!8m2!3d51.2456278!4d6.7698573!16s%2Fg%2F11c5bw0ls3?entry=ttu&g_ep=EgoyMDI1MDQwOS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"
+        //                                 target="_blank"
+        //                                 rel="noopener noreferrer"
+        //                                 style={{ textDecoration: 'none', color: '#fff' }}
+        //                             >
+        //                                 Kaiserswerther Straße 135, Düsseldorf, Germany
+        //                             </a></p>
+        //                         </div>
+        //                     </div>
+        //                     <div className="col-12 col-md-7 p-3 ps-4 text-start">
+        //                         <h4>Get in Touch</h4>
+
+        //                         <div className="row">
+        //                             <div className="col-12 col-md-6">
+        //                                 <label className="input-label">Full Name <span className="text-danger">*</span></label>
+        //                                 <input type="text" className="contact-field" value={user_name} onChange={(e) => setUser_name(e.target.value)} placeholder="Enter your full name" />
+        //                             </div>
+        //                             <div className="col-12 col-md-6">
+        //                                 <label className="input-label">Email ID <span className="text-danger">*</span></label>
+        //                                 <input type="email" className="contact-field" value={email_id} onChange={(e) => setEmail_id(e.target.value)} placeholder="Enter your email id" />
+        //                             </div>
+        //                         </div>
+        //                         <div className="row">
+        //                             <div className="col-12 col-md-6">
+        //                                 <label className="input-label">Contact Number <span className="text-danger">*</span></label>
+        //                                 <input type="tel" className="contact-field" value={contact_number} onChange={(e) => setContact_number(e.target.value)} placeholder="Enter your contact number" />
+        //                             </div>
+        //                             <div className="col-12 col-md-6">
+        //                                 <label className="input-label">Country you Live <span className="text-danger">*</span></label>
+        //                                 <input type="text" className="contact-field" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Enter your country" />
+        //                             </div>
+        //                         </div>
+        //                         <div className="">
+        //                             <label className="input-label">Message (if any)</label>
+        //                             <textarea className="contact-field" value={message} onChange={(e) => setmessage(e.target.value)} rows="4" placeholder="Type here . . ." style={{ resize: 'none' }}></textarea>
+        //                         </div>
+        //                         <button className="btn p-3 text-white w-100" style={{ backgroundColor: ' #de8316' }} onClick={handle_sumbit}>SUBMIT</button>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </section>
+
+        //     <section className="promo-wrapper">
+        //         <div className="d-flex flex-column align-items-center mt-4 mt-md-5 text-white p-3 p-md-5 w-100" style={{ backgroundColor: "#0044BC" }}>
+        //             <div className="title-head">
+        //                 <h2>Partner With Us and Grow Your Reach</h2>
+        //             </div>
+        //             <p className="">Join our platform to connect with global customers and expand your logistics business</p>
+        //             <button className="btn-register" onClick={() => navigate('/register_company')}>Register your Company</button>
+        //         </div>
+        //     </section>
+
+        //     <section className="footer-wrapper">
+        //         <div className="container">
+        //             <div className="footer-wrap">
+        //                 <div className="d-flex flex-row">
+        //                     <div className="col-12 col-md-3 footer-logo-wrap">
+        //                         <img src="/Images/novibiz/fulllogo_nobuffer.jpg" alt="Novibiiz" onClick={() => navigate('/')} />
+        //                     </div>
+
+        //                     <div className="col-12 col-md-3">
+        //                         <h3 >Company</h3>
+        //                         <ul>
+        //                             <li>About Us</li>
+        //                             <li>Contact Us</li>
+        //                             <li>Privacy Policy</li>
+        //                             <li>Terms of use</li>
+        //                             <li>Code of conduct</li>
+        //                         </ul>
+        //                     </div>
+
+        //                     <div className="col-12 col-md-3">
+        //                         <h3 >Resources</h3>
+        //                         <ul>
+        //                             <li>Blog</li>
+        //                             <li>Company Profiles</li>
+        //                             <li>Partner with us</li>
+        //                         </ul>
+        //                     </div>
+
+        //                     <div className="col-12 col-md-3">
+        //                         <h3>Follow Us</h3>
+        //                         <ul className="follow">
+        //                             <li> <FaFacebook /></li>
+        //                             <li><FaInstagramSquare /></li>
+        //                             <li><FaLinkedin /></li>
+        //                         </ul>
+        //                     </div>
+        //                 </div>
+        //             </div>
+
+        //             <div className="w-100 text-center text-secondary mt-4">
+        //                 <p>© 2025 Navibiiz. All Rights Reserved.</p>
+        //             </div>
+        //         </div>
+        //     </section>
+        // </>
     )
 }
 
