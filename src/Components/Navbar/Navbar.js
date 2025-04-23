@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import { FaUser } from "react-icons/fa";
 import { BsSendFill } from "react-icons/bs";
@@ -20,6 +20,7 @@ const Navbar = () => {
   const port = process.env.REACT_APP_SECRET;
   const navigate = useNavigate();
   const user_login_state = localStorage.getItem('user_logins_type');
+  const isRedirecting = useRef(false);
 
   // const [mode, setMode] = useState(false);
   useEffect(() => {
@@ -32,15 +33,23 @@ const Navbar = () => {
         }).then((response) => {
           if (response.data.status === false) {
             localStorage.removeItem('token');
-            window.location.reload();
-            navigate('/login');
+            // window.location.reload();
+            // navigate('/login');
           }
           if (response.data.status === true) {
             localStorage.setItem('userRole', response.data.message);
           }
         }).catch((err) => {
-          console.log(err);
-          // setMode(true);
+          if (token) {
+            if (err.response && err.response.status === 403 && !isRedirecting.current) {
+              isRedirecting.current = true;
+              localStorage.removeItem('token');
+              showAlert('Token expired. Please login again.');
+              // navigate('/login');
+            } else {
+              console.error("Unexpected error:", err);
+            }
+          }
         });
     };
     const userType = localStorage.getItem("userType");
@@ -61,7 +70,16 @@ const Navbar = () => {
         }
       }).then((response) => {
         setUserInfo(response.data.message);
-      }).catch((err) => { });
+      }).catch((err) => {
+        if (err.response && err.response.status === 403 && !isRedirecting.current) {
+          isRedirecting.current = true;
+          localStorage.removeItem('token');
+          showAlert('Token expired. Please login again.');
+          // navigate('/login');
+        } else {
+          console.error("Unexpected error:", err);
+        }
+      });
     }
   }, [userRole]);
 
@@ -115,7 +133,7 @@ const Navbar = () => {
               }}
             >
               <img
-                src="/Images/novibiz/icononly_transparent_nobuffer.png"
+                src="/Images/novibiz/fulllogo_transparent_nobuffer.png"
                 alt="logo"
                 className="img-fluid"
                 style={{ maxHeight: "100%", objectFit: "contain" }} // Prevents cropping

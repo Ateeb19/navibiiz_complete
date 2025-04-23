@@ -96,6 +96,43 @@ const Dashboard = () => {
     setSelectedFile(file);
     setSelectedImage(URL.createObjectURL(file));
   };
+  const isRedirecting = useRef(false);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      axios
+        .get(`${port}/user/check_token`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((response) => {
+          if (response.data.status === false) {
+            localStorage.removeItem('token');
+            if (!isRedirecting.current) {
+              isRedirecting.current = true;
+              showAlert('Token expired. Please login again.');
+              navigate('/login');
+            }
+          } else if (response.data.status === true) {
+            localStorage.setItem('userRole', response.data.message);
+          }
+        })
+        .catch((err) => {
+          if (err.response && err.response.status === 403 && !isRedirecting.current) {
+            isRedirecting.current = true;
+            localStorage.removeItem('token');
+            showAlert('Token expired. Please login again.');
+            navigate('/login');
+          } else {
+            console.error('Unexpected error:', err);
+          }
+        });
+    }, 5000);
+
+    return () => clearInterval(intervalId); 
+  }, [navigate, token]);
+
 
   const handle_logo_update = async () => {
     if (selectedFile) {
@@ -1630,7 +1667,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="" style={{marginTop: '80px', height: '89vh', overflow: 'hidden'}}>
+    <div className="" style={{ marginTop: '80px', height: '89vh', overflow: 'hidden' }}>
       {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
       <ConfirmationModal
         show={showModal}
@@ -1739,7 +1776,7 @@ const Dashboard = () => {
           <>
             {userRole === 'Sadmin' ? (
               <>
-                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%', paddingBottom: '40px', overflow:'auto' }}>
+                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%', paddingBottom: '40px', overflow: 'auto' }}>
                   <div className="dashbord-info-wrap">
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
@@ -1829,7 +1866,7 @@ const Dashboard = () => {
               </>
             ) : userRole === 'admin' ? (
               <>
-                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%', paddingBottom: '40px', overflow:'auto' }}>
+                <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%', paddingBottom: '40px', overflow: 'auto' }}>
                   <div className="dashbord-info-wrap">
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
@@ -1900,7 +1937,7 @@ const Dashboard = () => {
               </>
             ) : (
               <>
-                <div style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto', marginTop: '80px', paddingBottom: '40px', overflow:'auto' }}>
+                <div style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto', marginTop: '80px', paddingBottom: '40px', overflow: 'auto' }}>
                   <div className="dashbord-info-wrap">
                     <div className="d-flex flex-wrap justify-content-end align-items-center mt-2 gap-3">
                       {isMobile && (
@@ -2889,7 +2926,7 @@ const Dashboard = () => {
 
         {activeSection === 'payment_history' && (
           <>
-            <div className="bg-light" style={{marginTop: '80px', paddingBottom: '90px',  width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               {isMobile && (
                 <div className="w-100 d-flex justify-content-start">
                   <Menu />
@@ -2973,7 +3010,7 @@ const Dashboard = () => {
 
         {activeSection === 'user_offers' && (
           <>
-            <div className="bg-light" style={{marginTop: '80px', paddingBottom: '90px',  width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               {isMobile && (
                 <div className="w-100 d-flex justify-content-start">
                   <Menu />
@@ -3565,7 +3602,7 @@ const Dashboard = () => {
           <>
             {userRole === 'Sadmin' && (
               <>
-                <div className="bg-light px-3" style={{marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+                <div className="bg-light px-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
                   <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                     {isMobile && (
                       <div className="w-100 d-flex justify-content-start">
@@ -4309,7 +4346,7 @@ const Dashboard = () => {
         )}
         {activeSection === "offers" && (
           <>
-            <div className="bg-light" style={{marginTop: '80px', paddingBottom: '90px',  width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                 {isMobile && (
                   <div className="w-100 d-flex justify-content-start">
@@ -5016,7 +5053,7 @@ const Dashboard = () => {
 
         {activeSection === "users" && (
           <>
-            <div className="bg-light" style={{marginTop: '80px', paddingBottom: '90px',  width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
                 {isMobile && (
                   <div className="w-100 d-flex justify-content-start">

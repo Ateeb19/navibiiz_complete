@@ -35,5 +35,9 @@
         max-width: 80%;
         height: 80vh;
       }
+
+    .search-div{
+        padding-left: 0px !important;
+    }
 }
 

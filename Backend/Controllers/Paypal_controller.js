@@ -77,12 +77,12 @@ const client = new paypal.core.PayPalHttpClient(environment);
 
 // API to create an order (Alternative if needed)
 const create_order_api = async (req, res) => {
+    // console.log('hello');
     try {
         const { offer } = req.body;
         if (!offer || !offer.amount || !offer.id || !offer.name) {
-            return res.status(400).json({ error: "Invalid offer data." });
+            return res.status(400).json({ error: "Invalid offer data." });            
         }
-
         const request = new paypal.orders.OrdersCreateRequest();
         request.requestBody({
             intent: "CAPTURE",

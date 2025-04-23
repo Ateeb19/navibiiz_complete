@@ -578,7 +578,7 @@ svg {
 }
 
 .custom-progress-bar {
-    background: #de8316;
+    background: #de8316 !important;
     height: 5px;
     border-radius: 2px;
 }
