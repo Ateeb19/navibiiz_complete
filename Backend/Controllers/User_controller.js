@@ -69,7 +69,7 @@ const login = (req, res) => {
                     let token = '';
                     if (value[3] === false) {
                         token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role, company: result[0].company, user_type: result[0].user_type }, process.env.JWT_SECRET, {
-                            expiresIn: "1m",
+                            expiresIn: "12h",
                         });
                     } else {
                         token = jwt.sign({ userid: result[0].id, username: result[0].name, useremail: result[0].email, role: result[0].role, company: result[0].company, user_type: result[0].user_type }, process.env.JWT_SECRET, {
