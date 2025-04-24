@@ -7,10 +7,10 @@ import Navbar from "../Navbar/Navbar";
 import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown, MdSwitchAccount, MdAlternateEmail, MdOutlineKey } from "react-icons/md";
 import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag } from "react-icons/fa6";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { FaBell, FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaSearch, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck } from "react-icons/fa";
+import { FaBell, FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaSearch, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck, FaPassport } from "react-icons/fa";
 import { PiShippingContainerDuotone } from "react-icons/pi";
 import { BsCarFrontFill, BsFillInfoCircleFill, BsBuildingsFill, BsWindowSidebar, BsBank2 } from "react-icons/bs";
-import { IoIosAddCircleOutline, IoMdAddCircleOutline, IoMdArrowRoundBack } from "react-icons/io";
+import { IoIosAddCircleOutline, IoMdAddCircleOutline, IoMdArrowRoundBack, IoMdDocument } from "react-icons/io";
 import Countries_selector from "./Countries_selector";
 import { IoStar, IoCall } from "react-icons/io5";
 import { RiPencilFill, RiSecurePaymentFill, RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
@@ -130,7 +130,7 @@ const Dashboard = () => {
         });
     }, 5000);
 
-    return () => clearInterval(intervalId); 
+    return () => clearInterval(intervalId);
   }, [navigate, token]);
 
 
@@ -670,7 +670,7 @@ const Dashboard = () => {
           });
           console.log(res.data, 'this is the data 4');
           setSelectedCompany(res.data.message[0]);
-          setActiveSection('company_detail');
+          // setActiveSection('company_detail');
         } catch (err) {
           console.error('Failed to fetch admin company details:', err);
         }
@@ -689,7 +689,7 @@ const Dashboard = () => {
             const data = res.data;
             if (data.status && data.message.length > 0) {
               setSelectedCompany(data.message[0]);
-              setActiveSection('company_detail');
+              // setActiveSection('company_detail');
             } else {
               console.error('Company not found or invalid response');
             }
@@ -699,28 +699,6 @@ const Dashboard = () => {
     };
 
     initializeCompany();
-
-
-    // const storedId = localStorage.getItem('selected_company_id');
-    // const active = localStorage.getItem('activeSection');
-
-    // if (storedId && active === 'company_detail') {
-    //   axios.get(`${port}/s_admin/company_info_detail/${storedId}`, {
-    //     headers: {
-    //       Authorization: token,
-    //     }
-    //   })
-    //     .then(res => {
-    //       const data = res.data;
-    //       if (data.status && data.message.length > 0) {
-    //         setSelectedCompany(data.message[0]);
-    //         setActiveSection('company_detail');
-    //       } else {
-    //         console.error('Company not found or invalid response');
-    //       }
-    //     })
-    //     .catch(err => console.error('Error fetching company on load:', err));
-    // }
   }, [userRole]);
 
   const [showEditPopup, setShowEditPopup] = useState(false);
@@ -1309,9 +1287,85 @@ const Dashboard = () => {
 
   const [handle_profile_edit, setHandle_profile_edit] = useState(false);
   const [editPopupOpen, setEditPopupOpen] = useState(false);
+  const [edit_company_document, setEdit_company_document] = useState(false);
+  const [company_document, setCompany_document] = useState(null);
   const [editField, setEditField] = useState({ label: '', previousValue: '' });
   const [newValue, setNewValue] = useState('');
 
+
+  // const handle_logo_update = async () => {
+  //   if (selectedFile) {
+  //     const formData = new FormData();
+  //     formData.append("image", selectedFile);
+
+  //     try {
+  //       const response = await fetch(`${port}/admin/edit_logo/${selectedCompany.id}`, {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //         body: formData,
+  //       });
+
+  //       console.log(response.ok);
+  //       if (response) {
+  //         const result = await response.json();
+  //         showAlert(result.message);
+  //         setTimeout(() => {
+  //           window.location.reload();
+  //         }, 2500);
+  //         setHandle_profile_edit(false);
+  //         setSelectedFile('');
+  //         setSelectedImage('');
+  //       } else {
+  //         console.error("Failed to upload image");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error uploading image:", error);
+  //       // setMode(true);
+  //     }
+  //   } else {
+  //     showAlert('Please select a Logo');
+  //   }
+  // }
+  const handle_edit_company_document = async () => {
+    if (userRole === 'admin') {
+      if (company_document) {
+        const formData = new FormData();
+        formData.append("type", editField.label);
+        formData.append("image", company_document);
+
+        try {
+          const response = await fetch(`${port}/admin/edit_company_document/${selectedCompany.id}`, {
+            method: "POST",
+            headers: {
+              Authorization: token,
+            },
+            body: formData,
+          });
+
+          console.log(response.ok);
+          if (response) {
+            const result = await response.json();
+            showAlert(result.message);
+            setTimeout(() => {
+              window.location.reload();
+            }, 2500);
+            setHandle_profile_edit(false);
+            setSelectedFile('');
+            setSelectedImage('');
+          } else {
+            console.error("Failed to upload image");
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          // setMode(true);
+        }
+      } else {
+        showAlert('Please select a Logo');
+      }
+    }
+  }
   const handle_edit_company_query = () => {
     if (userRole === 'admin') {
       axios.put(`${port}/admin/edit_company/${selectedCompany.id}`, { editField, newValue }, {
@@ -3222,7 +3276,7 @@ const Dashboard = () => {
                                   <td className="text-secondary">{item.product_name}</td>
                                   <td className="text-secondary">XXXXX-XXX</td>
                                   <td className="text-secondary">{item.price}</td>
-                                  <td className="text-secondary">{item.delivery_duration}</td>
+                                  <td className="text-secondary">{item.delivery_duration.replace(/_/g, ' ')}</td>
                                   <td className="d-flex align-items-center justify-content-center w-100 gap-3">
                                     <button className="btn btn-sm text-light " style={{ backgroundColor: '#31b23c' }} onClick={() => handleShowOffer(item)}>
                                       Accept
@@ -3941,11 +3995,22 @@ const Dashboard = () => {
 
                         <div className="row mt-5 text-center text-md-start">
                           {[
-                            { icon: <FaPhoneAlt />, label: 'Financial Document', value: selectedCompany.financialDocument ? selectedCompany.financialDocument : 'N/A' },
-                            { icon: <MdEmail />, label: 'Passport CEO MD', value: selectedCompany.passport_CEO_MD ? selectedCompany.passport_CEO_MD : 'N/A' },
-                            { icon: <FaLocationDot />, label: 'Registration Document', value: selectedCompany.registrationDocument ? selectedCompany.registrationDocument : 'N/A' },
+                            { icon: <IoMdDocument />, label: 'Financial Document', value: selectedCompany.financialDocument ? selectedCompany.financialDocument : 'N/A' },
+                            { icon: <FaPassport />, label: 'Passport CEO MD', value: selectedCompany.passport_CEO_MD ? selectedCompany.passport_CEO_MD : 'N/A' },
+                            { icon: <IoMdDocument />, label: 'Registration Document', value: selectedCompany.registrationDocument ? selectedCompany.registrationDocument : 'N/A' },
                           ].map((item, index) => (
-                            <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3">
+                            <div key={index}
+                              className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                              onClick={() => {
+                                if (!edit_company) return;
+                                setEdit_company_document(true);
+                                setEditField({
+                                  label: item.label,
+                                  previousValue: item.value,
+                                });
+                                setNewValue('');
+                              }}
+                            >
                               <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                 style={{
                                   width: '3rem',
@@ -3959,7 +4024,7 @@ const Dashboard = () => {
                                 {item.label}
                                 <img className="" width='50px' src={item.value} />
                               </label>
-                              {/* {edit_company && (<div className="ms-2 fs-4 text-primary"> < GoPencil /></div>)} */}
+                              {edit_company && (<div className="ms-2 fs-4 text-primary"> < GoPencil /></div>)}
                             </div>
                           ))}
                         </div>
@@ -4256,6 +4321,44 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
+              )}
+
+              {edit_company_document && (
+                <>
+                  <div
+                    className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1050 }}
+                  >
+                    <div className="bg-white p-4 rounded shadow" style={{ width: '90%', maxWidth: '500px' }}>
+                      <h5 className="mb-3 text-center">Edit {editField.label}</h5>
+
+                      <label className="shipping-input-label">Attach Registration Documents of the company</label>
+                      <DragAndDrop
+                        accept="application/pdf, image/jpeg"
+                        onFileDrop={(file) => setCompany_document(file)}
+                        label="Drag and drop file to upload or Select file from folder (pdf, jpeg)"
+                      />
+                      <div className="d-flex align-items-start mb-4">
+                        {company_document && <label>Uploaded File -:  <span>{company_document.name}</span></label>}
+                      </div>
+
+                      <div className="d-flex justify-content-center gap-2">
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            handle_edit_company_document();
+                            setEdit_company_document(false);
+                          }}
+                        >
+                          Update
+                        </button>
+                        <button className="btn btn-secondary" onClick={() => setEdit_company_document(false)}>
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
               )}
 
               {editPopupOpen && (

@@ -60,7 +60,7 @@ const Footer = () => {
                                 <strong className="mb-2 mb-md-3 fs-5">Contact Information</strong>
                                 <div>
                                     <p className="mb-1">Chat with us</p>
-                                    <p><IoLogoWhatsapp className="me-2 " style={{ color: ' #de8316' }} />+49 178 9386741</p>
+                                    <p><IoLogoWhatsapp className="me-2 " style={{ color: ' #de8316' }} />+49 176 60906264</p>
                                 </div>
                                 <div>
                                     <p className="mb-1">Email Us</p>
