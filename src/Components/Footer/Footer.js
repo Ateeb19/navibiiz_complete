@@ -76,7 +76,7 @@ const Footer = () => {
                                 </div>
                                 <div>
                                     <p className="mb-1">Call Us</p>
-                                    <p><IoCall className="me-2" style={{ color: ' #de8316' }} />+49 178 9386741</p>
+                                    <p><IoCall className="me-2" style={{ color: ' #de8316' }} />+49 176 60906264</p>
                                 </div>
                                 <div>
                                     <p className="mb-1">Our Headquarters</p>
