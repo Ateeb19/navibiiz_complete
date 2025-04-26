@@ -23,7 +23,6 @@ const CompaniesList = () => {
     let sortedCompanies= Object.values(data).filter(item => typeof item === 'object' && item.id);
     let companies = sortedCompanies.sort((a, b) => b.id - a.id);
 
-    console.log(companies, 'this is company');
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedServices, setSelectedServices] = useState([]);
     const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
@@ -41,16 +40,13 @@ const CompaniesList = () => {
 
         const savedFilters = JSON.parse(localStorage.getItem("filters"));
 
-        // Check if the user is coming from the details page
         if (location.state?.fromDetailsPage) {
-            // Restore filters from localStorage
             setSelectedServices(savedFilters?.selectedServices || []);
             setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
             setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
             setSelectedDuration(savedFilters?.selectedDuration || "");
             setSearchQuery(savedFilters?.searchQuery || "");
         } else {
-            // Clear filters if coming from a fresh visit
             localStorage.removeItem("filters");
             setSelectedServices([]);
             setSelectedPickupCountry("");
@@ -126,7 +122,6 @@ const CompaniesList = () => {
                 company.location6, company.location7, company.location8, company.location9, company.location10]
                     .some(location => location && location.toLowerCase().includes(searchQuery.toLowerCase()));
 
-            // Match input with countries inside the Countries array
             const countryMatch =
                 !searchQuery ||
                 company.Countries.some((country) =>
@@ -139,17 +134,8 @@ const CompaniesList = () => {
     };
 
     const filteredData = filterData(companies);
-    console.log(filteredData);
 
-    // console.log(filteredData)
     const [company_detail, setCompany_detail] = useState(null);
-    // const View_details = (item) => {
-    //     setCompany_detail(item);
-    // }
-
-    // const View_details = (item) => {
-    //     navigate(`/company_details/${item.id}`, { state: { company: item } });
-    // };
 
     const View_details = (item) => {
         localStorage.setItem(`company_${item.id}`, JSON.stringify(item));
@@ -190,20 +176,6 @@ const CompaniesList = () => {
                     <Navbar />
                 </div>
             </div>
-            {/* <div className="d-flex flex-column justify-content-center align-items-center text-dark px-3" style={{
-                width: "100%",
-                minHeight: "25vh",
-                backgroundColor: "#eff6ff",
-                position: "relative",
-                zIndex: -1,
-            }}>
-                <div className="text-center mt-3 w-100">
-                    <strong className="fs-3 d-block mb-2">Companies</strong>
-                    <p className="w-50 mx-auto">
-                        Connect with verified companies to transport your goods, any where in the world.
-                    </p>
-                </div>
-            </div> */}
 
             <section className="search-result-wrapper w-100">
                 <div className="container">
@@ -371,7 +343,6 @@ const CompaniesList = () => {
                                             }}
                                         >
                                             <div className="row">
-                                                {/* Left Section */}
                                                 <div className="col-md-8 border-end border-2 text-start">
                                                     <div className="d-flex align-items-center gap-4 p-3">
                                                         <div
@@ -407,13 +378,11 @@ const CompaniesList = () => {
                                                         </div>
                                                     </div>
 
-                                                    {/* Company Overview */}
                                                     <div className="p-3">
                                                         <h4>Company Overview</h4>
                                                         <p className="text-secondary">{company_detail.description}</p>
                                                     </div>
 
-                                                    {/* Company Information */}
                                                     <div className="p-3">
                                                         <h5>Company Information</h5>
                                                         <span className="text-secondary d-block">
@@ -436,7 +405,6 @@ const CompaniesList = () => {
                                                         </span>
                                                     </div>
 
-                                                    {/* Ratings & Reviews */}
                                                     <div className="p-3">
                                                         <h4>Ratings & Reviews</h4>
                                                         <span className="text-primary">20 Reviews</span>
@@ -463,7 +431,6 @@ const CompaniesList = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* Right Section */}
                                                 <div className="col-md-4 text-start">
                                                     <button
                                                         className="btn btn-danger position-absolute top-0 end-0 m-2"

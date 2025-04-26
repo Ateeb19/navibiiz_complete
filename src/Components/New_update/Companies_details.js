@@ -1,7 +1,7 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 import { FaLocationDot, FaMapLocationDot, FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
-import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "react-icons/fa";
+import { FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "react-icons/fa";
 import { HiBadgeCheck } from "react-icons/hi";
 import { Rating } from 'react-simple-star-rating';
 import Footer from "../Footer/Footer";
@@ -15,25 +15,18 @@ import { useAlert } from "../alert/Alert_message";
 const CompanyDetails = () => {
     const { id } = useParams();
     const { showAlert } = useAlert();
-    const location = useLocation();
-    // const company = location.state?.company;
     const [company, setCompany] = useState(null);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
     const [details_company, setDetails_company] = useState(false);
 
     useEffect(() => {
-        // Retrieve company details from localStorage
         const storedCompany = localStorage.getItem(`company_${id}`);
         if (storedCompany) {
             setCompany(JSON.parse(storedCompany));
         }
     }, [id]);
-
-    const handleGoBack = () => {
-        navigate("/companies_list", { state: { fromDetailsPage: true } });
-    };
-
+    
     const handle_contact = () => {
         if (token) {
             setDetails_company(true);
@@ -48,7 +41,6 @@ const CompanyDetails = () => {
     }
     return (
         <div className="d-flex flex-column align-items-center justify-content-center  mt-5 pt-5">
-            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
@@ -59,9 +51,6 @@ const CompanyDetails = () => {
 
                     <div className="row mt-5 ">
                         <div className="col-md-8 border-end border-2 text-start">
-                            {/* <div className='d-flex align-items-start text-head'>
-            <h3 style={{ cursor: 'pointer' }} onClick={handleGoBack}><IoMdArrowRoundBack className='mt-1' /> Back</h3>
-        </div> */}
                             <div className="d-flex align-items-center gap-4 p-3 company-details-wrap">
                                 <div
                                     className="rounded-circle overflow-hidden"
@@ -301,7 +290,7 @@ const CompanyDetails = () => {
             <div className="d-flex flex-column align-items-center my-5 text-white p-3 p-md-5 w-100" style={{ backgroundColor: "#0044BC" }}>
                 <strong className="fs-3 text-center">Unable to Find Your Preferred Shipping Companies?</strong>
                 <p className="w-100 w-md-50 my-3 text-center">Reach out to us for tailored shipping solutions that meet your needs</p>
-                <button className="btn-main" style={{ marginTop: '0px' }}>Ship Your Goods with Us</button>
+                <button className="btn-main" style={{ marginTop: '0px' }} onClick={() => navigate('/send_groupage')}>Ship Your Goods with Us</button>
             </div>
 
             <div className='w-100'>

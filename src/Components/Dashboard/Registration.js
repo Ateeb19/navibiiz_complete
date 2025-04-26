@@ -53,28 +53,23 @@ const DragAndDrop = ({ accept, onFileDrop, label }) => {
 
 const Registration = () => {
     const token = localStorage.getItem('token');
-    // const [mode, setMode] = useState(false);
-
     const { showAlert } = useAlert();
     const port = process.env.REACT_APP_SECRET;
     const navigate = useNavigate();
     const stepperRef = useRef(null);
     useEffect(() => {
         const handleBeforeUnload = (event) => {
-            event.preventDefault(); // Required for some browsers
+            event.preventDefault(); 
             const isConfirmed = window.confirm(
                 "The page is about to reload, and your form data will be reset. Do you want to continue?"
             );
             if (!isConfirmed) {
-                event.returnValue = ""; // Prevent reload
+                event.returnValue = "";
             }
         };
         localStorage.setItem('valid', 'false');
         window.addEventListener("beforeunload", handleBeforeUnload);
         fetchToken();
-        // if (mode) {
-        //     navigate('/');
-        // }
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
         };
@@ -90,11 +85,6 @@ const Registration = () => {
                 
             }).catch((err) => {
                 console.log(err);
-                // setMode(true);
-                // showAlert('You are Offline! Please Connect to Internet')
-                // setTimeout(() => {
-                //     navigate('/')
-                // }, 2500);
             });
     };
     const [selectedImage, setSelectedImage] = useState(null);
@@ -109,8 +99,8 @@ const Registration = () => {
     const [groupageService, setGroupageService] = useState(false);
 
     const handleFileDrop = (file) => {
-        setSelectedFile(file); // Store the file object
-        setSelectedImage(URL.createObjectURL(file)); // Create a preview
+        setSelectedFile(file); 
+        setSelectedImage(URL.createObjectURL(file)); 
     };
 
     const [step, setStep] = useState(1);
@@ -180,21 +170,7 @@ const Registration = () => {
             setLocations(updatedLocations);
         }
     };
-    // console.log(locations);
 
-    // const [selectedShippingCountries, setSelectedShippingCountries] = useState([]);
-    // const handleShippingCountry = (value) => {
-    //     if (value && !selectedShippingCountries.includes(value)) {
-    //         setSelectedShippingCountries([...selectedShippingCountries, value]);
-    //     }
-    // };
-
-    // const handleRemoveSelected = (indexToRemove) => {
-    //     const updatedCountries = selectedShippingCountries.filter((_, index) => index !== indexToRemove);
-    //     setSelectedShippingCountries(updatedCountries);
-    // };
-
-    //Container service
     const [selectedContainerCountries, setSelectedContainerCountries] = useState([]);
     const handleContainerCountry = (value) => {
         if (value && !selectedContainerCountries.some((item) => item.country === value)) {
@@ -203,7 +179,7 @@ const Registration = () => {
     };
     const handleDeliveryTimeChange_container = (index, value) => {
         const updatedCountries = [...selectedContainerCountries];
-        updatedCountries[index].deliveryTime = value; // Update the delivery time
+        updatedCountries[index].deliveryTime = value; 
         setSelectedContainerCountries(updatedCountries);
     };
     const handleRemoveContainerCountry = (indexToRemove) => {
@@ -220,7 +196,7 @@ const Registration = () => {
     };
     const handleDeliveryTimeChange_groupage = (index, value) => {
         const updatedCountries = [...selectedGroupageCountries];
-        updatedCountries[index].deliveryTime = value; // Update the delivery time
+        updatedCountries[index].deliveryTime = value; 
         setSelectedGroupageCountries(updatedCountries);
     };
     const handleRemoveGroupageCountry = (indexToRemove) => {
@@ -237,7 +213,7 @@ const Registration = () => {
     };
     const handleDeliveryTimeChange_car = (index, value) => {
         const updatedCountries = [...selectedCarCountries];
-        updatedCountries[index].deliveryTime = value; // Update the delivery time
+        updatedCountries[index].deliveryTime = value; 
         setSelectedCarCountries(updatedCountries);
     };
     const handleRemoveCarCountry = (indexToRemove) => {
@@ -271,15 +247,12 @@ const Registration = () => {
                 return false;
             }
         } catch (err) {
-            console.log(err);
             localStorage.setItem('valid', 'false');
-            // setMode(true);
             showAlert('You are Offline! Please Connect to Internet');
             return false;
         }
     };
 
-    // console.log(step);
     const basicDetails = useMemo(() => {
         if (!companyName || !password || !confirm_password || !contactNumber || !emailAddress || !description)
             return false;
@@ -289,17 +262,6 @@ const Registration = () => {
         return true;
     }, [companyName, password, confirm_password, paypal_id, contactNumber, emailAddress, description, locations]);
 
-    // const  = async () => {
-    //     if (!companyName || !password || !confirm_password || !paypal_id || !contactNumber || !emailAddress || !description) return false;
-    //     if (password !== confirm_password) return false;
-    //     for (const location of locations) {
-    //         if (!location.country || !location.state || !location.city) return false;
-    //     }
-    //     // const check = handleregester();
-
-    //     // return check;
-    //     return false;
-    // }
 
     const isTransportationValid = () => {
         if (containerService) {
@@ -339,7 +301,7 @@ const Registration = () => {
             return false;
         }
 
-        return true; // All validations passed
+        return true; 
     };
 
     const isPaymentValid = () => {
@@ -404,13 +366,10 @@ const Registration = () => {
             })
             .then(response => {
                 if (response.status === 200) {
-                    // Handle successful submission
                     showAlert('Data submited Successfully!');
                 } else {
-                    // Handle errors
                     showAlert('Error submitting data');
                 }
-                console.log(response);
                 setCongrat(true);
             })
             .catch(error => {
@@ -419,16 +378,10 @@ const Registration = () => {
             });
     };
 
-    const nextpage = () => {
-        stepperRef.current.nextCallback()
-    }
-    const congratulations = () => {
-        window.location.reload();
-    }
+
 
     return (
         <div className="flex justify-content-start h-100vh">
-            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <Stepper linear desabled ref={stepperRef} onStepChange={(e) => setStep(e)} style={{ flexBasis: 'auto' }}>
                 <StepperPanel header="Basic Details">
                     <div className="container">
@@ -535,18 +488,6 @@ const Registration = () => {
                                     required
                                 />
                             </div>
-                            {/* <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
-                                <label className="shipping-input-label">Paypal Id<span className="text-danger">*</span></label>
-                                <input
-                                    className="shipping-input-field"
-                                    type="text"
-                                    placeholder="Enter the paypal id"
-                                    value={paypal_id}
-                                    onChange={(e) => setPaypal_id(e.target.value)}
-                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                    required
-                                />
-                            </div> */}
                         </div>
 
                         {locations.map((location, index) => (
@@ -728,7 +669,7 @@ const Registration = () => {
 
                                         <div className="d-flex align-items-start w-100">
                                             <label className="shipping-input-label">Do you ship Car ?<span className="text-danger">*</span></label>
-                                            <Form.Check // prettier-ignore
+                                            <Form.Check 
                                                 type="switch"
                                                 id="car"
                                                 checked={carService}
@@ -785,7 +726,7 @@ const Registration = () => {
                                     <div className="d-flex flex-column justify-content-start align-items-start w-100">
                                         <div className="d-flex align-items-start w-100">
                                             <label className="shipping-input-label">Do you offer groupage to transport goods?<span className="text-danger">*</span></label>
-                                            <Form.Check // prettier-ignore
+                                            <Form.Check 
                                                 type="switch"
                                                 id="groupage"
                                                 checked={groupageService}
@@ -915,7 +856,7 @@ const Registration = () => {
                                     <div className="d-flex flex-column justify-content-start align-items-start w-100">
                                         <div className="d-flex align-items-start w-100">
                                             <label className="shipping-input-label">Do you want to receive in Paypal?<span className="text-danger">*</span></label>
-                                            <Form.Check // prettier-ignore
+                                            <Form.Check
                                                 type="switch"
                                                 id="paypal_id"
                                                 checked={paypal_id_check}

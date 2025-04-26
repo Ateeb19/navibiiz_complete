@@ -1,14 +1,10 @@
-import React, { useState } from "react";
-import { useAlert } from "../alert/Alert_message";
+import React from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 
 const About_us = () => {
-    const [showAlert, setShowAlert] = useState(false);
-    const [alert_message, setAlert_message] = useState('');
     return (
         <div className="d-flex flex-column align-items-center justify-content-center  mt-5 pt-5">
-            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />

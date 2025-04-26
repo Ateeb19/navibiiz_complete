@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar'
 import { IoEyeOutline } from "react-icons/io5";
 import { useAlert } from "../alert/Alert_message";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -26,13 +25,12 @@ const LoginPage = () => {
     const handleResize = () => {
       setMobileView(window.innerWidth < 1000);
     };
-    handleResize(); // Initialize on component mount
+    handleResize(); 
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  // console.log(isMobileView);
 
   const [isSignup, setIsSignup] = useState(false);
   const toggleForm = () => {
@@ -76,7 +74,6 @@ const LoginPage = () => {
           showAlert(response.data.message);
           return
         }
-        console.log(response.data);
         const token = response.data.token;
         localStorage.setItem('token', token);
         localStorage.setItem('userRole', response.data.role);
@@ -100,7 +97,6 @@ const LoginPage = () => {
           navigate(redirectPath);
         }
       } catch (err) {
-        console.log(err);
         showAlert('You are Offline! Please Connect to Internet');
       }
     } else {
@@ -116,7 +112,6 @@ const LoginPage = () => {
           showAlert(response.data.message);
           return
         }
-        console.log(selected, 'from login');
         const token = response.data.token;
         localStorage.setItem('token', token);
         localStorage.setItem('userRole', response.data.role);
@@ -141,7 +136,6 @@ const LoginPage = () => {
         }
 
       } catch (err) {
-        console.log(err);
         showAlert('You are Offline! Please Connect to Internet');
       }
     }
@@ -184,11 +178,9 @@ const LoginPage = () => {
       showAlert('You are Offline! Please Connect to Internet');
     }
   }
-  // console.log(forget_password);
 
   return (
     <div className="login-bg-wrapper">
-      {/* <div className="d-flex align-items-center justify-content-end" style={{ height: "100vh" }}> */}
       <div className="d-flex align-items-center justify-content-center justify-content-md-end" style={{ minHeight: "100vh"}}>
         <div className="login-wrap">
           <div className="d-flex flex-column align-items-start">

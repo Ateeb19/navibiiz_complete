@@ -5,7 +5,6 @@ import { Form } from "react-bootstrap";
 import Navbar from "../Navbar/Navbar";
 import { BiSolidDetail } from "react-icons/bi";
 import { IoLocationSharp } from "react-icons/io5";
-import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaTruckFast } from "react-icons/fa6";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaStar } from "react-icons/fa";
@@ -26,14 +25,11 @@ import { IoSearch } from "react-icons/io5";
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
-    // console.log(port);
     const { showAlert } = useAlert();
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
     const [offers_details, setOffers_details] = useState([]);
-    // const [mode, setMode] = useState(false);
     const displayCompany = () => {
-        // localStorage.setItem('companyInfo');
         axios.get(`${port}/company/display_company`)
             .then((response) => {
                 if (response.data.status) {
@@ -122,14 +118,10 @@ const Home = () => {
         ]
     };
     const [pickupCountry, setPickupCountry] = useState('');
-    const [destinationCountry, setDestinationCountry] = useState('');
-    const [filter_selectedService, setFilter_selectedService] = useState('');
     const handleSearch = () => {
         navigate('/companies_list', {
             state: {
                 pickupCountry,
-                destinationCountry,
-                selectedService: filter_selectedService,
             },
         });
     };
@@ -165,7 +157,6 @@ const Home = () => {
             img: 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg'
         }
     ];
-    // console.log(offers_details, 'this is offers');
 
     const [bidAmount, setBidAmount] = useState('');
     const [expetedDate, setExpetedDate] = useState('');
@@ -188,26 +179,22 @@ const Home = () => {
             },
         }).then((response) => {
             if (response.data.status === false) {
-                showAlert('Login with a company account to submit an offer');
+                showAlert('Login as a company to submit an offer');
                 navigate('/login');
             } else {
-                console.log(response.data);
-                showAlert(response.data.message);
+                showAlert("Offer Created Successfully!");
                 setGroupage_detail(null);
                 setBidAmount('');
                 setExpetedDate('');
             }
         }).catch((err) => {
-            showAlert('Login to submit offer');
+            showAlert('Login as a company to submit an offer');
             navigate('/login');
-
-            console.log(err);
         });
     };
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
-            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
@@ -234,39 +221,6 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-            {/* <section className="search-wrapper">
-                <div className="container">
-                    <div className="row bg-white rounded-3 p-3 shadow border">
-                        <div className="col-12 col-md-9 border-end border-1 p-3 text-center text-md-start">
-                            <h5>Pick Up</h5>
-                            <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px 6px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
-                        </div>
-                        <div className="col-12 col-md-3 border-end border-1 p-3 text-center text-md-start">
-                            <h5>Delivery</h5>
-                            <span><Countryselector bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='15px 0 0 0' paddingcount="0px 6px" onSelectCountry={(country) => setDestinationCountry(country)} /></span>
-                        </div>
-                        <div className="col-12 col-md-3 p-3 text-center text-md-start">
-                            <h5>Service</h5>
-                            <span>
-                                <Form.Select
-                                    value={filter_selectedService}
-                                    onChange={(e) => setFilter_selectedService(e.target.value)}
-                                    style={{ backgroundColor: '#ffffff', border: '1px solid #ffffff', padding: '0 6px', marginTop: '15px' }}
-                                >
-                                    <option value="">Select the service</option>
-                                    <option value="container">Container</option>
-                                    <option value="car">Car</option>
-                                </Form.Select>
-                            </span>
-                        </div>
-                        <div className="col-12 col-md-3 p-3 text-center">
-                            <button className="btn btn-light border border-danger text-danger w-100" onClick={handleSearch}>
-                                Search Shipping Companies
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
 
             <div className="container mt-4">
                 <div className="row g-4 text-center">
@@ -481,7 +435,6 @@ const Home = () => {
                                                         />
                                                     </div>
                                                     <h5>{company.product_name}</h5>
-                                                    {/* <span className="text-secondary">4.5 (20 Ratings)</span> */}
                                                     <p className="text-secondary text-start mt-1">{company.sender_description.split(" ").slice(0, 10).join(" ") + "..."}</p>
                                                     <span className="" style={{ cursor: "pointer", color: '#de8316' }} onClick={() => submit_offer(company)}>Submit Offer</span>
                                                 </div>
@@ -502,7 +455,6 @@ const Home = () => {
                                                     />
                                                 </div>
                                                 <h5>No Data fetch</h5>
-                                                {/* <span className="text-secondary">4.5 (20 Ratings)</span> */}
                                                 <p className="text-secondary text-start mt-1"></p>
                                                 <span className="" style={{ cursor: "pointer", color: '#de8316' }} >Submit Offer</span>
                                             </div>
@@ -1033,7 +985,6 @@ const Home = () => {
             </section>
 
 
-            {/* <section className="testi-wrapper"> */}
             <div className="d-flex flex-column justify-content-center align-items-center w-100 mt-5">
                 <div className="title-head">
                     <h3>Real stories, Real impact</h3>
@@ -1060,7 +1011,6 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* </section> */}
 
             <section className="faq-wrapper">
                 <div className="title-head">
@@ -1076,7 +1026,6 @@ const Home = () => {
                                         <li>
                                             <Accordion.Item eventKey="0">
                                                 <Accordion.Header>
-                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
                                                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                                                 </Accordion.Header>
                                                 <Accordion.Body>
@@ -1093,7 +1042,6 @@ const Home = () => {
                                         <li>
                                             <Accordion.Item eventKey="1">
                                                 <Accordion.Header>
-                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
                                                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                                                 </Accordion.Header>
                                                 <Accordion.Body>
@@ -1110,7 +1058,6 @@ const Home = () => {
                                         <li>
                                             <Accordion.Item eventKey="2">
                                                 <Accordion.Header>
-                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
                                                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                                                 </Accordion.Header>
                                                 <Accordion.Body>
@@ -1127,7 +1074,6 @@ const Home = () => {
                                         <li>
                                             <Accordion.Item eventKey="3">
                                                 <Accordion.Header>
-                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
                                                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                                                 </Accordion.Header>
                                                 <Accordion.Body>
@@ -1150,7 +1096,6 @@ const Home = () => {
                                         <li>
                                             <Accordion.Item eventKey="0">
                                                 <Accordion.Header>
-                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
                                                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                                                 </Accordion.Header>
                                                 <Accordion.Body>
@@ -1167,7 +1112,6 @@ const Home = () => {
                                         <li>
                                             <Accordion.Item eventKey="1">
                                                 <Accordion.Header>
-                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
                                                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                                                 </Accordion.Header>
                                                 <Accordion.Body>
@@ -1184,7 +1128,6 @@ const Home = () => {
                                         <li>
                                             <Accordion.Item eventKey="2">
                                                 <Accordion.Header>
-                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
                                                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                                                 </Accordion.Header>
                                                 <Accordion.Body>
@@ -1201,7 +1144,6 @@ const Home = () => {
                                         <li>
                                             <Accordion.Item eventKey="3">
                                                 <Accordion.Header>
-                                                    {/* <h5><IoIosAddCircleOutline className="text-primary" /></h5> */}
                                                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                                                 </Accordion.Header>
                                                 <Accordion.Body>

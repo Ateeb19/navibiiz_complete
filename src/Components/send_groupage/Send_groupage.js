@@ -9,13 +9,11 @@ import { useDropzone } from "react-dropzone";
 import Countries_selector from "../Dashboard/Countries_selector";
 import State_selector from "../Dashboard/State_selector";
 import axios from "axios";
-import { Calendar } from "react-date-range";
-
 import { DateRange } from 'react-date-range';
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
-import { useAlert } from "../alert/Alert_message"; // Import the alert function
+import { useAlert } from "../alert/Alert_message"; 
 
 
 
@@ -74,7 +72,6 @@ const Send_groupage = () => {
         }
     }, [])
 
-    const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFiles, setSelectedFiles] = useState([]);
 
     const handleFileDrop = (files) => {
@@ -103,24 +100,11 @@ const Send_groupage = () => {
             key: 'selection'
         }
     ]);
-    // Ensure endDate is not null before formatting
     const startDateFormatted = format(state[0].startDate, "dd/MM/yyyy");
     const endDateFormatted = state[0].endDate ? format(state[0].endDate, "dd/MM/yyyy") : "Select End Date";
     const picking_period = `${startDateFormatted} - ${endDateFormatted}`;
 
 
-    // // Storing the Calendar in a variable
-    // const calendarElement = (
-    //     <Calendar date={selectedDate} onChange={handleSelect} />
-    // );
-
-    // const [state, setState] = useState([
-    //     {
-    //         startDate: new Date(),
-    //         endDate: null,
-    //         key: 'selection'
-    //     }
-    // ]);
     const [productName, setProductName] = useState(null);
     const [productType, setProductType] = useState(null);
     const [Pweight, setPweight] = useState(null);
@@ -219,18 +203,9 @@ const Send_groupage = () => {
                     },
                 }
             );
-            console.log("Success:", response.data);
             if (response.data.status === true) {
-                // alert('data submited');
                 setIsVisible(false);
                 setCongrat(true);
-
-                // setTimeout(() => {
-                //     setCongrat(false);
-                //     navigate('/dashboard')
-                // }, 5000);
-                // window.location.reload();
-                // navigate('/');
             }
         } catch (error) {
             console.error("Error:", error);
@@ -238,7 +213,6 @@ const Send_groupage = () => {
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
-            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
@@ -264,7 +238,6 @@ const Send_groupage = () => {
                                                         <div className="row">
                                                             <div className="col-12">
                                                                 <div className="border-2 border-dashed surface-border border-round surface-ground p-1">
-                                                                    {/* Image Upload Section */}
                                                                     <div className="text-center mb-3">
                                                                         <DragAndDrop
                                                                             accept="image/*"
@@ -274,7 +247,6 @@ const Send_groupage = () => {
                                                                         />
                                                                     </div>
 
-                                                                    {/* Preview Images */}
                                                                     {selectedFiles.length > 0 && (
                                                                         <div className="d-flex flex-wrap justify-content-center gap-2">
                                                                             {selectedFiles.map((img, index) => (
@@ -305,7 +277,6 @@ const Send_groupage = () => {
                                                                         </div>
                                                                     )}
 
-                                                                    {/* Product Name & Type */}
 
                                                                     <div className="row mt-4">
                                                                         <div className="col-12 col-md-6 mb-2 text-start">
@@ -336,7 +307,6 @@ const Send_groupage = () => {
                                                                         </div>
                                                                     </div>
 
-                                                                    {/* Product Dimensions (Responsive Grid) */}
                                                                     <div className="row mt-4">
                                                                         <div className="col-6 col-md-3 mb-2 text-start">
                                                                             <label className="shipping-input-label">Weight (kg)</label>
@@ -591,22 +561,6 @@ const Send_groupage = () => {
                                             </StepperPanel>
 
 
-                                            {/* <StepperPanel header="Additional Information">
-                                                <div className="d-flex flex-column align-items-start justify-content-center gap-3 w-100">
-                                                    <label className="shipping-input-label text-start">Attach any product documents (if any)</label>
-                                                    <div className="w-100">
-                                                        <DragAndDrop
-                                                            accept="application/pdf, image/jpeg"
-                                                            className='w-100'
-                                                            multiple={false}
-                                                            onFileDrop={(file) => setDocument(file)}
-                                                            label="Drag & drop a file or select from folder (PDF, JPEG)"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </StepperPanel> */}
-
-
                                         </Stepper>
                                     </div>
                                     <div className="d-flex flex-column align-items-start justify-content-start col-md-3 cod-12  border border-1 rounded-2">
@@ -657,20 +611,6 @@ const Send_groupage = () => {
                                                         </div>
                                                     </>
                                                 )
-                                                    // : (
-                                                    //     <>
-                                                    //         <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Additional Information</h5>
-                                                    //         <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
-                                                    //             <div className="d-flex justify-content-between w-100 p-2">
-                                                    //                 <span>Product Document:</span>
-                                                    //                 <span>
-                                                    //                     {document ? <h6>{document.name.slice(0, 4)}...</h6> : <span>N/A</span>}
-                                                    //                 </span>
-                                                    //             </div>
-                                                    //         </div>
-
-                                                    //     </>
-                                                    // )
                                                 }
 
                                             </div>

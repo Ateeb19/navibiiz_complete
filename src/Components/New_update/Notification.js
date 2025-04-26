@@ -70,7 +70,7 @@ const Notification = () => {
 
     const notification_groupageData = super_admin_notification.filter(
         (item) => item.groupage_created_at && item.groupage_created_by
-    ).slice(0, 4); // Ensure only first 4 items
+    ).slice(0, 4); 
 
     const notification_companyData = super_admin_notification.filter(
         (item) => item.company_info_logo !== null && item.company_info_name !== null
@@ -83,13 +83,6 @@ const Notification = () => {
                 </div>
             </div>
             <div className="bg-light  mt-5 pt-5" style={{ width: '100%', overflow: 'auto' }}>
-                {/* <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                    {isMobile && (
-                        <div className="w-100 d-flex justify-content-start">
-                            <Menu />
-                        </div>
-                    )}                    
-                </div> */}
 
                 <div className="d-flex justify-content-start align-items-center mt-2 rounded-1">
                     <div className="d-flex ps-4 w-50 justify-content-start">

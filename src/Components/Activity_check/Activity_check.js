@@ -13,7 +13,7 @@ const useInactivityLogout = () => {
             localStorage.removeItem("token");
             showAlert("User logout since no activity for 2 Hours")
             navigate('/');
-        }, 2 * 60 * 60 * 1000); // 2 hours 2 * 60 * 60 * 1000
+        }, 2 * 60 * 60 * 1000); 
     };
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const useInactivityLogout = () => {
             window.addEventListener(event, resetTimer)
         );
 
-        resetTimer(); // initialize
+        resetTimer();
 
         return () => {
             events.forEach(event =>

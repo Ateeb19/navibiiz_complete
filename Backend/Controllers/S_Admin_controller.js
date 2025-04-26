@@ -209,7 +209,6 @@ const compnay_info_details = (req, res) => {
     if (req.user.role === 'Sadmin') {
         const company_id = req.params.id;
 
-        // First, fetch the main company information
         db.query(`SELECT * FROM companies_info WHERE id = ?`, [company_id], (err, result) => {
             if (err) {
                 console.error("Error fetching company info:", err);
@@ -222,7 +221,6 @@ const compnay_info_details = (req, res) => {
 
             const company = result[0];
 
-            // Then, fetch data from the dynamic company-specific table
             const dynamicTableName = `company_${company_id}`;
             db.query(`SELECT * FROM ??`, [dynamicTableName], (tableErr, tableData) => {
                 if (tableErr) {
@@ -236,7 +234,6 @@ const compnay_info_details = (req, res) => {
                     });
                 }
 
-                // Return both the main info and the company-specific table data
                 res.json({
                     message: [{ ...company, tableData }],
                     status: true
@@ -252,9 +249,6 @@ const edit_company_details = (req, res) => {
     const company_id = req.params.id;
     const editField = req.body.editField;
     const newValue = req.body.newValue;
-
-    // console.log(editField.label,'-::-' ,newValue, '-::-' ,company_id);
-    // res.json({message: 'ok'});
     if (req.user.role === 'Sadmin') {
 
         if (editField.label === 'Email ID') {

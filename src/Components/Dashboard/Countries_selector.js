@@ -6,9 +6,8 @@ const Countries_selector = ({ onSelectCountry, label='Select the country', bgcol
     const [countries, setCountries] = useState([]);
     axios.get('https://countriesnow.space/api/v0.1/countries/positions')
     .then((response) => {
-        // console.log(response.data.data);
         setCountries(response.data.data);
-    }).catch((err) => console.log(err));
+    }).catch();
     const [selectedCountry, setSelectedCountry] = useState("");
     const handleChange = (event) => {
         const country = event.target.value;

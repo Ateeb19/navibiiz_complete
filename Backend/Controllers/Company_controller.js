@@ -39,12 +39,10 @@ const deleteAllFilse = (directoryPath) => {
     })
 };
 const uploadDir = path.join(__dirname, '../send_transport_img');
-// if (!fs.existsSync(uploadDir)) {
-//     fs.mkdirSync(uploadDir);
-// }
+
 if (!fs.existsSync(uploadDir)) {
     try {
-        fs.mkdirSync(uploadDir, { recursive: true }); // Ensure all intermediate directories are created
+        fs.mkdirSync(uploadDir, { recursive: true }); 
     } catch (err) {
         console.error('Error creating upload directory:', err);
     }
@@ -133,7 +131,6 @@ const Company_Register = (req, res) => {
             account_number: sanitizeField(account_number),
             iban_number: sanitizeField(iban_number),
             description: sanitizeField(description),
-            // Process and sanitize locations
             locations: JSON.parse(locations).map((loc) => {
                 return `${sanitizeField(loc.country)}, ${sanitizeField(loc.state)}, ${sanitizeField(loc.city)}`;
             }),
@@ -208,7 +205,6 @@ const Company_Register = (req, res) => {
                                 });
                             });
                         }
-                        // res.json({ message: 'Company registered successfully', data: sqlData });
                         db.query('UPDATE users SET role = ?, company = ? WHERE email = ?', ['admin','yes', sqlData.emailAddress], (err, result) => {
                             if (err) {
                                 console.log(err);
@@ -401,7 +397,6 @@ const display_company = async (req, res) => {
             });
         });
 
-        // Fetch countries for each company
         for (const element of result1) {
             const name = `company_${element.id}`;
 

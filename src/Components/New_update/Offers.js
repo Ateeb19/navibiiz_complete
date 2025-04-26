@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import { FaLocationDot, FaWeightScale, FaMapLocationDot, FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
-import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "react-icons/fa";
-import { HiBadgeCheck } from "react-icons/hi";
+import { FaLocationDot, FaWeightScale} from "react-icons/fa6";
+import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter } from "react-icons/fa";
 import Countries_selector from "../Dashboard/Countries_selector";
-import { Rating } from 'react-simple-star-rating';
 import axios from "axios";
 import { BsFillSendFill } from "react-icons/bs";
 import { SiAnytype } from "react-icons/si";
@@ -79,21 +77,20 @@ const Offers = () => {
                         groupage.sender_country,
                         groupage.sender_state
                     ]
-                        .filter(Boolean) // Remove null/undefined values
+                        .filter(Boolean) 
                         .some((location) =>
                             location.toLowerCase().includes(searchQuery.toLowerCase())
                         );
 
                 return pickupCountryMatch && destinationCountryMatch && searchMatch;
             })
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sorting by latest `created_at`
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     };
     const filteredData = filterData(groupage);
     const [groupage_detail, setGroupage_detail] = useState(null);
     const View_details = (item) => {
         setGroupage_detail(item);
     }
-    console.log(groupage_detail);
 
     const handleSubmit_offer = (details) => {
         if (bidAmount === '' || expetedDate === '') {
@@ -116,7 +113,6 @@ const Offers = () => {
                 showAlert('Login as a company to submit an offer');
                 navigate('/login');
             } else {
-                console.log(response.data);
                 showAlert("Offer Created Successfully!");
                 setGroupage_detail(null);
                 setBidAmount('');
@@ -125,7 +121,6 @@ const Offers = () => {
         }).catch((err) => {
             showAlert('Login as a company to submit an offer');
             navigate('/login');
-            console.log(err);
         });
     };
 
@@ -152,27 +147,11 @@ const Offers = () => {
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
-            {/* {showAlert && <Alert message={alert_message} onClose={() => setShowAlert(false)} />} */}
             <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
                 </div>
             </div>
-            {/* <div className="d-flex flex-column justify-content-center align-items-center text-dark px-3" style={{
-                width: "100%",
-                minHeight: "25vh", 
-                borderRadius: "0% 0% 2% 2% / 28% 28% 20% 20%",
-                backgroundColor: "#eff6ff",
-                position: "relative",
-                zIndex: -1,
-            }}>
-                <div className="text-center mt-3 w-100">
-                    <strong className="fs-3 d-block mb-2">Offers</strong>
-                    <p className="w-50 mx-auto">
-                        Connect with verified companies to transport your goods, any where in the world.
-                    </p>
-                </div>
-            </div> */}
             <section className="search-result-wrapper w-100">
                 <div className="container">
                     <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-3 mt-md-5 w-100">
@@ -321,14 +300,14 @@ const Offers = () => {
                                                         groupage_detail.img01, groupage_detail.img02, groupage_detail.img03, groupage_detail.img04, groupage_detail.img05,
                                                         groupage_detail.img06, groupage_detail.img07, groupage_detail.img08, groupage_detail.img09, groupage_detail.img10,
                                                     ]
-                                                        .filter(img => img) // filter out empty strings
+                                                        .filter(img => img) 
                                                         .map((img, index) => (
                                                             <img
                                                                 key={index}
                                                                 src={img}
                                                                 alt={`Product ${index + 1}`}
                                                                 style={{
-                                                                    width: '18%', // approx 5 per row with spacing
+                                                                    width: '18%', 
                                                                     maxWidth: '120px',
                                                                     height: 'auto',
                                                                     objectFit: 'cover',

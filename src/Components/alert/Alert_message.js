@@ -19,5 +19,4 @@ export const AlertProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the alert function anywhere
 export const useAlert = () => useContext(AlertContext);

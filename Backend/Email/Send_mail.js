@@ -2,18 +2,17 @@ const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     host: "smtp.ionos.de",
-    port: 587, // Use 587 instead of 465
-    secure: false, // Important! 587 does NOT use implicit TLS
+    port: 587, 
+    secure: false, 
     auth: {
         user: "info@novibiz.com",
         pass: "Novibiz*2025",
     },
     tls: {
-        rejectUnauthorized: false, // Prevents strict TLS rejection
+        rejectUnauthorized: false, 
     },
 });
 
-// Verify SMTP Connection
 transporter.verify((error, success) => {
     if (error) {
         console.log('SMTP Connection Error:', error);
@@ -22,7 +21,6 @@ transporter.verify((error, success) => {
     }
 });
 
-// Function to send email
 const sendMail = async (to, subject, htmlContent) => {
     try {
         const info = await transporter.sendMail({

@@ -34,7 +34,7 @@
   }
 }
 
-@media (max-width: 576px) { /* Mobile view */
+@media (max-width: 576px) { 
   .rounded-circle {
     width: 2rem !important;
     height: 2rem !important;
@@ -42,7 +42,6 @@
   }
 }
   
-  /* Navbar for larger screens */
   .navbar {
     background: #333;
     color: white;
@@ -61,7 +60,6 @@
     cursor: pointer;
   }
   
-  /* Sidebar for smaller screens */
   .sidebar {
     position: fixed;
     top: 0;
@@ -97,7 +95,6 @@
     cursor: pointer;
     color: white;
   }
-  /* Toggle Button */
   .toggle-btn {
     background: #333;
     color: white;
@@ -132,7 +129,6 @@
     animation: typing 4s steps(100, end) infinite, blink 0.7s step-end infinite;
 }
 
-/* Typing effect */
 @keyframes typing {
     0% {
         width: 0;
@@ -141,11 +137,10 @@
         width: 100%;
     }
     100% {
-        width: 0; /* Reset to start typing again */
+        width: 0; 
     }
 }
 
-/* Blinking cursor effect */
 @keyframes blink {
     from, to {
         border-color: transparent;
@@ -180,19 +175,17 @@
 
 
 
-/* Target slick dots and modify them to dashes */
 ul.slick-dots li button:before {
   content: '';
-  width: 1rem;                /* Dash length */
-  height: 4px;                /* Dash thickness */
-  background-color: gray;  /* Bootstrap blue */
-  border-radius: 2px;         /* Rounded edges */
+  width: 1rem;              
+  height: 4px;                
+  background-color: gray; 
+  border-radius: 2px;         
   display: block;
   opacity: 0.5;
   transition: opacity 0.3s;
 }
 
-/* Make the active dash fully visible */
 ul.slick-dots li.slick-active button:before {
   background-color: #007bff;
   opacity: 1;

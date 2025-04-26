@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import { FaUser } from "react-icons/fa";
 import { BsSendFill } from "react-icons/bs";
 import { MdDashboardCustomize } from "react-icons/md";
 import { FaUser, FaBars, FaTimes } from "react-icons/fa";
-import { IoLogOut } from "react-icons/io5";
 import { FaBell } from "react-icons/fa"
-import Registration from "../Dashboard/Registration";
 import axios from "axios";
 import { IoIosAddCircleOutline } from "react-icons/io"
 import { useAlert } from "../alert/Alert_message";
@@ -16,13 +13,10 @@ const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
   const { showAlert } = useAlert();
   const token = localStorage.getItem('token');
-  // console.log(token.length,'this is length')
   const port = process.env.REACT_APP_SECRET;
   const navigate = useNavigate();
-  const user_login_state = localStorage.getItem('user_logins_type');
   const isRedirecting = useRef(false);
 
-  // const [mode, setMode] = useState(false);
   useEffect(() => {
     const fetchToken = () => {
       axios
@@ -33,8 +27,6 @@ const Navbar = () => {
         }).then((response) => {
           if (response.data.status === false) {
             localStorage.removeItem('token');
-            // window.location.reload();
-            // navigate('/login');
           }
           if (response.data.status === true) {
             localStorage.setItem('userRole', response.data.message);
@@ -45,7 +37,6 @@ const Navbar = () => {
               isRedirecting.current = true;
               localStorage.removeItem('token');
               showAlert('Token expired. Please login again.');
-              // navigate('/login');
             } else {
               console.error("Unexpected error:", err);
             }
@@ -62,7 +53,6 @@ const Navbar = () => {
   const [userInfo, setUserInfo] = useState('');
   useEffect(() => {
     if (userRole !== 'admin' && userRole !== 'Sadmin' && userRole !== 'user') {
-      console.log('hello');
     } else {
       axios.get(`${port}/user/display_profile`, {
         headers: {
@@ -75,16 +65,12 @@ const Navbar = () => {
           isRedirecting.current = true;
           localStorage.removeItem('token');
           showAlert('Token expired. Please login again.');
-          // navigate('/login');
         } else {
           console.error("Unexpected error:", err);
         }
       });
     }
   }, [userRole]);
-
-  // console.log('data-:', userInfo);
-
 
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -114,10 +100,7 @@ const Navbar = () => {
     width: '100%',
     zIndex: 1050,
   };
-  const logout = () => {
-    localStorage.removeItem('token');
-    window.location.reload();
-  }
+
   return (
     <div className="container-fluid">
       <nav className="d-flex justify-content-between align-items-center w-100 px-3 py-2"
@@ -128,15 +111,15 @@ const Navbar = () => {
             <div
               className="d-flex justify-content-center align-items-center"
               style={{
-                width: "150px", // Ensures proper scaling
-                height: "80px",  // Adjusted for mobile & desktop
+                width: "150px",
+                height: "80px",
               }}
             >
               <img
                 src="/Images/novibiz/fulllogo_transparent_nobuffer.png"
                 alt="logo"
                 className="img-fluid"
-                style={{ maxHeight: "100%", objectFit: "contain" }} // Prevents cropping
+                style={{ maxHeight: "100%", objectFit: "contain" }}
               />
             </div>
           </Link>
@@ -156,7 +139,6 @@ const Navbar = () => {
           <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} >About Us</Link>
           <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} >Companies</Link>
           <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} >Offers</Link>
-          {/* <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1.2rem" }}>Contact Us</Link> */}
         </div>
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-2">
@@ -218,7 +200,6 @@ const Navbar = () => {
               <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About Us</Link>
               <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Companies</Link>
               <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Offers</Link>
-              {/* <Link to="/" className="py-3 text-light text-decoration-none" onClick={() => setIsOpen(false)}>Contact Us</Link> */}
               {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
                 <Link to="/register_company" >
                   <button className="btn text-light m-1" style={{ fontSize: "1rem", backgroundColor: "#de8316" }}>
@@ -265,22 +246,6 @@ const Navbar = () => {
             </div>
           </div>
         )}
-
-        {/* {isVisible && (
-          <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
-            <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '1300px', height: '40rem', overflowY: 'auto' }}>
-              <button
-                className="btn-close position-absolute top-0 end-0 m-2"
-                onClick={handleClose}
-              ></button>
-
-              <div>
-                <Registration />
-              </div>
-
-            </div>
-          </div>
-        )} */}
       </nav >
     </div>
   )

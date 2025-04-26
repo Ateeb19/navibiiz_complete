@@ -33,48 +33,12 @@ const Display_company = (req, res) => {
                 });
             }
 
-            // Return both the main info and the company-specific table data
             res.json({
                 message: [{ ...company, tableData }],
                 status: true
             });
         });
     });
-
-    // db.query(
-    //     `SELECT * FROM companies_info WHERE created_by = ?`,
-    //     [req.user.useremail],
-    //     (err, companies) => {
-    //         if (err) {
-    //             console.error("Error fetching companies:", err);
-    //             return res.status(500).json({ message: "Error fetching companies", error: err });
-    //         }
-    //         const companyDataPromises = companies.map((company) => {
-    //             return new Promise((resolve) => {
-    //                 db.query(`SELECT * FROM company_${company.id}`, (err, tableData) => {
-    //                     if (err) {
-    //                         console.error(`Error fetching data for ${company.company_name}:`, err);
-    //                         resolve({ ...company, tableData: [], error: "Error fetching table data" });
-    //                     } else {
-    //                         resolve({ ...company, tableData });
-    //                     }
-    //                 });
-    //             });
-    //         });
-
-    //         Promise.all(companyDataPromises)
-    //             .then((companiesWithTableData) => {
-    //                 res.json({
-    //                     message: "Data fetched successfully",
-    //                     data: companiesWithTableData,
-    //                 });
-    //             })
-    //             .catch((error) => {
-    //                 console.error("Error resolving promises:", error);
-    //                 res.status(500).json({ message: "Error processing data", error });
-    //             });
-    //     }
-    // );
 };
 
 const Delete_company_admin = (req, res) => {
@@ -175,7 +139,6 @@ const edit_company_details = (req, res) => {
     const newValue = req.body.newValue;
 
     console.log(editField.label, '-::-', newValue, '-::-', company_id);
-    // res.json({message: 'ok'});
     if (req.user.role === 'admin') {
 
         if (editField.label === 'Contact Number') {
@@ -283,11 +246,6 @@ const Delete_company_details_country = (req, res) => {
 const add_company_country = (req, res) => {
     if (req.user.role === 'admin') {
         const company_id = req.params.id;
-        const newCountryData = {
-            country: req.body.country,
-            duration: req.body.duration,
-            name: req.body.name,
-        }
         db.query(
             `INSERT INTO company_${company_id} (countries, duration, service_type) VALUES (?, ?, ?)`,
             [req.body.country, req.body.duration, req.body.name],
@@ -346,7 +304,7 @@ const uploadDir = path.join(__dirname, '../send_transport_img');
 
 if (!fs.existsSync(uploadDir)) {
     try {
-        fs.mkdirSync(uploadDir, { recursive: true }); // Ensure all intermediate directories are created
+        fs.mkdirSync(uploadDir, { recursive: true });
     } catch (err) {
         console.error('Error creating upload directory:', err);
     }
@@ -369,12 +327,10 @@ const edit_logo = [
         try {
             const filePath = req.file.path;
             const id = req.params.id;
-            // Upload the file to Cloudinary
             const result = await cloudinary.uploader.upload(filePath, {
-                folder: "uploads", // Optional: specify a folder in Cloudinary
+                folder: "uploads",
             });
 
-            // Log the URL of the uploaded image
             console.log("Uploaded Image URL:", result.secure_url);
 
             db.query(`UPDATE companies_info SET logo = ? WHERE id = ?`, [result.secure_url, id], (err, result) => {
@@ -385,7 +341,6 @@ const edit_logo = [
                     res.json({ message: 'Updated success', status: true });
                 }
             })
-            // Delete the file from the local server
             fs.unlinkSync(filePath);
         } catch (error) {
             console.error("Error uploading image to Cloudinary:", error);
@@ -456,7 +411,6 @@ const edit_company_documents = [
                     }
                 })
             }
-            // Delete the local file after upload
             fs.unlinkSync(filePath);
 
         } catch (error) {

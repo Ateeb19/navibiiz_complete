@@ -32,7 +32,6 @@ const ResetPassword = () => {
 
             if (res.data.status === true) {
                 navigate('/login')
-                // setTimeout(() => navigate('/login'), 2000);
             }
         } catch (err) {
             showAlert('You are Offline! Please Connect to Internet');
@@ -47,8 +46,6 @@ const ResetPassword = () => {
                 <div className='title-head w-100'>
                     <h3 className="text-center mb-4">Reset Your Password</h3>
                 </div>
-
-                {/* {message && <div className="alert alert-info">{message}</div>} */}
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3 text-start w-100">

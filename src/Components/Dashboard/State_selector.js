@@ -16,7 +16,6 @@ const State_selector = ({ onSelectState, paddingcount='', fontsizefont='', bgcol
         }
     )
         .then((response) => {
-            // console.log(response.data.data.states);
             setState(response.data.data.states);
         }).catch((err) => console.log(err));
 
@@ -28,7 +27,7 @@ const State_selector = ({ onSelectState, paddingcount='', fontsizefont='', bgcol
         const state = event.target.value;
         setSelectedCountry(state);
         if (onSelectState) {
-            onSelectState(state);  // Call the callback function with the selected country
+            onSelectState(state); 
         }
     };
 
