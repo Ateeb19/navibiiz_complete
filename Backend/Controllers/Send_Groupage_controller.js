@@ -257,7 +257,8 @@ const create_offer = (req, res) => {
                 res.json({ message: 'error in database', status: false });
             } else {
                 if (result.length === 0) {
-                    const commission = (data.offer_amount * 30) / 100;
+                    const commission = ((data.offer_amount * 30) / 100).toFixed(1);
+                    console.log(commission, '2');
                     db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, commission: commission, expeted_date: data.expected_date, accepted: 0, status: 'pending' }, (err, result) => {
                         if (err) {
                             console.log(err, '12')
@@ -337,7 +338,7 @@ const show_offers_user = (req, res) => {
                     product_name: groupage.product_name || "N/A",
                     offer_id: offer.offer_id,
                     created_date: offer.created_at,
-                    price: parseFloat(offer.amount) + parseFloat(offer.commission),
+                    price: Number((parseFloat(offer.amount) + parseFloat(offer.commission)).toFixed(2)),
                     delivery_duration: offer.expeted_date,
                 };
             });
