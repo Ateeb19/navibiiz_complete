@@ -3,7 +3,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 
-const base = 'https://api-m.sandbox.paypal.com';
+const base = 'https://api-m.paypal.com';
 async function generateAccessToken() {
     const auth = Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`).toString('base64');
 
@@ -187,7 +187,8 @@ const send_information = (req, res) => {
                     status: status,
                     user_id: user_id,
                     user_email: user_email,
-                    payment_time: payment_time
+                    payment_time: payment_time,
+                    current_status: true
                 });
             }
         }

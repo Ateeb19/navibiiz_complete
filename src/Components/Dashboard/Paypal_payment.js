@@ -1,67 +1,81 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useAlert } from "../alert/Alert_message";
+import { useEffect, useState } from "react";
 
 function OfferDetails({ selected_offer }) {
     const port = process.env.REACT_APP_SECRET;
-  const createOrder = async () => {
-    const { data } = await axios.post(`${port}/paypal/api/create-order`, {
-      amount: selected_offer.price,
-    });
-    return data.id;
-  };
-      const { showAlert } = useAlert();
-  
+    const [showPayPalButton, setShowPayPalButton] = useState(false);
 
-  const onApprove = async (data) => {
-    const response = await axios.post(`${port}/paypal/api/capture-order/${data.orderID}`);
-
-
-    const transactionData = {
-        orderId: response.data.id, // PayPal order ID
-        payerId: response.data.payer.payer_id,
-        payerEmail: response.data.payer.email_address,
-        payerName: `${response.data.payer.name.given_name} ${response.data.payer.name.surname}`,
-        amount: response.data.purchase_units[0].payments.captures[0].amount.value,
-        currency: response.data.purchase_units[0].payments.captures[0].amount.currency_code,
-        status: response.data.status,
-        paymentTime: response.data.purchase_units[0].payments.captures[0].create_time,
-      };
-
-      axios.post(`${port}/paypal/api/save_transaction`, {
-        orderId: transactionData.orderId,
-        transactionId: response.data.purchase_units[0].payments.captures[0].id,
-        offerId: selected_offer.offer_id,
-        amount: transactionData.amount,
-        status: transactionData.status,
-        paypal_id: transactionData.payerId,
-        payment_time: transactionData.paymentTime,
-      }, {
-        headers: {
-            Authorization: localStorage.getItem('token'),
+    useEffect(() => {
+        if (selected_offer && selected_offer.price) {
+            setShowPayPalButton(true); // Only show when offer data is loaded
+        } else {
+            setShowPayPalButton(false);
         }
-      }).then((res) => {
-        if(res.data.message === "transaction successfull"){
-            showAlert(`Transaction successful: ${transactionData.response.data.purchase_units[0].payments.captures[0].id}`);
-        }
+    }, [selected_offer]);
+
+    const createOrder = async () => {
+        const { data } = await axios.post(`${port}/paypal/api/create-order`, {
+            amount: selected_offer.price,
+        });
+        return data.id;
+    };
+    const { showAlert } = useAlert();
+
+
+    const onApprove = async (data) => {
+        const response = await axios.post(`${port}/paypal/api/capture-order/${data.orderID}`);
+
+
+        const transactionData = {
+            transaction_ID: response.data.purchase_units[0].payments.captures[0].id,
+            orderId: response.data.id, // PayPal order ID
+            payerId: response.data.payer.payer_id,
+            payerEmail: response.data.payer.email_address,
+            payerName: `${response.data.payer.name.given_name} ${response.data.payer.name.surname}`,
+            amount: response.data.purchase_units[0].payments.captures[0].amount.value,
+            currency: response.data.purchase_units[0].payments.captures[0].amount.currency_code,
+            status: response.data.status,
+            paymentTime: response.data.purchase_units[0].payments.captures[0].create_time,
+        };
+
+        axios.post(`${port}/paypal/api/save_transaction`, {
+            orderId: transactionData.orderId,
+            transactionId: response.data.purchase_units[0].payments.captures[0].id,
+            offerId: selected_offer.offer_id,
+            amount: transactionData.amount,
+            status: transactionData.status,
+            paypal_id: transactionData.payerId,
+            payment_time: transactionData.paymentTime,
+        }, {
+            headers: {
+                Authorization: localStorage.getItem('token'),
+            }
+        }).then((res) => {
+            if (res.data.current_status === true) {
+                showAlert(`Transaction successful: ${transactionData.transaction_ID}`);
+            }
         }).catch((err) => { console.log(err) });
-  };
+    };
 
 
 
-  return (
-    <div className="d-flex flex-column w-100 align-items-center justify-content-center">
-      <div className="mt-3 w-100">
-        <PayPalScriptProvider options={{ "client-id": "ASlopymejwuwMiM8nYFeJJXJJBsabJto5VsecbmTu_0NefUh3J9NlD7YlUb2flJbm9OFzr9eUt-D7Si2" }}>
-          <PayPalButtons
-            createOrder={createOrder}
-            onApprove={onApprove}
-            style={{ layout: "horizontal", color: "gold", shape: "pill", label: "pay" }}
-          />
-        </PayPalScriptProvider>
-      </div>
-    </div>
-  );
+    return (
+        <div className="d-flex flex-column w-100 align-items-center justify-content-center">
+            {showPayPalButton && (
+                <div className="mt-3 w-100">
+                    <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}>
+                        <PayPalButtons
+                            createOrder={createOrder}
+                            onApprove={onApprove}
+                            style={{ layout: "horizontal", color: "gold", shape: "pill", label: "pay" }}
+                        />
+                    </PayPalScriptProvider>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default OfferDetails;
