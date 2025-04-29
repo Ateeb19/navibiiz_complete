@@ -8,12 +8,12 @@ function OfferDetails({ selected_offer }) {
     const [showPayPalButton, setShowPayPalButton] = useState(false);
 
     useEffect(() => {
-        if (selected_offer && selected_offer.price) {
-            setShowPayPalButton(true); // Only show when offer data is loaded
-        } else {
-            setShowPayPalButton(false);
-        }
-    }, [selected_offer]);
+        const timer = setTimeout(() => {
+            setShowPayPalButton(true);
+        }, 1000);
+    
+        return () => clearTimeout(timer);
+      }, [selected_offer]);
 
     const createOrder = async () => {
         const { data } = await axios.post(`${port}/paypal/api/create-order`, {
@@ -65,13 +65,13 @@ function OfferDetails({ selected_offer }) {
         <div className="d-flex flex-column w-100 align-items-center justify-content-center">
             {showPayPalButton && (
                 <div className="mt-3 w-100">
-                    <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}>
+                    {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}> */}
                         <PayPalButtons
                             createOrder={createOrder}
                             onApprove={onApprove}
                             style={{ layout: "horizontal", color: "gold", shape: "pill", label: "pay" }}
                         />
-                    </PayPalScriptProvider>
+                    {/* </PayPalScriptProvider> */}
                 </div>
             )}
         </div>

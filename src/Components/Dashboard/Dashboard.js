@@ -23,6 +23,7 @@ import PaypalPayment from "./Paypal_payment";
 import { useAlert } from "../alert/Alert_message";
 import ConfirmationModal from '../alert/Conform_alert';
 import { GoPencil } from "react-icons/go";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 // import PayPalButton from "./Paypal_0222";
 
 
@@ -2879,7 +2880,7 @@ const Dashboard = () => {
                   overflowY: 'auto'
                 }}
               >
-
+                <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}>
                   <div className="d-flex flex-column justify-content-start align-items-start w-100">
                     <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
                       ✕
@@ -3012,14 +3013,16 @@ const Dashboard = () => {
                     </div>
 
                     <div className="d-flex flex-column w-100 justify-content-center align-items-center">
-                        <PaypalPayment
-                          key={selected_offer?.offer_id}
-                          selected_offer={selected_offer}
-                        />
+                      <PaypalPayment
+                        key={selected_offer?.offer_id}
+                        selected_offer={selected_offer}
+                      />
 
                       <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
                     </div>
                   </div>
+                </PayPalScriptProvider>
+
               </div>
             </div>
           </>
@@ -3392,7 +3395,7 @@ const Dashboard = () => {
                                         backgroundColor: '#E1F5FF',
                                         aspectRatio: '1 / 1'
                                       }}
-                                      onClick={(e) => e.stopPropagation()} 
+                                      onClick={(e) => e.stopPropagation()}
                                     >
                                       <MdFileDownload />
                                     </a>
