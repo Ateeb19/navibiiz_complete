@@ -98,9 +98,15 @@ const Offers = () => {
             return;
         }
 
+        const integerBidAmount = parseFloat(parseFloat(bidAmount).toFixed(2));
+        if(integerBidAmount < 1) {
+            showAlert('Bid amount cannot be Zero 0'); 
+            return;
+        }
+
         const data = {
             offer_id: details.id,
-            offer_amount: bidAmount,
+            offer_amount: integerBidAmount,
             expected_date: expetedDate
         };
 

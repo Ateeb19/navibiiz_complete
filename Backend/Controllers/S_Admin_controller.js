@@ -1,5 +1,11 @@
 const { truncate } = require('fs');
 const db = require('../Db_Connection');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+require('dotenv').config({ path: './.env' });
+
 
 const Display_All_company = (req, res) => {
     if (req.user.role === 'Sadmin') {
@@ -410,6 +416,82 @@ const amount_to_pay = (req, res) => {
         res.json({ message: 'You are not super amdin', status: false });
     }
 }
+
+
+const uploadDir = path.join(__dirname, '../send_transport_img');
+
+if (!fs.existsSync(uploadDir)) {
+    try {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    } catch (err) {
+        console.error('Error creating upload directory:', err);
+    }
+}
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
+
+
+const edit_company_documents = [
+    upload.single("image"),
+    async (req, res) => {
+        try {
+            const filePath = req.file.path;
+            const id = req.params.id;
+            const type = req.body.type;
+
+            const result = await cloudinary.uploader.upload(filePath, {
+                folder: `company_documents/${id}`,
+                resource_type: "auto",
+            });
+
+
+            if (type === 'Financial Document') {
+
+                db.query(`UPDATE companies_info SET financialDocument = ? WHERE id = ?`, [result.secure_url, id], (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.json({ message: 'Error in database', status: false });
+                    } else {
+                        res.json({ message: 'Updated success', status: true });
+                    }
+                })
+            } else if (type === 'Registration Document') {
+
+                db.query(`UPDATE companies_info SET registrationDocument = ? WHERE id = ?`, [result.secure_url, id], (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.json({ message: 'Error in database', status: false });
+                    } else {
+                        res.json({ message: 'Updated success', status: true });
+                    }
+                })
+            } else if (type === 'Passport CEO MD') {
+
+                db.query(`UPDATE companies_info SET passport_CEO_MD = ? WHERE id = ?`, [result.secure_url, id], (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.json({ message: 'Error in database', status: false });
+                    } else {
+                        res.json({ message: 'Updated success', status: true });
+                    }
+                })
+            }
+            fs.unlinkSync(filePath);
+
+        } catch (error) {
+            console.error("Error uploading document to Cloudinary:", error);
+            res.status(500).json({ error: "Failed to upload document" });
+        }
+    }
+];
 module.exports = {
     Display_All_company,
     Delete_any_company,
@@ -427,4 +509,5 @@ module.exports = {
     total_amount_received,
     total_commission,
     amount_to_pay,
+    edit_company_documents
 };

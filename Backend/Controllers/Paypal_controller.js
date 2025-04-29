@@ -1,91 +1,159 @@
 const db = require('../Db_Connection');
-require("dotenv").config();
+const axios = require('axios');
+require('dotenv').config();
 
-const paypal = require("@paypal/checkout-server-sdk");
-const OrdersCreateRequest = paypal.orders.OrdersCreateRequest;
-const OrdersCaptureRequest = paypal.orders.OrdersCaptureRequest;
 
-// Set up PayPal environment
-// const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
+const base = 'https://api-m.sandbox.paypal.com';
+async function generateAccessToken() {
+    const auth = Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`).toString('base64');
 
-const environment = new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_SECRET);
-const client = new paypal.core.PayPalHttpClient(environment);
-const create_order_api = async (req, res) => {
-    // console.log('hello');
-    try {
-        const { offer } = req.body;
-        if (!offer || !offer.amount || !offer.id || !offer.name) {
-            return res.status(400).json({ error: "Invalid offer data." });            
-        }
-        const request = new paypal.orders.OrdersCreateRequest();
-        request.requestBody({
-            intent: "CAPTURE",
+    const response = await axios.post(`${base}/v1/oauth2/token`, 'grant_type=client_credentials', {
+        headers: {
+            Authorization: `Basic ${auth}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    });
+
+    return response.data.access_token;
+}
+
+
+//   capture_order_route,
+//   create_order_api,
+//   send_information
+
+const capture_order_route = async (req, res) => {
+    const accessToken = await generateAccessToken();
+
+    const response = await axios.post(
+        `${base}/v2/checkout/orders`,
+        {
+            intent: 'CAPTURE',
             purchase_units: [
                 {
                     amount: {
-                        currency_code: "USD",
-                        value: offer.amount,
-                        breakdown: {
-                            item_total: {
-                                currency_code: "USD",
-                                value: offer.amount, // Ensure this matches the sum of items
-                            }
-                        }
+                        currency_code: 'USD',
+                        value: req.body.amount,
                     },
-                    items: [
-                        {
-                            name: offer.name,
-                            unit_amount: {
-                                currency_code: "USD",
-                                value: offer.amount,
-                            },
-                            quantity: "1",
-                            description: `Payment for ${offer.name}`,
-                            sku: offer.id,
-                        }
-                    ]
-                }
-            ]
-        });
-
-        const response = await client.execute(request);
-        res.status(response.statusCode).json(response.result);
-    } catch (error) {
-        console.error("Failed to create order:", error);
-        res.status(500).json({ error: "Failed to create order." });
-    }
-};
-
-// Function to capture an order
-const capture_order_route = async (req, res) => {
-    try {
-        const { orderID } = req.params;
-        if (!orderID) {
-            return res.status(400).json({ error: "Order ID is required." });
+                },
+            ],
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
         }
+    );
 
-        const request = new OrdersCaptureRequest(orderID);
-        request.requestBody({});
+    res.json(response.data);
+}
 
-        const response = await client.execute(request);
-        res.status(response.statusCode).json(response.result);
-    } catch (error) {
-        console.error("Failed to capture order:", error);
-        res.status(500).json({ error: "Failed to capture order." });
+const create_payment_api = async (req, res) => {
+    const accessToken = await generateAccessToken();
+
+  const response = await axios.post(
+    `${base}/v2/checkout/orders/${req.params.orderID}/capture`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     }
-};
+  );
+
+  res.json(response.data);
+}
+
+// const db = require('../Db_Connection');
+// require("dotenv").config();
+
+// const paypal = require("@paypal/checkout-server-sdk");
+// const OrdersCreateRequest = paypal.orders.OrdersCreateRequest;
+// const OrdersCaptureRequest = paypal.orders.OrdersCaptureRequest;
+
+// // Set up PayPal environment
+// // const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
+
+// const environment = new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_SECRET);
+// const client = new paypal.core.PayPalHttpClient(environment);
+// const create_order_api = async (req, res) => {
+//     // console.log('hello');
+//     try {
+//         const { offer } = req.body;
+//         if (!offer || !offer.amount || !offer.id || !offer.name) {
+//             return res.status(400).json({ error: "Invalid offer data." });            
+//         }
+//         const request = new paypal.orders.OrdersCreateRequest();
+//         request.requestBody({
+//             intent: "CAPTURE",
+//             purchase_units: [
+//                 {
+//                     amount: {
+//                         currency_code: "USD",
+//                         value: offer.amount,
+//                         breakdown: {
+//                             item_total: {
+//                                 currency_code: "USD",
+//                                 value: offer.amount, // Ensure this matches the sum of items
+//                             }
+//                         }
+//                     },
+//                     items: [
+//                         {
+//                             name: offer.name,
+//                             unit_amount: {
+//                                 currency_code: "USD",
+//                                 value: offer.amount,
+//                             },
+//                             quantity: "1",
+//                             description: `Payment for ${offer.name}`,
+//                             sku: offer.id,
+//                         }
+//                     ]
+//                 }
+//             ]
+//         });
+
+//         const response = await client.execute(request);
+//         res.status(response.statusCode).json(response.result);
+//     } catch (error) {
+//         console.error("Failed to create order:", error);
+//         res.status(500).json({ error: "Failed to create order." });
+//     }
+// };
+
+// // Function to capture an order
+// const capture_order_route = async (req, res) => {
+//     try {
+//         const { orderID } = req.params;
+//         if (!orderID) {
+//             return res.status(400).json({ error: "Order ID is required." });
+//         }
+
+//         const request = new OrdersCaptureRequest(orderID);
+//         request.requestBody({});
+
+//         const response = await client.execute(request);
+//         res.status(response.statusCode).json(response.result);
+//     } catch (error) {
+//         console.error("Failed to capture order:", error);
+//         res.status(500).json({ error: "Failed to capture order." });
+//     }
+// };
 
 // Function to send order information
 const send_information = (req, res) => {
-    const { orderId, transactionId, offerId, amount, status, paypal_id } = req.body;
+    const { orderId, transactionId, offerId, amount, status, paypal_id, payment_time } = req.body;
     const user_id = req.user.userid;
     const user_email = req.user.useremail;
     console.log(orderId, transactionId, paypal_id, offerId, amount, status, user_id, user_email);
-    if (!orderId || !transactionId || !paypal_id || !offerId || !amount || !status) {
+    if (!orderId || !transactionId || !paypal_id || !offerId || !amount || !status|| !payment_time) {
         return res.status(400).json({ error: "Missing required fields." });
     }
     db.query(
-        `INSERT INTO payment_info_customers (user_id, user_email, transaction_id, order_id, paypal_id, offer_id, payment_info_amount, payment_info_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [user_id, user_email, transactionId, orderId, paypal_id, offerId, amount, status],
+        `INSERT INTO payment_info_customers (user_id, user_email, transaction_id, order_id, paypal_id, offer_id, payment_info_amount, payment_info_status, payment_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [user_id, user_email, transactionId, orderId, paypal_id, offerId, amount, status, payment_time],
         (error, result) => {
             if (error) {
                 return res.status(500).json({ error: "Error processing data" });
@@ -118,9 +186,9 @@ const send_information = (req, res) => {
                     amount: amount,
                     status: status,
                     user_id: user_id,
-                    user_email: user_email
+                    user_email: user_email,
+                    payment_time: payment_time
                 });
-                console.log("Transaction inserted successfully:", result);
             }
         }
     );
@@ -128,6 +196,7 @@ const send_information = (req, res) => {
 
 module.exports = {
     capture_order_route,
-    create_order_api,
+    create_payment_api,
+    // create_order_api,
     send_information
 };

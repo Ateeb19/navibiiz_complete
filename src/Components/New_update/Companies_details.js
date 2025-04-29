@@ -26,7 +26,7 @@ const CompanyDetails = () => {
             setCompany(JSON.parse(storedCompany));
         }
     }, [id]);
-    
+
     const handle_contact = () => {
         if (token) {
             setDetails_company(true);
@@ -177,9 +177,12 @@ const CompanyDetails = () => {
                                     </>
                                 )}
                                 <span className="text-secondary d-block">
-                                    <FaTruckMoving className="fs-5 me-1" style={{ color: '#de8316' }} /> Offers{" "}
-                                    {company.container_service ? "Containers" : ""}
-                                    {company.car_service ? " & Cars" : ""}
+                                    <FaTruckMoving className="fs-5 me-1" style={{ color: '#de8316' }} /> Shipping{" "}
+                                    {company.container_service === '1' ? "Containers" : ""}
+                                    {(company.car_service === '1' && company.container_service === '1' )? " & " : ""}
+                                    {company.car_service === '1' ? "Cars" : ""}                                    
+                                    {(company.car_service === '1' && company.groupage_service === '1')? " & " : ""}
+                                    {company.groupage_service === '1' ? "Groupage" : ""}
                                 </span>
                                 <span className="text-secondary d-block">
                                     <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to –{" "}

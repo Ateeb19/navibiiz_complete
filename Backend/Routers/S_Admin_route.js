@@ -18,6 +18,7 @@ const {
     total_amount_received,
     total_commission,
     amount_to_pay,
+    edit_company_documents,
 } = require('../Controllers/S_Admin_controller.js');
 
 Routers.route('/display_company').get(AuthenticateToken, Display_All_company);
@@ -31,6 +32,7 @@ Routers.route('/count_users').get(AuthenticateToken, Total_User_count);
 Routers.route('/payment_history').get(AuthenticateToken, payment_history);
 Routers.route('/company_info_detail/:id').get(AuthenticateToken, compnay_info_details);
 Routers.route('/edit_company/:id').put(AuthenticateToken, edit_company_details);
+Routers.route('/edit_company_document/:id').post(AuthenticateToken, edit_company_documents);
 Routers.route('/delete_company_country').delete(AuthenticateToken, Delete_company_details_country)
 Routers.route('/add_new_country/:id').post(AuthenticateToken, add_company_country);
 Routers.route('/total_amount_received').get(AuthenticateToken, total_amount_received);

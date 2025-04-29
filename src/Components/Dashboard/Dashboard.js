@@ -4,7 +4,7 @@ import { Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
-import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown, MdSwitchAccount, MdAlternateEmail, MdOutlineKey } from "react-icons/md";
+import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown, MdSwitchAccount, MdAlternateEmail, MdOutlineKey, MdFileDownload } from "react-icons/md";
 import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag } from "react-icons/fa6";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck, FaPassport } from "react-icons/fa";
@@ -20,10 +20,11 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import PaypalPayment from "./Paypal_payment";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useAlert } from "../alert/Alert_message";
 import ConfirmationModal from '../alert/Conform_alert';
 import { GoPencil } from "react-icons/go";
+// import PayPalButton from "./Paypal_0222";
+
 
 
 const DragAndDrop = ({ accept, onFileDrop, label }) => {
@@ -191,6 +192,7 @@ const Dashboard = () => {
     localStorage.setItem('token', '');
     localStorage.setItem('userInfo', '');
     localStorage.setItem('valid', '');
+    localStorage.removeItem('activeSection');
     window.location.reload();
   }
 
@@ -226,7 +228,7 @@ const Dashboard = () => {
 
   const confirmDelete = () => {
     if (deleteAction) {
-      deleteAction(); 
+      deleteAction();
     }
     setShowModal(false);
   };
@@ -629,7 +631,7 @@ const Dashboard = () => {
   const handleScrollToMore = () => {
     const targetDiv = document.getElementById("more");
     if (targetDiv) {
-      targetDiv.scrollIntoView({ behavior: "smooth" }); 
+      targetDiv.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -713,7 +715,7 @@ const Dashboard = () => {
     const firstPickupDate = pickup_date.split(" - ")[0];
 
     const departureDateObj = new Date(departure_date);
-    const pickupDateObj = new Date(firstPickupDate.split("/").reverse().join("-")); 
+    const pickupDateObj = new Date(firstPickupDate.split("/").reverse().join("-"));
 
     const diffInTime = departureDateObj - pickupDateObj;
 
@@ -724,9 +726,6 @@ const Dashboard = () => {
         ? `${Math.floor(durationInDays / 30)} month(s)`
         : `${durationInDays} day(s)`;
     return duration;
-  }
-
-  const handleAcceptOffer = (item) => {
   }
 
   const [admin_offer, setAdmin_offer] = useState([]);
@@ -767,7 +766,7 @@ const Dashboard = () => {
       }
     }).then((response) => {
       setAllOffers(response.data.data);
-    }).catch((err) => { console.log(err)});
+    }).catch((err) => { console.log(err) });
   }
 
   const [edit_company, setEdit_company] = useState(false);
@@ -783,7 +782,7 @@ const Dashboard = () => {
   const [newValue, setNewValue] = useState('');
 
 
-  
+
   const handle_edit_company_document = async () => {
     if (userRole === 'admin') {
       if (company_document) {
@@ -793,6 +792,39 @@ const Dashboard = () => {
 
         try {
           const response = await fetch(`${port}/admin/edit_company_document/${selectedCompany.id}`, {
+            method: "POST",
+            headers: {
+              Authorization: token,
+            },
+            body: formData,
+          });
+
+          if (response) {
+            const result = await response.json();
+            showAlert(result.message);
+            setTimeout(() => {
+              window.location.reload();
+            }, 2500);
+            setHandle_profile_edit(false);
+            setSelectedFile('');
+            setSelectedImage('');
+          } else {
+            console.error("Failed to upload image");
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
+      } else {
+        showAlert('Please select a Logo');
+      }
+    } else if (userRole === 'Sadmin') {
+      if (company_document) {
+        const formData = new FormData();
+        formData.append("type", editField.label);
+        formData.append("image", company_document);
+
+        try {
+          const response = await fetch(`${port}/s_admin/edit_company_document/${selectedCompany.id}`, {
             method: "POST",
             headers: {
               Authorization: token,
@@ -847,7 +879,7 @@ const Dashboard = () => {
   const handleDeleteRow = async (index) => {
     if (userRole === 'admin') {
       const row = selectedCompany.tableData[index];
-      const company_id = selectedCompany.id; 
+      const company_id = selectedCompany.id;
       const row_id = row.id;
 
       try {
@@ -876,7 +908,7 @@ const Dashboard = () => {
       return;
     }
     const row = selectedCompany.tableData[index];
-    const company_id = selectedCompany.id; 
+    const company_id = selectedCompany.id;
     const row_id = row.id;
 
     try {
@@ -997,7 +1029,7 @@ const Dashboard = () => {
     });
   };
 
-  
+
   useEffect(() => {
     featchCompanydata();
     featchAllUsers();
@@ -1188,7 +1220,7 @@ const Dashboard = () => {
                 <div className="d-flex align-items-start justify-content-start mt-5">
                   <ul className="nav flex-column mt-4 fs-4 w-100">
                     <li className="nav-item mb-4 text-start" style={activeSection === 'dashboard' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                      <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("dashboard"); localStorage.setItem("activeSection", "dashboard"); setShowOfferDetails(null); setSelected_groupage(null);}}>
+                      <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("dashboard"); localStorage.setItem("activeSection", "dashboard"); setShowOfferDetails(null); setSelected_groupage(null); }}>
                         <MdDashboard /> Dashboard
                       </Link>
                     </li>
@@ -1212,7 +1244,7 @@ const Dashboard = () => {
                         </li>
                         {userData.length > 0 && (
                           <li className="nav-item mb-4 text-start" style={activeSection === 'users' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                            <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("users"); localStorage.setItem("activeSection", "users"); setShowOfferDetails(null);}}>
+                            <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("users"); localStorage.setItem("activeSection", "users"); setShowOfferDetails(null); }}>
                               <FaUserGear /> Roles & Permissions
                             </Link>
                           </li>
@@ -1223,7 +1255,7 @@ const Dashboard = () => {
                         {userRole === 'user' && (
                           <>
                             <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelected_groupage(null);}}>
+                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelected_groupage(null); }}>
                                 <FaBoxOpen /> Orders
                               </Link>
                             </li>
@@ -1231,7 +1263,7 @@ const Dashboard = () => {
                         )}
 
                         <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelected_groupage(null);}}>
+                          <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelected_groupage(null); }}>
                             <MdPayment /> Offers
                           </Link>
                         </li>
@@ -1239,7 +1271,7 @@ const Dashboard = () => {
                         {userRole === 'user' && (
                           <>
                             <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelected_groupage(null);}}>
+                              <Link to="#" className="nav-link text-white sidebar-links" onClick={() => { setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelected_groupage(null); }}>
                                 <MdPayment /> Payment History
                               </Link>
                             </li>
@@ -2848,7 +2880,6 @@ const Dashboard = () => {
                 }}
               >
 
-                <PayPalScriptProvider options={initialOptions}>
                   <div className="d-flex flex-column justify-content-start align-items-start w-100">
                     <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
                       ✕
@@ -2981,19 +3012,14 @@ const Dashboard = () => {
                     </div>
 
                     <div className="d-flex flex-column w-100 justify-content-center align-items-center">
-                      <div className="btn btn-light border border-2 border-dark mt-3 w-100"><strong>Accept</strong> <br></br>
                         <PaypalPayment
                           key={selected_offer?.offer_id}
                           selected_offer={selected_offer}
-                          handleAcceptOffer={handleAcceptOffer}
                         />
-                      </div>
 
                       <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
                     </div>
                   </div>
-                </PayPalScriptProvider>
-
               </div>
             </div>
           </>
@@ -3353,12 +3379,33 @@ const Dashboard = () => {
                               </div>
                               <label className="text-secondary ms-3 d-flex flex-column">
                                 {item.label}
-                                <img className="" width='50px' src={item.value} alt="" />
+                                {item.value !== 'N/A' ? (
+                                  <div className="d-flex align-items-center mt-1">
+                                    <img width="50px" src={item.value} alt={item.label} />
+                                    <a
+                                      href={item.value}
+                                      download={`document-${index}.jpg`}
+                                      className="rounded-circle d-flex justify-content-center align-items-center text-primary ms-2"
+                                      style={{
+                                        width: '1.8rem',
+                                        height: '1.8rem',
+                                        backgroundColor: '#E1F5FF',
+                                        aspectRatio: '1 / 1'
+                                      }}
+                                      onClick={(e) => e.stopPropagation()} 
+                                    >
+                                      <MdFileDownload />
+                                    </a>
+                                  </div>
+                                ) : (
+                                  <span className="text-dark  ms-3">N/A</span>
+                                )}
                               </label>
-                              {edit_company && (<div className="ms-2 fs-4 text-primary"> < GoPencil /></div>)}
+                              {edit_company && (<div className="ms-2 fs-4 text-primary"> <GoPencil /></div>)}
                             </div>
                           ))}
                         </div>
+
 
                         <div className="d-flex flex-row align-items-between justify-contents-start w-100 gap-5 mt-3"
                           onClick={() => {
@@ -3835,7 +3882,7 @@ const Dashboard = () => {
 
                     <div className="table-responsive w-100">
 
-<table className="table">
+                      <table className="table">
                         <thead>
                           <tr>
                             <th scope="col"><h6>Order Id</h6></th>
