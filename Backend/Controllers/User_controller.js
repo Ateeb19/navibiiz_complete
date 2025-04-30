@@ -265,4 +265,43 @@ const total_number_orders = (req, res) => {
         }
     })
 }
-module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password, total_number_orders };
+
+const user_upcoming = (req, res) => {
+    const email = req.user.useremail;
+    db.query(`
+        SELECT COUNT(*) AS total
+        FROM offers o
+        JOIN groupage g ON o.groupage_id = g.id
+        WHERE g.payment_status = 'complete'
+          AND g.groupage_created_by = ?
+          AND o.status = 'complete'
+          AND STR_TO_DATE(SUBSTRING_INDEX(g.pickup_date, ' - ', -1), '%d/%m/%Y') <= CURDATE()
+    `, [email], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: result[0].total, status: true });
+        }
+    });
+    
+}
+
+const comapny_details = (req, res) => {
+    const id = req.params.id;
+    db.query('SELECT created_by_email FROM offers WHERE offer_id = ?', [id], (err, result) => {
+        if(err){
+            res.json({message: "error in database", status: false});
+        }else{
+            console.log(result[0].created_by_email);
+            db.query('SELECT company_name, email, contact_person_name, contect_no FROM companies_info WHERE email = ?', [result[0].created_by_email], (err, result) => {
+                if(err){
+                    res.json({message: "error in database", status: false});
+                }else{
+                    res.json({message: result[0], status: true});
+                }
+            })
+        }
+    });
+}
+module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password, total_number_orders, user_upcoming , comapny_details};

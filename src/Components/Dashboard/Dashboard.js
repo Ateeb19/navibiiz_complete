@@ -7,13 +7,13 @@ import Navbar from "../Navbar/Navbar";
 import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown, MdSwitchAccount, MdAlternateEmail, MdOutlineKey, MdFileDownload } from "react-icons/md";
 import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag } from "react-icons/fa6";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck, FaPassport } from "react-icons/fa";
+import { FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck, FaPassport, FaBuilding } from "react-icons/fa";
 import { PiShippingContainerDuotone } from "react-icons/pi";
 import { BsCarFrontFill, BsBuildingsFill, BsBank2 } from "react-icons/bs";
-import { IoMdDocument } from "react-icons/io";
+import { IoIosMailOpen, IoMdDocument } from "react-icons/io";
 import CountriesSelector from "./Countries_selector";
 import { IoStar, IoCall } from "react-icons/io5";
-import { RiPencilFill, RiSecurePaymentFill, RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
+import { RiPencilFill, RiSecurePaymentFill, RiExpandHeightFill, RiExpandWidthFill, RiContactsBook3Fill } from "react-icons/ri";
 import { SiAnytype } from "react-icons/si";
 import { DateRange } from 'react-date-range';
 import "react-date-range/dist/styles.css";
@@ -429,6 +429,20 @@ const Dashboard = () => {
     }
   }
 
+  const [user_upcomming, setUser_upcomming] = useState([]);
+  const upcomming = () => {
+    axios.get(`${port}/user/user_upcomming`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((response) => {
+      if (response.data.status === true) {
+        setUser_upcomming(response.data.message);
+      } else {
+        setUser_upcomming('');
+      }
+    }).catch((err) => { console.log(err) });
+  }
   const [user_numbers_orders, setUser_numbers_orders] = useState('');
   const total_user_orders = () => {
     axios.get(`${port}/user/total_orders_number`, {
@@ -444,6 +458,7 @@ const Dashboard = () => {
     }).catch((err) => { console.log(err) });
   }
   const [user_payment_history, setUser_payment_history] = useState([]);
+  let total_spending = 0;
   const payment_history_user = () => {
     axios.get(`${port}/user/payment_history`, {
       headers: {
@@ -452,10 +467,17 @@ const Dashboard = () => {
     }).then((response) => {
       if (response.data.status === true) {
         setUser_payment_history(response.data.message);
+
       } else {
         setUser_payment_history('');
       }
     }).catch((err) => { console.log(err) });
+  }
+
+  if (user_payment_history) {
+    total_spending = user_payment_history.reduce((total, record) => {
+      return total + parseFloat(record.payment_info_amount);
+    }, 0);
   }
 
   const [S_admin_payment, setS_admin_payment] = useState([]);
@@ -688,6 +710,24 @@ const Dashboard = () => {
       }
     }).catch((err) => { console.log(err); });
   }
+  const [show_company_details, setShow_company_details] = useState('');
+  const handle_user_offer_details = (offer_id, groupage_id) => {
+    console.log(offer_id);
+    axios.get(`${port}/user/company_details/${offer_id}`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((res) => {
+      console.log(res.data);
+      if (res.data.status === true) {
+        setShow_company_details(res.data.message);
+      } else {
+        setShow_company_details('');
+      }
+      console.log(show_company_details);
+    }).catch((err) => console.log(err));
+  }
+
   const [selected_offer, setSelected_offer] = useState(null);
   const handleShowOffer = (item) => {
     axios.get(`${port}/send_groupage/groupage_info/${item.order_id}`, {
@@ -698,6 +738,7 @@ const Dashboard = () => {
       setSelected_offer({ ...response.data.message, ...item });
     }).catch((err) => { console.log(err); });
   }
+
   const handleDeleteoffer = (item) => {
     openDeleteModal("Are you sure you want to delete this offer?", () => {
       axios.delete(`${port}/send_groupage/delete_offer_user/${item}`, {
@@ -1044,6 +1085,7 @@ const Dashboard = () => {
     payment_history();
     display_admin_total_offers();
     display_admin_accecepted_offers();
+    upcomming();
     total_user_orders();
     total_sadmin_amount();
     total_sadmin_commission();
@@ -1473,8 +1515,8 @@ const Dashboard = () => {
                     <div className="dashboard-wraper-box">
                       <div className="row mt-3 g-3 justify-content-center">
                         {[{ count: user_numbers_orders ? user_numbers_orders : 'N/A', change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
-                        { count: 15, change: "-2%", text: "Upcoming Pick up", icon: <BsCarFrontFill /> },
-                        { count: 25, change: "+10%", text: "Total Spending", icon: <FaTruckLoading /> }
+                        { count: user_upcomming ? user_upcomming : 'N/A', change: "-2%", text: "Upcoming Pick up", icon: <BsCarFrontFill /> },
+                        { count: total_spending ? total_spending : 'N/A', change: "+10%", text: "Total Spending", icon: <FaTruckLoading /> }
                         ].map((item, index) => (
                           <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                             <div className=" dashboard-wrap-box ">
@@ -2666,17 +2708,16 @@ const Dashboard = () => {
                           {offers && offers.length > 0 ? (
                             <tbody>
                               {offers.map((item, index) => (
-                                <tr key={index}>
+                                <tr key={index} onClick={() => item.accepted === '1' ? handle_user_offer_details(item.offer_id, item.groupage_id) : null} style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}>
                                   <td className="text-primary">#{item.order_id}</td>
                                   <td className="text-secondary">{item.product_name}</td>
                                   <td className="text-secondary">XXXXX-XXX</td>
                                   <td className="text-secondary">{item.price}</td>
                                   <td className="text-secondary">{item.delivery_duration.replace(/_/g, ' ')}</td>
                                   <td className="d-flex align-items-center justify-content-center w-100 gap-3">
-                                    <button className="btn btn-sm text-light " style={{ backgroundColor: '#31b23c' }} onClick={() => handleShowOffer(item)}>
-                                      Accept
+                                    <button className="btn btn-sm text-light" style={{ backgroundColor: '#31b23c' }} onClick={() => handleShowOffer(item)} disabled={item.accepted === '1'} >                                          Accept
                                     </button>
-                                    <button className="btn btn-sm text-light" style={{ backgroundColor: '#c63d3d' }} onClick={() => handleDeleteoffer(item.offer_id)}>
+                                    <button className="btn btn-sm text-light" style={{ backgroundColor: '#c63d3d' }} onClick={() => handleDeleteoffer(item.offer_id)} disabled={item.accepted === '1'} >
                                       Reject
                                     </button>
                                   </td>
@@ -2862,6 +2903,35 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </>
+        )}
+        {show_company_details && (
+          <>
+            <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+              <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: 'auto' }}>
+                <button
+                  className="btn-close position-absolute top-0 end-0 m-2"
+                  onClick={() => setShow_company_details(null)}
+                ></button>
+
+                <div className='d-flex flex-column align-items-start'>
+                  <div className='title-head'><h3>Company Details</h3></div>
+
+                  <div className='details-wrap w-100 text-start'>
+                    <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {show_company_details.company_name}</span>
+                  </div>
+
+                  <div className='details-wrap w-100 text-start'>
+                    <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${show_company_details.email}"`}>{show_company_details.email}</a></span>
+                  </div>
+
+                  <div className='details-wrap w-100 text-start'>
+                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {show_company_details.contect_no}</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </>
         )}
@@ -3387,7 +3457,8 @@ const Dashboard = () => {
                                     <img width="50px" src={item.value} alt={item.label} />
                                     <a
                                       href={item.value}
-                                      download={`document-${index}.jpg`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
                                       className="rounded-circle d-flex justify-content-center align-items-center text-primary ms-2"
                                       style={{
                                         width: '1.8rem',
@@ -3400,6 +3471,7 @@ const Dashboard = () => {
                                       <MdFileDownload />
                                     </a>
                                   </div>
+
                                 ) : (
                                   <span className="text-dark  ms-3">N/A</span>
                                 )}
