@@ -25,6 +25,7 @@ import ConfirmationModal from '../alert/Conform_alert';
 import { GoPencil } from "react-icons/go";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 // import PayPalButton from "./Paypal_0222";
+import { AiFillDelete } from "react-icons/ai";
 
 
 
@@ -482,17 +483,19 @@ const Dashboard = () => {
 
   const [S_admin_payment, setS_admin_payment] = useState([]);
   const payment_history = () => {
-    axios.get(`${port}/S_admin/payment_history`, {
-      headers: {
-        Authorization: token,
-      }
-    }).then((response) => {
-      if (response.data.status === true) {
-        setS_admin_payment(response.data.message);
-      } else {
-        setS_admin_payment('');
-      }
-    }).catch((err) => { console.log(err) });
+    if (userRole === 'Sadmin') {
+      axios.get(`${port}/S_admin/payment_history`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        if (response.data.status === true) {
+          setS_admin_payment(response.data.message);
+        } else {
+          setS_admin_payment('');
+        }
+      }).catch((err) => { console.log(err) });
+    }
   }
 
 
@@ -770,6 +773,22 @@ const Dashboard = () => {
     return duration;
   }
 
+  const delete_offer_admin = (offer_id) => {
+    openDeleteModal(`Are you sure you want to delete this offer ?`, () => {
+      axios.delete(`${port}/admin/delete_offer/${offer_id}`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        if (response.data.status === true) {
+          showAlert(response.data.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
+      }).catch((err) => { console.log(err) });
+    });
+  }
   const [admin_offer, setAdmin_offer] = useState([]);
   const display_admin_Offers = () => {
     axios.get(`${port}/admin/display_offer`, {
@@ -802,13 +821,15 @@ const Dashboard = () => {
 
   const [allOffers, setAllOffers] = useState([]);
   const displayallOffers = () => {
-    axios.get(`${port}/s_admin/show_all_offers`, {
-      headers: {
-        Authorization: token,
-      }
-    }).then((response) => {
-      setAllOffers(response.data.data);
-    }).catch((err) => { console.log(err) });
+    if (userRole === 'Sadmin') {
+      axios.get(`${port}/s_admin/show_all_offers`, {
+        headers: {
+          Authorization: token,
+        }
+      }).then((response) => {
+        setAllOffers(response.data.data);
+      }).catch((err) => { console.log(err) });
+    }
   }
 
   const [edit_company, setEdit_company] = useState(false);
@@ -2613,6 +2634,8 @@ const Dashboard = () => {
                                   <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => {
                                     if (item.status === 'pending') {
                                       showAlert("The status is Panding");
+                                    } else if (item.status === 'rejected') {
+                                      showAlert("Your offer is Rejected");
                                     } else {
                                       handle_admin_selected_offer(item.offer_id, item.groupage_id);
                                     }
@@ -2621,7 +2644,11 @@ const Dashboard = () => {
                                   <td className="text-secondary">{item.sender_name}</td>
                                   <td className="text-secondary">{item.amount}</td>
                                   <td className="text-secondary">{item.pickup_date}</td>
-                                  <td className="text-secondary"><span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: '#9B8100' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: '#006E09' }}>{item.status}</span></td>
+                                  <td className="text-secondary"
+                                    style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
+                                    onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
+                                  ><span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status} {item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
@@ -2707,22 +2734,45 @@ const Dashboard = () => {
                           </thead>
                           {offers && offers.length > 0 ? (
                             <tbody>
-                              {offers.map((item, index) => (
-                                <tr key={index} onClick={() => item.accepted === '1' ? handle_user_offer_details(item.offer_id, item.groupage_id) : null} style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}>
-                                  <td className="text-primary">#{item.order_id}</td>
-                                  <td className="text-secondary">{item.product_name}</td>
-                                  <td className="text-secondary">XXXXX-XXX</td>
-                                  <td className="text-secondary">{item.price}</td>
-                                  <td className="text-secondary">{item.delivery_duration.replace(/_/g, ' ')}</td>
-                                  <td className="d-flex align-items-center justify-content-center w-100 gap-3">
-                                    <button className="btn btn-sm text-light" style={{ backgroundColor: '#31b23c' }} onClick={() => handleShowOffer(item)} disabled={item.accepted === '1'} >                                          Accept
-                                    </button>
-                                    <button className="btn btn-sm text-light" style={{ backgroundColor: '#c63d3d' }} onClick={() => handleDeleteoffer(item.offer_id)} disabled={item.accepted === '1'} >
-                                      Reject
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))}
+                              {offers
+                                .filter(item => item.status !== 'rejected')
+                                .map((item, index) => (
+                                  <tr
+                                    key={index}
+                                    onClick={() =>
+                                      item.accepted === '1'
+                                        ? handle_user_offer_details(item.offer_id, item.groupage_id)
+                                        : null
+                                    }
+                                    style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}
+                                  >
+                                    <td className="text-primary">#{item.order_id}</td>
+                                    <td className="text-secondary">{item.product_name}</td>
+                                    <td className="text-secondary">XXXXX-XXX</td>
+                                    <td className="text-secondary">{item.price}</td>
+                                    <td className="text-secondary">
+                                      {item.delivery_duration.replace(/_/g, ' ')}
+                                    </td>
+                                    <td className="d-flex align-items-center justify-content-center w-100 gap-3">
+                                      <button
+                                        className="btn btn-sm text-light"
+                                        style={{ backgroundColor: '#31b23c' }}
+                                        onClick={() => handleShowOffer(item)}
+                                        disabled={item.accepted === '1'}
+                                      >
+                                        Accept
+                                      </button>
+                                      <button
+                                        className="btn btn-sm text-light"
+                                        style={{ backgroundColor: '#c63d3d' }}
+                                        onClick={() => handleDeleteoffer(item.offer_id)}
+                                        disabled={item.accepted === '1'}
+                                      >
+                                        Reject
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
                             </tbody>
                           ) : (
                             <tbody>
@@ -3082,6 +3132,20 @@ const Dashboard = () => {
                       </div>
                     </div>
 
+                    {/* <button onClick={() => {
+                      axios.post(`${port}/paypal/api/test_api`, {
+                        offerId: selected_offer.offer_id,
+                        amount: selected_offer.price,
+                      }, {
+                        headers: {
+                          Authorization: token,
+                        }
+                      }).then((res) => {
+                        if (res.data.current_status === true) {
+                          showAlert(`Transaction successful: ${res.data.transaction_ID}`);
+                        }
+                      }).catch((err) => { console.log(err) });
+                    }}>test payment button</button> */}
                     <div className="d-flex flex-column w-100 justify-content-center align-items-center">
                       <PaypalPayment
                         key={selected_offer?.offer_id}

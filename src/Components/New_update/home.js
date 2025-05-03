@@ -6,7 +6,7 @@ import Navbar from "../Navbar/Navbar";
 import { BiSolidDetail } from "react-icons/bi";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaTruckFast } from "react-icons/fa6";
-import { MdDeliveryDining } from "react-icons/md";
+import { MdDeliveryDining, MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { FaStar } from "react-icons/fa";
 import Footer from "../Footer/Footer";
 import Slider from 'react-slick';
@@ -21,7 +21,8 @@ import { RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
 import { FaRuler } from "react-icons/fa";
 import { useAlert } from "../alert/Alert_message";
 import { IoSearch } from "react-icons/io5";
-
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -53,6 +54,14 @@ const Home = () => {
         displayCompany();
         offers();
     }, []);
+
+    const [show_image, setShow_image] = useState(false);
+    const [images, setImages] = useState([
+        {
+            original: '',
+            thumbnail: ''
+        }
+    ]);
 
     const company_data = localStorage.getItem('companyInfo');
     const [company_info, setCompany_info] = useState([]);
@@ -481,7 +490,7 @@ const Home = () => {
                     <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
                         style={{
                             width: '90%',
-                            maxWidth: '900px',
+                            maxWidth: '1100px',
                             height: '90vh',
                             overflowY: 'auto'
                         }}
@@ -497,9 +506,69 @@ const Home = () => {
                             <span className="mt-2 text-start w-100">Offer ID: <span className="text-primary"> #{groupage_detail.id}</span></span>
 
                             <div className="offer-details-wrap">
+                                <h5 className="text-start w-100 mb-3 fs-6">Product Images</h5>
+                                <div className="d-flex flex-wrap gap-2"
+                                    onClick={() => {
+                                        const imageList = [
+                                            groupage_detail.img01, groupage_detail.img02, groupage_detail.img03, groupage_detail.img04, groupage_detail.img05,
+                                            groupage_detail.img06, groupage_detail.img07, groupage_detail.img08, groupage_detail.img09, groupage_detail.img10,
+                                        ].filter(img => img);
+
+                                        const formattedImages = imageList.map(img => ({
+                                            original: img,
+                                            thumbnail: img,
+                                            originalHeight: "500",
+                                        }));
+
+                                        setImages(formattedImages);
+                                        setShow_image(true);
+                                    }}
+                                >
+                                    {[
+                                        groupage_detail.img01, groupage_detail.img02, groupage_detail.img03, groupage_detail.img04, groupage_detail.img05,
+                                        groupage_detail.img06, groupage_detail.img07, groupage_detail.img08, groupage_detail.img09, groupage_detail.img10,
+                                    ]
+                                        .filter(img => img)
+                                        .map((img, index) => (
+                                            <img
+                                                key={index}
+                                                src={img}
+                                                alt={`Product ${index + 1}`}
+                                                style={{
+                                                    width: '18%',
+                                                    maxWidth: '120px',
+                                                    height: 'auto',
+                                                    objectFit: 'cover',
+                                                    borderRadius: '8px',
+                                                }}
+                                            // onClick={() => setShow_image(img)}
+                                            />
+                                        ))}
+                                </div>
+                            </div>
+
+
+
+                            <div className="offer-details-wrap">
                                 <h5 className="text-start w-100 mb-3 fs-6">Product Details</h5>
 
                                 <div className="d-flex flex-wrap gap-3 w-100">
+                                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                        <div
+                                            className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                            style={{
+                                                width: '3rem',
+                                                height: '3rem',
+                                                backgroundColor: '#E1F5FF',
+                                                aspectRatio: '1 / 1'
+                                            }}
+                                        ><MdOutlineDriveFileRenameOutline /></div>
+                                        <div className="d-flex flex-column align-items-start gap-2">
+                                            <span className="text-secondary offer-submit-sub-head">Product Name</span>
+                                            <h6>{groupage_detail.product_name}</h6>
+                                        </div>
+                                    </div>
+
                                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
                                         <div
                                             className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -534,6 +603,9 @@ const Home = () => {
                                         </div>
                                     </div>
 
+                                </div>
+                                <div className="d-flex flex-wrap gap-3 mt-3 w-100">
+
                                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
                                         <div
                                             className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -549,8 +621,7 @@ const Home = () => {
                                             <h6>{groupage_detail.p_height} Cm</h6>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="d-flex flex-wrap gap-3 mt-3 w-100">
+
                                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
                                         <div
                                             className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -866,6 +937,37 @@ const Home = () => {
 
                     </div>
                 </div>
+            )}
+
+            {show_image && (
+                <>
+                    <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            zIndex: 99999
+                        }}
+                    >
+                        <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+                            style={{
+                                width: '90%',
+                                maxWidth: '1100px',
+                                height: '95vh',
+                                // overflowY: 'auto'
+                            }}
+                        >
+                            <div className="d-flex flex-column justify-content-start">
+                                <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setShow_image(false)}>
+                                    ✕
+                                </button>
+                                <div className="w-100 pt-4">
+                                    <ImageGallery
+                                        items={images}
+                                        showFullscreenButton={false} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
             )}
 
             <section className="step-wrapper">

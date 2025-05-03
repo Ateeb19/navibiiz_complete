@@ -341,6 +341,7 @@ const show_offers_user = (req, res) => {
                     price: Number((parseFloat(offer.amount) + parseFloat(offer.commission)).toFixed(2)),
                     delivery_duration: offer.expeted_date,
                     accepted: offer.accepted,
+                    status: offer.status,
                 };
             });
 

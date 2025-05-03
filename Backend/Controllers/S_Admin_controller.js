@@ -492,6 +492,8 @@ const edit_company_documents = [
         }
     }
 ];
+
+
 module.exports = {
     Display_All_company,
     Delete_any_company,
@@ -509,5 +511,6 @@ module.exports = {
     total_amount_received,
     total_commission,
     amount_to_pay,
-    edit_company_documents
+    edit_company_documents,
+    
 };

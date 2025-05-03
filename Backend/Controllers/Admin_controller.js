@@ -420,5 +420,20 @@ const edit_company_documents = [
     }
 ];
 
+const delete_offer = (req, res) => {
+    if(req.user.role === 'admin'){
+        const offer_id = req.params.id;
+        db.query(`DELETE FROM offers WHERE offer_id = ${offer_id}`, (err, result) => {
+            if(err){
+                console.log(err);
+                re.json({message: 'error in database', status: false});
+            }else{
+                res.json({message: 'Offer deleted success', status: true});
+            }
+        })
+    }else{
+        res.json({message: 'You are not super admin', status: false})
+    }
+}
 
-module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country, edit_logo, selected_offer, edit_company_documents };
+module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country, edit_logo, selected_offer, edit_company_documents, delete_offer };
