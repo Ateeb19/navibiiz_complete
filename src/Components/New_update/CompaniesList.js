@@ -9,6 +9,8 @@ import { Rating } from 'react-simple-star-rating';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ReactPaginate from "react-paginate";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { RxCross2 } from "react-icons/rx";
+
 
 const CompaniesList = () => {
     const location = useLocation();
@@ -32,20 +34,20 @@ const CompaniesList = () => {
 
 
     useEffect(() => {
-        if (location.state) {
-            setSelectedPickupCountry(location.state.pickupCountry || '');
-            setSelectedDestinationCountry(location.state.destinationCountry || '');
-            setSelectedServices(location.state.selectedService || '');
-        }
-
-        const savedFilters = JSON.parse(localStorage.getItem("filters"));
-
         if (location.state?.fromDetailsPage) {
+            const savedFilters = JSON.parse(localStorage.getItem("filters"));
             setSelectedServices(savedFilters?.selectedServices || []);
             setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
             setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
             setSelectedDuration(savedFilters?.selectedDuration || "");
             setSearchQuery(savedFilters?.searchQuery || "");
+        } else if (location.state) {
+            setSelectedPickupCountry(location.state.pickupCountry || "");
+            setSelectedDestinationCountry(location.state.destinationCountry || "");
+            setSelectedServices(location.state.selectedService || "");
+            localStorage.removeItem("filters");
+            setSelectedDuration("");
+            setSearchQuery("");
         } else {
             localStorage.removeItem("filters");
             setSelectedServices([]);
@@ -75,6 +77,48 @@ const CompaniesList = () => {
         const value = e.target.value;
         setSelectedDuration(value);
     };
+
+    useEffect(() => {
+        const filters = {
+            selectedServices,
+            selectedPickupCountry,
+            selectedDestinationCountry,
+            selectedDuration,
+            searchQuery
+        };
+        localStorage.setItem("filters", JSON.stringify(filters));
+    }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery]);
+
+    const [filtersLoaded, setFiltersLoaded] = useState(false);
+
+    useEffect(() => {
+        const savedFilters = JSON.parse(localStorage.getItem("filters"));
+    
+        if (location.state?.fromDetailsPage) {
+            setSelectedServices(savedFilters?.selectedServices || []);
+            setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
+            setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
+            setSelectedDuration(savedFilters?.selectedDuration || "");
+            setSearchQuery(savedFilters?.searchQuery || "");
+        } else if (location.state) {
+            setSelectedPickupCountry(location.state.pickupCountry || "");
+            setSelectedDestinationCountry(location.state.destinationCountry || "");
+            setSelectedServices(location.state.selectedService || []);
+            localStorage.removeItem("filters");
+            setSelectedDuration("");
+            setSearchQuery("");
+        } else if (savedFilters) {
+            setSelectedServices(savedFilters?.selectedServices || []);
+            setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
+            setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
+            setSelectedDuration(savedFilters?.selectedDuration || "");
+            setSearchQuery(savedFilters?.searchQuery || "");
+        }
+    
+        setFiltersLoaded(true);
+    }, [location.state]);
+
+
 
     const filterData = (data) => {
         return data.filter((company) => {
@@ -133,7 +177,9 @@ const CompaniesList = () => {
         }).sort((a) => data.id);
     };
 
-    const filteredData = filterData(companies);
+    const filteredData = filtersLoaded ? filterData(companies) : [];
+
+    // const filteredData = filterData(companies);
 
     const [company_detail, setCompany_detail] = useState(null);
 
@@ -187,8 +233,8 @@ const CompaniesList = () => {
                             {(selectedPickupCountry || selectedDestinationCountry) && (
                                 <>
                                     <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-1 text-start">
-                                        {selectedPickupCountry && (<><span className="mb-2"><h6 style={{fontWeight: '600'}}>Pick up Country:</h6> {selectedPickupCountry}</span></>)}
-                                        {selectedDestinationCountry && (<><span><h6 style={{fontWeight: '600'}}>Destination Country: </h6>{selectedDestinationCountry}</span></>)}
+                                        {selectedPickupCountry && (<><span className="mb-2 w-100"><h6 style={{fontWeight: '600'}}>Pick up Country:</h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedPickupCountry}< RxCross2 onClick={() => {setSelectedPickupCountry('')}}/> </div></span> </>)}
+                                        {selectedDestinationCountry && (<><span className="w-100"><h6 style={{fontWeight: '600'}}>Destination Country: </h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedDestinationCountry} < RxCross2 onClick={() => {setSelectedDestinationCountry('')}}/></div> </span></>)}
                                     </div>
                                 </>
                             )}
