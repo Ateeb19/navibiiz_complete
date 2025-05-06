@@ -127,10 +127,15 @@ const Home = () => {
         ]
     };
     const [pickupCountry, setPickupCountry] = useState('');
+    const selectedDestinationCountry = '';
+    const selectedServices = '';
     const handleSearch = () => {
         navigate('/companies_list', {
             state: {
-                pickupCountry,
+                fromHomePage: true,
+                pickupCountry: pickupCountry,
+                destinationCountry: selectedDestinationCountry,
+                selectedServices: selectedServices,
             },
         });
     };

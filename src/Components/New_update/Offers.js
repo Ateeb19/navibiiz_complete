@@ -17,6 +17,7 @@ import { useAlert } from "../alert/Alert_message";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import { RxCross2 } from "react-icons/rx";
 
 const Offers = () => {
     const navigate = useNavigate();
@@ -25,7 +26,70 @@ const Offers = () => {
     const port = process.env.REACT_APP_SECRET;
     const token = localStorage.getItem('token');
     const [groupage, setGroupage] = useState([]);
+
+    const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
+    const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
+    const [bidAmount, setBidAmount] = useState('');
+    const [expetedDate, setExpetedDate] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    // const handlePickupCountrySelect = (country) => {
+    //     setSelectedPickupCountry(country);
+    // };
+
+
     useEffect(() => {
+        const filtersToSave = {
+            selectedPickupCountry,
+            selectedDestinationCountry,
+            searchQuery
+        };
+        localStorage.setItem("offerFilters", JSON.stringify(filtersToSave));
+    }, [selectedPickupCountry, selectedDestinationCountry, searchQuery]);
+
+
+    useEffect(() => {
+        const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+
+        if (savedFilters.selectedPickupCountry) {
+            setSelectedPickupCountry(savedFilters.selectedPickupCountry);
+        }
+        if (savedFilters.selectedDestinationCountry) {
+            setSelectedDestinationCountry(savedFilters.selectedDestinationCountry);
+        }
+        if (savedFilters.searchQuery) {
+            setSearchQuery(savedFilters.searchQuery);
+        }
+    }, []);
+
+
+    useEffect(() => {
+        const savedFilters = JSON.parse(localStorage.getItem("offerFilters"));
+
+        if (savedFilters) {
+            const { selectedPickupCountry, selectedDestinationCountry, searchQuery } = savedFilters;
+
+            if (selectedPickupCountry) {
+                setSelectedPickupCountry(selectedPickupCountry);
+                handlePickupCountrySelect(selectedPickupCountry);
+
+                // Force the select element to show the saved value
+                const pickupSelect = document.querySelector('#pickup-selector select');
+                if (pickupSelect) pickupSelect.value = selectedPickupCountry;
+            }
+
+            if (selectedDestinationCountry) {
+                setSelectedDestinationCountry(selectedDestinationCountry);
+                handleDestinationCountrySelect(selectedDestinationCountry);
+
+                // Same for destination selector
+                const destinationSelect = document.querySelector('#destination-selector select');
+                if (destinationSelect) destinationSelect.value = selectedDestinationCountry;
+            }
+
+            if (searchQuery) {
+                setSearchQuery(searchQuery);
+            }
+        }
         axios.get(`${port}/send_groupage/show_grouage`, {
             headers: {
                 Authorization: token,
@@ -40,6 +104,7 @@ const Offers = () => {
             console.log(err);
         });
     }, []);
+
     const getDaysAgo = (createdAt) => {
         const createdDate = new Date(createdAt);
         const currentDate = new Date();
@@ -47,17 +112,42 @@ const Offers = () => {
         const daysAgo = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
         return daysAgo === 0 ? "Today" : `${daysAgo} days ago`;
     };
-    const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
-    const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
-    const [bidAmount, setBidAmount] = useState('');
-    const [expetedDate, setExpetedDate] = useState('');
-    const [searchQuery, setSearchQuery] = useState('');
+
     const handlePickupCountrySelect = (country) => {
         setSelectedPickupCountry(country);
+        const filters = JSON.parse(localStorage.getItem("filters")) || {};
+        filters.selectedPickupCountry = country;
+        localStorage.setItem("filters", JSON.stringify(filters));
     };
+
 
     const handleDestinationCountrySelect = (country) => {
         setSelectedDestinationCountry(country);
+        const filters = JSON.parse(localStorage.getItem("filters")) || {};
+        filters.selectedDestinationCountry = country;
+        localStorage.setItem("filters", JSON.stringify(filters));
+    };
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchQuery(value);
+        const filters = JSON.parse(localStorage.getItem("filters")) || {};
+        filters.searchQuery = value;
+        localStorage.setItem("filters", JSON.stringify(filters));
+    };
+
+    const clearPickupFilter = () => {
+        setSelectedPickupCountry('');
+        const filters = JSON.parse(localStorage.getItem("filters")) || {};
+        filters.selectedPickupCountry = '';
+        localStorage.setItem("filters", JSON.stringify(filters));
+    };
+
+    const clearDestinationFilter = () => {
+        setSelectedDestinationCountry('');
+        const filters = JSON.parse(localStorage.getItem("filters")) || {};
+        filters.selectedDestinationCountry = '';
+        localStorage.setItem("filters", JSON.stringify(filters));
     };
 
     const filterData = (data) => {
@@ -177,24 +267,60 @@ const Offers = () => {
                             <div className="title-head">
                                 <h3><span style={{ color: ' #de8316' }}><FaFilter /> </span>Filters by :</h3>
                             </div>
+                            {(selectedPickupCountry || selectedDestinationCountry) && (
+                                <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-1 text-start">
+                                    {selectedPickupCountry && (
+                                        <span className="mb-2 w-100">
+                                            <h6 style={{ fontWeight: '600' }}>Pick up Country:</h6>
+                                            <div className="d-flex justify-content-between align-items-center w-100">
+                                                {selectedPickupCountry}
+                                                <RxCross2 onClick={clearPickupFilter} />
+                                            </div>
+                                        </span>
+                                    )}
+                                    {selectedDestinationCountry && (
+                                        <span className="w-100">
+                                            <h6 style={{ fontWeight: '600' }}>Destination Country:</h6>
+                                            <div className="d-flex justify-content-between align-items-center w-100">
+                                                {selectedDestinationCountry}
+                                                <RxCross2 onClick={clearDestinationFilter} />
+                                            </div>
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+
                             <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-3">
-                                <input type="text"
+                                <input
+                                    type="text"
                                     placeholder="Search here by location ..."
                                     className="shipping-input-field"
                                     value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    onChange={handleSearchChange}
                                 />
                             </div>
                             <div className="d-flex flex-column align-items-start w-100 mt-4 mb-4 border-bottom border-2 pb-4">
                                 <h6>PICK UP COUNTRY</h6>
                                 <span className="w-100 w-md-75">
-                                    <Countries_selector onSelectCountry={handlePickupCountrySelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
+                                    <Countries_selector
+                                        selectedCountry={selectedPickupCountry}
+                                        onSelectCountry={handlePickupCountrySelect}
+                                        bgcolor='#f6f6f6'
+                                        borderradiuscount='5px'
+                                        paddingcount='12px'
+                                    />
                                 </span>
                             </div>
                             <div className="d-flex flex-column align-items-start w-100 mt-4 mb-4 border-bottom border-2 pb-4">
                                 <h6>DESTINATION COUNTRY</h6>
                                 <span className="w-100 w-md-75">
-                                    <Countries_selector onSelectCountry={handleDestinationCountrySelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
+                                    <Countries_selector
+                                        selectedCountry={selectedDestinationCountry}
+                                        onSelectCountry={handleDestinationCountrySelect}
+                                        bgcolor='#f6f6f6'
+                                        borderradiuscount='5px'
+                                        paddingcount='12px'
+                                    />
                                 </span>
                             </div>
 

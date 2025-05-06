@@ -19,54 +19,32 @@ const CompaniesList = () => {
 
     let data = [];
 
-    if(localStorage.getItem('companyInfo').length > 0){
+    if (localStorage.getItem('companyInfo').length > 0) {
         data = JSON.parse(localStorage.getItem('companyInfo'));
     }
-    let sortedCompanies= Object.values(data).filter(item => typeof item === 'object' && item.id);
+    let sortedCompanies = Object.values(data).filter(item => typeof item === 'object' && item.id);
     let companies = sortedCompanies.sort((a, b) => b.id - a.id);
 
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedServices, setSelectedServices] = useState([]);
     const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
     const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
-    const [selectedDuration, setSelectedDuration] = useState('');
+    const [selectedDuration, setSelectedDuration] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-
-
-    useEffect(() => {
-        if (location.state?.fromDetailsPage) {
-            const savedFilters = JSON.parse(localStorage.getItem("filters"));
-            setSelectedServices(savedFilters?.selectedServices || []);
-            setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
-            setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
-            setSelectedDuration(savedFilters?.selectedDuration || "");
-            setSearchQuery(savedFilters?.searchQuery || "");
-        } else if (location.state) {
-            setSelectedPickupCountry(location.state.pickupCountry || "");
-            setSelectedDestinationCountry(location.state.destinationCountry || "");
-            setSelectedServices(location.state.selectedService || "");
-            localStorage.removeItem("filters");
-            setSelectedDuration("");
-            setSearchQuery("");
-        } else {
-            localStorage.removeItem("filters");
-            setSelectedServices([]);
-            setSelectedPickupCountry("");
-            setSelectedDestinationCountry("");
-            setSelectedDuration("");
-            setSearchQuery("");
-        }
-    }, [location.state]);
-
-    const handleServiceChange = (e) => {
-        const value = e.target.value;
-        setSelectedServices((prev) =>
-            prev.includes(value) ? prev.filter((service) => service !== value) : [...prev, value]
-        );
-    };
 
     const handlePickupCountrySelect = (country) => {
         setSelectedPickupCountry(country);
+        
+        const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+        savedFilters.selectedPickupCountry = country;
+        localStorage.setItem("filters", JSON.stringify(savedFilters));
+    };
+
+    const handlePickupCountryClear = () => {
+        setSelectedPickupCountry(''); // Clear the filter
+        const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+        delete savedFilters.selectedPickupCountry; // Remove from localStorage
+        localStorage.setItem("filters", JSON.stringify(savedFilters)); // Save back to localStorage
     };
 
     const handleDestinationCountrySelect = (country) => {
@@ -75,48 +53,67 @@ const CompaniesList = () => {
 
     const handleDurationChange = (e) => {
         const value = e.target.value;
-        setSelectedDuration(value);
+        setSelectedDuration(prev =>
+            prev.includes(value)
+                ? prev.filter(item => item !== value)
+                : [...prev, value]
+        );
     };
-
-    useEffect(() => {
-        const filters = {
-            selectedServices,
-            selectedPickupCountry,
-            selectedDestinationCountry,
-            selectedDuration,
-            searchQuery
-        };
-        localStorage.setItem("filters", JSON.stringify(filters));
-    }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery]);
 
     const [filtersLoaded, setFiltersLoaded] = useState(false);
 
+    // useEffect(() => {
+    //     if (!selectedPickupCountry) {
+    //         const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+    //         savedFilters.selectedPickupCountry = ''; // Ensure it is removed
+    //         localStorage.setItem("filters", JSON.stringify(savedFilters));
+    //     }
+    // }, [selectedPickupCountry]);
+
+
     useEffect(() => {
         const savedFilters = JSON.parse(localStorage.getItem("filters"));
-    
+
+        if (!location.state && savedFilters) {
+            setSelectedServices(savedFilters.selectedServices || []);
+            setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
+            setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
+            setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
+            setSearchQuery(savedFilters.searchQuery || "");
+        }
+
         if (location.state?.fromDetailsPage) {
             setSelectedServices(savedFilters?.selectedServices || []);
             setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
             setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
-            setSelectedDuration(savedFilters?.selectedDuration || "");
+            setSelectedDuration(Array.isArray(savedFilters?.selectedDuration) ? savedFilters.selectedDuration : []);
             setSearchQuery(savedFilters?.searchQuery || "");
-        } else if (location.state) {
+        }
+
+        if (location.state && !location.state.fromDetailsPage) {
             setSelectedPickupCountry(location.state.pickupCountry || "");
             setSelectedDestinationCountry(location.state.destinationCountry || "");
             setSelectedServices(location.state.selectedService || []);
-            localStorage.removeItem("filters");
-            setSelectedDuration("");
+            setSelectedDuration([]); 
             setSearchQuery("");
-        } else if (savedFilters) {
-            setSelectedServices(savedFilters?.selectedServices || []);
-            setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
-            setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
-            setSelectedDuration(savedFilters?.selectedDuration || "");
-            setSearchQuery(savedFilters?.searchQuery || "");
         }
-    
+
         setFiltersLoaded(true);
-    }, [location.state]);
+    }, []);
+
+    useEffect(() => {
+        if (filtersLoaded) {
+            const filtersToSave = {
+                selectedServices,
+                selectedPickupCountry,
+                selectedDestinationCountry,
+                selectedDuration,
+                searchQuery,
+            };
+            localStorage.setItem("filters", JSON.stringify(filtersToSave));
+        }
+    }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery]);
+
 
 
 
@@ -150,14 +147,16 @@ const CompaniesList = () => {
                 company.Countries.some((country) => country.countries === selectedDestinationCountry);
 
             const durationMatch =
-                !selectedDuration ||
+                selectedDuration.length === 0 ||
                 company.Countries.some((country) => {
                     const duration = parseInt(country.duration, 10);
-                    if (selectedDuration === '92') return duration <= 92;
-                    if (selectedDuration === '60') return duration <= 60;
-                    if (selectedDuration === '30') return duration <= 30;
-                    if (selectedDuration === '45') return duration <= 15;
-                    return true;
+                    return selectedDuration.some((selected) => {
+                        if (selected === '92') return duration <= 92;
+                        if (selected === '60') return duration <= 60;
+                        if (selected === '30') return duration <= 30;
+                        if (selected === '15') return duration <= 15;
+                        return false;
+                    });
                 });
 
             const locationMatch =
@@ -177,9 +176,10 @@ const CompaniesList = () => {
         }).sort((a) => data.id);
     };
 
+   
     const filteredData = filtersLoaded ? filterData(companies) : [];
 
-    // const filteredData = filterData(companies);
+
 
     const [company_detail, setCompany_detail] = useState(null);
 
@@ -214,6 +214,31 @@ const CompaniesList = () => {
     const handlePageClick = ({ selected }) => {
         setCurrentPage(selected);
     };
+
+    const handleServiceChange = (e) => {
+        const value = e.target.value;
+        const updatedServices = selectedServices.includes(value)
+            ? selectedServices.filter((service) => service !== value) // remove
+            : [...selectedServices, value]; // add
+
+        setSelectedServices(updatedServices);
+
+        // Update localStorage immediately
+        const existingFilters = JSON.parse(localStorage.getItem("filters")) || {};
+        localStorage.setItem("filters", JSON.stringify({
+            ...existingFilters,
+            selectedServices: updatedServices
+        }));
+    };
+
+    const handleRemovePickupCountry = () => {
+        setSelectedPickupCountry("");
+        const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+        localStorage.setItem("filters", JSON.stringify({
+            ...savedFilters,
+            selectedPickupCountry: ""
+        }));
+    };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center  mt-5 pt-5">
 
@@ -233,8 +258,19 @@ const CompaniesList = () => {
                             {(selectedPickupCountry || selectedDestinationCountry) && (
                                 <>
                                     <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-1 text-start">
-                                        {selectedPickupCountry && (<><span className="mb-2 w-100"><h6 style={{fontWeight: '600'}}>Pick up Country:</h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedPickupCountry}< RxCross2 onClick={() => {setSelectedPickupCountry('')}}/> </div></span> </>)}
-                                        {selectedDestinationCountry && (<><span className="w-100"><h6 style={{fontWeight: '600'}}>Destination Country: </h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedDestinationCountry} < RxCross2 onClick={() => {setSelectedDestinationCountry('')}}/></div> </span></>)}
+                                        {selectedPickupCountry && (<><span className="mb-2 w-100"><h6 style={{ fontWeight: '600' }}>Pick up Country:</h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedPickupCountry}< RxCross2 onClick={() => {
+                                            handlePickupCountryClear();
+                                            // setSelectedPickupCountry('');
+                                            // const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+                                            // savedFilters.selectedPickupCountry = '';
+                                            // localStorage.setItem("filters", JSON.stringify(savedFilters));
+                                        }} /> </div></span> </>)}
+                                        {selectedDestinationCountry && (<><span className="w-100"><h6 style={{ fontWeight: '600' }}>Destination Country: </h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedDestinationCountry} < RxCross2 onClick={() => {
+                                            setSelectedDestinationCountry('');
+                                            const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+                                            savedFilters.selectedDestinationCountry = '';
+                                            localStorage.setItem("filters", JSON.stringify(savedFilters));
+                                        }} /></div> </span></>)}
                                     </div>
                                 </>
                             )}
@@ -248,11 +284,23 @@ const CompaniesList = () => {
                             <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-3">
                                 <h6>SERVICES</h6>
                                 <div className="gap-3 d-flex mt-2 mb-2">
-                                    <input className="form-check-input" type="checkbox" value="containers" id="containers" onChange={handleServiceChange} />
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value="containers"
+                                        id="containers"
+                                        onChange={handleServiceChange}
+                                        checked={selectedServices.includes("containers")} />
                                     <label className="text-secondary">Containers</label>
                                 </div>
                                 <div className="gap-3 d-flex mt-2 mb-2">
-                                    <input className="form-check-input" type="checkbox" value="car" id="car" onChange={handleServiceChange} />
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value="car"
+                                        id="car"
+                                        onChange={handleServiceChange}
+                                        checked={selectedServices.includes("car")} />
                                     <label className="text-secondary">Cars</label>
                                 </div>
                             </div>
@@ -271,19 +319,19 @@ const CompaniesList = () => {
                             <div className="d-flex flex-column align-items-start w-100 mb-4 border-bottom border-2 pb-4">
                                 <h6>DURATION</h6>
                                 <div className="gap-3 d-flex mt-2 mb-2">
-                                    <input className="form-check-input" type="checkbox" value="92" id="92" onChange={handleDurationChange} />
+                                    <input className="form-check-input" type="checkbox" value="92" id="92" onChange={handleDurationChange} checked={selectedDuration.includes("92")} />
                                     <label className="text-secondary">0 - 3 Months</label>
                                 </div>
                                 <div className="gap-3 d-flex mt-2 mb-2">
-                                    <input className="form-check-input" type="checkbox" value="60" id="60" onChange={handleDurationChange} />
+                                    <input className="form-check-input" type="checkbox" value="60" id="60" onChange={handleDurationChange} checked={selectedDuration.includes("60")} />
                                     <label className="text-secondary">Less than 2 months</label>
                                 </div>
                                 <div className="gap-3 d-flex mt-2 mb-2">
-                                    <input className="form-check-input" type="checkbox" value="30" id="30" onChange={handleDurationChange} />
+                                    <input className="form-check-input" type="checkbox" value="30" id="30" onChange={handleDurationChange} checked={selectedDuration.includes("30")} />
                                     <label className="text-secondary">Less than 30 Days</label>
                                 </div>
                                 <div className="gap-3 d-flex mt-2 mb-2">
-                                    <input className="form-check-input" type="checkbox" value="45" id="45" onChange={handleDurationChange} />
+                                    <input className="form-check-input" type="checkbox" value="15" id="15" onChange={handleDurationChange} checked={selectedDuration.includes("15")} />
                                     <label className="text-secondary">1 - 15 days</label>
                                 </div>
                             </div>
