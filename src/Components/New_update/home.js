@@ -127,16 +127,15 @@ const Home = () => {
         ]
     };
     const [pickupCountry, setPickupCountry] = useState('');
-    const selectedDestinationCountry = '';
-    const selectedServices = '';
     const handleSearch = () => {
         localStorage.setItem('fromHome', '0')
+        localStorage.setItem('forcompanies_list', pickupCountry);
         navigate('/companies_list', {
             state: {
                 fromHomePage: true,
                 pickupCountry: pickupCountry,
-                destinationCountry: selectedDestinationCountry,
-                selectedServices: selectedServices,
+                // destinationCountry: selectedDestinationCountry,
+                // selectedServices: selectedServices,
             },
         });
     };
@@ -229,7 +228,7 @@ const Home = () => {
                         </div>
 
                         <div className="d-flex flex-row justify-content-center align-items-center px-3 pickup-wrap gap-4">
-                            <span><Countryselector label='Search here by location ...' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
+                            <span><Countryselector label='Pick Up Country' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
 
                             <button className="" onClick={handleSearch}><IoSearch /> Search Companies</button>
                         </div>
