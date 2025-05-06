@@ -34,17 +34,33 @@ const CompaniesList = () => {
 
     const handlePickupCountrySelect = (country) => {
         setSelectedPickupCountry(country);
-        
+
         const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
         savedFilters.selectedPickupCountry = country;
         localStorage.setItem("filters", JSON.stringify(savedFilters));
     };
 
+    useEffect(() => {
+        const apply = localStorage.getItem('fromHome');
+        if( apply === '0') {
+            return;
+        }
+
+        if (location.state?.fromHomePage && apply === '1') {
+            setSelectedPickupCountry('');
+            const filters = JSON.parse(localStorage.getItem("filters")) || {};
+            filters.selectedPickupCountry = '';
+            localStorage.setItem("filters", JSON.stringify(filters));
+        }
+    })
     const handlePickupCountryClear = () => {
-        setSelectedPickupCountry(''); // Clear the filter
-        const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
-        delete savedFilters.selectedPickupCountry; // Remove from localStorage
-        localStorage.setItem("filters", JSON.stringify(savedFilters)); // Save back to localStorage
+        if (location.state?.fromHomePage) {
+            localStorage.setItem('fromHome', '1');
+        }
+        setSelectedPickupCountry('');
+        const filters = JSON.parse(localStorage.getItem("filters")) || {};
+        filters.selectedPickupCountry = '';
+        localStorage.setItem("filters", JSON.stringify(filters));
     };
 
     const handleDestinationCountrySelect = (country) => {
@@ -94,7 +110,7 @@ const CompaniesList = () => {
             setSelectedPickupCountry(location.state.pickupCountry || "");
             setSelectedDestinationCountry(location.state.destinationCountry || "");
             setSelectedServices(location.state.selectedService || []);
-            setSelectedDuration([]); 
+            setSelectedDuration([]);
             setSearchQuery("");
         }
 
@@ -176,7 +192,7 @@ const CompaniesList = () => {
         }).sort((a) => data.id);
     };
 
-   
+
     const filteredData = filtersLoaded ? filterData(companies) : [];
 
 

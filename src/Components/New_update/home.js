@@ -130,6 +130,7 @@ const Home = () => {
     const selectedDestinationCountry = '';
     const selectedServices = '';
     const handleSearch = () => {
+        localStorage.setItem('fromHome', '0')
         navigate('/companies_list', {
             state: {
                 fromHomePage: true,
