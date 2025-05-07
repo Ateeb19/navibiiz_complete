@@ -344,10 +344,10 @@ const Home = () => {
                                                         className="w-100 h-100 object-fit-cover"
                                                     />
                                                 </div>
-                                                <h5> No Data Fetch</h5>
-                                                <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1" /> 4.5 (20 Ratings)</span>
+                                                <h2> No Data </h2>
+                                                {/* <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1" /> 4.5 (20 Ratings)</span>
                                                 <p className="text-secondary text-start mt-2"></p>
-                                                <span className="" style={{ cursor: "pointer", color: '#de8316' }} >View Details</span>
+                                                <span className="" style={{ cursor: "pointer", color: '#de8316' }} >View Details</span> */}
                                             </div>
                                         </div>
                                     </div>
@@ -490,9 +490,9 @@ const Home = () => {
                                                         className="w-100 h-100 object-fit-cover"
                                                     />
                                                 </div>
-                                                <h5>No Data fetch</h5>
-                                                <p className="text-secondary text-start mt-1"></p>
-                                                <span className="" style={{ cursor: "pointer", color: '#de8316' }} >Submit Offer</span>
+                                                <h2>No Data</h2>
+                                                {/* <p className="text-secondary text-start mt-1"></p>
+                                                <span className="" style={{ cursor: "pointer", color: '#de8316' }} >Submit Offer</span> */}
                                             </div>
                                         </div>
                                     </div>

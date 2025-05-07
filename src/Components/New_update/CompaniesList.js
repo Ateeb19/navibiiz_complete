@@ -39,31 +39,6 @@ const CompaniesList = () => {
         localStorage.setItem("filters", JSON.stringify(savedFilters));
     };
 
-    // useEffect(() => {
-    //     const apply = localStorage.getItem('fromHome');
-    //     if (apply === '0') {
-    //         return;
-    //     }
-
-    //     if (location.state?.fromHomePage && location.state.pickupCountry.length > 0) {
-    //         setSelectedPickupCountry('');
-    //         const filters = JSON.parse(localStorage.getItem("filters")) || {};
-    //         filters.selectedPickupCountry = '';
-    //         localStorage.setItem("filters", JSON.stringify(filters));
-    //     }
-    // })
-    // const handlePickupCountryClear = () => {
-    //     if (location.state?.fromHomePage) {
-    //         location.state.pickupCountry = '';
-    //         localStorage.setItem('fromHome', '1');
-    //     }
-    //     setSelectedPickupCountry('');
-    //     const filters = JSON.parse(localStorage.getItem("filters")) || {};
-    //     filters.selectedPickupCountry = '';
-    //     localStorage.setItem("filters", JSON.stringify(filters));
-    // };
-
-
     const handlePickupCountryClear = () => {
         setSelectedPickupCountry("");
         
@@ -90,37 +65,6 @@ const CompaniesList = () => {
     };
 
     const [filtersLoaded, setFiltersLoaded] = useState(false);
-
-    // useEffect(() => {
-    //     const savedFilters = JSON.parse(localStorage.getItem("filters"));
-
-    //     if (!location.state && savedFilters) {
-    //         setSelectedServices(savedFilters.selectedServices || []);
-    //         setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
-    //         setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
-    //         setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
-    //         setSearchQuery(savedFilters.searchQuery || "");
-    //     }
-
-    //     if (location.state?.fromDetailsPage) {
-    //         setSelectedServices(savedFilters?.selectedServices || []);
-    //         setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
-    //         setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
-    //         setSelectedDuration(Array.isArray(savedFilters?.selectedDuration) ? savedFilters.selectedDuration : []);
-    //         setSearchQuery(savedFilters?.searchQuery || "");
-    //     }
-
-    //     if (location.state && !location.state.fromDetailsPage) {
-    //         setSelectedPickupCountry(location.state.pickupCountry || "");
-    //         setSelectedDestinationCountry(location.state.destinationCountry || "");
-    //         setSelectedServices(location.state.selectedService || []);
-    //         setSelectedDuration([]);
-    //         setSearchQuery("");
-    //     }
-
-    //     setFiltersLoaded(true);
-    // }, []);
-    // In your CompaniesList component
 
     useEffect(() => {
         const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
@@ -350,10 +294,6 @@ const CompaniesList = () => {
                                     <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-1 text-start">
                                         {selectedPickupCountry && (<><span className="mb-2 w-100"><h6 style={{ fontWeight: '600' }}>Pick up Country:</h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedPickupCountry}< RxCross2 onClick={() => {
                                             handlePickupCountryClear();
-                                            // setSelectedPickupCountry('');
-                                            // const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
-                                            // savedFilters.selectedPickupCountry = '';
-                                            // localStorage.setItem("filters", JSON.stringify(savedFilters));
                                         }} /> </div></span> </>)}
                                         {selectedDestinationCountry && (<><span className="w-100"><h6 style={{ fontWeight: '600' }}>Destination Country: </h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedDestinationCountry} < RxCross2 onClick={() => {
                                             setSelectedDestinationCountry('');
