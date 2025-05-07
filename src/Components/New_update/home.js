@@ -127,18 +127,40 @@ const Home = () => {
         ]
     };
     const [pickupCountry, setPickupCountry] = useState('');
+    // const handleSearch = () => {
+    //     localStorage.setItem('fromHome', '0')
+    //     localStorage.setItem('forcompanies_list', pickupCountry);
+    //     navigate('/companies_list', {
+    //         state: {
+    //             fromHomePage: true,
+    //             pickupCountry: pickupCountry,
+    //         },
+    //     });
+    // };
+
+    // In your home page component
     const handleSearch = () => {
-        localStorage.setItem('fromHome', '0')
-        localStorage.setItem('forcompanies_list', pickupCountry);
+        // Prepare the filters object
+        const filters = {
+          selectedServices: [],
+          selectedPickupCountry: pickupCountry,  // This is the key change
+          selectedDestinationCountry: "",
+          selectedDuration: [],
+          searchQuery: ""
+        };
+      
+        // Save to localStorage
+        localStorage.setItem("filters", JSON.stringify(filters));
+        
+        // Navigate with state
         navigate('/companies_list', {
-            state: {
-                fromHomePage: true,
-                pickupCountry: pickupCountry,
-                // destinationCountry: selectedDestinationCountry,
-                // selectedServices: selectedServices,
-            },
+          state: {
+            fromHomePage: true,
+            pickupCountry: pickupCountry
+          },
+          replace: true  // Prevent back button issues
         });
-    };
+      };
 
     const View_details = (item) => {
         localStorage.setItem(`company_${item.id}`, JSON.stringify(item));

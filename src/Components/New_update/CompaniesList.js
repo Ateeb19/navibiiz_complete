@@ -34,34 +34,47 @@ const CompaniesList = () => {
 
     const handlePickupCountrySelect = (country) => {
         setSelectedPickupCountry(country);
-
         const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
         savedFilters.selectedPickupCountry = country;
         localStorage.setItem("filters", JSON.stringify(savedFilters));
     };
 
-    useEffect(() => {
-        const apply = localStorage.getItem('fromHome');
-        if( apply === '0') {
-            return;
-        }
+    // useEffect(() => {
+    //     const apply = localStorage.getItem('fromHome');
+    //     if (apply === '0') {
+    //         return;
+    //     }
 
-        if (location.state?.fromHomePage && apply === '1') {
-            setSelectedPickupCountry('');
-            const filters = JSON.parse(localStorage.getItem("filters")) || {};
-            filters.selectedPickupCountry = '';
-            localStorage.setItem("filters", JSON.stringify(filters));
-        }
-    })
+    //     if (location.state?.fromHomePage && location.state.pickupCountry.length > 0) {
+    //         setSelectedPickupCountry('');
+    //         const filters = JSON.parse(localStorage.getItem("filters")) || {};
+    //         filters.selectedPickupCountry = '';
+    //         localStorage.setItem("filters", JSON.stringify(filters));
+    //     }
+    // })
+    // const handlePickupCountryClear = () => {
+    //     if (location.state?.fromHomePage) {
+    //         location.state.pickupCountry = '';
+    //         localStorage.setItem('fromHome', '1');
+    //     }
+    //     setSelectedPickupCountry('');
+    //     const filters = JSON.parse(localStorage.getItem("filters")) || {};
+    //     filters.selectedPickupCountry = '';
+    //     localStorage.setItem("filters", JSON.stringify(filters));
+    // };
+
+
     const handlePickupCountryClear = () => {
-        if (location.state?.fromHomePage) {
-            localStorage.setItem('fromHome', '1');
-        }
-        setSelectedPickupCountry('');
-        const filters = JSON.parse(localStorage.getItem("filters")) || {};
-        filters.selectedPickupCountry = '';
-        localStorage.setItem("filters", JSON.stringify(filters));
-    };
+        setSelectedPickupCountry("");
+        
+        // Update localStorage while preserving other filters
+        const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
+        const updatedFilters = {
+          ...savedFilters,
+          selectedPickupCountry: ""
+        };
+        localStorage.setItem("filters", JSON.stringify(updatedFilters));
+      };
 
     const handleDestinationCountrySelect = (country) => {
         setSelectedDestinationCountry(country);
@@ -79,43 +92,105 @@ const CompaniesList = () => {
     const [filtersLoaded, setFiltersLoaded] = useState(false);
 
     // useEffect(() => {
-    //     if (!selectedPickupCountry) {
-    //         const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
-    //         savedFilters.selectedPickupCountry = ''; // Ensure it is removed
-    //         localStorage.setItem("filters", JSON.stringify(savedFilters));
-    //     }
-    // }, [selectedPickupCountry]);
+    //     const savedFilters = JSON.parse(localStorage.getItem("filters"));
 
+    //     if (!location.state && savedFilters) {
+    //         setSelectedServices(savedFilters.selectedServices || []);
+    //         setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
+    //         setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
+    //         setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
+    //         setSearchQuery(savedFilters.searchQuery || "");
+    //     }
+
+    //     if (location.state?.fromDetailsPage) {
+    //         setSelectedServices(savedFilters?.selectedServices || []);
+    //         setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
+    //         setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
+    //         setSelectedDuration(Array.isArray(savedFilters?.selectedDuration) ? savedFilters.selectedDuration : []);
+    //         setSearchQuery(savedFilters?.searchQuery || "");
+    //     }
+
+    //     if (location.state && !location.state.fromDetailsPage) {
+    //         setSelectedPickupCountry(location.state.pickupCountry || "");
+    //         setSelectedDestinationCountry(location.state.destinationCountry || "");
+    //         setSelectedServices(location.state.selectedService || []);
+    //         setSelectedDuration([]);
+    //         setSearchQuery("");
+    //     }
+
+    //     setFiltersLoaded(true);
+    // }, []);
+    // In your CompaniesList component
 
     useEffect(() => {
-        const savedFilters = JSON.parse(localStorage.getItem("filters"));
-
-        if (!location.state && savedFilters) {
-            setSelectedServices(savedFilters.selectedServices || []);
-            setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
-            setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
-            setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
-            setSearchQuery(savedFilters.searchQuery || "");
+        const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
+        
+        // Handle home page navigation
+        if (location.state?.fromHomePage) {
+          // Create new filters with home page's pickup country
+          const newFilters = {
+            ...savedFilters,
+            selectedPickupCountry: location.state.pickupCountry || "",
+            // Reset other filters when coming from home
+            selectedServices: [],
+            selectedDestinationCountry: "",
+            selectedDuration: [],
+            searchQuery: ""
+          };
+          
+          // Save to localStorage
+          localStorage.setItem("filters", JSON.stringify(newFilters));
+          
+          // Update state
+          setSelectedPickupCountry(newFilters.selectedPickupCountry);
+          setSelectedServices(newFilters.selectedServices);
+          setSelectedDestinationCountry(newFilters.selectedDestinationCountry);
+          setSelectedDuration(newFilters.selectedDuration);
+          setSearchQuery(newFilters.searchQuery);
+          
+          // Clear the navigation state to prevent reapplication
+          navigate(location.pathname, { replace: true, state: {} });
         }
-
-        if (location.state?.fromDetailsPage) {
-            setSelectedServices(savedFilters?.selectedServices || []);
-            setSelectedPickupCountry(savedFilters?.selectedPickupCountry || "");
-            setSelectedDestinationCountry(savedFilters?.selectedDestinationCountry || "");
-            setSelectedDuration(Array.isArray(savedFilters?.selectedDuration) ? savedFilters.selectedDuration : []);
-            setSearchQuery(savedFilters?.searchQuery || "");
+        // Normal load (not from home page)
+        else {
+          setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
+          setSelectedServices(savedFilters.selectedServices || []);
+          setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
+          setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
+          setSearchQuery(savedFilters.searchQuery || "");
         }
-
-        if (location.state && !location.state.fromDetailsPage) {
-            setSelectedPickupCountry(location.state.pickupCountry || "");
-            setSelectedDestinationCountry(location.state.destinationCountry || "");
-            setSelectedServices(location.state.selectedService || []);
-            setSelectedDuration([]);
-            setSearchQuery("");
-        }
-
+      
         setFiltersLoaded(true);
-    }, []);
+      }, [location.state]);
+      
+      // This remains the same - persists filter changes
+      useEffect(() => {
+        if (filtersLoaded) {
+          const filtersToSave = {
+            selectedServices,
+            selectedPickupCountry,
+            selectedDestinationCountry,
+            selectedDuration,
+            searchQuery,
+          };
+          localStorage.setItem("filters", JSON.stringify(filtersToSave));
+        }
+      }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery, filtersLoaded]);
+
+    // Update your filter persistence useEffect
+    useEffect(() => {
+        if (filtersLoaded) {
+            const filtersToSave = {
+                selectedServices,
+                selectedPickupCountry,
+                selectedDestinationCountry,
+                selectedDuration,
+                searchQuery,
+            };
+            localStorage.setItem("filters", JSON.stringify(filtersToSave));
+        }
+    }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery, filtersLoaded]);
+
 
     useEffect(() => {
         if (filtersLoaded) {
@@ -239,7 +314,6 @@ const CompaniesList = () => {
 
         setSelectedServices(updatedServices);
 
-        // Update localStorage immediately
         const existingFilters = JSON.parse(localStorage.getItem("filters")) || {};
         localStorage.setItem("filters", JSON.stringify({
             ...existingFilters,
