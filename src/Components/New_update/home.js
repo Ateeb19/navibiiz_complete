@@ -335,21 +335,21 @@ const Home = () => {
                             ) : (
                                 <>
                                     <div className="col-12 col-sm-6 col-md-4 col-xl-3" >
-                                        <div className="company-box-wrap">
-                                            <div className="d-flex flex-column align-items-start">
-                                                <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
+                                        {/* <div className="company-box-wrap"> */}
+                                            <div className="d-flex flex-column align-items-center">
+                                                {/* <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
                                                     <img
                                                         src={"https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
                                                         alt="Logo"
                                                         className="w-100 h-100 object-fit-cover"
                                                     />
-                                                </div>
+                                                </div> */}
                                                 <h2> No Data </h2>
                                                 {/* <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1" /> 4.5 (20 Ratings)</span>
                                                 <p className="text-secondary text-start mt-2"></p>
                                                 <span className="" style={{ cursor: "pointer", color: '#de8316' }} >View Details</span> */}
                                             </div>
-                                        </div>
+                                        {/* </div> */}
                                     </div>
                                 </>
                             )}
@@ -481,20 +481,20 @@ const Home = () => {
                             ) : (
                                 <>
                                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" >
-                                        <div className="company-box-wrap">
-                                            <div className="d-flex flex-column align-items-start">
-                                                <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
+                                        {/* <div className="company-box-wrap"> */}
+                                            <div className="d-flex flex-column align-items-center">
+                                                {/* <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
                                                     <img
                                                         src="https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"
                                                         alt="Logo"
                                                         className="w-100 h-100 object-fit-cover"
                                                     />
-                                                </div>
+                                                </div> */}
                                                 <h2>No Data</h2>
                                                 {/* <p className="text-secondary text-start mt-1"></p>
                                                 <span className="" style={{ cursor: "pointer", color: '#de8316' }} >Submit Offer</span> */}
                                             </div>
-                                        </div>
+                                        {/* </div> */}
                                     </div>
                                 </>
                             )}
