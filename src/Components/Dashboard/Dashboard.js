@@ -3330,7 +3330,7 @@ const Dashboard = () => {
                           {[
                             { icon: <FaPhoneAlt />, label: 'Contact Number', value: selectedCompany.contect_no },
                             { icon: <MdEmail />, label: 'Email ID', value: selectedCompany.email },
-                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1.split(",")[0].trim() },
+                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1? selectedCompany.location1.split(",")[0].trim() : 'Location' },
                           ].map((item, index) => {
                             const isEditable = edit_company && index !== 1;
                             return (
