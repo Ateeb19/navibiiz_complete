@@ -441,9 +441,23 @@ const Registration = () => {
                 setCongrat(true);
             })
             .catch(error => {
-                console.error('Error:', error);
-                showAlert('You are Offline! Please Connect to Internet');
+                if (error.response) {
+                    console.error("Server Error:", error.response.data);
+                    console.error("Status Code:", error.response.status);
+                    showAlert(`Error: ${error.response.status} - ${error.response.data.message || "Server error"}`);
+                } else if (error.request) {
+                    console.error("No response received from server");
+                    showAlert("No response from server");
+                } else {
+                    console.error("Error setting up the request", error.message);
+                    showAlert("Error setting up request");
+                }
             });
+
+        // .catch(error => {
+        //     console.error('Error:', error);
+        //     showAlert('You are Offline! Please Connect to Internet');
+        // });
     };
 
 
