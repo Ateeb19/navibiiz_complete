@@ -6,7 +6,8 @@ const db = require('./Db_Connection.js')
 const cors = require('cors');
 require('dotenv').config({path: './.env'});
 
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
 
 app.use(cors({
     origin: ['http://localhost:3000', 'http://217.154.86.64:3000', 'https://novibiz.com', 'https://p000tqb6-3000.inc1.devtunnels.ms' ],
@@ -25,8 +26,11 @@ app.use(session({
     }
 }));
 
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '20mb' }));
+// app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
 
 
 db.connect((err) => {

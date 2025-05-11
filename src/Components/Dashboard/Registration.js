@@ -57,23 +57,23 @@ const Registration = () => {
     const port = process.env.REACT_APP_SECRET;
     const navigate = useNavigate();
     const stepperRef = useRef(null);
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            event.preventDefault(); 
-            const isConfirmed = window.confirm(
-                "The page is about to reload, and your form data will be reset. Do you want to continue?"
-            );
-            if (!isConfirmed) {
-                event.returnValue = "";
-            }
-        };
-        localStorage.setItem('valid', 'false');
-        window.addEventListener("beforeunload", handleBeforeUnload);
-        fetchToken();
-        return () => {
-            window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, []);
+    // useEffect(() => {
+    //     const handleBeforeUnload = (event) => {
+    //         event.preventDefault(); 
+    //         const isConfirmed = window.confirm(
+    //             "The page is about to reload, and your form data will be reset. Do you want to continue?"
+    //         );
+    //         if (!isConfirmed) {
+    //             event.returnValue = "";
+    //         }
+    //     };
+    //     localStorage.setItem('valid', 'false');
+    //     window.addEventListener("beforeunload", handleBeforeUnload);
+    //     fetchToken();
+    //     return () => {
+    //         window.removeEventListener("beforeunload", handleBeforeUnload);
+    //     };
+    // }, []);
 
     const fetchToken = () => {
         axios
@@ -82,7 +82,7 @@ const Registration = () => {
                     Authorization: token,
                 },
             }).then((response) => {
-                
+
             }).catch((err) => {
                 console.log(err);
             });
@@ -99,8 +99,8 @@ const Registration = () => {
     const [groupageService, setGroupageService] = useState(false);
 
     const handleFileDrop = (file) => {
-        setSelectedFile(file); 
-        setSelectedImage(URL.createObjectURL(file)); 
+        setSelectedFile(file);
+        setSelectedImage(URL.createObjectURL(file));
     };
 
     const [step, setStep] = useState(1);
@@ -147,6 +147,74 @@ const Registration = () => {
         setLocations(updatedLocations);
     };
 
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            const hasChanges =
+                selectedImage ||
+                selectedFile ||
+                RegistrationDocument ||
+                FinancialDocument ||
+                PassportCEO_MD ||
+                containerService ||
+                carService ||
+                groupageService ||
+                companyName.trim() !== "" ||
+                contact_person_name.trim() !== "" ||
+                password.trim() !== "" ||
+                confirm_password.trim() !== "" ||
+                contactNumber.trim() !== "" ||
+                emailAddress.trim() !== "" ||
+                description.trim() !== "" ||
+                bankaccount.trim() !== "" ||
+                account_number.trim() !== "" ||
+                iban_number.trim() !== "" ||
+                paypal_id.trim() !== "" ||
+                paypal_id_check.trim() !== "" ||
+                locations.some(
+                    (loc) =>
+                        loc.country.trim() !== "" ||
+                        loc.state.trim() !== "" ||
+                        loc.city.trim() !== ""
+                );
+
+            if (hasChanges) {
+                event.preventDefault();
+                event.returnValue =
+                    "The page is about to reload, and your form data will be reset. Do you want to continue?";
+            }
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        fetchToken();
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, [
+        selectedImage,
+        selectedFile,
+        RegistrationDocument,
+        FinancialDocument,
+        PassportCEO_MD,
+        containerService,
+        carService,
+        groupageService,
+        companyName,
+        contact_person_name,
+        password,
+        confirm_password,
+        contactNumber,
+        emailAddress,
+        description,
+        bankaccount,
+        account_number,
+        iban_number,
+        paypal_id,
+        paypal_id_check,
+        locations
+    ]);
+
     const handleAddLocation = () => {
         if (locations.length >= 10) {
             showAlert("You can only add up to 10 locations.");
@@ -179,7 +247,7 @@ const Registration = () => {
     };
     const handleDeliveryTimeChange_container = (index, value) => {
         const updatedCountries = [...selectedContainerCountries];
-        updatedCountries[index].deliveryTime = value; 
+        updatedCountries[index].deliveryTime = value;
         setSelectedContainerCountries(updatedCountries);
     };
     const handleRemoveContainerCountry = (indexToRemove) => {
@@ -196,7 +264,7 @@ const Registration = () => {
     };
     const handleDeliveryTimeChange_groupage = (index, value) => {
         const updatedCountries = [...selectedGroupageCountries];
-        updatedCountries[index].deliveryTime = value; 
+        updatedCountries[index].deliveryTime = value;
         setSelectedGroupageCountries(updatedCountries);
     };
     const handleRemoveGroupageCountry = (indexToRemove) => {
@@ -213,7 +281,7 @@ const Registration = () => {
     };
     const handleDeliveryTimeChange_car = (index, value) => {
         const updatedCountries = [...selectedCarCountries];
-        updatedCountries[index].deliveryTime = value; 
+        updatedCountries[index].deliveryTime = value;
         setSelectedCarCountries(updatedCountries);
     };
     const handleRemoveCarCountry = (indexToRemove) => {
@@ -301,7 +369,7 @@ const Registration = () => {
             return false;
         }
 
-        return true; 
+        return true;
     };
 
     const isPaymentValid = () => {
@@ -669,7 +737,7 @@ const Registration = () => {
 
                                         <div className="d-flex align-items-start w-100">
                                             <label className="shipping-input-label">Do you ship Car ?<span className="text-danger">*</span></label>
-                                            <Form.Check 
+                                            <Form.Check
                                                 type="switch"
                                                 id="car"
                                                 checked={carService}
@@ -726,7 +794,7 @@ const Registration = () => {
                                     <div className="d-flex flex-column justify-content-start align-items-start w-100">
                                         <div className="d-flex align-items-start w-100">
                                             <label className="shipping-input-label">Do you offer groupage to transport goods?<span className="text-danger">*</span></label>
-                                            <Form.Check 
+                                            <Form.Check
                                                 type="switch"
                                                 id="groupage"
                                                 checked={groupageService}
