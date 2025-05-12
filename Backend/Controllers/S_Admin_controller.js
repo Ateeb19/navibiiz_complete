@@ -50,15 +50,28 @@ const Delete_any_company = (req, res) => {
     if (req.user.role === 'Sadmin') {
         const company_info = req.params.id;
         const [comapny_name, company_id] = company_info.split('_');
-        db.query(`DELETE FROM companies_info WHERE id = ${company_id}`, (err, result) => {
+        db.query(`SELECT created_by FROM companies_info WHERE id = ${company_id}`, (err, result) => {
             if (err) {
                 console.log(err);
             } else {
-                db.query(`DROP TABLE ${company_info}`, (err, result) => {
+                const created_by = result[0].created_by;
+                db.query(`DELETE FROM users WHERE email = '${created_by}'`, (err, result) => {
                     if (err) {
                         console.log(err);
                     } else {
-                        res.json({ message: 'Companyy Deleted success', status: true });
+                        db.query(`DELETE FROM companies_info WHERE id = ${company_id}`, (err, result) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                db.query(`DROP TABLE ${company_info}`, (err, result) => {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.json({ message: 'Companyy Deleted success', status: true });
+                                    }
+                                })
+                            }
+                        })
                     }
                 })
             }
@@ -512,5 +525,5 @@ module.exports = {
     total_commission,
     amount_to_pay,
     edit_company_documents,
-    
+
 };
