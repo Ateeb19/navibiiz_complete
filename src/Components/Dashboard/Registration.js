@@ -12,7 +12,10 @@ import Form from 'react-bootstrap/Form';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../alert/Alert_message";
-
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+import { Modal } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const DragAndDrop = ({ accept, onFileDrop, label }) => {
     const onDrop = useCallback(
@@ -57,23 +60,6 @@ const Registration = () => {
     const port = process.env.REACT_APP_SECRET;
     const navigate = useNavigate();
     const stepperRef = useRef(null);
-    // useEffect(() => {
-    //     const handleBeforeUnload = (event) => {
-    //         event.preventDefault(); 
-    //         const isConfirmed = window.confirm(
-    //             "The page is about to reload, and your form data will be reset. Do you want to continue?"
-    //         );
-    //         if (!isConfirmed) {
-    //             event.returnValue = "";
-    //         }
-    //     };
-    //     localStorage.setItem('valid', 'false');
-    //     window.addEventListener("beforeunload", handleBeforeUnload);
-    //     fetchToken();
-    //     return () => {
-    //         window.removeEventListener("beforeunload", handleBeforeUnload);
-    //     };
-    // }, []);
 
     const fetchToken = () => {
         axios
@@ -178,6 +164,13 @@ const Registration = () => {
                 );
 
             if (hasChanges) {
+                localStorage.setItem('valid', 'false');
+                axios.post(`${port}/user/delete_user`, { email: emailAddress })
+                .then((response) => {
+                    console.log(response.data);
+                }).catch((error) => {
+                    console.error('Error deleting user:', error);
+                });
                 event.preventDefault();
                 event.returnValue =
                     "The page is about to reload, and your form data will be reset. Do you want to continue?";
@@ -412,6 +405,17 @@ const Registration = () => {
             return '';
         }
     };
+    const [RegistrationDocument_selected, setRegistrationDocument_selected] = useState(null);
+    const [showPreview, setShowPreview] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
+
+    const handleZoomIn = () => {
+        setZoomLevel((prev) => Math.min(prev + 0.2, 3));
+    };
+
+    const handleZoomOut = () => {
+        setZoomLevel((prev) => Math.max(prev - 0.2, 0.5));
+    };
 
     const handleSubmit = async () => {
         try {
@@ -550,7 +554,6 @@ const Registration = () => {
     // };
 
 
-
     return (
         <div className="flex justify-content-start h-100vh">
             <Stepper linear desabled ref={stepperRef} onStepChange={(e) => setStep(e)} style={{ flexBasis: 'auto' }}>
@@ -607,7 +610,14 @@ const Registration = () => {
                             </div>
                             <div className="col-12 col-md-6 col-lg-4 mb-3 d-flex flex-column align-items-start">
                                 <label className="shipping-input-label">Contact Number <span className="text-danger">*</span></label>
-                                <input
+                                <PhoneInput
+                                    international
+                                    className="shipping-input-field-contact"
+                                    style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                    defaultCountry="DE"
+                                    value={contactNumber}
+                                    onChange={setContactNumber} />
+                                {/* <input
                                     className="shipping-input-field"
                                     type="tel"
                                     placeholder="Enter the company number"
@@ -615,7 +625,7 @@ const Registration = () => {
                                     onChange={(e) => setContactNumber(e.target.value)}
                                     style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                     required
-                                />
+                                /> */}
                             </div>
                         </div>
 
@@ -1085,14 +1095,37 @@ const Registration = () => {
                                 <div className="d-flex flex-md-column align-items-center justify-content-center mt-4 gap-5 w-100">
                                     <div className="w-100 text-start">
                                         <label className="shipping-input-label">Attach Registration Documents of the company</label>
-                                        <DragAndDrop
-                                            accept="application/pdf, image/jpeg"
-                                            onFileDrop={(file) => setRegistrationDocument(file)}
-                                            label="Drag and drop file to upload or Select file from folder (pdf, jpeg)"
-                                        />
-                                        <div className="d-flex align-items-start mb-4">
-                                            {RegistrationDocument && <label>Uploaded File -:  <span>{RegistrationDocument.name}</span></label>}
-                                        </div>
+                                        <>
+                                            <DragAndDrop
+                                                accept="application/pdf, image/jpeg"
+                                                onFileDrop={(file) => setRegistrationDocument(file)}
+                                                label="Drag and drop file to upload or Select file from folder (pdf, jpeg)"
+                                            />
+
+                                            {RegistrationDocument && (
+                                                <div className="d-flex align-items-start mb-4 flex-column">
+                                                    <label>Uploaded File:</label>
+                                                    {RegistrationDocument.type === 'application/pdf' ? (
+                                                        <span>{RegistrationDocument.name}</span>
+                                                    ) : (
+                                                        <div className="d-flex align-items-center mt-2">
+                                                            <img
+                                                                src={URL.createObjectURL(RegistrationDocument)}
+                                                                alt="Preview"
+                                                                style={{ width: '150px', height: 'auto', cursor: 'pointer' }}
+                                                                onClick={() => setShowPreview('registration')}
+                                                            />
+                                                            <button
+                                                                className="btn btn-danger btn-sm ms-3"
+                                                                onClick={() => setRegistrationDocument(null)}
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </>
 
                                         <label className="shipping-input-label">Attach Financial Documents of the company</label>
                                         <DragAndDrop
@@ -1100,9 +1133,29 @@ const Registration = () => {
                                             onFileDrop={(file) => setFinancialDocument(file)}
                                             label="Drag and drop file to upload or Select file from folder (pdf, jpeg)"
                                         />
-                                        <div className="d-flex align-items-start mb-4">
-                                            {FinancialDocument && <label>Uploaded File -:  <span>{FinancialDocument.name}</span></label>}
-                                        </div>
+                                        {FinancialDocument && (
+                                            <div className="d-flex align-items-start mb-4 flex-column">
+                                                <label>Uploaded File:</label>
+                                                {FinancialDocument.type === 'application/pdf' ? (
+                                                    <span>{FinancialDocument.name}</span>
+                                                ) : (
+                                                    <div className="d-flex align-items-center mt-2">
+                                                        <img
+                                                            src={URL.createObjectURL(FinancialDocument)}
+                                                            alt="Preview"
+                                                            style={{ width: '150px', height: 'auto', cursor: 'pointer' }}
+                                                            onClick={() => setShowPreview('financial')}
+                                                        />
+                                                        <button
+                                                            className="btn btn-danger btn-sm ms-3"
+                                                            onClick={() => setFinancialDocument(null)}
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
 
                                         <label className="shipping-input-label">Passport of CEO / MD of the company</label>
                                         <DragAndDrop
@@ -1110,9 +1163,57 @@ const Registration = () => {
                                             onFileDrop={(file) => setPassportCEO_MD(file)}
                                             label="Drag and drop file to upload or Select file from folder (pdf, jpeg)"
                                         />
-                                        <div className="d-flex align-items-start mb-4">
-                                            {PassportCEO_MD && <label>Uploaded File -:  <span>{PassportCEO_MD.name}</span></label>}
-                                        </div>
+                                        {PassportCEO_MD && (
+                                            <div className="d-flex align-items-start mb-4 flex-column">
+                                                <label>Uploaded File:</label>
+                                                {PassportCEO_MD.type === 'application/pdf' ? (
+                                                    <span>{PassportCEO_MD.name}</span>
+                                                ) : (
+                                                    <div className="d-flex align-items-center mt-2">
+                                                        <img
+                                                            src={URL.createObjectURL(PassportCEO_MD)}
+                                                            alt="Preview"
+                                                            style={{ width: '150px', height: 'auto', cursor: 'pointer' }}
+                                                            onClick={() => setShowPreview('passport')}
+                                                        />
+                                                        <button
+                                                            className="btn btn-danger btn-sm ms-3"
+                                                            onClick={() => setPassportCEO_MD(null)}
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {/* Shared Modal Preview for All */}
+                                        <Modal show={!!showPreview} onHide={() => setShowPreview(false)} centered size="xl">
+                                            <Modal.Header closeButton>
+                                                <Modal.Title>Image Preview</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body className="d-flex flex-column align-items-center justify-content-center" style={{ height: '80vh' }}>
+                                                <div style={{ overflow: 'auto', height: '100%', width: '100%' }} className="d-flex justify-content-center align-items-center">
+                                                    <img
+                                                        src={
+                                                            showPreview === 'registration'
+                                                                ? URL.createObjectURL(RegistrationDocument)
+                                                                : showPreview === 'financial'
+                                                                    ? URL.createObjectURL(FinancialDocument)
+                                                                    : showPreview === 'passport'
+                                                                        ? URL.createObjectURL(PassportCEO_MD)
+                                                                        : ''
+                                                        }
+                                                        alt="Zoomable Preview"
+                                                        style={{
+                                                            height: '100%',
+                                                            width: '100%',
+                                                            objectFit: 'contain'
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Modal.Body>
+                                        </Modal>
                                     </div>
                                 </div>
                             </>

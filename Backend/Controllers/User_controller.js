@@ -304,4 +304,16 @@ const comapny_details = (req, res) => {
         }
     });
 }
-module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password, total_number_orders, user_upcoming , comapny_details};
+
+const user_delete = (req, res) => {
+    const email = req.body.email;
+    db.query('DELETE FROM users WHERE email = ?', [email], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: 'user deleted success', status: true });
+        }
+    })
+}
+module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password, total_number_orders, user_upcoming , comapny_details, user_delete};
