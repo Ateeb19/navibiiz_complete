@@ -164,13 +164,7 @@ const Registration = () => {
                 );
 
             if (hasChanges) {
-                localStorage.setItem('valid', 'false');
-                axios.post(`${port}/user/delete_user`, { email: emailAddress })
-                .then((response) => {
-                    console.log(response.data);
-                }).catch((error) => {
-                    console.error('Error deleting user:', error);
-                });
+                localStorage.setItem('email_is', emailAddress);
                 event.preventDefault();
                 event.returnValue =
                     "The page is about to reload, and your form data will be reset. Do you want to continue?";
@@ -183,6 +177,7 @@ const Registration = () => {
 
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
+
         };
     }, [
         selectedImage,
@@ -207,6 +202,52 @@ const Registration = () => {
         paypal_id_check,
         locations
     ]);
+
+    useEffect(() => {
+        let isReload = false;
+
+        // Try modern way first
+        const navEntries = performance.getEntriesByType("navigation");
+        if (navEntries.length > 0 && navEntries[0].type === "reload") {
+            isReload = true;
+        }
+
+        // Fallback for older browsers
+        if (performance.navigation.type === 1) {
+            isReload = true;
+        }
+
+        if (isReload) {
+            const emailaddress = localStorage.getItem('email_is');
+            localStorage.setItem('valid', 'false');
+
+            axios.post(`${port}/user/delete_user`, { email: emailaddress })
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error deleting user:', error);
+                });
+            console.log('Page was reloaded');
+        }
+    }, []);
+
+
+    // useEffect(() => {
+    //     const navEntries = performance.getEntriesByType("navigation");
+    //     if (navEntries.length > 0 && navEntries[0].type === "reload") {
+    //         const emailaddress = localStorage.getItem('email_is');
+    //         localStorage.setItem('valid', 'false');
+    //         axios.post(`${port}/user/delete_user`, { email: emailaddress })
+    //             .then((response) => {
+    //                 console.log(response.data);
+    //             }).catch((error) => {
+    //                 console.error('Error deleting user:', error);
+    //             });
+    //         console.log('Page was reloaded');
+    //     }
+    // }, []);
+
 
     const handleAddLocation = () => {
         if (locations.length >= 10) {
