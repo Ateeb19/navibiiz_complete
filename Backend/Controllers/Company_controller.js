@@ -58,20 +58,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-
 const Company_Register = (req, res) => {
-    const fileHandler = upload.fields([
-        { name: 'selectedImage', maxCount: 1 },
-        { name: 'registrationDocument', maxCount: 1 },
-        { name: 'financialDocument', maxCount: 1 },
-        { name: 'passportCEO_MD', maxCount: 1 }
-    ]);
-
-    fileHandler(req, res, async (err) => {
-        if (err) {
-            return res.status(400).json({ message: 'File upload failed', error: err.message });
-        }
-
+    try {
         const {
             companyName,
             contactNumber,
@@ -83,42 +71,10 @@ const Company_Register = (req, res) => {
             iban_number,
             description,
             locations,
-            transportation
+            transportation,
+            files
         } = req.body;
 
-        const uploadToCloudinary = async (filePath) => {
-            return new Promise((resolve, reject) => {
-                cloudinary.uploader.upload(filePath, { folder: 'Documents' }, (error, result) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(result.secure_url);
-                    }
-                });
-            });
-        };
-        const uploadedFiles = {};
-
-        if (req.files && typeof req.files === 'object') {
-            for (const field in req.files) {
-                if (Object.prototype.hasOwnProperty.call(req.files, field)) {
-                    try {
-                        const filePath = req.files[field][0]?.path;
-                        if (filePath) {
-                            const url = await uploadToCloudinary(filePath);
-                            uploadedFiles[field] = url;
-                        } else {
-                            uploadedFiles[field] = '';
-                        }
-                    } catch (error) {
-                        console.error(`Error uploading ${field} to Cloudinary:`, error);
-                        uploadedFiles[field] = '';
-                    }
-                } else {
-                    uploadedFiles[field] = '';
-                }
-            }
-        }
         const sanitizeField = (field) => (field === null || field === undefined ? '' : field);
 
         const companyData = {
@@ -136,12 +92,13 @@ const Company_Register = (req, res) => {
             }),
             transportation: JSON.parse(transportation),
             files: {
-                registrationDocument: uploadedFiles.registrationDocument || '',
-                financialDocument: uploadedFiles.financialDocument || '',
-                passportCEO_MD: uploadedFiles.passportCEO_MD || '',
-                selectedImage: uploadedFiles.selectedImage || '',
+                registrationDocument: files?.registrationDocument || '',
+                financialDocument: files?.financialDocument || '',
+                passportCEO_MD: files?.passportCEO_MD || '',
+                selectedImage: files?.selectedImage || '',
             },
         };
+
         const sqlData = {
             location1: companyData.locations[0] || '',
             location2: companyData.locations[1] || '',
@@ -160,64 +117,270 @@ const Company_Register = (req, res) => {
             password: companyData.password,
             paypal_id: companyData.paypal_id,
             account_number: companyData.account_number,
-            iban_number: companyData.iban_number,  
+            iban_number: companyData.iban_number,
             description: companyData.description,
             transportation: companyData.transportation,
             files: companyData.files,
         };
 
-        db.query('INSERT INTO companies_info SET ?', { created_by: sqlData.emailAddress, user_role: 'admin', company_name: sqlData.companyName, contact_person_name: sqlData.contact_person_name, email: sqlData.emailAddress, paypal_id: sqlData.paypal_id, account_holder_name: sqlData.account_number, iban_number: sqlData.iban_number, contect_no: sqlData.contactNumber, description: sqlData.description, logo: sqlData.files.selectedImage, location1: sqlData.location1, location2: sqlData.location2, location3: sqlData.location3, location4: sqlData.location4, location5: sqlData.location5, location6: sqlData.location6, location7: sqlData.location7, location8: sqlData.location8, location9: sqlData.location9, location10: sqlData.location10, container_service: sqlData.transportation.containerService, groupage_service: sqlData.transportation.groupageService, car_service: sqlData.transportation.carService, registrationDocument: sqlData.files.registrationDocument, financialDocument: sqlData.files.financialDocument, passport_CEO_MD: sqlData.files.passportCEO_MD }, (err, result1) => {
-            if (err) {
-                res.json({ message: 'Error in database', status: false });
-                console.log(err);
-            } else {
-                db.query('CREATE TABLE ' + 'company' + '_' + result1.insertId + '(id INT AUTO_INCREMENT PRIMARY KEY, countries VARCHAR(255), duration VARCHAR(255), service_type VARCHAR(255));', (err, result2) => {
-                    if (err) {
-                        res.json({ message: 'Error in creating table', status: false });
-                    } else {
-                        if (sqlData.transportation.containerService === true) {
-                            sqlData.transportation.selectedContainerCountries.map((country) => {
-                                db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'container' }, (err, result001) => {
-                                    if (err) {
-                                        console.log('error in cpmanyName table', err);
-                                    }
+        db.query(
+            'INSERT INTO companies_info SET ?',
+            {
+                created_by: sqlData.emailAddress,
+                user_role: 'admin',
+                company_name: sqlData.companyName,
+                contact_person_name: sqlData.contact_person_name,
+                email: sqlData.emailAddress,
+                paypal_id: sqlData.paypal_id,
+                account_holder_name: sqlData.account_number,
+                iban_number: sqlData.iban_number,
+                contect_no: sqlData.contactNumber,
+                description: sqlData.description,
+                logo: sqlData.files.selectedImage,
+                location1: sqlData.location1,
+                location2: sqlData.location2,
+                location3: sqlData.location3,
+                location4: sqlData.location4,
+                location5: sqlData.location5,
+                location6: sqlData.location6,
+                location7: sqlData.location7,
+                location8: sqlData.location8,
+                location9: sqlData.location9,
+                location10: sqlData.location10,
+                container_service: sqlData.transportation.containerService,
+                groupage_service: sqlData.transportation.groupageService,
+                car_service: sqlData.transportation.carService,
+                registrationDocument: sqlData.files.registrationDocument,
+                financialDocument: sqlData.files.financialDocument,
+                passport_CEO_MD: sqlData.files.passportCEO_MD
+            },
+            (err, result1) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json({ message: 'Error in database', status: false });
+                }
 
-                                });
-                            });
+                const companyTable = `company_${result1.insertId}`;
+                db.query(
+                    `CREATE TABLE ${companyTable} (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        countries VARCHAR(255),
+                        duration VARCHAR(255),
+                        service_type VARCHAR(255)
+                    );`,
+                    (err) => {
+                        if (err) {
+                            return res.status(500).json({ message: 'Error in creating table', status: false });
                         }
-                        if (sqlData.transportation.carService === true) {
-                            sqlData.transportation.selectedCarCountries.map((country) => {
-                                db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'car' }, (err, result002) => {
-                                    if (err) {
-                                        console.log('error in cpmanyName table', err);
-                                    }
 
-                                });
-                            });
-                        }
-                        if (sqlData.transportation.groupageService === true) {
-                            sqlData.transportation.selectedGroupageCountries.map((country) => {
-                                db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'groupage' }, (err, result003) => {
-                                    if (err) {
-                                        console.log('error in cpmanyName table', err);
+                        const insertCountryData = (countries, type) => {
+                            countries.forEach((country) => {
+                                db.query(
+                                    `INSERT INTO ${companyTable} SET ?`,
+                                    {
+                                        countries: country.country,
+                                        duration: country.deliveryTime,
+                                        service_type: type
+                                    },
+                                    (err) => {
+                                        if (err) console.log(`Error in company table (${type}):`, err);
                                     }
-
-                                });
+                                );
                             });
-                        }
-                        db.query('UPDATE users SET role = ?, company = ? WHERE email = ?', ['admin','yes', sqlData.emailAddress], (err, result) => {
-                            if (err) {
-                                console.log(err);
+                        };
+
+                        if (sqlData.transportation.containerService)
+                            insertCountryData(sqlData.transportation.selectedContainerCountries, 'container');
+
+                        if (sqlData.transportation.carService)
+                            insertCountryData(sqlData.transportation.selectedCarCountries, 'car');
+
+                        if (sqlData.transportation.groupageService)
+                            insertCountryData(sqlData.transportation.selectedGroupageCountries, 'groupage');
+
+                        db.query(
+                            'UPDATE users SET role = ?, company = ? WHERE email = ?',
+                            ['admin', 'yes', sqlData.emailAddress],
+                            (err) => {
+                                if (err) console.log('User update error:', err);
                             }
-                        })
-                        res.json({ message: 'Company registered successfully', data: sqlData });
+                        );
+
+                        return res.status(200).json({
+                            message: 'Company registered successfully',
+                            data: sqlData
+                        });
                     }
-                });
-                deleteAllFilse(directoryPath);
+                );
             }
-        });
-    });
+        );
+    } catch (error) {
+        console.error('Server error:', error);
+        return res.status(500).json({ message: 'Server error', error });
+    }
 };
+
+
+
+// const Company_Register = (req, res) => {
+//     const fileHandler = upload.fields([
+//         { name: 'selectedImage', maxCount: 1 },
+//         { name: 'registrationDocument', maxCount: 1 },
+//         { name: 'financialDocument', maxCount: 1 },
+//         { name: 'passportCEO_MD', maxCount: 1 }
+//     ]);
+
+//     fileHandler(req, res, async (err) => {
+//         if (err) {
+//             return res.status(400).json({ message: 'File upload failed', error: err.message });
+//         }
+
+//         const {
+//             companyName,
+//             contactNumber,
+//             contact_person_name,
+//             emailAddress,
+//             password,
+//             paypal_id,
+//             account_number,
+//             iban_number,
+//             description,
+//             locations,
+//             transportation
+//         } = req.body;
+
+//         const uploadToCloudinary = async (filePath) => {
+//             return new Promise((resolve, reject) => {
+//                 cloudinary.uploader.upload(filePath, { folder: 'Documents' }, (error, result) => {
+//                     if (error) {
+//                         reject(error);
+//                     } else {
+//                         resolve(result.secure_url);
+//                     }
+//                 });
+//             });
+//         };
+//         const uploadedFiles = {};
+
+//         if (req.files && typeof req.files === 'object') {
+//             for (const field in req.files) {
+//                 if (Object.prototype.hasOwnProperty.call(req.files, field)) {
+//                     try {
+//                         const filePath = req.files[field][0]?.path;
+//                         if (filePath) {
+//                             const url = await uploadToCloudinary(filePath);
+//                             uploadedFiles[field] = url;
+//                         } else {
+//                             uploadedFiles[field] = '';
+//                         }
+//                     } catch (error) {
+//                         console.error(`Error uploading ${field} to Cloudinary:`, error);
+//                         uploadedFiles[field] = '';
+//                     }
+//                 } else {
+//                     uploadedFiles[field] = '';
+//                 }
+//             }
+//         }
+//         const sanitizeField = (field) => (field === null || field === undefined ? '' : field);
+
+//         const companyData = {
+//             companyName: sanitizeField(companyName),
+//             contactNumber: sanitizeField(contactNumber),
+//             contact_person_name: sanitizeField(contact_person_name),
+//             emailAddress: sanitizeField(emailAddress),
+//             password: sanitizeField(password),
+//             paypal_id: sanitizeField(paypal_id),
+//             account_number: sanitizeField(account_number),
+//             iban_number: sanitizeField(iban_number),
+//             description: sanitizeField(description),
+//             locations: JSON.parse(locations).map((loc) => {
+//                 return `${sanitizeField(loc.country)}, ${sanitizeField(loc.state)}, ${sanitizeField(loc.city)}`;
+//             }),
+//             transportation: JSON.parse(transportation),
+//             files: {
+//                 registrationDocument: uploadedFiles.registrationDocument || '',
+//                 financialDocument: uploadedFiles.financialDocument || '',
+//                 passportCEO_MD: uploadedFiles.passportCEO_MD || '',
+//                 selectedImage: uploadedFiles.selectedImage || '',
+//             },
+//         };
+//         const sqlData = {
+//             location1: companyData.locations[0] || '',
+//             location2: companyData.locations[1] || '',
+//             location3: companyData.locations[2] || '',
+//             location4: companyData.locations[3] || '',
+//             location5: companyData.locations[4] || '',
+//             location6: companyData.locations[5] || '',
+//             location7: companyData.locations[6] || '',
+//             location8: companyData.locations[7] || '',
+//             location9: companyData.locations[8] || '',
+//             location10: companyData.locations[9] || '',
+//             companyName: companyData.companyName,
+//             contactNumber: companyData.contactNumber,
+//             contact_person_name: companyData.contact_person_name,
+//             emailAddress: companyData.emailAddress,
+//             password: companyData.password,
+//             paypal_id: companyData.paypal_id,
+//             account_number: companyData.account_number,
+//             iban_number: companyData.iban_number,  
+//             description: companyData.description,
+//             transportation: companyData.transportation,
+//             files: companyData.files,
+//         };
+
+//         db.query('INSERT INTO companies_info SET ?', { created_by: sqlData.emailAddress, user_role: 'admin', company_name: sqlData.companyName, contact_person_name: sqlData.contact_person_name, email: sqlData.emailAddress, paypal_id: sqlData.paypal_id, account_holder_name: sqlData.account_number, iban_number: sqlData.iban_number, contect_no: sqlData.contactNumber, description: sqlData.description, logo: sqlData.files.selectedImage, location1: sqlData.location1, location2: sqlData.location2, location3: sqlData.location3, location4: sqlData.location4, location5: sqlData.location5, location6: sqlData.location6, location7: sqlData.location7, location8: sqlData.location8, location9: sqlData.location9, location10: sqlData.location10, container_service: sqlData.transportation.containerService, groupage_service: sqlData.transportation.groupageService, car_service: sqlData.transportation.carService, registrationDocument: sqlData.files.registrationDocument, financialDocument: sqlData.files.financialDocument, passport_CEO_MD: sqlData.files.passportCEO_MD }, (err, result1) => {
+//             if (err) {
+//                 res.json({ message: 'Error in database', status: false });
+//                 console.log(err);
+//             } else {
+//                 db.query('CREATE TABLE ' + 'company' + '_' + result1.insertId + '(id INT AUTO_INCREMENT PRIMARY KEY, countries VARCHAR(255), duration VARCHAR(255), service_type VARCHAR(255));', (err, result2) => {
+//                     if (err) {
+//                         res.json({ message: 'Error in creating table', status: false });
+//                     } else {
+//                         if (sqlData.transportation.containerService === true) {
+//                             sqlData.transportation.selectedContainerCountries.map((country) => {
+//                                 db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'container' }, (err, result001) => {
+//                                     if (err) {
+//                                         console.log('error in cpmanyName table', err);
+//                                     }
+
+//                                 });
+//                             });
+//                         }
+//                         if (sqlData.transportation.carService === true) {
+//                             sqlData.transportation.selectedCarCountries.map((country) => {
+//                                 db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'car' }, (err, result002) => {
+//                                     if (err) {
+//                                         console.log('error in cpmanyName table', err);
+//                                     }
+
+//                                 });
+//                             });
+//                         }
+//                         if (sqlData.transportation.groupageService === true) {
+//                             sqlData.transportation.selectedGroupageCountries.map((country) => {
+//                                 db.query('INSERT INTO ' + 'company' + '_' + result1.insertId + ' SET ?', { countries: country.country, duration: country.deliveryTime, service_type: 'groupage' }, (err, result003) => {
+//                                     if (err) {
+//                                         console.log('error in cpmanyName table', err);
+//                                     }
+
+//                                 });
+//                             });
+//                         }
+//                         db.query('UPDATE users SET role = ?, company = ? WHERE email = ?', ['admin','yes', sqlData.emailAddress], (err, result) => {
+//                             if (err) {
+//                                 console.log(err);
+//                             }
+//                         })
+//                         res.json({ message: 'Company registered successfully', data: sqlData });
+//                     }
+//                 });
+//                 deleteAllFilse(directoryPath);
+//             }
+//         });
+//     });
+// };
 
 
 //update company

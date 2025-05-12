@@ -392,73 +392,162 @@ const Registration = () => {
     }
 
     const [congrat, setCongrat] = useState(false);
-    const handleSubmit = async () => {
-        const formData = new FormData();
-        formData.append('companyName', companyName);
-        formData.append('contactNumber', contactNumber);
-        formData.append('contact_person_name', contact_person_name);
-        formData.append('emailAddress', emailAddress);
-        formData.append('password', password);
-        formData.append('paypal_id', paypal_id);
-        formData.append('account_number', account_number);
-        formData.append('iban_number', iban_number);
-        formData.append('description', description);
-        formData.append('locations', JSON.stringify(locations));
-        if (selectedFile) {
-            formData.append('selectedImage', selectedFile);
-        }
-        formData.append('transportation', JSON.stringify({
-            containerService,
-            selectedContainerCountries,
-            carService,
-            selectedCarCountries,
-            groupageService,
-            selectedGroupageCountries
-        }));
-        if (RegistrationDocument) {
-            formData.append('registrationDocument', RegistrationDocument);
-        }
-        if (FinancialDocument) {
-            formData.append('financialDocument', FinancialDocument);
-        }
-        if (PassportCEO_MD) {
-            formData.append('passportCEO_MD', PassportCEO_MD);
-        }
 
-        axios.post(`${port}/company/regester_company`, formData,
-            {
+    // Utility function to upload a file to Cloudinary
+    const uploadToCloudinary = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'company_upload'); // Replace with your Cloudinary upload preset
+
+        try {
+            const response = await fetch('https://api.cloudinary.com/v1_1/dizzgvtgf/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            return data.secure_url; // The final hosted file URL
+        } catch (err) {
+            console.error('Cloudinary upload failed:', err);
+            return '';
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            // 1. Upload each file to Cloudinary (if it exists)
+            const imageUrl = selectedFile ? await uploadToCloudinary(selectedFile) : '';
+            const regDocUrl = RegistrationDocument ? await uploadToCloudinary(RegistrationDocument) : '';
+            const finDocUrl = FinancialDocument ? await uploadToCloudinary(FinancialDocument) : '';
+            const passportUrl = PassportCEO_MD ? await uploadToCloudinary(PassportCEO_MD) : '';
+
+            // 2. Build JSON object with Cloudinary URLs and all form fields
+            const formData = {
+                companyName,
+                contactNumber,
+                contact_person_name,
+                emailAddress,
+                password,
+                paypal_id,
+                account_number,
+                iban_number,
+                description,
+                locations: JSON.stringify(locations),
+                transportation: JSON.stringify({
+                    containerService,
+                    selectedContainerCountries,
+                    carService,
+                    selectedCarCountries,
+                    groupageService,
+                    selectedGroupageCountries
+                }),
+                files: {
+                    selectedImage: imageUrl,
+                    registrationDocument: regDocUrl,
+                    financialDocument: finDocUrl,
+                    passportCEO_MD: passportUrl
+                }
+            };
+
+            console.log('Form Data:', formData);
+            // 3. Send data to backend via Axios
+            const response = await axios.post(`${port}/company/regester_company`, formData, {
                 headers: {
                     Authorization: token,
-                    'Content-Type': 'multipart/form-data',
-                }
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    showAlert('Data submited Successfully!');
-                } else {
-                    showAlert('Error submitting data');
-                }
-                setCongrat(true);
-            })
-            .catch(error => {
-                if (error.response) {
-                    console.error("Server Error:", error.response.data);
-                    console.error("Status Code:", error.response.status);
-                    showAlert(`Error: ${error.response.status} - ${error.response.data.message || "Server error"}`);
-                } else if (error.request) {
-                    console.error("No response received from server");
-                    showAlert("No response from server");
-                } else {
-                    console.error("Error setting up the request", error.message);
-                    showAlert("Error setting up request");
+                    'Content-Type': 'application/json',
                 }
             });
 
-        // .catch(error => {
-        //     console.error('Error:', error);
-        //     showAlert('You are Offline! Please Connect to Internet');
-        // });
+            if (response.status === 200) {
+                showAlert('Data submitted successfully!');
+                setCongrat(true);
+            } else {
+                showAlert('Error submitting data');
+            }
+
+        } catch (error) {
+            if (error.response) {
+                console.error("Server Error:", error.response.data);
+                console.error("Status Code:", error.response.status);
+                showAlert(`Error: ${error.response.status} - ${error.response.data.message || "Server error"}`);
+            } else if (error.request) {
+                console.error("No response received from server");
+                showAlert("No response from server");
+            } else {
+                console.error("Error setting up the request", error.message);
+                showAlert("Error setting up request");
+            }
+        }
     };
+
+    // const [congrat, setCongrat] = useState(false);
+    // const handleSubmit = async () => {
+    //     const formData = new FormData();
+    //     formData.append('companyName', companyName);
+    //     formData.append('contactNumber', contactNumber);
+    //     formData.append('contact_person_name', contact_person_name);
+    //     formData.append('emailAddress', emailAddress);
+    //     formData.append('password', password);
+    //     formData.append('paypal_id', paypal_id);
+    //     formData.append('account_number', account_number);
+    //     formData.append('iban_number', iban_number);
+    //     formData.append('description', description);
+    //     formData.append('locations', JSON.stringify(locations));
+    //     if (selectedFile) {
+    //         formData.append('selectedImage', selectedFile);
+    //     }
+    //     formData.append('transportation', JSON.stringify({
+    //         containerService,
+    //         selectedContainerCountries,
+    //         carService,
+    //         selectedCarCountries,
+    //         groupageService,
+    //         selectedGroupageCountries
+    //     }));
+    //     if (RegistrationDocument) {
+    //         formData.append('registrationDocument', RegistrationDocument);
+    //     }
+    //     if (FinancialDocument) {
+    //         formData.append('financialDocument', FinancialDocument);
+    //     }
+    //     if (PassportCEO_MD) {
+    //         formData.append('passportCEO_MD', PassportCEO_MD);
+    //     }
+
+    //     axios.post(`${port}/company/regester_company`, formData,
+    //         {
+    //             headers: {
+    //                 Authorization: token,
+    //                 'Content-Type': 'multipart/form-data',
+    //             }
+    //         })
+    //         .then(response => {
+    //             if (response.status === 200) {
+    //                 showAlert('Data submited Successfully!');
+    //             } else {
+    //                 showAlert('Error submitting data');
+    //             }
+    //             setCongrat(true);
+    //         })
+    //         .catch(error => {
+    //             if (error.response) {
+    //                 console.error("Server Error:", error.response.data);
+    //                 console.error("Status Code:", error.response.status);
+    //                 showAlert(`Error: ${error.response.status} - ${error.response.data.message || "Server error"}`);
+    //             } else if (error.request) {
+    //                 console.error("No response received from server");
+    //                 showAlert("No response from server");
+    //             } else {
+    //                 console.error("Error setting up the request", error.message);
+    //                 showAlert("Error setting up request");
+    //             }
+    //         });
+
+    //     // .catch(error => {
+    //     //     console.error('Error:', error);
+    //     //     showAlert('You are Offline! Please Connect to Internet');
+    //     // });
+    // };
 
 
 
