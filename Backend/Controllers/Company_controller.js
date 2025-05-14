@@ -562,7 +562,7 @@ const display_company = async (req, res) => {
 
         for (const element of result1) {
             const name = `company_${element.id}`;
-
+            const created_by = element.created_by;
             try {
                 const countries = await new Promise((resolve, reject) => {
                     db.query(`SELECT * FROM \`${name}\``, (err, data) => {
@@ -574,6 +574,18 @@ const display_company = async (req, res) => {
             } catch (err) {
                 console.error(`Error fetching countries for ${name}:`, err);
                 element.Countries = []; // Set to empty array on error
+            }
+            try{
+                const total_delivery = await new Promise((resolve, reject) => {
+                    db.query (`SELECT COUNT(*) AS total_delivery FROM offers WHERE status = 'complete' AND created_by_email = ?`, [created_by], (err, data) => {
+                        if(err) return reject(err);
+                        resolve(data);
+                    });
+                });
+                element.total_delivery = total_delivery[0].total_delivery;
+            } catch(err) {
+                console.error('Error fetching total delivery:', err);
+                element.total_delivery = 0;
             }
         }
 

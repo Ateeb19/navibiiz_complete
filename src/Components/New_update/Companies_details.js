@@ -98,7 +98,7 @@ const CompanyDetails = () => {
                             <div className="p-4 company-details-wrap my-4 gap-3 d-flex flex-column">
                                 <h4>Company Information</h4>
                                 <span className="text-secondary d-block">
-                                    <FaUserEdit className="fs-5 me-1" style={{ color: '#de8316' }} /> Completed 10k+ Orders
+                                    <FaUserEdit className="fs-5 me-1" style={{ color: '#de8316' }} /> Completed {company.total_delivery} Orders
                                 </span>
                                 <span className="text-secondary d-block">
                                     <FaLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Based in{" "}

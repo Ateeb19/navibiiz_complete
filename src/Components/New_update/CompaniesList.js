@@ -395,7 +395,7 @@ const CompaniesList = () => {
                                                                     <FaLocationDot className='fs-4 pe-1 ' style={{ color: '#de8316' }} /> <span className="text-secondary">{item.location1.split(",")[0].trim()}</span>
                                                                 </div>
                                                                 <div className="pe-3 border-end border-1">
-                                                                    <FaTruckLoading className='fs-4 pe-1    ' style={{ color: '#de8316' }} /> <span className="text-secondary">2k+ Delivery Completed</span>
+                                                                    <FaTruckLoading className='fs-4 pe-1    ' style={{ color: '#de8316' }} /> <span className="text-secondary">{item.total_delivery} Delivery Completed</span>
                                                                 </div>
                                                                 <div className="pe-3">
                                                                     <FaTruckMoving className='fs-4 pe-1 ' style={{ color: '#de8316' }} /> <span className="text-secondary">Offers {item.container_service ? 'Containers' : ''}{item.car_service ? ' & Cars' : ''}</span>
