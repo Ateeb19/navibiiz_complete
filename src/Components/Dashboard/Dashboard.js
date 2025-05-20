@@ -4,12 +4,12 @@ import { Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
-import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown, MdSwitchAccount, MdAlternateEmail, MdOutlineKey, MdFileDownload } from "react-icons/md";
-import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag } from "react-icons/fa6";
+import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown, MdSwitchAccount, MdAlternateEmail, MdOutlineKey, MdFileDownload, MdPermContactCalendar, MdOutlineDateRange } from "react-icons/md";
+import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag, FaSackDollar } from "react-icons/fa6";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck, FaPassport, FaBuilding } from "react-icons/fa";
-import { PiShippingContainerDuotone } from "react-icons/pi";
-import { BsCarFrontFill, BsBuildingsFill, BsBank2 } from "react-icons/bs";
+import { FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck, FaPassport, FaBuilding, FaUserAlt } from "react-icons/fa";
+import { PiContactlessPaymentFill, PiHandCoinsBold, PiShippingContainerDuotone } from "react-icons/pi";
+import { BsCarFrontFill, BsBuildingsFill, BsBank2, BsBuildingFillCheck } from "react-icons/bs";
 import { IoIosMailOpen, IoMdDocument } from "react-icons/io";
 import CountriesSelector from "./Countries_selector";
 import { IoStar, IoCall } from "react-icons/io5";
@@ -498,6 +498,20 @@ const Dashboard = () => {
     }
   }
 
+  const [payment_search, setPayment_search] = useState('');
+  const [payment_date, setPayment_date] = useState('');
+
+  const filteredPayments = S_admin_payment.filter((item) => {
+    const matchesSearch = payment_search === "" ||
+      item.transaction_id?.toLowerCase().includes(payment_search.toLowerCase()) ||
+      item.offer_id?.toString().includes(payment_search) ||
+      item.payment_info_amount?.toString().includes(payment_search);
+
+    const matchesDate = payment_date === "" ||
+      (item.payment_time && new Date(item.payment_time).toISOString().split("T")[0] === payment_date);
+
+    return matchesSearch && matchesDate;
+  });
 
 
   const handleViewClick = async (company) => {
@@ -831,6 +845,27 @@ const Dashboard = () => {
       }).catch((err) => { console.log(err) });
     }
   }
+
+const [offersearch, setOffersearch] = useState('');
+const [offerdate, setOfferdate] = useState('');
+
+const filteredOffers = allOffers.filter((item) => {
+  const matchesSearch = offersearch === "" || (
+    item.offer_id?.toString().includes(offersearch) ||
+    item.product_name?.toLowerCase().includes(offersearch.toLowerCase()) ||
+    item.userName?.toLowerCase().includes(offersearch.toLowerCase()) ||
+    item.company_name?.toLowerCase().includes(offersearch.toLowerCase()) ||
+    ((parseFloat(item.amount) || 0) + 
+     (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission)))
+      .toString()
+      .includes(offersearch)
+  );
+
+  const matchesDate = offerdate === "" ||
+    (item.created_at && new Date(item.created_at).toISOString().split("T")[0] === offerdate);
+
+  return matchesSearch && matchesDate;
+});
 
   const [edit_company, setEdit_company] = useState(false);
   const handle_edit_company = (company) => {
@@ -1178,6 +1213,36 @@ const Dashboard = () => {
     components: "buttons",
   };
 
+  const commission_percentage = 1.3;
+  const [payment_details, setPayment_details] = useState('');
+  const S_admin_payment_status = (item) => {
+    axios.post(`${port}/s_admin/payment_information`,
+      {
+        user_email: item.user_email,
+        offer_id: item.offer_id,
+      },
+      {
+        headers: {
+          Authorization: token,
+        }
+      }
+    )
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status === true) {
+          const combinedDetails = {
+            ...item,
+            ...response.data.message
+          };
+          setPayment_details(combinedDetails);
+        } else {
+          setPayment_details(null);
+        }
+      })
+      .catch((err) => {
+        console.error('API error:', err);
+      });
+  };
 
 
   const Menu = () => {
@@ -2497,7 +2562,6 @@ const Dashboard = () => {
                           <th scope="col"><h6>Paypal Id</h6></th>
                           <th scope="col"><h6>Offer Id</h6></th>
                           <th scope="col"><h6>Amount ($)</h6></th>
-                          <th scope="col"><h6>Status</h6></th>
                         </tr>
                       </thead>
                       {user_payment_history && user_payment_history.length > 0 ? (
@@ -2509,7 +2573,6 @@ const Dashboard = () => {
                               <td className="text-secondary">{item.paypal_id}</td>
                               <td className="text-secondary">{item.offer_id}</td>
                               <td className="text-secondary">{item.payment_info_amount}</td>
-                              <td className="text-secondary">{item.payment_info_status}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -3145,7 +3208,8 @@ const Dashboard = () => {
                           showAlert(`Transaction successful: ${res.data.transaction_ID}`);
                         }
                       }).catch((err) => { console.log(err) });
-                    }}>test payment button</button> */}
+                    }}>test payment button</button>
+                     */}
                     <div className="d-flex flex-column w-100 justify-content-center align-items-center">
                       <PaypalPayment
                         key={selected_offer?.offer_id}
@@ -3330,7 +3394,7 @@ const Dashboard = () => {
                           {[
                             { icon: <FaPhoneAlt />, label: 'Contact Number', value: selectedCompany.contect_no },
                             { icon: <MdEmail />, label: 'Email ID', value: selectedCompany.email },
-                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1? selectedCompany.location1.split(",")[0].trim() : 'Location' },
+                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1 ? selectedCompany.location1.split(",")[0].trim() : 'Location' },
                           ].map((item, index) => {
                             const isEditable = edit_company && index !== 1;
                             return (
@@ -4002,53 +4066,56 @@ const Dashboard = () => {
                     <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
                       <h5>Filter By:</h5>
                       <div className="row w-100 g-2 mt-1 ">
-                        <div className="col-12 col-md-6 col-lg-3">
-                          <input type="text" className="shipping-input-field" placeholder="Search here..." />
+                        <div className="col-12 col-md-6 col-lg-8">
+                          <input type="text" className="shipping-input-field" placeholder="Search here..." onChange={(e) => setOffersearch(e.target.value)} value={offersearch} />
                         </div>
-                        <div className="col-12 col-md-6 col-lg-3">
-                          <CountriesSelector label="Pick Up Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-3">
-                          <CountriesSelector label="Destination Country" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-3 position-relative">
-                          <input type="date" className="shipping-input-field" placeholder="Pick up date" />
+
+                        <div className="col-12 col-md-6 col-lg-4 position-relative">
+                          <input type="date" className="shipping-input-field" placeholder="Pick up date" onChange={(e) => setOfferdate(e.target.value)} value={offerdate}/>
                         </div>
                       </div>
                     </div>
-
-
 
                     <div className="table-responsive w-100">
 
                       <table className="table">
                         <thead>
                           <tr>
-                            <th scope="col"><h6>Order Id</h6></th>
+                            <th scope="col"><h6>Offer Id</h6></th>
                             <th scope="col"><h6>Product Name</h6></th>
+                            <th scope="col"><h6>Date</h6></th>
                             <th scope="col"><h6>Offer Created By</h6></th>
                             <th scope="col"><h6>Price ($)</h6></th>
-                            <th scope="col"><h6>Offer Received By</h6></th>
-                            <th scope="col"><h6>Payment Status ($)</h6></th>
+                            <th scope="col"><h6>Offer From</h6></th>
+                            {/* <th scope="col"><h6>Payment Status ($)</h6></th> */}
                           </tr>
                         </thead>
                         <tbody>
                           {allOffers && allOffers.length > 0 ? (
-                            allOffers.map((item, index) => (
+                            filteredOffers.map((item, index) => (
                               <tr key={index}>
-                                <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => show_offer_details(item)}>#{item.offer_id}</td>
+                                <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => {
+                                  if (item.status === 'rejected') {
+                                    showAlert("The offer is rejected");
+                                    return;
+                                  }
+                                  show_offer_details(item)
+                                }}>#{item.offer_id}</td>
                                 <td className="text-secondary">{item.product_name}</td>
-                                <td className="text-secondary">{item.groupage_created_by}</td>
-                                <td className="text-dark"><b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></td>
-                                <td className="text-secondary">{item.created_by_email}</td>
                                 <td className="text-secondary">
-                                  <span
-                                    className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : 'text-success'}`}
-                                    style={{ backgroundColor: item.status === 'pending' ? 'rgb(255, 242, 128)' : 'rgb(145, 255, 128)' }}
-                                  >
-                                    {item.status === 'pending' ? 'Pending' : 'Success'}
-                                  </span>
+                                  {item.created_at ? new Date(item.created_at).toISOString().split("T")[0] : ""}
                                 </td>
+                                <td className="text-secondary">{item.userName}</td>
+                                <td className="text-dark"><b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></td>
+                                <td className="text-secondary">{item.company_name}</td>
+                                {/* <td className="text-secondary">
+                                  <span
+                                    className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : item.status === 'rejected' ? 'text-danger' : 'text-success'}`}
+                                    style={{ backgroundColor: item.status === 'pending' ? 'rgb(255, 242, 128)' : item.status === 'rejected' ? 'rgb(255, 128, 128)' : 'rgb(145, 255, 128)' }}
+                                  >
+                                    {item.status === 'pending' ? 'Pending' : item.status === 'rejected' ? 'Rejected' : 'Success'}
+                                  </span>
+                                </td> */}
                               </tr>
                             ))
                           ) : (
@@ -4116,12 +4183,12 @@ const Dashboard = () => {
                     ],
                     [
                       { icon: <SiAnytype />, label: "Paid By", value: showOfferDetails.user_email ? showOfferDetails.user_email : 'N/A' },
-                      { icon: <FaWeightScale />, label: "Paypal ID", value: showOfferDetails.paypal_id ? showOfferDetails.paypal_id : 'N/A' },
-                      { icon: <RiExpandHeightFill />, label: "Offers Received ", value: showOfferDetails.accepted === '1' ? 'Yes' : 'No' }
+                      { icon: <FaWeightScale />, label: "Transaction ID", value: showOfferDetails.transaction_id ? showOfferDetails.transaction_id : 'N/A' },
+                      { icon: <RiExpandHeightFill />, label: "Offer Status ", value: showOfferDetails.status === 'pending' ? 'Pending' : showOfferDetails.status === 'rejected' ? 'Rejected' : 'Success' }
                     ],
                     [
                       { icon: <SiAnytype />, label: "Company Name", value: showOfferDetails.company_name },
-                      { icon: <FaWeightScale />, label: "Contact Number", value: showOfferDetails.contect_no },
+                      { icon: <FaWeightScale />, label: "Company Contact Number", value: showOfferDetails.contect_no },
                       { icon: <RiExpandHeightFill />, label: "Company Email ID", value: showOfferDetails.created_by_email ? showOfferDetails.created_by_email : 'N/A' }
                     ]
                   ].map((row, index) => (
@@ -4582,48 +4649,147 @@ const Dashboard = () => {
                   <label className="fs-3"><strong>Payment History</strong></label>
                 </div>
               </div>
+
               <div className="dashboard-wrapper-box">
                 <div className="table-wrap">
-                  <div className="table-responsive" style={{
-                    width: "100%",
-                    overflowX: "auto",
-                    whiteSpace: "nowrap",
-                  }}>
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th scope="col"><h6>Order Id</h6></th>
-                          <th scope="col"><h6>Transaction Id</h6></th>
-                          <th scope="col"><h6>Paypal Id</h6></th>
-                          <th scope="col"><h6>Offer Id</h6></th>
-                          <th scope="col"><h6>Amount ($)</h6></th>
-                          <th scope="col"><h6>Status</h6></th>
-                        </tr>
-                      </thead>
-                      {S_admin_payment && S_admin_payment.length > 0 ? (
-                        <tbody>
-                          {S_admin_payment.map((item, index) => (
-                            <tr key={index}>
-                              <td className="text-secondary">{item.order_id}</td>
-                              <td className="text-secondary">{item.transaction_id}</td>
-                              <td className="text-secondary">{item.paypal_id}</td>
-                              <td className="text-secondary">{item.offer_id}</td>
-                              <td className="text-secondary">{item.payment_info_amount}</td>
-                              <td className="text-secondary">{item.payment_info_status}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      ) : (
-                        <tbody>
+                  <div className="table-filter-wrap">
+                    <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
+                      <h5>Filter By:</h5>
+                      <div className="row w-100 g-2 mt-1 ">
+                        <div className="col-12 col-md-6 col-lg-8">
+                          <input type="text" className="shipping-input-field" placeholder="Search here..." onChange={(e) => setPayment_search(e.target.value)} value={payment_search} />
+                        </div>
+
+                        <div className="col-12 col-md-6 col-lg-4 position-relative">
+                          <input type="date" className="shipping-input-field" placeholder="Pick up date" onChange={(e) => setPayment_date(e.target.value)} value={payment_date} />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="table-responsive w-100">
+
+                      <table className="table">
+                        <thead>
                           <tr>
-                            <td colSpan="6" className="text-center text-secondary">No Data</td>
+                            <th scope="col"><h6>Offer Id</h6></th>
+                            <th scope="col"><h6>Transaction Id</h6></th>
+                            <th scope="col"><h6>Payment Receive Date</h6></th>
+                            <th scope="col"><h6>Amount ($)</h6></th>
+                            <th scope="col"><h6>Commission</h6></th>
                           </tr>
-                        </tbody>
-                      )}
-                    </table>
+                        </thead>
+                        {S_admin_payment && S_admin_payment.length > 0 ? (
+                          <tbody>
+                            {filteredPayments.map((item, index) => (
+                              <tr key={index}>
+                                <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => S_admin_payment_status(item)}>#{item.offer_id}</td>
+                                <td className="text-secondary">{item.transaction_id}</td>
+                                <td className="text-secondary">{item.payment_time ? new Date(item.payment_time).toISOString().split("T")[0] : ""}</td>
+                                <td className="text-secondary">{item.payment_info_amount}</td>
+                                <td className="text-secondary">
+                                  {(() => {
+                                    const T = parseFloat(item.payment_info_amount);
+                                    const com = T - (T / commission_percentage);
+                                    return com.toFixed(2);
+                                  })()}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        ) : (
+                          <tbody>
+                            <tr>
+                              <td colSpan="6" className="text-center text-secondary">No Data</td>
+                            </tr>
+                          </tbody>
+                        )}
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
+              {payment_details && (
+                <>
+                  <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                    style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                      zIndex: 9999
+                    }}
+                  >
+                    <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+                      style={{
+                        width: '90%',
+                        maxWidth: '1100px',
+                        height: '60vh',
+                        overflowY: 'auto'
+                      }}
+                    >
+                      <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                        <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setPayment_details(null)}>
+                          ✕
+                        </button>
+                        <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                          <div className="d-flex w-100 justify-content-start">
+                            <label className="fs-3"><strong>Payment Details</strong></label>
+                          </div>
+                        </div>
+
+                        <div className="offer-details-wrap">
+                          {[
+                            [
+                              { icon: <BsBuildingFillCheck />, label: "Company Name", value: payment_details.company_name ? payment_details.company_name : 'N/A' },
+                              { icon: <MdAttachEmail />, label: "Company Email", value: payment_details.company_email ? payment_details.company_email : 'N/A' },
+                              { icon: <MdPermContactCalendar />, label: "Company Contact No. ", value: payment_details.company_contact ? payment_details.company_contact : 'N/A' }
+                            ],
+                            [
+                              { icon: <FaUserAlt />, label: "User Name", value: payment_details.user_name ? payment_details.user_name : 'N/A' },
+                              { icon: <MdAttachEmail />, label: "User Email", value: payment_details.user_email ? payment_details.user_email : 'N/A' },
+                              { icon: <FaSackDollar />, label: "Amount Paid", value: payment_details.payment_info_amount ? payment_details.payment_info_amount : 'N/A' }
+                            ],
+                            [
+                              {
+                                icon: <PiHandCoinsBold />,
+                                label: "Commission Earned",
+                                value: payment_details.payment_info_amount
+                                  ? (() => {
+                                    const T = parseFloat(payment_details.payment_info_amount);
+                                    const com = T - (T / commission_percentage);
+                                    return com.toFixed(2);
+                                  })()
+                                  : 'N/A'
+                              },
+                              { icon: <MdOutlineDateRange />, label: "Payment Date", value: payment_details.payment_time ? new Date(payment_details.payment_time).toISOString().split("T")[0] : 'N/A' },
+                              { icon: <PiContactlessPaymentFill />, label: "Payment Status", value: payment_details.payment_info_status ? payment_details.payment_info_status : 'N/A' }
+                            ]
+                          ].map((row, index) => (
+                            <div key={index} className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
+                              {row.map((item, idx) => (
+                                <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                                  <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                    style={{
+                                      width: '3rem',
+                                      height: '3rem',
+                                      backgroundColor: '#E1F5FF',
+                                      aspectRatio: '1 / 1'
+                                    }}>
+                                    {item.icon}
+                                  </div>
+                                  <div className="d-flex flex-column align-items-start gap-2">
+                                    <span className="text-secondary">{item.label}</span>
+                                    <h6>{item.value}</h6>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </>
+              )}
             </div>
           </>
         )}

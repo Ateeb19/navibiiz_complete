@@ -13,9 +13,8 @@ import { DateRange } from 'react-date-range';
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
-import { useAlert } from "../alert/Alert_message"; 
-
-
+import { useAlert } from "../alert/Alert_message";
+import PhoneInput from 'react-phone-number-input'
 
 const DragAndDrop = ({ accept, onFileDrop, label, multiple = true }) => {
     const onDrop = useCallback(
@@ -102,9 +101,9 @@ const Send_groupage = () => {
     ]);
     const startDateFormatted = format(state[0].startDate, "dd/MM/yyyy");
     const endDateFormatted = state[0].endDate ? format(state[0].endDate, "dd/MM/yyyy") : "Select End Date";
-    const picking_period = `${startDateFormatted} - ${endDateFormatted}`;
+    // const picking_period = `${startDateFormatted} - ${endDateFormatted}`;
 
-
+    const [picking_period, setPicking_period] = useState(null);
     const [productName, setProductName] = useState(null);
     const [productType, setProductType] = useState(null);
     const [Pweight, setPweight] = useState(null);
@@ -380,7 +379,14 @@ const Send_groupage = () => {
                                                         </div>
                                                         <div className="col-12 col-md-4 text-start ">
                                                             <label className="shipping-input-label">Contact Number <span className="text-danger">*</span></label>
-                                                            <input className="shipping-input-field" type="tel" placeholder="Enter your contact number" value={userNumber} onChange={(e) => setUserNumber(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                                            <PhoneInput
+                                                                international
+                                                                className="shipping-input-field-contact"
+                                                                style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                                defaultCountry="DE"
+                                                                value={userNumber}
+                                                                onChange={setUserNumber} />
+                                                            {/* <input className="shipping-input-field" type="tel" placeholder="Enter your contact number" value={userNumber} onChange={(e) => setUserNumber(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required /> */}
                                                         </div>
                                                         <div className="col-12 col-md-4 text-start">
                                                             <label className="shipping-input-label">Email Address<span className="text-danger">*</span></label>
@@ -413,15 +419,24 @@ const Send_groupage = () => {
                                                             <input className="shipping-input-field" type="number" placeholder="Enter your Zip Code" value={zipCode} onChange={(e) => setZipCode(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
                                                         </div>
                                                         <div className="col-12 col-md-4 text-start">
-                                                            <label className="shipping-input-label">Picking Period<span className="text-danger">*</span></label>
-                                                            <div style={{ position: "relative", width: "100%" }}>
+                                                            <label className="shipping-input-label">Picking Date<span className="text-danger">*</span></label>
+                                                            <input
+                                                                className="shipping-input-field"
+                                                                type="date"
+                                                                value={picking_period}
+                                                                onChange={(e) => setPicking_period(e.target.value)}
+                                                                min={new Date().toISOString().split("T")[0]}
+                                                                required
+                                                                style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                            />
+                                                            {/* <div style={{ position: "relative", width: "100%" }}>
                                                                 <input type="text" readOnly className="shipping-input-field" value={state[0].endDate ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}` : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`} onClick={() => setShowCalendar(!showCalendar)} style={{ cursor: "pointer", backgroundColor: 'rgb(214, 214, 214)' }} />
                                                                 {showCalendar && (
                                                                     <div style={{ position: "absolute", top: "45px", left: "0", right: "0", zIndex: 1000, background: "#fff", borderRadius: "8px", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)" }}>
                                                                         <DateRange editableDateInputs={true} onChange={item => setState([item.selection])} moveRangeOnFirstSelection={false} ranges={state} />
                                                                     </div>
                                                                 )}
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     </div>
 
@@ -453,7 +468,14 @@ const Send_groupage = () => {
                                                     </div>
                                                     <div className="col-md-4  text-start">
                                                         <label className="shipping-input-label">Receiver Contact Number <span className="text-danger">*</span></label>
-                                                        <input
+                                                        <PhoneInput
+                                                            international
+                                                            className="shipping-input-field-contact"
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                            defaultCountry="DE"
+                                                            value={senderNumber}
+                                                            onChange={setSenderNumber} />
+                                                        {/* <input
                                                             className="shipping-input-field"
                                                             type="tel"
                                                             value={senderNumber}
@@ -461,7 +483,7 @@ const Send_groupage = () => {
                                                             placeholder="Enter Receiver's contact number"
                                                             required
                                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                                        />
+                                                        /> */}
                                                     </div>
                                                     <div className="col-md-4  text-start">
                                                         <label className="shipping-input-label">Receiver Email Address <span className="text-danger">*</span></label>

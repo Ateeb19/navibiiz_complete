@@ -1,13 +1,13 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { Form } from "react-bootstrap";
 import Navbar from "../Navbar/Navbar";
 import { BiSolidDetail } from "react-icons/bi";
-import { IoLocationSharp } from "react-icons/io5";
-import { FaTruckFast } from "react-icons/fa6";
-import { MdDeliveryDining, MdOutlineDriveFileRenameOutline } from "react-icons/md";
-import { FaStar } from "react-icons/fa";
+import { IoCall, IoChatbubblesSharp, IoLocationSharp } from "react-icons/io5";
+import { FaArrowLeftLong, FaArrowRightLong, FaLocationDot, FaTruckFast } from "react-icons/fa6";
+import { MdDeliveryDining, MdEmail, MdOutlineDriveFileRenameOutline } from "react-icons/md";
+import { FaBox, FaStar } from "react-icons/fa";
 import Footer from "../Footer/Footer";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -23,6 +23,11 @@ import { useAlert } from "../alert/Alert_message";
 import { IoSearch } from "react-icons/io5";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { PiBoxArrowUpBold } from "react-icons/pi";
+import { GiCardPickup } from "react-icons/gi";
+import { IoIosCall } from "react-icons/io";
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -142,25 +147,25 @@ const Home = () => {
     const handleSearch = () => {
         // Prepare the filters object
         const filters = {
-          selectedServices: [],
-          selectedPickupCountry: pickupCountry,  // This is the key change
-          selectedDestinationCountry: "",
-          selectedDuration: [],
-          searchQuery: ""
+            selectedServices: [],
+            selectedPickupCountry: pickupCountry,  // This is the key change
+            selectedDestinationCountry: "",
+            selectedDuration: [],
+            searchQuery: ""
         };
-      
+
         // Save to localStorage
         localStorage.setItem("filters", JSON.stringify(filters));
-        
+
         // Navigate with state
         navigate('/companies_list', {
-          state: {
-            fromHomePage: true,
-            pickupCountry: pickupCountry
-          },
-          replace: true  // Prevent back button issues
+            state: {
+                fromHomePage: true,
+                pickupCountry: pickupCountry
+            },
+            replace: true  // Prevent back button issues
         });
-      };
+    };
 
     const View_details = (item) => {
         localStorage.setItem(`company_${item.id}`, JSON.stringify(item));
@@ -174,22 +179,22 @@ const Home = () => {
     const profiles = [
         {
             name: 'John Doe',
-            description: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-',
+            description: '"As a small business exporting to Europe, we struggled with high costs and delays. Novibiz helped us find reliable partners and track every shipment with ease!"',
             img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsb_V_Ha4XAl47doWf_2lF-actuld60ssYew&s'
         },
         {
             name: 'Jane Smith',
-            description: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-',
+            description: '"As a small business exporting to Europe, we struggled with high costs and delays. Novibiz helped us find reliable partners and track every shipment with ease!"',
             img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0PDKrErulLlbJkbv5KtsCeICczdgJSyurA&s'
         },
         {
             name: 'Mike Johnson',
-            description: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-',
+            description: '"As a small business exporting to Europe, we struggled with high costs and delays. Novibiz helped us find reliable partners and track every shipment with ease!"',
             img: 'https://i2.pickpik.com/photos/711/14/431/smile-profile-face-male-preview.jpg'
         },
         {
             name: 'Sarah Brown',
-            description: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-',
+            description: '"As a small business exporting to Europe, we struggled with high costs and delays. Novibiz helped us find reliable partners and track every shipment with ease!"',
             img: 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg'
         }
     ];
@@ -228,7 +233,31 @@ const Home = () => {
             navigate('/login');
         });
     };
-
+    const filteredCompanies = company_info.filter(company => company.logo);
+    const settings_logo = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 6, // Show 6 logos at once
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        responsive: [
+            {
+                breakpoint: 1200,
+                settings: { slidesToShow: 4 },
+            },
+            {
+                breakpoint: 768,
+                settings: { slidesToShow: 3 },
+            },
+            {
+                breakpoint: 480,
+                settings: { slidesToShow: 2 },
+            },
+        ],
+    };
+    const sliderRef = useRef(null);
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
             <div className='navbar-wrapper'>
@@ -242,23 +271,218 @@ const Home = () => {
                     <div className="d-flex flex-column justify-content-center align-items-center text-light px-3">
                         <div className="text-center mt-3 w-100">
                             <div className="hero-wrap-head">
-                                <h1>Ship Your Goods Worldwide with Reliable and Trusted Logistics Partners</h1>
+                                <h1>Delivering Your <span style={{ color: '#FFC31C' }}>Goods</span> Globally with Trusted <span style={{ color: '#FFC31C' }}>Logistics</span> Partners</h1>
                                 <p>
-                                    Connect with reliable logistics providers to transport goods across borders seamlessly. Our platform ensures efficient and hassle-free global shipping tailored to your needs.
+                                    Our platform is designed to streamline cross-border shipping by linking you with reliable providers who offer consistent, transparent, and timely service around the globe.
                                 </p>
                             </div>
                         </div>
 
-                        <div className="d-flex flex-row justify-content-center align-items-center px-3 pickup-wrap gap-4">
+                        {/* <div className="d-flex flex-row justify-content-center align-items-center px-3 pickup-wrap gap-4">
                             <span><Countryselector label='Pick Up Country' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
 
                             <button className="" onClick={handleSearch}><IoSearch /> Search Companies</button>
+                        </div> */}
+                        <div className="d-flex flex-row justify-content-between align-items-center px-3 pickup-wrap gap-4">
+                            <div style={{ width: '50%', borderRight: '1px solid #00000066', padding: '0 20px' }}>
+                                <span><Countryselector label='Choose Country Name' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
+                            </div>
+
+                            <div className="d-flex text-black flex-row align-items-center justify-content-between" style={{ width: '50%', padding: '0 20px' }}>
+                                <div>Search companies</div>
+                                <div onClick={handleSearch} style={{ cursor: 'pointer' }}><IoSearch /></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <div className="container mt-4">
+            <div className="container mt-5">
+                <div className="row g-5">
+                    <div className="col-6 d-flex flex-column justify-content-start align-items-start p-4">
+                        <div className="about-head-wrap">
+                            <h3>About Us</h3>
+                        </div>
+                        <div className="about-text-wrap text-start">
+                            <h2>We Provide End - to - end Logistics Services for timely secure delivery</h2>
+                            <p>Our vision is to lead the global logistics industry by providing seamless, reliable, and innovative solutions that not only meet but exceed client expectations, driving long-term success and growth for businesses worldwide.</p>
+                            <p>Our vision is to lead the global logistics industry by providing seamless, reliable, and innovative solutions that not only meet but exceed client expectations, driving long-term success and growth for businesses worldwide.</p>
+                        </div>
+                        <div className="about-btn">
+                            <button onClick={() => navigate('/about_us')}> View More</button>
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <div className="about-image-wrap d-flex justify-content-center align-items-center w-100 p-4">
+                            <img src="/Images/about_us_img.jpg" alt="About_us" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="container mt-5 mb-4">
+                <div className="home-company-wrap d-flex flex-column justify-content-center align-items-center">
+                    <div className="home-heading d-flex flex-row align-items-center justify-content-between w-100">
+                        <h2>Companies that trusted our services</h2>
+                        <div className="d-flex flex-row align-items-center justify-content-center gap-2 slider-btn">
+                            <button onClick={() => sliderRef.current?.slickPrev()}>
+                                <FaArrowLeftLong />
+                            </button>
+                            <button onClick={() => sliderRef.current?.slickNext()}>
+                                <FaArrowRightLong />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="w-100 mx-auto px-3 mt-4">
+                        {filteredCompanies.length > 0 ? (
+                            <Slider {...settings_logo} ref={sliderRef}>
+                                {filteredCompanies.map((company, index) => (
+                                    <div key={index} className="px-2">
+                                        <img
+                                            src={company.logo}
+                                            alt={`Company ${index}`}
+                                            style={{
+                                                width: "100%",
+                                                height: "100px",
+                                                objectFit: "contain",
+                                                padding: "10px",
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                            </Slider>
+                        ) : (
+                            <div className="text-center">
+                                <h2>No Data</h2>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <div className="container mt-5">
+                <div className="d-flex flex-column justify-content-center align-items-center w-100">
+                    <div className="d-flex align-items-start justify-content-start w-100 mb-4">
+                        <div className="home-heading text-start" style={{ width: '60%' }}>
+                            <h2>How It Works: Simple & Secure Shipping in Four Easy Steps</h2>
+                        </div>
+                    </div>
+                    <div className="d-flex flex-column justify-content-center align-items-center w-100">
+                        <div className="row w-100 mt-4 mb-4">
+                            <div className="col-6 d-flex flex-row justify-content-between align-items-center pe-5">
+                                <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
+                                    <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
+                                        <h5 style={{ fontSize: '25px', fontWeight: '500' }}>1. </h5>
+                                        <h5>Enter Your Shipping Request</h5>
+                                    </div>
+
+                                    <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
+                                </div>
+                                <div className="step-image d-flex flex-column align-items-center">
+                                    <img src="/Images/home_img04.jpg" alt="step1" />
+                                </div>
+                            </div>
+                            <div className="col-6 d-flex flex-row justify-content-between align-items-center ps-5">
+                                <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
+                                    <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
+                                        <h5 style={{ fontSize: '25px', fontWeight: '500' }}>2. </h5>
+                                        <h5>Receive Bids from Verified Carriers</h5>
+                                    </div>
+
+                                    <p>Get instant offers from trusted global shipping partners who match your shipment criteria.</p>
+                                </div>
+                                <div className="step-image d-flex flex-column align-items-center">
+                                    <img src="/Images/home_img03.jpg" alt="step1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row w-100 mt-4">
+                            <div className="col-6 d-flex flex-row justify-content-between align-items-center pe-5">
+                                <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
+                                    <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
+                                        <h5 style={{ fontSize: '25px', fontWeight: '500' }}>3. </h5>
+                                        <h5>Enter Your Shipping Request</h5>
+                                    </div>
+
+                                    <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
+                                </div>
+                                <div className="step-image d-flex flex-column align-items-center">
+                                    <img src="/Images/home_img02.jpg" alt="step1" />
+                                </div>
+                            </div>
+                            <div className="col-6 d-flex flex-row justify-content-between align-items-start ps-5">
+                                <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
+                                    <div className="step-text d-flex flex-row justify-content-center align-items-start gap-2 text-start w-100">
+                                        <h5 style={{ fontSize: '25px', fontWeight: '500' }}>4. </h5>
+                                        <h5>Confirm Booking & Track Your Shipment</h5>
+                                    </div>
+
+                                    <p>Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p>
+                                </div>
+                                <div className="step-image d-flex flex-column align-items-center">
+                                    <img src="/Images/home_img01.jpg" alt="step1" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5">
+                        <button onClick={() => navigate('/send_groupage')}>Start shipping your products</button>
+                    </div>
+                </div>
+            </div>
+
+            <section className="new-add-company-wrapper">
+                <div className="container">
+                    <div className="d-flex flex-column justify-content-start align-items-start">
+                        <div className="home-heading">
+                            <h2>Recent Offers Posted</h2>
+                        </div>
+
+                        <div className="row justify-content-center w-100 mt-4">
+                            {offers_details.length > 0 ? (
+                                <>
+                                    {offers_details.map((company, index) => (
+                                        <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" onClick={() => submit_offer(company)}>
+                                            <div className="company-box-wrap">
+                                                <div className="d-flex flex-column align-items-start company-box-text">
+                                                    <div className="image-div">
+                                                        <img
+                                                            src={company.img01 ? company.img01 : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
+                                                            alt="Logo"
+                                                            className="w-100 h-100 object-fit-cover"
+                                                        />
+                                                    </div>
+                                                    <h5 className="mt-3">{company.product_name}</h5>
+                                                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start gap-2 offer-pickup"><h6>Pickup: </h6> <p>{company.sender_country}</p></div>
+                                                        <span className="submit-offer" onClick={() => submit_offer(company)}>Submit Offer <PiBoxArrowUpBold style={{ fontSize: '16px' }} /></span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </>
+                            ) : (
+                                <>
+                                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" >
+                                        <div className="d-flex flex-column align-items-center">
+                                            <h2>No Data</h2>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                        </div>
+                        <button className="home-offer-btn" onClick={() => navigate('/offers')}>
+                            View All
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            {/* <div className="container mt-4">
                 <div className="row g-4 text-center">
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="d-flex flex-column align-items-center">
@@ -300,9 +524,9 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
-            <section className="new-add-company-wrapper">
+            {/* <section className="new-add-company-wrapper">
                 <div className="container">
                     <div className="d-flex flex-column justify-content-start align-items-start">
                         <div className="title-head">
@@ -335,21 +559,9 @@ const Home = () => {
                             ) : (
                                 <>
                                     <div className="col-12 col-sm-6 col-md-4 col-xl-3" >
-                                        {/* <div className="company-box-wrap"> */}
-                                            <div className="d-flex flex-column align-items-center">
-                                                {/* <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
-                                                    <img
-                                                        src={"https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
-                                                        alt="Logo"
-                                                        className="w-100 h-100 object-fit-cover"
-                                                    />
-                                                </div> */}
-                                                <h2> No Data </h2>
-                                                {/* <span className="text-secondary"><FaStar className="pe-1 text-warning fs-5 mb-1" /> 4.5 (20 Ratings)</span>
-                                                <p className="text-secondary text-start mt-2"></p>
-                                                <span className="" style={{ cursor: "pointer", color: '#de8316' }} >View Details</span> */}
-                                            </div>
-                                        {/* </div> */}
+                                        <div className="d-flex flex-column align-items-center">
+                                            <h2> No Data </h2>
+                                        </div>
                                     </div>
                                 </>
                             )}
@@ -360,11 +572,11 @@ const Home = () => {
                         </button>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
 
 
-            <section className="step-wrapper">
+            {/* <section className="step-wrapper">
                 <div className="container mt-5">
                     <div className="text-center mb-4">
                         <div className="title-head">
@@ -444,68 +656,12 @@ const Home = () => {
                         </button>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
 
 
 
-            <section className="new-add-company-wrapper">
-                <div className="container">
-                    <div className="d-flex flex-column justify-content-start align-items-start">
-                        <div className="title-head">
-                            <h3>Recent Offers Posted</h3>
-                        </div>
 
-                        <div className="row justify-content-center w-100">
-                            {offers_details.length > 0 ? (
-                                <>
-                                    {offers_details.map((company, index) => (
-                                        <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" onClick={() => submit_offer(company)}>
-                                            <div className="company-box-wrap">
-                                                <div className="d-flex flex-column align-items-start">
-                                                    <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
-                                                        <img
-                                                            src={company.img01 ? company.img01 : "https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"}
-                                                            alt="Logo"
-                                                            className="w-100 h-100 object-fit-cover"
-                                                        />
-                                                    </div>
-                                                    <h5>{company.product_name}</h5>
-                                                    <p className="text-secondary text-start mt-1">{company.sender_description.split(" ").slice(0, 10).join(" ") + "..."}</p>
-                                                    <span className="" style={{ cursor: "pointer", color: '#de8316' }} onClick={() => submit_offer(company)}>Submit Offer</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </>
-                            ) : (
-                                <>
-                                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" >
-                                        {/* <div className="company-box-wrap"> */}
-                                            <div className="d-flex flex-column align-items-center">
-                                                {/* <div className="rounded-circle overflow-hidden" style={{ width: '30%', maxWidth: '130px', aspectRatio: '1/1' }}>
-                                                    <img
-                                                        src="https://png.pngtree.com/png-clipart/20230915/original/pngtree-global-icon-for-web-design-logo-app-isolated-vector-vector-png-image_12189325.png"
-                                                        alt="Logo"
-                                                        className="w-100 h-100 object-fit-cover"
-                                                    />
-                                                </div> */}
-                                                <h2>No Data</h2>
-                                                {/* <p className="text-secondary text-start mt-1"></p>
-                                                <span className="" style={{ cursor: "pointer", color: '#de8316' }} >Submit Offer</span> */}
-                                            </div>
-                                        {/* </div> */}
-                                    </div>
-                                </>
-                            )}
-
-                        </div>
-                        <button className="btn-main" onClick={() => navigate('/offers')}>
-                            View All
-                        </button>
-                    </div>
-                </div>
-            </section>
 
             {groupage_detail && (
                 <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
@@ -997,7 +1153,7 @@ const Home = () => {
                 </>
             )}
 
-            <section className="step-wrapper">
+            {/* <section className="step-wrapper">
                 <div className="container mt-5">
                     <div className="text-center mb-4">
                         <div className="title-head">
@@ -1077,10 +1233,11 @@ const Home = () => {
                         </button>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             <section className="stats-wrapper">
                 <div className="container">
+
                     <div className="w-100 d-flex flex-wrap justify-content-between align-items-center">
                         <div className="flex-grow-1 text-light text-center">
                             <div className="stats-wrap">
@@ -1113,35 +1270,236 @@ const Home = () => {
                 </div>
             </section>
 
+            <section className="build-wrapper">
+                <div className="container">
+                    <div className="d-flex flex-column align-items-start justify-content-start w-100">
+                        <div className="home-heading">
+                            <h2>Build on trust on our values</h2>
+                        </div>
+                    </div>
+                    <div className="row w-100 mt-3">
+                        <div className="col-12 col-sm-6 col-lg-3 mb-4">
+                            <div className="build-wrap text-start h-100 p-3">
+                                <h2><FaBox /></h2>
+                                <h5>Easy Shipment Details</h5>
+                                <p>Simply provide your shipment details to get a tailored list of logistics companies</p>
+                            </div>
+                        </div>
 
-            <div className="d-flex flex-column justify-content-center align-items-center w-100 mt-5">
-                <div className="title-head">
-                    <h3>Real stories, Real impact</h3>
+                        <div className="col-12 col-sm-6 col-lg-3 mb-4">
+                            <div className="build-wrap text-start h-100 p-3 ">
+                                <h2><FaLocationDot /></h2>
+                                <h5>Location-based Filtering</h5>
+                                <p>Filter shipping companies by your destination and origin for precise results</p>
+                            </div>
+                        </div>
+
+                        <div className="col-12 col-sm-6 col-lg-3 mb-4">
+                            <div className="build-wrap text-start h-100 p-3">
+                                <h2><FaTruckFast /></h2>
+                                <h5>Shipping Methods</h5>
+                                <p>Choose your preferred shipping method and connect with the right partners</p>
+                            </div>
+                        </div>
+
+                        <div className="col-12 col-sm-6 col-lg-3 mb-4">
+                            <div className="build-wrap text-start h-100 p-3">
+                                <h2><GiCardPickup /></h2>
+                                <h5>Pickup Service</h5>
+                                <p>Shipping companies will send their professionals to pick up your goods from your location</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div className="w-100 mx-auto px-3">
-                    <Slider {...settings}>
-                        {profiles.map((profile, index) => (
-                            <div key={index} className="p-4">
-                                <div className="bg-white rounded-3 w-100 p-4 d-flex flex-column align-items-center text-center border">
-                                    <div className="testi-img-wrapper">
-                                        <img
-                                            src={profile.img}
-                                            alt={profile.name}
-                                        />
+            </section>
+
+            <section className="container mt-3">
+                <div className="d-flex flex-column justify-content-center align-items-center w-100 mt-5">
+                    <div className="home-heading w-100 d-flex align-items-start justify-content-start">
+                        <h2>Real stories real impact</h2>
+                    </div>
+                    <div className="w-100 mx-auto mt-4">
+                        <Slider {...settings}>
+                            {profiles.map((profile, index) => (
+                                <div key={index} className="p-3">
+                                    <div className="bg-white rounded-3 w-100 p-2 d-flex flex-column align-items-center text-center border">
+                                        <div className="testi-desc-wrapper text-start">
+                                            <p>{profile.description}</p>
+                                        </div>
+
+                                        <div className="d-flex flex-row align-items-center justify-content-start w-100 pe-4 gap-3">
+                                            <div className="testi-img-wrapper">
+                                                <img
+                                                    src={profile.img}
+                                                    alt={profile.name}
+                                                />
+                                            </div>
+                                            <h5 className="mb-2">{profile.name}</h5>
+                                        </div>
                                     </div>
-                                    <div className="testi-desc-wrapper">
-                                        <p>{profile.description}</p>
+                                </div>
+                            ))}
+                        </Slider>
+                    </div>
+                </div>
+            </section>
+
+            <section className="home-footer-wrapper w-100 mt-5 mb-5 pb-5">
+                <div className="container">
+                    <div className="d-flex flex-column align-items-start justify-content-start text-start w-100">
+                        <div className="heading-footer mt-5 mb-3">
+                            <h1>Partner with us and grow your reach</h1>
+                            <p>Join our platform to connect with global customers and expand your logistics business</p>
+                            <button className="" onClick={() => navigate('/register_company')}>Register your compmany</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* <section className="footer-touch mb-5 pb-5 w-100">
+                <div className="container mt-5">
+                    <div className="row w-100">
+                        <div className="col-md-8 d-flex flex-column align-items-start justify-content-start text-start">
+                            <div className="title-head w-100">
+                                <h3>Get In Touch</h3>
+                            </div>
+                            <div className="row w-100 mt-1">
+                                <div className="col-md-6 d-flex flex-column align-items-between justify-content-center">
+                                    <div className="d-flex flex-column align-items-start justify-content-start gap-2">
+                                        <lable className='input-label'>Full Name</lable>
+                                        <input type='text' className="contact-field w-100" />
                                     </div>
-                                    <h5 className="mb-2">{profile.name}</h5>
+                                </div>
+                                <div className="col-md-6 d-flex flex-column align-items-between justify-content-center">
+                                    <div className="d-flex flex-column align-items-start justify-content-start gap-2">
+                                        <lable className='input-label'>Email ID</lable>
+                                        <input type='text' className="contact-field w-100" />
+                                    </div>
                                 </div>
                             </div>
-                        ))}
-                    </Slider>
+
+                            <div className="row w-100 mt-1">
+                                <div className="col-md-6 d-flex flex-column align-items-between justify-content-center">
+                                    <div className="d-flex flex-column align-items-start justify-content-start gap-2">
+                                        <lable className='input-label'>Contact Number</lable>
+                                        <input type='text' className="contact-field w-100" />
+                                    </div>
+                                </div>
+                                <div className="col-md-6 d-flex flex-column align-items-between justify-content-center">
+                                    <div className="d-flex flex-column align-items-start justify-content-start gap-2">
+                                        <lable className='input-label'>Country You Live</lable>
+                                        <input type='text' className="contact-field w-100" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="d-flex flex-column align-items-start justify-content-start gap-2">
+                                <lable className='input-label'>Description</lable>
+                                <textarea cols='95' rows='4' className="contact-field w-100" />
+                            </div>
+                            <div className="d-flex w-100 about-btn">
+                                <button className="w-100 ">Submit</button>
+                            </div>
+                        </div>
+                        <div className="col-md-4 d-flex flex-column align-items-start justify-content-start">
+                            <div className="d-flex flex-column text-start align-items-start justify-content-start contact-info w-100" style={{ color: '#FFFFFF' }}>
+                                <div className="title-head w-100 text-light d-flex" style={{ marginBottom: '-30px' }}>
+                                    <h3>Contact Information</h3>
+                                </div>
+                                <div className="d-flex flex-column w-100 gap-2 mt-5">
+                                    <h6>Call us</h6>
+                                    <div className="d-flex flex-row align-items-start justify-content-start w-100 gap-2">
+                                        <h6>< IoIosCall /> </h6> <h6>+49 176 60906264</h6>
+                                    </div>
+
+                                </div>
+                                <div className="d-flex flex-column w-100 gap-2 mt-5">
+                                    <h6>Email us</h6>
+                                    <div className="d-flex flex-row align-items-start justify-content-start w-100 gap-2">
+                                        <h6>< MdEmail /> </h6> <h6>
+                                            <a
+                                                href="mailto:info@novibiz.com"
+                                                style={{ textDecoration: 'none', color: 'inherit' }}
+                                            >
+                                                info@novibiz.com
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                </div>
+                                <div className="d-flex flex-column w-100 gap-2 mt-5">
+                                    <h6>Chat with us</h6>
+                                    <div className="d-flex flex-row align-items-start justify-content-start w-100 gap-2">
+                                        <h6>< IoChatbubblesSharp /> </h6> <h6>+49 176 60906264</h6>
+                                    </div>
+
+                                </div>
+                                <div className="d-flex flex-column w-100 gap-2 mt-5">
+                                    <h6>Our headquarters</h6>
+                                    <div className="d-flex flex-row align-items-start justify-content-start w-100 gap-2">
+                                        <h6>< FaLocationDot /> </h6> <h6>
+                                            <a
+                                                href="https://www.google.com/maps/place/Kaiserswerther+Str.+135,+40474+D%C3%BCsseldorf,+Germany/@51.2456278,6.7672824,17z/data=!3m1!4b1!4m6!3m5!1s0x47b8c9f01ec81eb7:0x6364618294734dc5!8m2!3d51.2456278!4d6.7698573!16s%2Fg%2F11c5bw0ls3?entry=ttu&g_ep=EgoyMDI1MDQwOS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{ textDecoration: 'none', color: '#fff' }}
+                                            >
+                                                kaiserwerther strabe 135, Dusseldorf, Germany
+                                            </a>
+                                        </h6>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section> */}
 
+            <section className="w-100 mb-5 mt-4 pb-5">
+                <div className="container">
+                    <div className="row w-100">
+                        <div className="col-md-7">
+                            <div className="d-flex flex-column align-items-start justify-content-start w-100">
+                                <div className="home-heading w-100 d-flex align-items-start justify-content-start">
+                                    <h2>Have any questions?</h2>
+                                </div>
+                                <h4 className="question-h4 mt-4 mb-4">We are just one click away</h4>
+                                <p className="para-question text-start mb-4">
+                                    Join our platform to connect with global customers and expand your logistics business Our platform is designed to streamline cross-border shipping by linking you with reliable providers who offer consistent, transparent, and timely service around the globe.
+                                </p>
+                                <div className="d-flex flex-row align-items-center justify-content-between w-100">
+                                    <div className="d-flex flex-row align-items-center justify-content-start question-call-email w-100 gap-4">
+                                        <h5>Call Us</h5>
+                                        <h6><IoCall />  <span className="text-dark">+49 176 60906264</span></h6>
+                                    </div>
+                                    <div className="d-flex flex-row align-items-center justify-content-start question-call-email w-100 gap-4">
+                                        <h5>Email us:</h5>
+                                        <h6><MdEmail />  <a href="mailto:info@novibiz.com"
+                                            style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer'}}><span className="text-dark">info@novibiz.com</span></a></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-5">
+                            <div className="w-100 question-image">
+                                <img src="/Images/home-footer.jpg" alt="image" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <section className="faq-wrapper">
+            <section className="footer-bottom w-100">
+                <div className="container">
+                    <div className="d-flex flex-column align-items-start justify-content-start w-100">
+                        <img src="/Images/novibiz/fulllogo_transparent_nobuffer.png" height='80px' alt="Logo" />
+                    </div>
+                </div>
+
+            </section>
+            {/* <section className="faq-wrapper">
                 <div className="title-head">
                     <h3>Questions we get asked</h3>
                 </div>
@@ -1292,11 +1650,11 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            <div className="w-100 mt-5">
+            {/* <div className="w-100 mt-5">
                 <Footer />
-            </div>
+            </div> */}
         </div>
     )
 }

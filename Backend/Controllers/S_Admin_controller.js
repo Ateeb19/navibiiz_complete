@@ -152,15 +152,28 @@ const show_all_offers = (req, res) => {
                             (err, companyResult) => {
                                 if (err) {
                                     console.error("Error fetching company info:", err);
-                                    resolve({ ...offer, company_name: null, contect_no: null });
-                                } else {
-                                    const company = companyResult[0] || {};
-                                    resolve({
-                                        ...offer,
-                                        company_name: company.company_name || null,
-                                        contect_no: company.contect_no || null,
-                                    });
+                                    companyResult = [{}];
                                 }
+                                const company = companyResult[0] || {};
+
+                                db.query(
+                                    `SELECT name as userName FROM users WHERE email = ?`,
+                                    [offer.groupage_created_by],
+                                    (err, userResult) => {
+                                        if (err) {
+                                            console.log("Error fetching user name", err);
+                                            userResult = [{}];
+                                        }
+                                        const user = userResult[0] || {};
+
+                                        resolve({
+                                            ...offer,
+                                            company_name: company.company_name || null,
+                                            contect_no: company.contect_no || null,
+                                            userName: user.userName || null,
+                                        });
+                                    }
+                                );
                             }
                         );
                     });
@@ -506,6 +519,45 @@ const edit_company_documents = [
     }
 ];
 
+const payment_details = (req, res) => {
+  if (req.user.role === 'Sadmin') {
+    const user_email = req.body.user_email;
+    const offer_id = req.body.offer_id;
+    const details = {};
+
+    db.query(`SELECT name FROM users WHERE email = ?`, [user_email], (err, result1) => {
+      if (err || !result1.length) {
+        console.log(err || 'User not found');
+        return res.status(500).json({ message: 'Error fetching user name', status: false });
+      }
+      details.user_name = result1[0].name;
+
+      db.query(`SELECT created_by_email FROM offers WHERE offer_id = ?`, [offer_id], (err, result2) => {
+        if (err || !result2.length) {
+          console.log(err || 'Offer not found');
+          return res.status(500).json({ message: 'Error fetching offer', status: false });
+        }
+        details.company_email = result2[0].created_by_email;
+
+        db.query(`SELECT company_name, contect_no FROM companies_info WHERE created_by = ?`, [details.company_email], (err, result3) => {
+          if (err || !result3.length) {
+            console.log(err || 'Company not found');
+            return res.status(500).json({ message: 'Error fetching company info', status: false });
+          }
+
+          details.company_name = result3[0].company_name;
+          details.company_contact = result3[0].contect_no;
+
+          res.json({ message: details, status: true });
+        });
+      });
+    });
+  } else {
+    res.status(403).json({ message: 'Only super admin can access', status: false });
+  }
+};
+
+
 
 module.exports = {
     Display_All_company,
@@ -525,5 +577,5 @@ module.exports = {
     total_commission,
     amount_to_pay,
     edit_company_documents,
-
+    payment_details
 };

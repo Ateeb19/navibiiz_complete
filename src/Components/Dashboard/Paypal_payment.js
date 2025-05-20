@@ -2,18 +2,20 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useAlert } from "../alert/Alert_message";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function OfferDetails({ selected_offer }) {
     const port = process.env.REACT_APP_SECRET;
     const [showPayPalButton, setShowPayPalButton] = useState(false);
-
+    const [transactionId, setTraansactionId] = useState('');
+    const navigate = useNavigate();
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowPayPalButton(true);
         }, 1000);
-    
+
         return () => clearTimeout(timer);
-      }, [selected_offer]);
+    }, [selected_offer]);
 
     const createOrder = async () => {
         const { data } = await axios.post(`${port}/paypal/api/create-order`, {
@@ -54,7 +56,7 @@ function OfferDetails({ selected_offer }) {
             }
         }).then((res) => {
             if (res.data.current_status === true) {
-                showAlert(`Transaction successful: ${transactionData.transaction_ID}`);
+                setTraansactionId(transactionData.transaction_ID)
             }
         }).catch((err) => { console.log(err) });
     };
@@ -66,13 +68,42 @@ function OfferDetails({ selected_offer }) {
             {showPayPalButton && (
                 <div className="mt-3 w-100">
                     {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}> */}
-                        <PayPalButtons
-                            createOrder={createOrder}
-                            onApprove={onApprove}
-                            style={{ layout: "horizontal", color: "gold", shape: "pill", label: "pay" }}
-                        />
+                    <PayPalButtons
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        style={{ layout: "horizontal", color: "gold", shape: "pill", label: "pay" }}
+                    />
                     {/* </PayPalScriptProvider> */}
                 </div>
+            )}
+            {transactionId && (
+                <>
+                    <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+
+                        <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: '25rem' }}>
+
+                            <div className="success-img-wrap">
+                                <img src="/Images/Party_Popper.png" alt="congratulation" />
+                            </div>
+
+                            <div className="title-head">
+                                <h3 style={{ color: ' #1ba300' }}>CONGRATULATIONS</h3>
+                            </div>
+
+                            <div className="success-des-wrap">
+                                <p>You have successfully complete the transaction.<br /> Transaction id -: {transactionId}</p>
+                            </div>
+
+                            <div className="success-button">
+                                <button className="btn-success" onClick={() => {
+                                    navigate('/dashboard');
+                                    localStorage.setItem('activeSection', 'dashboard')
+                                    setTraansactionId('');
+                                }}>Go To Login</button>
+                            </div>
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );
