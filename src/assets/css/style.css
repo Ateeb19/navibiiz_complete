@@ -789,6 +789,7 @@ svg {
 .about-head-wrap h3 {
     color: #012A52;
     font-weight: 600;
+    font-size: 20px;
 }
 
 .home-heading h2 {
@@ -803,7 +804,7 @@ svg {
     color: #000000;
     font-size: 28px;
     font-weight: 700;
-    line-height: 38px;
+    line-height: 38px;
 }
 
 .about-text-wrap p {
@@ -968,6 +969,9 @@ svg {
     line-height: 30px;
 }
 
-.footer-list ul li{
+.footer-list ul li {
     cursor: pointer;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 7px;
 }
