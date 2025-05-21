@@ -213,7 +213,7 @@ const Total_company_count = (req, res) => {
 
 const Total_User_count = (req, res) => {
     if (req.user.role === 'Sadmin') {
-        db.query(`SELECT COUNT(*) AS count FROM users WHERE role = 'user' OR role = 'admin'`, (err, result) => {
+        db.query(`SELECT COUNT(*) AS count FROM users WHERE role = 'user'`, (err, result) => {
             if (err) {
                 res.json({ message: 'Error in database', status: 'false' });
             } else {

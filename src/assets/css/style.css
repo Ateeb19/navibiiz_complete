@@ -66,18 +66,18 @@
 }
 
 .hero-wrap-head h1 {
-    font-size: 60px;
+    font-size: 56px;
     font-weight: bold;
     color: #fff;
     line-height: 70px;
 }
 
 .hero-wrap-head p {
-    font-size: 20px;
+    font-size: 18px;
     color: #fff;
     width: 75%;
     margin: 18px auto;
-    line-height: 30px;
+    line-height: 28px;
 }
 
 .title-head h3 {
@@ -116,6 +116,7 @@
 
 .company-box-text h5 {
     font-weight: 600;
+    font-size: 16px;
 }
 
 .image-div {
@@ -139,9 +140,9 @@
 }
 
 .offer-pickup h6 {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 14px;
-    color: '#000000';
+    color: #4e4e4e;
 }
 
 .offer-pickup p {
@@ -151,9 +152,10 @@
 
 .submit-offer {
     font-size: 14px;
-    font-weight: 400;
-    color: #012A52;
+    /* font-weight: 500; */
+    color: #095198;
     cursor: pointer;
+    text-decoration: underline;
 }
 
 .home-offer-btn {
@@ -192,8 +194,9 @@
     margin: 10px 0px;
 }
 
+
 .stats-wrapper {
-    margin-top: 60px;
+    /* margin-top: 60px; */
     padding: 35px 0px;
     background-color: #012A52;
     width: 100%;
@@ -218,15 +221,17 @@
 
 .build-wrap h5 {
     font-weight: 600;
-    color: '#000000';
     margin-top: 20px;
+    font-size: 18px;
+    color: #000;
 }
 
 .build-wrap p {
     font-weight: 400;
-    font-size: 14px;
-    color: '#000000';
-    margin-top: 20px;
+    font-size: 15px;
+    line-height: 25px;
+    color: #000000;
+    margin-top: 12px;
 }
 
 .stats-wrap h3 {
@@ -788,34 +793,36 @@ svg {
 
 .home-heading h2 {
     color: #000000;
-    font-size: 34px;
+    font-size: 28px;
     font-weight: 700;
-    line-height: 44px;
+    line-height: 38px;
 }
 
 .about-text-wrap h2 {
-    margin-top: 20px;
+    margin-top: 10px;
     color: #000000;
-    font-size: 34px;
+    font-size: 28px;
     font-weight: 700;
-    line-height: 44px;
+    line-height: 38px;
 }
 
 .about-text-wrap p {
     margin-top: 20px;
-    color: #000000;
-    font-weight: 500;
+    color: #464646;
+    /* font-weight: 500; */
     font-size: 15px;
-    line-height: 22px;
+    line-height: 25px;
+    /* margin-bottom: 21px; */
 }
 
 .about-btn button {
     font-weight: 500;
-    padding: 12px 30px;
+    padding: 12px 24px;
     color: #fff;
     background-color: #012A52;
     border: 1px solid #012A52;
-    border-radius: 12px;
+    border-radius: 7px;
+    margin-top: 15px;
 }
 
 .slider-btn button {
@@ -830,22 +837,25 @@ svg {
 .step-text h5 {
     font-weight: 700;
     color: #000000;
+    margin-bottom: 0;
+    font-size: 20px;
 }
 
 .step-text p {
-    padding-left: 28px;
-    font-weight: 500;
+    padding-left: 21px;
+    /* font-weight: 500; */
     font-size: 15px;
     line-height: 25px;
-    width: 390px;
+    /* width: 390px; */
     color: #00000099;
+    /* margin-top: -4px; */
 }
 
 .step-image img {
     width: 160px;
     height: 160px;
+    object-fit: cover;
 }
-
 .home-footer-wrapper {
     background-image: url(../../../public/Images/home_footer.jpg);
     padding: 40px 0;
@@ -899,29 +909,32 @@ svg {
 
 .footer-bottom {
     background-color: #012A52;
-    padding: 60px 0px 120px 0px;
+    padding: 60px 0px 0px 0px;
 }
 
 .question-h4 {
-    font-weight: 600;
+    font-weight: 500;
     color: #012A52;
+    font-size: 18px;
 }
 
 .para-question {
-    font-size: 20px;
-    line-height: 30px;
-    color: #00000099;
-    font-weight: 500;
+    font-size: 16px;
+    line-height: 27px;
+    color: #4f4f4f;
+    /* font-weight: 500; */
 }
 
 .question-call-email h5 {
     color: #012A52;
     font-weight: 600;
+    font-size: 18px;
 }
 
 .question-call-email h6 {
     color: #012A52;
     font-weight: 500;
+    font-size: 16px;
 }
 
 .question-image {
@@ -938,4 +951,23 @@ svg {
      width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.footer-list{
+    color: #FFFFFF;
+}
+
+.footer-list h4{
+    font-weight: 600;
+}
+
+.footer-list ul{
+    list-style: none;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 30px;
+}
+
+.footer-list ul li{
+    cursor: pointer;
 }

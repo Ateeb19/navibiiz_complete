@@ -135,16 +135,16 @@ const Navbar = () => {
         </div>
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-4 flex-grow-1 me-4">
-          <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Home</Link>
-          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >About Us</Link>
-          <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Companies</Link>
-          <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Offers</Link>
+          <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "20px", fontWeight:'500' }} >Home</Link>
+          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "20px", fontWeight:'500' }} >About Us</Link>
+          <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "20px", fontWeight:'500' }} >Companies</Link>
+          <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "20px", fontWeight:'500' }} >Offers</Link>
         </div>
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-2">
           {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
             <Link to="/register_company" >
-              <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: " #FFFFFF" , color: '#012A52', fontWeight:'500'}}>
+              <button className="btn m-1" style={{ fontSize: "20px", backgroundColor: " #FFFFFF" , color: '#012A52', fontWeight:'500'}}>
                 {(userInfo && userInfo.role === 'Sadmin') ? (
                   <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>
                 ) : (
@@ -157,14 +157,14 @@ const Navbar = () => {
             <>
               <Link to="/send_groupage" >
                 <button className="btn m-1" style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500' }}>
-                  <BsSendFill /> <span style={{ fontSize: '16px' }}>Send through groupage</span>
+                  <BsSendFill /> <span style={{ fontSize: "20px" }}>Send through groupage</span>
                 </button>
               </Link>
 
               <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard" >
-                  <button className="btn btn-light m-1" style={{ fontSize: '16px', color: "#012A52" }}>
+                  <button className="btn btn-light m-1" style={{ fontSize: "20px", color: "#012A52" }}>
                     <MdDashboardCustomize />
                   </button>
                 </Link>
@@ -173,12 +173,12 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/send_groupage" >
-                <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500'}}>
+                <button className="btn m-1" style={{ fontSize: "20px", backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500'}}>
                   <BsSendFill /> Send through groupage
                 </button>
               </Link>
               <Link to="/login" >
-                <button className="btn btn-light m-1" style={{ fontSize: "16px", color: "#012A52" , fontWeight:'500'}}>
+                <button className="btn btn-light m-1" style={{ fontSize: "20px", color: "#012A52" , fontWeight:'500'}}>
                   <FaUser /> Login
                 </button>
               </Link>

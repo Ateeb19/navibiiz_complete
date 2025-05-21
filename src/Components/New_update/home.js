@@ -290,7 +290,7 @@ const Home = () => {
 
                             <div className="d-flex text-black flex-row align-items-center justify-content-between" style={{ width: '50%', padding: '0 20px' }}>
                                 <div>Search companies</div>
-                                <div onClick={handleSearch} style={{ cursor: 'pointer' }}><IoSearch /></div>
+                                <div onClick={handleSearch} style={{ cursor: 'pointer' }}><IoSearch className="fs-5" /></div>
                             </div>
                         </div>
                     </div>
@@ -373,7 +373,7 @@ const Home = () => {
                             <div className="col-6 d-flex flex-row justify-content-between align-items-center pe-5">
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
                                     <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
-                                        <h5 style={{ fontSize: '25px', fontWeight: '500' }}>1. </h5>
+                                        <h5 style={{ fontSize: '20px', fontWeight: '500' }}>1. </h5>
                                         <h5>Enter Your Shipping Request</h5>
                                     </div>
 
@@ -386,7 +386,7 @@ const Home = () => {
                             <div className="col-6 d-flex flex-row justify-content-between align-items-center ps-5">
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
                                     <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
-                                        <h5 style={{ fontSize: '25px', fontWeight: '500' }}>2. </h5>
+                                        <h5 style={{ fontSize: '20px', fontWeight: '500' }}>2. </h5>
                                         <h5>Receive Bids from Verified Carriers</h5>
                                     </div>
 
@@ -401,7 +401,7 @@ const Home = () => {
                             <div className="col-6 d-flex flex-row justify-content-between align-items-center pe-5">
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
                                     <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
-                                        <h5 style={{ fontSize: '25px', fontWeight: '500' }}>3. </h5>
+                                        <h5 style={{ fontSize: '20px', fontWeight: '500' }}>3. </h5>
                                         <h5>Enter Your Shipping Request</h5>
                                     </div>
 
@@ -414,7 +414,7 @@ const Home = () => {
                             <div className="col-6 d-flex flex-row justify-content-between align-items-start ps-5">
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
                                     <div className="step-text d-flex flex-row justify-content-center align-items-start gap-2 text-start w-100">
-                                        <h5 style={{ fontSize: '25px', fontWeight: '500' }}>4. </h5>
+                                        <h5 style={{ fontSize: '20px', fontWeight: '500' }}>4. </h5>
                                         <h5>Confirm Booking & Track Your Shipment</h5>
                                     </div>
 
@@ -1351,7 +1351,7 @@ const Home = () => {
                         <div className="heading-footer mt-5 mb-3">
                             <h1>Partner with us and grow your reach</h1>
                             <p>Join our platform to connect with global customers and expand your logistics business</p>
-                            <button className="" onClick={() => navigate('/register_company')}>Register your compmany</button>
+                            <button className="" onClick={() => navigate('/register_company')}>Register your company</button>
                         </div>
                     </div>
                 </div>
@@ -1477,7 +1477,7 @@ const Home = () => {
                                     <div className="d-flex flex-row align-items-center justify-content-start question-call-email w-100 gap-4">
                                         <h5>Email us:</h5>
                                         <h6><MdEmail />  <a href="mailto:info@novibiz.com"
-                                            style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer'}}><span className="text-dark">info@novibiz.com</span></a></h6>
+                                            style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}><span className="text-dark">info@novibiz.com</span></a></h6>
                                     </div>
                                 </div>
                             </div>
@@ -1493,8 +1493,43 @@ const Home = () => {
 
             <section className="footer-bottom w-100">
                 <div className="container">
-                    <div className="d-flex flex-column align-items-start justify-content-start w-100">
-                        <img src="/Images/novibiz/fulllogo_transparent_nobuffer.png" height='80px' alt="Logo" />
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <div className="d-flex flex-column align-items-start justify-content-start">
+                            <img src="/Images/novibiz/fulllogo_transparent_nobuffer.png" height='80px' alt="Logo" />
+                        </div>
+
+                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                            <h4 className="mb-3">Company</h4>
+                            <ul>
+                                <li onClick={() => navigate('/')}>Home</li>
+                                <li onClick={() => navigate('/about_us')}>About Us</li>
+                                <li onClick={() => navigate('/companies_list')}>Company List</li>
+                                <li onClick={() => navigate('/offers')}>Offers</li>
+                                <li onClick={() => navigate('/')}>Contact Us</li>
+                            </ul>
+                        </div>
+
+                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                            <h4 className="mb-3">Support</h4>
+                            <ul>
+                                <li>Term & Conditions</li>
+                                <li>Privacy Policy</li>
+                                <li>Refund Policy </li>
+                            </ul>
+                        </div>
+
+                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                            <h4 className="mb-3">Follow Us</h4>
+                            <div className="d-flex flex-row align-items-start justify-content-center gap-3">
+                                <img src="/Images/icons8-instagram-48.png" height="30px" alt="Instagram"/>
+                                <img src="/Images/icons8-facebook-48.png" height="30px" alt="Instagram"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="d-flex w-100 align-items-center justify-content-end text-light mt-4 gap-2">
+                        <p style={{fontSize: '12px'}}>@ Nobiviz2024</p>
+                        <div className="mb-3" style={{border: '1px solid #FFFFFF', width: '63%'}}></div>
                     </div>
                 </div>
 

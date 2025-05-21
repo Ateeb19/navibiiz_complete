@@ -1461,9 +1461,9 @@ const filteredOffers = allOffers.filter((item) => {
 
                     <div className="dashboard-wraper-box">
                       <div className="row mt-3 g-3 justify-content-center">
-                        {[{ count: total_amount_received, change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
-                        { count: total_commission, change: "-2%", text: "Commission Earned", icon: <BsCarFrontFill /> },
-                        { count: amount_to_pay, change: "+10%", text: "Total Amount Paid", icon: <FaTruckLoading /> }
+                        {[{ count: total_amount_received ? parseFloat(total_amount_received).toFixed(2) : 'N/A', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
+                        { count: total_commission ? parseFloat(total_commission).toFixed(2) : 'N/A', change: "-2%", text: "Commission Earned", icon: <BsCarFrontFill /> },
+                        { count: amount_to_pay ? parseFloat(amount_to_pay).toFixed(2) : 'N/A', change: "+10%", text: "Total Amount Paid", icon: <FaTruckLoading /> }
                         ].map((item, index) => (
                           <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                             <div className=" dashboard-wrap-box ">
