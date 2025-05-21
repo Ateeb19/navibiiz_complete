@@ -50,7 +50,85 @@ const Footer = () => {
     }
     return (
         <>
-            <section className="contact-form-wrapper">
+
+            <section className="w-100 mb-5 mt-4 pb-5">
+                <div className="container">
+                    <div className="row w-100">
+                        <div className="col-md-7">
+                            <div className="d-flex flex-column align-items-start justify-content-start w-100">
+                                <div className="home-heading w-100 d-flex align-items-start justify-content-start">
+                                    <h2>Have any questions?</h2>
+                                </div>
+                                <h4 className="question-h4 mt-4 mb-4">We are just one click away</h4>
+                                <p className="para-question text-start mb-4">
+                                    Join our platform to connect with global customers and expand your logistics business Our platform is designed to streamline cross-border shipping by linking you with reliable providers who offer consistent, transparent, and timely service around the globe.
+                                </p>
+                                <div className="d-flex flex-row align-items-center justify-content-between w-100">
+                                    <div className="d-flex flex-row align-items-center justify-content-start question-call-email w-100 gap-4">
+                                        <h5>Call Us</h5>
+                                        <h6><IoCall />  <span className="text-dark">+49 176 60906264</span></h6>
+                                    </div>
+                                    <div className="d-flex flex-row align-items-center justify-content-start question-call-email w-100 gap-4">
+                                        <h5>Email us:</h5>
+                                        <h6><MdEmail />  <a href="mailto:info@novibiz.com"
+                                            style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}><span className="text-dark">info@novibiz.com</span></a></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-5">
+                            <div className="w-100 question-image">
+                                <img src="/Images/home-footer.jpg" alt="image" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="footer-bottom w-100">
+                <div className="container">
+                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <div className="d-flex flex-column align-items-start justify-content-start">
+                            <img src="/Images/novibiz/fulllogo_transparent_nobuffer.png" height='80px' alt="Logo" />
+                        </div>
+
+                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                            <h4 className="mb-3">Company</h4>
+                            <ul>
+                                <li onClick={() => navigate('/')}>Home</li>
+                                <li onClick={() => navigate('/about_us')}>About Us</li>
+                                <li onClick={() => navigate('/companies_list')}>Company List</li>
+                                <li onClick={() => navigate('/offers')}>Offers</li>
+                                <li onClick={() => navigate('/')}>Contact Us</li>
+                            </ul>
+                        </div>
+
+                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                            <h4 className="mb-3">Support</h4>
+                            <ul>
+                                <li>Term & Conditions</li>
+                                <li>Privacy Policy</li>
+                                <li>Refund Policy </li>
+                            </ul>
+                        </div>
+
+                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                            <h4 className="mb-3">Follow Us</h4>
+                            <div className="d-flex flex-row align-items-start justify-content-center gap-3">
+                                <img src="/Images/icons8-instagram-48.png" height="30px" alt="Instagram" />
+                                <img src="/Images/icons8-facebook-48.png" height="30px" alt="Instagram" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="d-flex w-100 align-items-center justify-content-center text-light mt-4 gap-2">
+                        <p style={{ fontSize: '12px' }}>Copyright © 2025 – 2026 Novibiz. All rights reserved.</p>
+
+                    </div>
+                </div>
+
+            </section>
+            {/* <section className="contact-form-wrapper">
                 <div className="container">
                     <div className="contact-form-wrap">
                         <div className="row mt-2 w-100">
@@ -175,7 +253,7 @@ const Footer = () => {
                         <p>© 2025 Navibiiz. All Rights Reserved.</p>
                     </div>
                 </div>
-            </section>
+            </section> */}
         </>
     )
 }

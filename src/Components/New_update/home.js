@@ -1528,7 +1528,7 @@ const Home = () => {
 
                     </div>
                     <div className="d-flex w-100 align-items-center justify-content-center text-light mt-4 gap-2">
-                        <p style={{fontSize: '12px'}}>@ Nobiviz2024 Copyright © 2025 – 2026 Novibiz. All rights reserved.</p>
+                        <p style={{fontSize: '12px'}}>Copyright © 2025 – 2026 Novibiz. All rights reserved.</p>
                         
                     </div>
                 </div>
