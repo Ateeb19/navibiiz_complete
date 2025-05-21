@@ -2696,7 +2696,7 @@ const filteredOffers = allOffers.filter((item) => {
                                 <tr key={index}>
                                   <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => {
                                     if (item.status === 'pending') {
-                                      showAlert("The status is Panding");
+                                      showAlert("Offer is not yet accepted by customer");
                                     } else if (item.status === 'rejected') {
                                       showAlert("Your offer is Rejected");
                                     } else {

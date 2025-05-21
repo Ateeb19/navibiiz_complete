@@ -201,10 +201,17 @@ const Home = () => {
 
     const [bidAmount, setBidAmount] = useState('');
     const [expetedDate, setExpetedDate] = useState('');
+    const [dateError, setDateError] = useState(false);
+    const [offer_success, setOffer_success] = useState(false);
 
     const handleSubmit_offer = (details) => {
-        if (bidAmount === '' || expetedDate === '') {
+        if (bidAmount === '') {
             showAlert('Please fill all the fields');
+            return;
+        }
+        if (!expetedDate) {
+            showAlert('Please fill all the fields');
+            setDateError(true);
             return;
         }
 
@@ -224,12 +231,14 @@ const Home = () => {
                 navigate('/login');
             } else {
                 showAlert("Offer Created Successfully!");
+                setOffer_success(true);
                 setGroupage_detail(null);
                 setBidAmount('');
                 setExpetedDate('');
             }
         }).catch((err) => {
             showAlert('Login as a company to submit an offer');
+            setOffer_success(false);
             navigate('/login');
         });
     };
@@ -285,12 +294,12 @@ const Home = () => {
                         </div> */}
                         <div className="d-flex flex-row justify-content-between align-items-center px-3 pickup-wrap gap-4">
                             <div style={{ width: '50%', borderRight: '1px solid #00000066', padding: '0 20px' }}>
-                                <span><Countryselector label='Choose Country Name' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
+                                <span><Countryselector label='Pick Up Countr' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                             </div>
 
-                            <div className="d-flex text-black flex-row align-items-center justify-content-between" style={{ width: '50%', padding: '0 20px' }}>
+                            <div className="d-flex text-black flex-row align-items-center justify-content-between" onClick={handleSearch} style={{cursor: 'pointer', width: '50%', padding: '0 20px' }}>
                                 <div>Search companies</div>
-                                <div onClick={handleSearch} style={{ cursor: 'pointer' }}><IoSearch className="fs-5" /></div>
+                                <div style={{ cursor: 'pointer' }}><IoSearch className="fs-5" /></div>
                             </div>
                         </div>
                     </div>
@@ -1102,8 +1111,15 @@ const Home = () => {
                                             <span className="text-secondary text-start">How long will this product take to deliver?</span>
                                         </div>
                                         <Form.Select
+                                            style={{
+                                                border: dateError ? '1px solid rgb(178, 0, 0)' : '',
+                                                boxShadow: dateError ? '0 0 10px rgb(178, 0, 0)' : '',
+                                            }}
                                             value={expetedDate}
-                                            onChange={(e) => setExpetedDate(e.target.value)}
+                                            onChange={(e) => {
+                                                setExpetedDate(e.target.value);
+                                                setDateError(false); // reset error when changed
+                                            }}
                                         >
                                             <option value="">Select Expected Days</option>
                                             <option value="less_than_15_days">Less Than 15 Days</option>
@@ -1153,6 +1169,31 @@ const Home = () => {
                 </>
             )}
 
+            {offer_success && (
+                <>
+                     <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+
+                        <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: '25rem' }}>
+
+                            <div className="success-img-wrap">
+                                <img src="/Images/Party_Popper.png" alt="congratulation" />
+                            </div>
+
+                            <div className="title-head">
+                                <h3 style={{ color: ' #1ba300' }}>CONGRATULATIONS</h3>
+                            </div>
+
+                            <div className="success-des-wrap">
+                                <p>Offer Sent Successfully</p>
+                            </div>
+
+                            <div className="success-button">
+                                <button className="btn-success" onClick={() => navigate('/dashboard')}>Go To Dashboard</button>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
             {/* <section className="step-wrapper">
                 <div className="container mt-5">
                     <div className="text-center mb-4">
@@ -1521,15 +1562,15 @@ const Home = () => {
                         <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
                             <h4 className="mb-3">Follow Us</h4>
                             <div className="d-flex flex-row align-items-start justify-content-center gap-3">
-                                <img src="/Images/icons8-instagram-48.png" height="30px" alt="Instagram"/>
-                                <img src="/Images/icons8-facebook-48.png" height="30px" alt="Instagram"/>
+                                <img src="/Images/icons8-instagram-48.png" height="30px" alt="Instagram" />
+                                <img src="/Images/icons8-facebook-48.png" height="30px" alt="Instagram" />
                             </div>
                         </div>
 
                     </div>
                     <div className="d-flex w-100 align-items-center justify-content-center text-light mt-4 gap-2">
-                        <p style={{fontSize: '12px'}}>Copyright © 2025 – 2026 Novibiz. All rights reserved.</p>
-                        
+                        <p style={{ fontSize: '12px' }}>Copyright © 2025 – 2026 Novibiz. All rights reserved.</p>
+
                     </div>
                 </div>
 

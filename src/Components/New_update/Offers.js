@@ -184,9 +184,18 @@ const Offers = () => {
         setGroupage_detail(item);
     }
 
+    const [dateError, setDateError] = useState(false);
+    const [offer_success, setOffer_success] = useState(false);
+
     const handleSubmit_offer = (details) => {
-        if (bidAmount === '' || expetedDate === '') {
+        if (bidAmount === '') {
             showAlert('Please fill all the fields');
+            return;
+        }
+        
+        if (!expetedDate) {
+            showAlert('Please fill all the fields');
+            setDateError(true);
             return;
         }
 
@@ -212,12 +221,14 @@ const Offers = () => {
                 navigate('/login');
             } else {
                 showAlert("Offer Created Successfully!");
+                setOffer_success(true);
                 setGroupage_detail(null);
                 setBidAmount('');
                 setExpetedDate('');
             }
         }).catch((err) => {
             showAlert('Login as a company to submit an offer');
+            setOffer_success(false);
             navigate('/login');
         });
     };
@@ -851,8 +862,15 @@ const Offers = () => {
                                                                 <span className="text-secondary text-start">How long will this product take to deliver?</span>
                                                             </div>
                                                             <Form.Select
+                                                                style={{
+                                                                    border: dateError ? '1px solid rgb(178, 0, 0)' : '',
+                                                                    boxShadow: dateError ? '0 0 10px rgb(178, 0, 0)' : '',
+                                                                }}
                                                                 value={expetedDate}
-                                                                onChange={(e) => setExpetedDate(e.target.value)}
+                                                                onChange={(e) => {
+                                                                    setExpetedDate(e.target.value);
+                                                                    setDateError(false); // reset error when changed
+                                                                }}
                                                             >
                                                                 <option value="">Select Expected Days</option>
                                                                 <option value="less_than_15_days">Less Than 15 Days</option>
@@ -896,6 +914,32 @@ const Offers = () => {
                                                             items={images}
                                                             showFullscreenButton={false} />
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {offer_success && (
+                                    <>
+                                        <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+
+                                            <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: '25rem' }}>
+
+                                                <div className="success-img-wrap">
+                                                    <img src="/Images/Party_Popper.png" alt="congratulation" />
+                                                </div>
+
+                                                <div className="title-head">
+                                                    <h3 style={{ color: ' #1ba300' }}>CONGRATULATIONS</h3>
+                                                </div>
+
+                                                <div className="success-des-wrap">
+                                                    <p>Offer Sent Successfully</p>
+                                                </div>
+
+                                                <div className="success-button">
+                                                    <button className="btn-success" onClick={() => navigate('/dashboard')}>Go To Dashboard</button>
                                                 </div>
                                             </div>
                                         </div>
