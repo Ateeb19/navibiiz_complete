@@ -99,7 +99,7 @@ function OfferDetails({ selected_offer }) {
                                     navigate('/dashboard');
                                     localStorage.setItem('activeSection', 'dashboard')
                                     setTraansactionId('');
-                                }}>Go To Login</button>
+                                }}>Go To Dashboard</button>
                             </div>
                         </div>
                     </div>

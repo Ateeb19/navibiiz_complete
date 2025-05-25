@@ -221,13 +221,15 @@ const Send_groupage = () => {
 
                 <section className="shipping-wrapper w-100">
                     <div className="container-fluid">
-                        <div className="shipping-wrap-box w-100 pe-4 ps-5 ">
+                        <div className="shipping-wrap-box w-100">
                             <div className="title-head text-start">
                                 <h3>Shipping Information</h3>
                             </div>
                             <div className="shipping-wrap">
+                                {/* <div className="row align-items-start justify-content-between w-100 mt-4 ps-3"> */}
                                 <div className="row align-items-between justify-content-between w-100 mt-4 ps-3">
-                                    <div className="d-flex flex-column align-items-start justify-content-start col-md-9 col-12  border border-1 rounded-2" style={{ width: '73%' }}>
+                                {/* <div className="col-12 col-md-9 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start" style={{ width: '73%' }}> */}
+                                    <div className="d-flex flex-column align-items-start justify-content-start col-md-9 col-12  border border-1 rounded-2 groupage-left" >
 
 
                                         <Stepper linear desabled ref={stepperRef} onStepChange={(step) => setCurrentStep(step)} style={{ flexBasis: 'auto', width: '100%' }}>
@@ -585,6 +587,7 @@ const Send_groupage = () => {
 
                                         </Stepper>
                                     </div>
+                                      {/* <div className="col-12 col-md-3 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start"> */}
                                     <div className="d-flex flex-column align-items-start justify-content-start col-md-3 cod-12  border border-1 rounded-2">
 
                                         <div className="d-flex flex-column align-items-start w-100">

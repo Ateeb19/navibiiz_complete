@@ -29,15 +29,43 @@
     .login-wrap {
         background-color: #fff;
         padding: 40px 50px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         overflow-x: hidden;
         width: 100%;
         max-width: 80%;
         height: 80vh;
-      }
+    }
 
-    .search-div{
+    .search-div {
         padding-left: 0px !important;
     }
-}
 
+    .pickup-wrap {
+        margin: 0px 0;
+        width: 370px;
+        border-radius: 15px;
+        background-color: #ffffff;
+    }
+
+    .groupage-left {
+        width: 100% !important;
+        margin-bottom: 15px;
+    }
+
+    .shipping-wrap-box {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .home-country-selector {
+        width: 60%;
+        border-right: 1px solid #00000066;
+        padding: 0 0px;
+    }
+
+    .home-search-country {
+        cursor: pointer;
+        width: 40%;
+        padding: 0 0px;
+    }
+}

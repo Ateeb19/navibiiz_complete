@@ -155,7 +155,7 @@
     /* font-weight: 500; */
     color: #095198;
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: underline;
 }
 
 .home-offer-btn {
@@ -796,7 +796,7 @@ svg {
     color: #000000;
     font-size: 28px;
     font-weight: 700;
-    line-height: 38px;
+    line-height: 38px;
 }
 
 .about-text-wrap h2 {
@@ -823,7 +823,7 @@ svg {
     background-color: #012A52;
     border: 1px solid #012A52;
     border-radius: 7px;
-    margin-top: 15px;
+    margin-top: 15px;
 }
 
 .slider-btn button {
@@ -839,7 +839,7 @@ svg {
     font-weight: 700;
     color: #000000;
     margin-bottom: 0;
-    font-size: 20px;
+    font-size: 20px;
 }
 
 .step-text p {
@@ -855,8 +855,9 @@ svg {
 .step-image img {
     width: 160px;
     height: 160px;
-    object-fit: cover;
+    object-fit: cover;
 }
+
 .home-footer-wrapper {
     background-image: url(../../../public/Images/home_footer.jpg);
     padding: 40px 0;
@@ -935,7 +936,7 @@ svg {
 .question-call-email h6 {
     color: #012A52;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 16px;
 }
 
 .question-image {
@@ -948,21 +949,21 @@ svg {
     overflow: hidden;
 }
 
-.question-image img{
-     width: 100%;
+.question-image img {
+    width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.footer-list{
+.footer-list {
     color: #FFFFFF;
 }
 
-.footer-list h4{
+.footer-list h4 {
     font-weight: 600;
 }
 
-.footer-list ul{
+.footer-list ul {
     list-style: none;
     font-weight: 500;
     font-size: 15px;
@@ -974,4 +975,25 @@ svg {
     font-size: 15px;
     font-weight: 400;
     margin-bottom: 7px;
+}
+
+.groupage-left {
+    width: 73% !important;
+}
+
+.shipping-wrap-box {
+    padding-left: 50px;
+    padding-right: 20px;
+}
+
+.home-country-selector{
+    width: 50%;
+    border-right: 1px solid #00000066;
+    padding: 0 20px;
+}
+
+.home-search-country{
+    cursor: pointer;
+    width: 50%;
+    padding: 0 20px;
 }

@@ -293,11 +293,11 @@ const Home = () => {
                             <button className="" onClick={handleSearch}><IoSearch /> Search Companies</button>
                         </div> */}
                         <div className="d-flex flex-row justify-content-between align-items-center px-3 pickup-wrap gap-4">
-                            <div style={{ width: '50%', borderRight: '1px solid #00000066', padding: '0 20px' }}>
+                            <div className= 'home-country-selector'>
                                 <span><Countryselector label='Pick Up Country' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                             </div>
 
-                            <div className="d-flex text-black flex-row align-items-center justify-content-between" onClick={handleSearch} style={{cursor: 'pointer', width: '50%', padding: '0 20px' }}>
+                            <div className="d-flex text-black flex-row align-items-center justify-content-between home-search-country" onClick={handleSearch} >
                                 <div>Search companies</div>
                                 <div style={{ cursor: 'pointer' }}><IoSearch className="fs-5" /></div>
                             </div>
@@ -370,76 +370,84 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="container mt-5">
-                <div className="d-flex flex-column justify-content-center align-items-center w-100">
-                    <div className="d-flex align-items-start justify-content-start w-100 mb-4">
-                        <div className="home-heading text-start" style={{ width: '60%' }}>
-                            <h2>How It Works: Simple & Secure Shipping in Four Easy Steps</h2>
-                        </div>
-                    </div>
-                    <div className="d-flex flex-column justify-content-center align-items-center w-100">
-                        <div className="row w-100 mt-4 mb-4">
-                            <div className="col-6 d-flex flex-row justify-content-between align-items-center pe-5">
-                                <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
-                                    <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
-                                        <h5 style={{ fontSize: '20px', fontWeight: '500' }}>1. </h5>
-                                        <h5>Enter Your Shipping Request</h5>
-                                    </div>
+           <div className="container mt-5">
+  <div className="d-flex flex-column justify-content-center align-items-center w-100">
+    <div className="d-flex align-items-start justify-content-start w-100 mb-4">
+      <div className="home-heading text-start w-100 w-md-60">
+        <h2>How It Works: Simple & Secure Shipping in Four Easy Steps</h2>
+      </div>
+    </div>
 
-                                    <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
-                                </div>
-                                <div className="step-image d-flex flex-column align-items-center">
-                                    <img src="/Images/home_img04.jpg" alt="step1" />
-                                </div>
-                            </div>
-                            <div className="col-6 d-flex flex-row justify-content-between align-items-center ps-5">
-                                <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
-                                    <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
-                                        <h5 style={{ fontSize: '20px', fontWeight: '500' }}>2. </h5>
-                                        <h5>Receive Bids from Verified Carriers</h5>
-                                    </div>
-
-                                    <p>Get instant offers from trusted global shipping partners who match your shipment criteria.</p>
-                                </div>
-                                <div className="step-image d-flex flex-column align-items-center">
-                                    <img src="/Images/home_img03.jpg" alt="step1" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row w-100 mt-4">
-                            <div className="col-6 d-flex flex-row justify-content-between align-items-center pe-5">
-                                <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
-                                    <div className="step-text d-flex flex-row justify-content-start align-items-start gap-2 text-start w-100">
-                                        <h5 style={{ fontSize: '20px', fontWeight: '500' }}>3. </h5>
-                                        <h5>Enter Your Shipping Request</h5>
-                                    </div>
-
-                                    <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
-                                </div>
-                                <div className="step-image d-flex flex-column align-items-center">
-                                    <img src="/Images/home_img02.jpg" alt="step1" />
-                                </div>
-                            </div>
-                            <div className="col-6 d-flex flex-row justify-content-between align-items-start ps-5">
-                                <div className="step-text d-flex flex-column align-items-start text-start gap-3" style={{ width: '70%' }}>
-                                    <div className="step-text d-flex flex-row justify-content-center align-items-start gap-2 text-start w-100">
-                                        <h5 style={{ fontSize: '20px', fontWeight: '500' }}>4. </h5>
-                                        <h5>Confirm Booking & Track Your Shipment</h5>
-                                    </div>
-
-                                    <p>Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p>
-                                </div>
-                                <div className="step-image d-flex flex-column align-items-center">
-                                    <img src="/Images/home_img01.jpg" alt="step1" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5">
-                        <button onClick={() => navigate('/send_groupage')}>Start shipping your products</button>
-                    </div>
-                </div>
+    <div className="d-flex flex-column justify-content-center align-items-center w-100">
+      <div className="row w-100 mt-4 mb-4 gy-4">
+        {/* Step 1 */}
+        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between pe-md-5">
+          <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
+            <div className="d-flex flex-row gap-2">
+              <h5 className="fw-medium" style={{ fontSize: '20px' }}>1.</h5>
+              <h5>Enter Your Shipping Request</h5>
             </div>
+            <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
+          </div>
+          <div className="step-image d-flex justify-content-center">
+            <img src="/Images/home_img04.jpg" alt="step1" className="img-fluid" />
+          </div>
+        </div>
+
+        {/* Step 2 */}
+        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between ps-md-5">
+          <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
+            <div className="d-flex flex-row gap-2">
+              <h5 className="fw-medium" style={{ fontSize: '20px' }}>2.</h5>
+              <h5>Receive Bids from Verified Carriers</h5>
+            </div>
+            <p>Get instant offers from trusted global shipping partners who match your shipment criteria.</p>
+          </div>
+          <div className="step-image d-flex justify-content-center">
+            <img src="/Images/home_img03.jpg" alt="step2" className="img-fluid" />
+          </div>
+        </div>
+      </div>
+
+      <div className="row w-100 mt-4 gy-4">
+        {/* Step 3 */}
+        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between pe-md-5">
+          <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
+            <div className="d-flex flex-row gap-2">
+              <h5 className="fw-medium" style={{ fontSize: '20px' }}>3.</h5>
+              <h5>Enter Your Shipping Request</h5>
+            </div>
+            <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
+          </div>
+          <div className="step-image d-flex justify-content-center">
+            <img src="/Images/home_img02.jpg" alt="step3" className="img-fluid" />
+          </div>
+        </div>
+
+        {/* Step 4 */}
+        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between ps-md-5">
+          <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
+            <div className="d-flex flex-row gap-2">
+              <h5 className="fw-medium" style={{ fontSize: '20px' }}>4.</h5>
+              <h5>Confirm Booking & Track Your Shipment</h5>
+            </div>
+            <p>Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p>
+          </div>
+          <div className="step-image d-flex justify-content-center">
+            <img src="/Images/home_img01.jpg" alt="step4" className="img-fluid" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5">
+      <button onClick={() => navigate('/send_groupage')} className="btn btn-primary px-4 py-2">
+        Start shipping your products
+      </button>
+    </div>
+  </div>
+</div>
+
 
             <section className="new-add-company-wrapper">
                 <div className="container">
