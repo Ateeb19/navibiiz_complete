@@ -99,6 +99,7 @@ function OfferDetails({ selected_offer }) {
                                     navigate('/dashboard');
                                     localStorage.setItem('activeSection', 'dashboard')
                                     setTraansactionId('');
+                                    window.location.reload();
                                 }}>Go To Dashboard</button>
                             </div>
                         </div>

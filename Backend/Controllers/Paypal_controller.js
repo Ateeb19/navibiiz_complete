@@ -2,7 +2,7 @@ const db = require('../Db_Connection');
 const axios = require('axios');
 require('dotenv').config();
 
-
+// console.log(process.env.PAYPAL_SECRET, 'hello \n',process.env.PAYPAL_CLIENT_ID);
 const base = 'https://api-m.paypal.com';
 // const base = 'https://api-m.sandbox.paypal.com';
 async function generateAccessToken() {
@@ -17,11 +17,6 @@ async function generateAccessToken() {
 
     return response.data.access_token;
 }
-
-
-//   capture_order_route,
-//   create_order_api,
-//   send_information
 
 const capture_order_route = async (req, res) => {
     const accessToken = await generateAccessToken();
@@ -66,83 +61,6 @@ const create_payment_api = async (req, res) => {
 
   res.json(response.data);
 }
-
-// const db = require('../Db_Connection');
-// require("dotenv").config();
-
-// const paypal = require("@paypal/checkout-server-sdk");
-// const OrdersCreateRequest = paypal.orders.OrdersCreateRequest;
-// const OrdersCaptureRequest = paypal.orders.OrdersCaptureRequest;
-
-// // Set up PayPal environment
-// // const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
-
-// const environment = new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_SECRET);
-// const client = new paypal.core.PayPalHttpClient(environment);
-// const create_order_api = async (req, res) => {
-//     // console.log('hello');
-//     try {
-//         const { offer } = req.body;
-//         if (!offer || !offer.amount || !offer.id || !offer.name) {
-//             return res.status(400).json({ error: "Invalid offer data." });            
-//         }
-//         const request = new paypal.orders.OrdersCreateRequest();
-//         request.requestBody({
-//             intent: "CAPTURE",
-//             purchase_units: [
-//                 {
-//                     amount: {
-//                         currency_code: "USD",
-//                         value: offer.amount,
-//                         breakdown: {
-//                             item_total: {
-//                                 currency_code: "USD",
-//                                 value: offer.amount, // Ensure this matches the sum of items
-//                             }
-//                         }
-//                     },
-//                     items: [
-//                         {
-//                             name: offer.name,
-//                             unit_amount: {
-//                                 currency_code: "USD",
-//                                 value: offer.amount,
-//                             },
-//                             quantity: "1",
-//                             description: `Payment for ${offer.name}`,
-//                             sku: offer.id,
-//                         }
-//                     ]
-//                 }
-//             ]
-//         });
-
-//         const response = await client.execute(request);
-//         res.status(response.statusCode).json(response.result);
-//     } catch (error) {
-//         console.error("Failed to create order:", error);
-//         res.status(500).json({ error: "Failed to create order." });
-//     }
-// };
-
-// // Function to capture an order
-// const capture_order_route = async (req, res) => {
-//     try {
-//         const { orderID } = req.params;
-//         if (!orderID) {
-//             return res.status(400).json({ error: "Order ID is required." });
-//         }
-
-//         const request = new OrdersCaptureRequest(orderID);
-//         request.requestBody({});
-
-//         const response = await client.execute(request);
-//         res.status(response.statusCode).json(response.result);
-//     } catch (error) {
-//         console.error("Failed to capture order:", error);
-//         res.status(500).json({ error: "Failed to capture order." });
-//     }
-// };
 
 // Function to send order information
 const send_information = (req, res) => {
@@ -255,7 +173,86 @@ console.log(user_id, user_email, offerId, amount);
 module.exports = {
     capture_order_route,
     create_payment_api,
-    // create_order_api,
     send_information,
     paypal_test_api
 };
+
+
+
+
+// const db = require('../Db_Connection');
+// require("dotenv").config();
+
+// const paypal = require("@paypal/checkout-server-sdk");
+// const OrdersCreateRequest = paypal.orders.OrdersCreateRequest;
+// const OrdersCaptureRequest = paypal.orders.OrdersCaptureRequest;
+
+// // Set up PayPal environment
+// // const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
+
+// const environment = new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_SECRET);
+// const client = new paypal.core.PayPalHttpClient(environment);
+// const create_order_api = async (req, res) => {
+//     // console.log('hello');
+//     try {
+//         const { offer } = req.body;
+//         if (!offer || !offer.amount || !offer.id || !offer.name) {
+//             return res.status(400).json({ error: "Invalid offer data." });            
+//         }
+//         const request = new paypal.orders.OrdersCreateRequest();
+//         request.requestBody({
+//             intent: "CAPTURE",
+//             purchase_units: [
+//                 {
+//                     amount: {
+//                         currency_code: "USD",
+//                         value: offer.amount,
+//                         breakdown: {
+//                             item_total: {
+//                                 currency_code: "USD",
+//                                 value: offer.amount, // Ensure this matches the sum of items
+//                             }
+//                         }
+//                     },
+//                     items: [
+//                         {
+//                             name: offer.name,
+//                             unit_amount: {
+//                                 currency_code: "USD",
+//                                 value: offer.amount,
+//                             },
+//                             quantity: "1",
+//                             description: `Payment for ${offer.name}`,
+//                             sku: offer.id,
+//                         }
+//                     ]
+//                 }
+//             ]
+//         });
+
+//         const response = await client.execute(request);
+//         res.status(response.statusCode).json(response.result);
+//     } catch (error) {
+//         console.error("Failed to create order:", error);
+//         res.status(500).json({ error: "Failed to create order." });
+//     }
+// };
+
+// // Function to capture an order
+// const capture_order_route = async (req, res) => {
+//     try {
+//         const { orderID } = req.params;
+//         if (!orderID) {
+//             return res.status(400).json({ error: "Order ID is required." });
+//         }
+
+//         const request = new OrdersCaptureRequest(orderID);
+//         request.requestBody({});
+
+//         const response = await client.execute(request);
+//         res.status(response.statusCode).json(response.result);
+//     } catch (error) {
+//         console.error("Failed to capture order:", error);
+//         res.status(500).json({ error: "Failed to capture order." });
+//     }
+// };

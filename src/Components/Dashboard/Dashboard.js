@@ -3064,6 +3064,7 @@ const filteredOffers = allOffers.filter((item) => {
                 }}
               >
                 <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}>
+                {/* <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gTPRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL" }}> */}
                   <div className="d-flex flex-column justify-content-start align-items-start w-100">
                     <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
                       ✕
