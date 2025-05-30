@@ -133,7 +133,7 @@ const Send_groupage = () => {
     const [senderCity, setSenderCity] = useState(null);
     const [document, setDocument] = useState(null);
     const [senderDescription, setSenderDescription] = useState(null);
-
+    const [selectedCountry, setSelectedCountry] = useState("");
 
     const validateStep1 = () => {
         return productName;
@@ -228,7 +228,7 @@ const Send_groupage = () => {
                             <div className="shipping-wrap">
                                 {/* <div className="row align-items-start justify-content-between w-100 mt-4 ps-3"> */}
                                 <div className="row align-items-between justify-content-between w-100 mt-4 ps-3">
-                                {/* <div className="col-12 col-md-9 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start" style={{ width: '73%' }}> */}
+                                    {/* <div className="col-12 col-md-9 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start" style={{ width: '73%' }}> */}
                                     <div className="d-flex flex-column align-items-start justify-content-start col-md-9 col-12  border border-1 rounded-2 groupage-left" >
 
 
@@ -399,11 +399,11 @@ const Send_groupage = () => {
                                                     <div className="row mt-4">
                                                         <div className="col-12 col-md-4 text-start">
                                                             <label className="shipping-input-label">Country<span className="text-danger">*</span></label>
-                                                            <Countries_selector onSelectCountry={(value) => setUserCountry(value)} value={userCountry} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' required />
+                                                            <Countries_selector onSelectCountry={(value) => { setUserCountry(value); setSelectedCountry(value) }} value={userCountry} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' required />
                                                         </div>
                                                         <div className="col-12 col-md-4 text-start">
                                                             <label className="shipping-input-label">State<span className="text-danger">*</span></label>
-                                                            <State_selector onSelectState={(value) => setUserState(value)} value={userState} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' required />
+                                                            <State_selector selectedCountry={selectedCountry} onSelectState={(value) => setUserState(value)} value={userState} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' required />
                                                         </div>
                                                         <div className="col-12 col-md-4 text-start">
                                                             <label className="shipping-input-label">City<span className="text-danger">*</span></label>
@@ -505,7 +505,7 @@ const Send_groupage = () => {
                                                     <div className="col-md-4  text-start">
                                                         <label className="shipping-input-label">Country <span className="text-danger">*</span></label>
                                                         <Countries_selector
-                                                            onSelectCountry={(value) => setSenderCountry(value)}
+                                                            onSelectCountry={(value) => { setSenderCountry(value); setSelectedCountry(value) }}
                                                             value={senderCountry} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
                                                             required
                                                         />
@@ -513,6 +513,7 @@ const Send_groupage = () => {
                                                     <div className="col-md-4  text-start">
                                                         <label className="shipping-input-label">State <span className="text-danger">*</span></label>
                                                         <State_selector
+                                                            selectedCountry={selectedCountry}
                                                             onSelectState={(value) => setSenderState(value)}
                                                             value={senderState} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
                                                             required
@@ -587,7 +588,7 @@ const Send_groupage = () => {
 
                                         </Stepper>
                                     </div>
-                                      {/* <div className="col-12 col-md-3 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start"> */}
+                                    {/* <div className="col-12 col-md-3 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start"> */}
                                     <div className="d-flex flex-column align-items-start justify-content-start col-md-3 cod-12  border border-1 rounded-2">
 
                                         <div className="d-flex flex-column align-items-start w-100">

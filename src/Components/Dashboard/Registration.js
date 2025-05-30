@@ -106,7 +106,8 @@ const Registration = () => {
     const [iban_number, setIban_number] = useState('');
     const [paypal_id, setPaypal_id] = useState("");
     const [paypal_id_check, setPaypal_id_check] = useState('');
-
+    const [selectedCountry, setSelectedCountry] = useState("");
+    
     const handlecountry = (value, index) => {
         const updatedLocations = [...locations];
         updatedLocations[index].country = value;
@@ -717,7 +718,7 @@ const Registration = () => {
                                 <div className="col-12 col-md-4 mb-3 d-flex flex-column align-items-start">
                                     <label className="shipping-input-label">Country <span className="text-danger">*</span></label>
                                     <Countries_selector
-                                        onSelectCountry={(value) => handlecountry(value, index)}
+                                        onSelectCountry={(value) => { handlecountry(value, index); setSelectedCountry(value) }}
                                         label="Select the country"
                                         value={location.country}
                                         paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
@@ -737,6 +738,7 @@ const Registration = () => {
                                     {visibleSelectors[index] && (
                                         <div className="w-100">
                                             <State_selector
+                                                selectedCountry={selectedCountry}
                                                 onSelectState={(value) => handlestate(value, index)}
                                                 value={location.state}
                                                 paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
@@ -848,7 +850,7 @@ const Registration = () => {
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable className="shipping-input-label">Countries Selected</lable>
+                                                        <lable className="shipping-input-label regerser-country-label">Countries Selected</lable>
                                                         {selectedContainerCountries.map((item, index) => (
                                                             <input
                                                                 key={index}
@@ -906,7 +908,7 @@ const Registration = () => {
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable className="shipping-input-label">Countries Selected</lable>
+                                                        <lable className="shipping-input-label regerser-country-label">Countries Selected</lable>
                                                         {selectedCarCountries.map((item, index) => (
                                                             <input
                                                                 key={index}
@@ -963,7 +965,7 @@ const Registration = () => {
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable className="shipping-input-label">Countries Selected</lable>
+                                                        <lable className="shipping-input-label regerser-country-label">Countries Selected</lable>
                                                         {selectedGroupageCountries.map((item, index) => (
                                                             <input
                                                                 key={index}

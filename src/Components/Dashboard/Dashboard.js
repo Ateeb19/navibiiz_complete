@@ -665,7 +665,7 @@ const Dashboard = () => {
         (filter_selectedCountry === '' || shipsToCountry(filter_selectedCountry)) &&
         (filter_selectedService === '' || providesService(filter_selectedService))
       );
-    });
+    }) .sort((a, b) => b.id - a.id); 
   }
 
   const handleScrollToMore = () => {
@@ -729,7 +729,7 @@ const Dashboard = () => {
   }
   const [show_company_details, setShow_company_details] = useState('');
   const handle_user_offer_details = (offer_id, groupage_id) => {
-    console.log(offer_id);
+    // console.log(offer_id);
     axios.get(`${port}/user/company_details/${offer_id}`, {
       headers: {
         Authorization: token,
@@ -741,7 +741,7 @@ const Dashboard = () => {
       } else {
         setShow_company_details('');
       }
-      console.log(show_company_details);
+      // console.log(show_company_details);
     }).catch((err) => console.log(err));
   }
 
@@ -846,26 +846,26 @@ const Dashboard = () => {
     }
   }
 
-const [offersearch, setOffersearch] = useState('');
-const [offerdate, setOfferdate] = useState('');
+  const [offersearch, setOffersearch] = useState('');
+  const [offerdate, setOfferdate] = useState('');
 
-const filteredOffers = allOffers.filter((item) => {
-  const matchesSearch = offersearch === "" || (
-    item.offer_id?.toString().includes(offersearch) ||
-    item.product_name?.toLowerCase().includes(offersearch.toLowerCase()) ||
-    item.userName?.toLowerCase().includes(offersearch.toLowerCase()) ||
-    item.company_name?.toLowerCase().includes(offersearch.toLowerCase()) ||
-    ((parseFloat(item.amount) || 0) + 
-     (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission)))
-      .toString()
-      .includes(offersearch)
-  );
+  const filteredOffers = allOffers.filter((item) => {
+    const matchesSearch = offersearch === "" || (
+      item.offer_id?.toString().includes(offersearch) ||
+      item.product_name?.toLowerCase().includes(offersearch.toLowerCase()) ||
+      item.userName?.toLowerCase().includes(offersearch.toLowerCase()) ||
+      item.company_name?.toLowerCase().includes(offersearch.toLowerCase()) ||
+      ((parseFloat(item.amount) || 0) +
+        (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission)))
+        .toString()
+        .includes(offersearch)
+    );
 
-  const matchesDate = offerdate === "" ||
-    (item.created_at && new Date(item.created_at).toISOString().split("T")[0] === offerdate);
+    const matchesDate = offerdate === "" ||
+      (item.created_at && new Date(item.created_at).toISOString().split("T")[0] === offerdate);
 
-  return matchesSearch && matchesDate;
-});
+    return matchesSearch && matchesDate;
+  });
 
   const [edit_company, setEdit_company] = useState(false);
   const handle_edit_company = (company) => {
@@ -1243,7 +1243,7 @@ const filteredOffers = allOffers.filter((item) => {
         console.error('API error:', err);
       });
   };
-
+  console.log(payment_details);
 
   const Menu = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -3064,7 +3064,7 @@ const filteredOffers = allOffers.filter((item) => {
                 }}
               >
                 <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}>
-                {/* <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gTPRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL" }}> */}
+                  {/* <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gTPRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL" }}> */}
                   <div className="d-flex flex-column justify-content-start align-items-start w-100">
                     <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
                       ✕
@@ -4072,7 +4072,7 @@ const filteredOffers = allOffers.filter((item) => {
                         </div>
 
                         <div className="col-12 col-md-6 col-lg-4 position-relative">
-                          <input type="date" className="shipping-input-field" placeholder="Pick up date" onChange={(e) => setOfferdate(e.target.value)} value={offerdate}/>
+                          <input type="date" className="shipping-input-field" placeholder="Pick up date" onChange={(e) => setOfferdate(e.target.value)} value={offerdate} />
                         </div>
                       </div>
                     </div>
@@ -4761,6 +4761,25 @@ const filteredOffers = allOffers.filter((item) => {
                               },
                               { icon: <MdOutlineDateRange />, label: "Payment Date", value: payment_details.payment_time ? new Date(payment_details.payment_time).toISOString().split("T")[0] : 'N/A' },
                               { icon: <PiContactlessPaymentFill />, label: "Payment Status", value: payment_details.payment_info_status ? payment_details.payment_info_status : 'N/A' }
+                            ],
+                            [
+                              {
+                                icon: <FaUserAlt />, label: "Amount Bid", value: payment_details.payment_info_amount ? (() => {
+                                  const Amount = parseFloat(payment_details.payment_info_amount);
+                                  const com = Amount - (Amount / commission_percentage);
+                                  const bid = Amount - com;
+                                  return bid.toFixed(2);
+                                })() : 'N/A'
+                              },
+
+                              {
+                                icon: <FaUserAlt />, label: "Amount To Pay", value: payment_details.payment_info_amount ? (() => {
+                                  const Amount = parseFloat(payment_details.payment_info_amount);
+                                  const com = Amount - (Amount / commission_percentage);
+                                  const bid = Amount - com;
+                                  return bid.toFixed(2);
+                                })() : 'N/A'
+                              },
                             ]
                           ].map((row, index) => (
                             <div key={index} className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
