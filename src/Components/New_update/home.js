@@ -1505,7 +1505,7 @@ const Home = () => {
                     </div>
                 </div>
             </section> */}
-
+{/* 
             <section className="w-100 mb-5 mt-4 pb-5">
                 <div className="container">
                     <div className="row w-100">
@@ -1582,7 +1582,7 @@ const Home = () => {
                     </div>
                 </div>
 
-            </section>
+            </section> */}
             {/* <section className="faq-wrapper">
                 <div className="title-head">
                     <h3>Questions we get asked</h3>
@@ -1736,9 +1736,9 @@ const Home = () => {
                 </div>
             </section> */}
 
-            {/* <div className="w-100 mt-5">
+            <div className="w-100 mt-5">
                 <Footer />
-            </div> */}
+            </div>
         </div>
     )
 }

@@ -986,14 +986,55 @@ svg {
     padding-right: 20px;
 }
 
-.home-country-selector{
+.home-country-selector {
     width: 50%;
     border-right: 1px solid #00000066;
     padding: 0 20px;
 }
 
-.home-search-country{
+.home-search-country {
     cursor: pointer;
     width: 50%;
     padding: 0 20px;
+}
+
+.terms-condition-weapper {
+    width: 100%;
+    padding: 60px 0;
+    background-color: #012a52;
+    position: relative;
+    z-index: 0;
+}
+
+.title-head-terms h2 {
+    font-size: 40px;
+    width: 50%;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.title-head-terms p {
+    font-size: 18px;
+    line-height: 28px;
+    margin-top: 20px;
+    width: 50%;
+    font-weight: 400;
+    color: #ffffff;
+}
+
+.terms-condition-wrap{
+    background-color: #ffffff;    
+}
+
+.condition h5{
+    font-size: 30px;
+    font-weight: bold;
+    color: #012a52;
+}
+
+.condition p{
+    font-size: 16px;
+    line-height: 26px;
+    color: #565656;
+    font-weight: 400;
 }

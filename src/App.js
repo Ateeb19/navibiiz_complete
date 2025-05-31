@@ -18,7 +18,9 @@ import About_us from './Components/New_update/About_us';
 import { AlertProvider } from "./Components/alert/Alert_message";
 import ResetPassword from './Components/User/ResetPassword';
 import useInactivityLogout from "./Components/Activity_check/Activity_check";
-
+import Terms_conditions from './Components/Support/Terms_conditions';
+import Privacy_policy from './Components/Support/Privacy_policy';
+import Refund_policy from './Components/Support/Refund_policy';
 
 
 const AppContent = () => {
@@ -37,6 +39,9 @@ const AppContent = () => {
         <Route Component={Regester_company} path='/register_company' />
         <Route Component={About_us} path='/about_us' />
         <Route Component={LoginPage} path='/login' />
+        <Route Component={Terms_conditions} path='/terms_conditions' />
+        <Route Component={Privacy_policy} path='/privacy_policy' />
+        <Route Component={Refund_policy} path='/refund_policy' />
         <Route Component={ResetPassword} path='/reset_password/:token' />
         <Route path="/company_details/:id" element={<CompanyDetails />} />
       </Routes>

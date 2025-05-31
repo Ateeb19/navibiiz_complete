@@ -106,9 +106,9 @@ const Footer = () => {
                         <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
                             <h4 className="mb-3">Support</h4>
                             <ul>
-                                <li>Term & Conditions</li>
-                                <li>Privacy Policy</li>
-                                <li>Refund Policy </li>
+                                <li onClick={() => navigate('/terms_conditions')}>Term & Conditions</li>
+                                <li onClick={() => navigate('/privacy_policy')}>Privacy Policy</li>
+                                <li onClick={() => navigate('/refund_policy')}>Refund Policy </li>
                             </ul>
                         </div>
 
