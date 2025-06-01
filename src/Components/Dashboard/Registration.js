@@ -607,7 +607,7 @@ const Registration = () => {
                                     <DragAndDrop
                                         accept="image/*"
                                         onFileDrop={handleFileDrop}
-                                        label="Drag and drop an image here, or click to select (only one image allowed)"
+                                        label="Drag and drop company logo here, or click to select (only one image allowed)"
                                     />
                                     {selectedImage && (
                                         <div className="mt-3">

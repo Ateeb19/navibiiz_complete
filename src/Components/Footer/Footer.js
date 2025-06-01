@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { IoCall } from "react-icons/io5";
@@ -15,7 +15,10 @@ const Footer = () => {
     const port = process.env.REACT_APP_SECRET;
     const { showAlert } = useAlert();
     const navigate = useNavigate();
-
+    const sectionRef = useRef(null);
+    const handleScroll = () => {
+        sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
     const [user_name, setUser_name] = useState('');
     const [email_id, setEmail_id] = useState('');
     const [contact_number, setContact_number] = useState('');
@@ -51,7 +54,7 @@ const Footer = () => {
     return (
         <>
 
-            <section className="w-100 mb-5 mt-4 pb-5">
+            <section className="w-100 mb-5 mt-4 pb-5" ref={sectionRef} >
                 <div className="container">
                     <div className="row w-100">
                         <div className="col-md-7">
@@ -99,7 +102,7 @@ const Footer = () => {
                                 <li onClick={() => navigate('/about_us')}>About Us</li>
                                 <li onClick={() => navigate('/companies_list')}>Company List</li>
                                 <li onClick={() => navigate('/offers')}>Offers</li>
-                                <li onClick={() => navigate('/')}>Contact Us</li>
+                                <li onClick={handleScroll}>Contact Us</li>
                             </ul>
                         </div>
 
