@@ -319,11 +319,10 @@ const Home = () => {
                             <h3>About Us</h3>
                         </div>
                         <div className="about-text-wrap text-start">
-                            <h2>How It Works: Simple & Secure Shipping in Four Easy Steps</h2>
-                            <p>Enter Your Shipping Request — Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination. You can also upload a photo of your product.</p>
-                            <p>Receive Bids from Verified Carriers — Get instant offers from trusted global shipping partners who match your shipment criteria.</p>
-                            <p>Select the Best Offer — Review the bids, compare prices and delivery times, then choose the carrier that fits your needs.</p>
-                            <p>Confirm Booking & Track Your Shipment — Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p>
+                            <h2>Comprehensive End-to-End Logistics Solutions for Reliable and Timely Delivery</h2>
+                            <p>At Novibiz, we are committed to transforming the global logistics industry by offering innovative, transparent, and dependable services. Our mission is to enable businesses worldwide to benefit from seamless shipping solutions that exceed expectations, fostering sustainable growth and long-term success.</p>
+                            
+                            <p>We partner with a trusted global network to ensure the safety and speed of every shipment. With our advanced technology, real-time tracking, and simplified shipment management, logistics become accessible and efficient for all our clients. At Novibiz, your satisfaction is our top priority.</p>
                         </div>
                         <div className="about-btn mt-3">
                             <button onClick={() => navigate('/about_us')}>View More</button>

@@ -157,7 +157,7 @@ const Navbar = () => {
             <>
               <Link to="/send_groupage" >
                 <button className="btn m-1" style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500' }}>
-                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send through groupage</span>
+                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Groupage Shipping</span>
                 </button>
               </Link>
 
@@ -174,7 +174,7 @@ const Navbar = () => {
             <>
               <Link to="/send_groupage" >
                 <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500'}}>
-                  <BsSendFill /> Send through groupage
+                  <BsSendFill /> Groupage Shipping
                 </button>
               </Link>
               <Link to="/login" >
@@ -215,7 +215,7 @@ const Navbar = () => {
                 <>
                   <Link to="/send_groupage" className="py-2">
                     <button className="btn w-100" style={{ fontSize: "1rem", backgroundColor: "#FFFFFF", color: '#012A52' }}>
-                      <BsSendFill /> Send through groupage
+                      <BsSendFill /> Groupage Shipping
                     </button>
                   </Link>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
@@ -232,7 +232,7 @@ const Navbar = () => {
 
                   <Link to="/send_groupage" >
                     <button className="btn w-100 mt-2" style={{ fontSize: "1rem", backgroundColor: "#FFFFFF", color: '#012A52' }}>
-                      <BsSendFill /> Send through groupage
+                      <BsSendFill /> Groupage Shipping
                     </button>
                   </Link>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />

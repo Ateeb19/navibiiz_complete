@@ -4,10 +4,12 @@ import Footer from "../Footer/Footer";
 import { CiCalendarDate } from "react-icons/ci";
 import { LiaSearchLocationSolid } from "react-icons/lia";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 
 
 const About_us = () => {
+    const navigate = useNavigate();
     return (
         <div className="d-flex flex-column align-items-center justify-content-center  mt-5 pt-5">
             <div className='navbar-wrapper'>
@@ -83,7 +85,7 @@ const About_us = () => {
                                         where customers can compare, book, and manage shipments in just a few clicks.
                                     </p>
                                     <div className="our-mission-btn px-4">
-                                        <button className="d-flex align-items-center justify-content-center gap-2">
+                                        <button className="d-flex align-items-center justify-content-center gap-2" onClick={() => navigate('/register_company')}>
                                             Register your company <HiOutlineArrowNarrowRight />
                                         </button>
                                     </div>

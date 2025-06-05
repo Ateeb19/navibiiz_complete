@@ -157,7 +157,9 @@ const Send_groupage = () => {
         setIsVisible(false);
     };
 
+    const [validate, setValidate] = useState(false);
     const submitData = async () => {
+        setValidate(true);
         const formData = new FormData();
         formData.append("productName", productName);
         formData.append("productType", productType);
@@ -203,11 +205,13 @@ const Send_groupage = () => {
                 }
             );
             if (response.data.status === true) {
+                setValidate(true);
                 setIsVisible(false);
                 setCongrat(true);
             }
         } catch (error) {
             console.error("Error:", error);
+            setValidate(false);
         }
     };
     return (
@@ -733,7 +737,7 @@ const Send_groupage = () => {
                                 </div>
                             </div>
                             <div className="w-100 pt-4">
-                                <button className="btn btn-primary w-100" onClick={submitData}>Submit</button>
+                                <button className="btn btn-primary w-100" disabled={validate} onClick={() => {submitData(); setValidate(true)}}>Submit</button>
                             </div>
                         </div>
                     </div>
