@@ -69,9 +69,63 @@
         padding: 0 0px;
     }
 
-    .regerser-country-label{
+    .regerser-country-label {
         margin-bottom: 55px;
     }
 
-    
+    .about-track {
+        margin-top: 8px;
+        font-size: 40px;
+        font-weight: none;
+        color: #012A52;
+    }
+
+    .about-title-head h3 {
+        font-size: 1.5rem;
+    }
+
+    .about-text p {
+        font-size: 0.95rem;
+    }
+
+    .about-track h5 {
+        font-size: 0.9rem;
+    }
+
+    .our-mission {
+        height: auto;
+        padding: 20px 0;
+    }
+
+    .our-mission p {
+        padding: 15px;
+        font-size: 18px;
+        line-height: 28px;
+        width: 100%;
+    }
+
+    .about-footer-img {
+        margin-top: 0;
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .about-footer-img img {
+        width: 100%;
+    }
+
+    .about-footer-wrap {
+        width: 100% !important;
+        height: auto;
+        padding: 40px 20px 20px 20px;
+        margin: 10px 0;
+    }
+
+    .footer-list img {
+        height: 28px;
+    }
+
+    .footer-list .gap-3 {
+        gap: 1rem !important;
+    }
 }

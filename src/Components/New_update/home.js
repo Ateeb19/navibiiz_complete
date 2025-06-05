@@ -178,24 +178,29 @@ const Home = () => {
     }
     const profiles = [
         {
-            name: 'John Doe',
-            description: '"As a small business exporting to Europe, we struggled with high costs and delays. Novibiz helped us find reliable partners and track every shipment with ease!"',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsb_V_Ha4XAl47doWf_2lF-actuld60ssYew&s'
+            name: 'Paris, France',
+            description: '“I compared prices from many logistics companies on Novibiz before shipping a car to Congo. The platform helped me choose the most reliable option at the best rate.” — Claire',
+            img: '/Images/person01.jpg'
         },
         {
-            name: 'Jane Smith',
-            description: '"As a small business exporting to Europe, we struggled with high costs and delays. Novibiz helped us find reliable partners and track every shipment with ease!"',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0PDKrErulLlbJkbv5KtsCeICczdgJSyurA&s'
+            name: 'Brussels, Belgium',
+            description: '“Before sending my equipment to Cameroon, I compared prices from many providers on Novibiz. It was easy to find the most affordable and trustworthy service.” — Mar',
+            img: '/Images/person02.webp'
         },
         {
-            name: 'Mike Johnson',
-            description: '"As a small business exporting to Europe, we struggled with high costs and delays. Novibiz helped us find reliable partners and track every shipment with ease!"',
-            img: 'https://i2.pickpik.com/photos/711/14/431/smile-profile-face-male-preview.jpg'
+            name: 'Berlin, Germany',
+            description: '“Shipping electronic devices to South Africa was simple. Novibiz arranged a home pickup, and I didn’t have to worry about logistics. Everything was taken care of.” — Lena',
+            img: '/Images/person03.jpg'
         },
         {
-            name: 'Sarah Brown',
-            description: '"As a small business exporting to Europe, we struggled with high costs and delays. Novibiz helped us find reliable partners and track every shipment with ease!"',
-            img: 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg'
+            name: 'Cologne, Germany',
+            description: '“I had car parts to send to China, and Novibiz offered a home pickup option. It saved me time and made the whole shipping process effortless.” — Thomas',
+            img: '/Images/person04.jpeg'
+        },
+        {
+            name: 'Paris, France',
+            description: '“I found a reliable freight forwarder through Novibiz’s Yellow Pages to ship goods to the USA. The platform made the search fast and effective.” — Sophie',
+            img: '/Images/profile05.jpg'
         }
     ];
 
@@ -293,7 +298,7 @@ const Home = () => {
                             <button className="" onClick={handleSearch}><IoSearch /> Search Companies</button>
                         </div> */}
                         <div className="d-flex flex-row justify-content-between align-items-center px-3 pickup-wrap gap-4">
-                            <div className= 'home-country-selector'>
+                            <div className='home-country-selector'>
                                 <span><Countryselector label='Pick Up Country' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                             </div>
 
@@ -306,28 +311,35 @@ const Home = () => {
                 </div>
             </section>
 
-            <div className="container mt-5">
+            <div className="container mt-5 px-3 px-md-4">
                 <div className="row g-5">
-                    <div className="col-6 d-flex flex-column justify-content-start align-items-start p-4">
+                    {/* Left Content */}
+                    <div className="col-12 col-lg-6 d-flex flex-column justify-content-start align-items-start p-3 p-md-4">
                         <div className="about-head-wrap">
                             <h3>About Us</h3>
                         </div>
                         <div className="about-text-wrap text-start">
-                            <h2>We Provide End - to - end Logistics Services for timely secure delivery</h2>
-                            <p>Our vision is to lead the global logistics industry by providing seamless, reliable, and innovative solutions that not only meet but exceed client expectations, driving long-term success and growth for businesses worldwide.</p>
-                            <p>Our vision is to lead the global logistics industry by providing seamless, reliable, and innovative solutions that not only meet but exceed client expectations, driving long-term success and growth for businesses worldwide.</p>
+                            <h2>How It Works: Simple & Secure Shipping in Four Easy Steps</h2>
+                            <p>Enter Your Shipping Request — Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination. You can also upload a photo of your product.</p>
+                            <p>Receive Bids from Verified Carriers — Get instant offers from trusted global shipping partners who match your shipment criteria.</p>
+                            <p>Select the Best Offer — Review the bids, compare prices and delivery times, then choose the carrier that fits your needs.</p>
+                            <p>Confirm Booking & Track Your Shipment — Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p>
                         </div>
-                        <div className="about-btn">
-                            <button onClick={() => navigate('/about_us')}> View More</button>
+                        <div className="about-btn mt-3">
+                            <button onClick={() => navigate('/about_us')}>View More</button>
                         </div>
                     </div>
-                    <div className="col-6">
-                        <div className="about-image-wrap d-flex justify-content-center align-items-center w-100 p-4">
-                            <img src="/Images/about_us_img.jpg" alt="About_us" />
+
+                    {/* Right Image */}
+                    <div className="col-12 col-lg-6">
+                        <div className="about-image-wrap d-flex justify-content-center align-items-center w-100 p-3 p-md-4 mt-4 mt-lg-5">
+                            <img className="img-fluid" src="/Images/about_us_img.jpg" alt="About_us" />
                         </div>
                     </div>
                 </div>
             </div>
+
+
 
             <div className="container mt-5 mb-4">
                 <div className="home-company-wrap d-flex flex-column justify-content-center align-items-center">
@@ -370,83 +382,83 @@ const Home = () => {
                 </div>
             </div>
 
-           <div className="container mt-5">
-  <div className="d-flex flex-column justify-content-center align-items-center w-100">
-    <div className="d-flex align-items-start justify-content-start w-100 mb-4">
-      <div className="home-heading text-start w-100 w-md-60">
-        <h2>How It Works: Simple & Secure Shipping in Four Easy Steps</h2>
-      </div>
-    </div>
+            <div className="container mt-5">
+                <div className="d-flex flex-column justify-content-center align-items-center w-100">
+                    <div className="d-flex align-items-start justify-content-start w-100 mb-4">
+                        <div className="home-heading text-start w-100 w-md-60">
+                            <h2>How It Works: Simple & Secure Shipping in Four Easy Steps</h2>
+                        </div>
+                    </div>
 
-    <div className="d-flex flex-column justify-content-center align-items-center w-100">
-      <div className="row w-100 mt-4 mb-4 gy-4">
-        {/* Step 1 */}
-        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between pe-md-5">
-          <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
-            <div className="d-flex flex-row gap-2">
-              <h5 className="fw-medium" style={{ fontSize: '20px' }}>1.</h5>
-              <h5>Enter Your Shipping Request</h5>
+                    <div className="d-flex flex-column justify-content-center align-items-center w-100">
+                        <div className="row w-100 mt-4 mb-4 gy-4">
+                            {/* Step 1 */}
+                            <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between pe-md-5">
+                                <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
+                                    <div className="d-flex flex-row gap-2">
+                                        <h5 className="fw-medium" style={{ fontSize: '20px' }}>1.</h5>
+                                        <h5>Enter Your Shipping Request</h5>
+                                    </div>
+                                    <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
+                                </div>
+                                <div className="step-image d-flex justify-content-center">
+                                    <img src="/Images/home_img04.jpg" alt="step1" className="img-fluid" />
+                                </div>
+                            </div>
+
+                            {/* Step 2 */}
+                            <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between ps-md-5">
+                                <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
+                                    <div className="d-flex flex-row gap-2">
+                                        <h5 className="fw-medium" style={{ fontSize: '20px' }}>2.</h5>
+                                        <h5>Receive Bids from Verified Carriers</h5>
+                                    </div>
+                                    <p>Get instant offers from trusted global shipping partners who match your shipment criteria.</p>
+                                </div>
+                                <div className="step-image d-flex justify-content-center">
+                                    <img src="/Images/home_img03.jpg" alt="step2" className="img-fluid" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="row w-100 mt-4 gy-4">
+                            {/* Step 3 */}
+                            <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between pe-md-5">
+                                <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
+                                    <div className="d-flex flex-row gap-2">
+                                        <h5 className="fw-medium" style={{ fontSize: '20px' }}>3.</h5>
+                                        <h5>Enter Your Shipping Request</h5>
+                                    </div>
+                                    <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
+                                </div>
+                                <div className="step-image d-flex justify-content-center">
+                                    <img src="/Images/home_img02.jpg" alt="step3" className="img-fluid" />
+                                </div>
+                            </div>
+
+                            {/* Step 4 */}
+                            <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between ps-md-5">
+                                <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
+                                    <div className="d-flex flex-row gap-2">
+                                        <h5 className="fw-medium" style={{ fontSize: '20px' }}>4.</h5>
+                                        <h5>Confirm Booking & Track Your Shipment</h5>
+                                    </div>
+                                    <p>Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p>
+                                </div>
+                                <div className="step-image d-flex justify-content-center">
+                                    <img src="/Images/home_img01.jpg" alt="step4" className="img-fluid" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5">
+                        <button onClick={() => navigate('/send_groupage')} className="btn btn-primary px-4 py-2">
+                            Start shipping your products
+                        </button>
+                    </div>
+                </div>
             </div>
-            <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
-          </div>
-          <div className="step-image d-flex justify-content-center">
-            <img src="/Images/home_img04.jpg" alt="step1" className="img-fluid" />
-          </div>
-        </div>
-
-        {/* Step 2 */}
-        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between ps-md-5">
-          <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
-            <div className="d-flex flex-row gap-2">
-              <h5 className="fw-medium" style={{ fontSize: '20px' }}>2.</h5>
-              <h5>Receive Bids from Verified Carriers</h5>
-            </div>
-            <p>Get instant offers from trusted global shipping partners who match your shipment criteria.</p>
-          </div>
-          <div className="step-image d-flex justify-content-center">
-            <img src="/Images/home_img03.jpg" alt="step2" className="img-fluid" />
-          </div>
-        </div>
-      </div>
-
-      <div className="row w-100 mt-4 gy-4">
-        {/* Step 3 */}
-        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between pe-md-5">
-          <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
-            <div className="d-flex flex-row gap-2">
-              <h5 className="fw-medium" style={{ fontSize: '20px' }}>3.</h5>
-              <h5>Enter Your Shipping Request</h5>
-            </div>
-            <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
-          </div>
-          <div className="step-image d-flex justify-content-center">
-            <img src="/Images/home_img02.jpg" alt="step3" className="img-fluid" />
-          </div>
-        </div>
-
-        {/* Step 4 */}
-        <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between ps-md-5">
-          <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
-            <div className="d-flex flex-row gap-2">
-              <h5 className="fw-medium" style={{ fontSize: '20px' }}>4.</h5>
-              <h5>Confirm Booking & Track Your Shipment</h5>
-            </div>
-            <p>Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p>
-          </div>
-          <div className="step-image d-flex justify-content-center">
-            <img src="/Images/home_img01.jpg" alt="step4" className="img-fluid" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5">
-      <button onClick={() => navigate('/send_groupage')} className="btn btn-primary px-4 py-2">
-        Start shipping your products
-      </button>
-    </div>
-  </div>
-</div>
 
 
             <section className="new-add-company-wrapper">
@@ -1179,7 +1191,7 @@ const Home = () => {
 
             {offer_success && (
                 <>
-                     <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+                    <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
 
                         <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: '25rem' }}>
 
@@ -1290,27 +1302,27 @@ const Home = () => {
                     <div className="w-100 d-flex flex-wrap justify-content-between align-items-center">
                         <div className="flex-grow-1 text-light text-center">
                             <div className="stats-wrap">
-                                <h3>100+</h3>
+                                <h3>50+</h3>
                                 <p>Verified Logistics Companies</p>
                             </div>
                         </div>
                         <div className="flex-grow-1 text-light text-center">
                             <div className="stats-wrap">
-                                <h3>100+</h3>
+                                <h3>40+</h3>
                                 <p>Countries Covered</p>
                             </div>
 
                         </div>
                         <div className="flex-grow-1 text-light text-center">
                             <div className="stats-wrap">
-                                <h3>10,000+</h3>
+                                <h3>5,000+</h3>
                                 <p>Shipments Processed</p>
                             </div>
 
                         </div>
                         <div className="flex-grow-1 text-light text-center">
                             <div className="stats-wrap">
-                                <h3>98%</h3>
+                                <h3>95%</h3>
                                 <p>Customer Satisfaction Rate</p>
                             </div>
 
@@ -1323,7 +1335,8 @@ const Home = () => {
                 <div className="container">
                     <div className="d-flex flex-column align-items-start justify-content-start w-100">
                         <div className="home-heading">
-                            <h2>Build on trust on our values</h2>
+                            <h2>Build on Trust and Our Core Values</h2>
+                            <p>We base our services on trust and strong values to ensure reliability.</p>
                         </div>
                     </div>
                     <div className="row w-100 mt-3">
@@ -1331,23 +1344,23 @@ const Home = () => {
                             <div className="build-wrap text-start h-100 p-3">
                                 <h2><FaBox /></h2>
                                 <h5>Easy Shipment Details</h5>
-                                <p>Simply provide your shipment details to get a tailored list of logistics companies</p>
+                                <p>Simply provide your shipment information to receive a tailored list of logistics companies.</p>
                             </div>
                         </div>
 
                         <div className="col-12 col-sm-6 col-lg-3 mb-4">
                             <div className="build-wrap text-start h-100 p-3 ">
                                 <h2><FaLocationDot /></h2>
-                                <h5>Location-based Filtering</h5>
-                                <p>Filter shipping companies by your destination and origin for precise results</p>
+                                <h5>Location-Based Filtering</h5>
+                                <p>Filter shipping providers by origin and destination for accurate, relevant results.</p>
                             </div>
                         </div>
 
                         <div className="col-12 col-sm-6 col-lg-3 mb-4">
                             <div className="build-wrap text-start h-100 p-3">
                                 <h2><FaTruckFast /></h2>
-                                <h5>Shipping Methods</h5>
-                                <p>Choose your preferred shipping method and connect with the right partners</p>
+                                <h5>Shipping Options</h5>
+                                <p>Select your preferred shipping method and connect with the best-suited partners.</p>
                             </div>
                         </div>
 
@@ -1355,7 +1368,7 @@ const Home = () => {
                             <div className="build-wrap text-start h-100 p-3">
                                 <h2><GiCardPickup /></h2>
                                 <h5>Pickup Service</h5>
-                                <p>Shipping companies will send their professionals to pick up your goods from your location</p>
+                                <p>Professional couriers will collect your goods directly from your specified location.</p>
                             </div>
                         </div>
                     </div>
@@ -1366,13 +1379,13 @@ const Home = () => {
             <section className="container mt-3">
                 <div className="d-flex flex-column justify-content-center align-items-center w-100 mt-5">
                     <div className="home-heading w-100 d-flex align-items-start justify-content-start">
-                        <h2>Real stories real impact</h2>
+                        <h2>Real Stories Real Impact</h2>
                     </div>
                     <div className="w-100 mx-auto mt-4">
                         <Slider {...settings}>
                             {profiles.map((profile, index) => (
                                 <div key={index} className="p-3">
-                                    <div className="bg-white rounded-3 w-100 p-2 d-flex flex-column align-items-center text-center border">
+                                    <div className="bg-white rounded-3 w-100 p-2 d-flex flex-column align-items-center text-center border review-rating">
                                         <div className="testi-desc-wrapper text-start">
                                             <p>{profile.description}</p>
                                         </div>
@@ -1505,7 +1518,7 @@ const Home = () => {
                     </div>
                 </div>
             </section> */}
-{/* 
+            {/* 
             <section className="w-100 mb-5 mt-4 pb-5">
                 <div className="container">
                     <div className="row w-100">

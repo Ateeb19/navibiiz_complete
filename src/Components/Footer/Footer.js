@@ -102,7 +102,7 @@ const Footer = () => {
                                 <li onClick={() => navigate('/about_us')}>About Us</li>
                                 <li onClick={() => navigate('/companies_list')}>Company List</li>
                                 <li onClick={() => navigate('/offers')}>Offers</li>
-                                <li onClick={handleScroll}>Contact Us</li>
+                                <li onClick={() => navigate('/contact_us')}>Contact Us</li>
                             </ul>
                         </div>
 
@@ -117,11 +117,19 @@ const Footer = () => {
 
                         <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
                             <h4 className="mb-3">Follow Us</h4>
-                            <div className="d-flex flex-row align-items-start justify-content-center gap-3">
-                                <img src="/Images/icons8-instagram-48.png" height="30px" alt="Instagram" />
-                                <img src="/Images/icons8-facebook-48.png" height="30px" alt="Instagram" />
+                            <div className="d-flex flex-wrap align-items-center justify-content-start gap-3">
+                                <a href="https://www.instagram.com/novibiz1/">
+                                    <img src="/Images/icons8-instagram-48.png" height="30px" alt="Instagram" />
+                                </a>
+                                <a href="https://www.facebook.com/people/Novibiz/61575119008770/?rdid=yNdJTlpnqoJ4ZeN0&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1EjDMKXW6B%2F">
+                                    <img src="/Images/icons8-facebook-48.png" height="30px" alt="Facebook" />
+                                </a>
+                                <a href="https://www.linkedin.com/company/107430950/admin/page-posts/published/">
+                                    <img src="/Images/icons8-linkedin-48.png" height="30px" alt="LinkedIn" />
+                                </a>
                             </div>
                         </div>
+
 
                     </div>
                     <div className="d-flex w-100 align-items-center justify-content-center text-light mt-4 gap-2">

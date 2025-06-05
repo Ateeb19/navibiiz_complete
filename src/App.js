@@ -21,7 +21,7 @@ import useInactivityLogout from "./Components/Activity_check/Activity_check";
 import Terms_conditions from './Components/Support/Terms_conditions';
 import Privacy_policy from './Components/Support/Privacy_policy';
 import Refund_policy from './Components/Support/Refund_policy';
-
+import Contact_us from './Components/New_update/Contact_us.';
 
 const AppContent = () => {
   useInactivityLogout();
@@ -42,6 +42,7 @@ const AppContent = () => {
         <Route Component={Terms_conditions} path='/terms_conditions' />
         <Route Component={Privacy_policy} path='/privacy_policy' />
         <Route Component={Refund_policy} path='/refund_policy' />
+        <Route Component={Contact_us} path='/contact_us' />
         <Route Component={ResetPassword} path='/reset_password/:token' />
         <Route path="/company_details/:id" element={<CompanyDetails />} />
       </Routes>

@@ -107,7 +107,7 @@ const Registration = () => {
     const [paypal_id, setPaypal_id] = useState("");
     const [paypal_id_check, setPaypal_id_check] = useState('');
     const [selectedCountry, setSelectedCountry] = useState("");
-    
+
     const handlecountry = (value, index) => {
         const updatedLocations = [...locations];
         updatedLocations[index].country = value;
@@ -458,7 +458,7 @@ const Registration = () => {
     const handleZoomOut = () => {
         setZoomLevel((prev) => Math.max(prev - 0.2, 0.5));
     };
-
+    const [validate, setValidate] = useState(false);
     const handleSubmit = async () => {
         try {
             // 1. Upload each file to Cloudinary (if it exists)
@@ -494,7 +494,7 @@ const Registration = () => {
                     passportCEO_MD: passportUrl
                 }
             };
-
+            setValidate(true);
             console.log('Form Data:', formData);
             // 3. Send data to backend via Axios
             const response = await axios.post(`${port}/company/regester_company`, formData, {
@@ -506,6 +506,7 @@ const Registration = () => {
 
             if (response.status === 200) {
                 showAlert('Data submitted successfully!');
+                setValidate(false);
                 setCongrat(true);
             } else {
                 showAlert('Error submitting data');
@@ -513,6 +514,7 @@ const Registration = () => {
 
         } catch (error) {
             if (error.response) {
+                setValidate(false);
                 console.error("Server Error:", error.response.data);
                 console.error("Status Code:", error.response.status);
                 showAlert(`Error: ${error.response.status} - ${error.response.data.message || "Server error"}`);
@@ -1271,7 +1273,8 @@ const Registration = () => {
                             iconPos="center" icon="pi pi-arrow-left"
                             onClick={() => { stepperRef.current.prevCallback(); setStep((prev) => prev - 1); window.scrollTo({ top: 0 }); }} />
                         <Button label="Submit"
-                            onClick={() => { handleSubmit(); setStep((prev) => prev + 1); window.scrollTo({ top: 0 }); }}
+                            disabled={validate}
+                            onClick={() => { handleSubmit(); setValidate(true); setStep((prev) => prev + 1); window.scrollTo({ top: 0 }); }}
                             icon="pi pi-arrow-right"
                             className="btn rounded-2 "
                             style={{ backgroundColor: '#1fa4e6', width: '100px', color: '#fff', fontWeight: '400' }}
