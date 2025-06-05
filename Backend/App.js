@@ -10,12 +10,13 @@ require('dotenv').config({ path: './.env' });
 app.use(express.json({ limit: '20mb' }));
 
 app.use(cors({
-    origin: [
+    origin: [        
+        '*',
         'http://localhost:3000',
         'http://217.154.86.64:3000',
         'https://novibiz.com',
         'https://www.novibiz.com',
-        'https://p000tqb6-3000.inc1.devtunnels.ms'
+        'https://p000tqb6-3000.inc1.devtunnels.ms',
     ],
     methods: ["POST", "GET", 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -41,7 +42,7 @@ app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 db.connect((err) => {
     if (err) {
-        console.log('database not connected');
+        console.log('database not connected \n', err);
     } else {
         console.log('database connected');
     }
