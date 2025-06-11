@@ -10,6 +10,7 @@ import { FaBuilding } from "react-icons/fa";
 import { IoIosMailOpen, IoMdArrowRoundBack } from "react-icons/io";
 import { RiContactsBook3Fill } from "react-icons/ri";
 import { useAlert } from "../alert/Alert_message";
+import Form from 'react-bootstrap/Form';
 
 
 const CompanyDetails = () => {
@@ -27,6 +28,9 @@ const CompanyDetails = () => {
         }
     }, [id]);
 
+
+    const [review, setReview] = useState(false);
+
     const handle_contact = () => {
         if (token) {
             setDetails_company(true);
@@ -37,8 +41,9 @@ const CompanyDetails = () => {
         }
     }
     if (!company) {
-        return <h2 className="text-danger">Company details not found.</h2>;
+        return <h2 className="text-danger">Company details not found.</h2>
     }
+
     return (
         <div className="d-flex flex-column align-items-center justify-content-center  mt-5 pt-5">
             <div className='navbar-wrapper'>
@@ -179,8 +184,8 @@ const CompanyDetails = () => {
                                 <span className="text-secondary d-block">
                                     <FaTruckMoving className="fs-5 me-1" style={{ color: '#de8316' }} /> Shipping{" "}
                                     {company.container_service === '1' ? "Containers" : "Containers"}
-                                    {(company.car_service === '1' && company.container_service === '1' )? " & " : ""}
-                                    {company.car_service === '1' ? "Cars" : ""}          
+                                    {(company.car_service === '1' && company.container_service === '1') ? " & " : ""}
+                                    {company.car_service === '1' ? "Cars" : ""}
                                 </span>
                                 <span className="text-secondary d-block">
                                     <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to –{" "}
@@ -194,8 +199,15 @@ const CompanyDetails = () => {
                             </div>
 
                             <div className="p-4 company-details-wrap">
-                                <h4>Ratings & Reviews</h4>
-                                <span className="text-primary">20 Reviews</span>
+                                <div className='d-flex flex-row align-items-between justify-content-between'>
+                                    <div className=''>
+                                        <h4>Ratings & Reviews</h4>
+                                        <span className="text-primary">20 Reviews</span>
+                                    </div>
+                                    <div className=''>
+                                        <button className='btn-main-review' onClick={() => setReview(true)}>Add a Review</button>
+                                    </div>
+                                </div>
                                 <div className="rounded p-3 mt-3" style={{ backgroundColor: '#fff' }}>
                                     <Rating initialValue={4.5} readonly allowFraction size={25} />
                                     <p className="text-secondary mt-2">
@@ -253,6 +265,46 @@ const CompanyDetails = () => {
                     </div>
                 </section>
             </div>
+
+
+            {review && (
+                <>
+                    <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+                        <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: 'auto' }}>
+                            <button
+                                className="btn-close position-absolute top-0 end-0 m-2"
+                                onClick={() => setReview(false)}
+                            ></button>
+
+                            <div className='d-flex flex-column align-items-start'>
+                                <div className='title-head'><h3>Submit Review</h3></div>
+
+                                <div className='details-wrap d-flex flex-row align-items-between justify-content-between w-100 text-start'>
+                                    <span>< FaBuilding className='fs-4 w-50' style={{ color: '#de8316' }} />Rating -: </span>
+                                    <Form.Select aria-label="Default select example" className='w-50'>
+                                        <option>Select Rating</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                        <option value="3">Four</option>
+                                        <option value="3">Five</option>
+                                    </Form.Select>
+                                </div>
+
+                                <div className='details-wrap w-100 text-start'>
+                                    <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${company.email}"`}>{company.email}</a></span>
+                                </div>
+
+                                <div className='details-wrap w-100 text-start'>
+                                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {company.contect_no}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </>
+            )}
+
 
 
             {details_company && (

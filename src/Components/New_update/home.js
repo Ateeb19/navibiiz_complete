@@ -426,9 +426,9 @@ const Home = () => {
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
                                     <div className="d-flex flex-row gap-2">
                                         <h5 className="fw-medium" style={{ fontSize: '20px' }}>3.</h5>
-                                        <h5>Enter Your Shipping Request</h5>
+                                        <h5>Select the Best Offer</h5>
                                     </div>
-                                    <p>Fill out a quick form with shipment details—such as package type, weight, pickup location, and delivery destination.</p>
+                                    <p>Review the bids, compare prices and delivery times, then choose the carrier that fits your needs.</p>
                                 </div>
                                 <div className="step-image d-flex justify-content-center">
                                     <img src="/Images/home_img02.jpg" alt="step3" className="img-fluid" />
