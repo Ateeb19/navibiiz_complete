@@ -665,7 +665,7 @@ const Dashboard = () => {
         (filter_selectedCountry === '' || shipsToCountry(filter_selectedCountry)) &&
         (filter_selectedService === '' || providesService(filter_selectedService))
       );
-    }) .sort((a, b) => b.id - a.id); 
+    }).sort((a, b) => b.id - a.id);
   }
 
   const handleScrollToMore = () => {
@@ -867,6 +867,7 @@ const Dashboard = () => {
     return matchesSearch && matchesDate;
   });
 
+  console.log(filteredOffers);
   const [edit_company, setEdit_company] = useState(false);
   const handle_edit_company = (company) => {
     setEdit_company(!edit_company);
@@ -4088,6 +4089,7 @@ const Dashboard = () => {
                             <th scope="col"><h6>Offer Created By</h6></th>
                             <th scope="col"><h6>Price ($)</h6></th>
                             <th scope="col"><h6>Offer From</h6></th>
+                            <th scope="col"><h6>Status</h6></th>
                             {/* <th scope="col"><h6>Payment Status ($)</h6></th> */}
                           </tr>
                         </thead>
@@ -4109,6 +4111,9 @@ const Dashboard = () => {
                                 <td className="text-secondary">{item.userName}</td>
                                 <td className="text-dark"><b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></td>
                                 <td className="text-secondary">{item.company_name}</td>
+                                <td className="text-secondary">
+                                  <span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', color: ' #006E09' }}>{item.status} </span>
+                                </td>
                                 {/* <td className="text-secondary">
                                   <span
                                     className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : item.status === 'rejected' ? 'text-danger' : 'text-success'}`}
