@@ -421,7 +421,7 @@ const edit_company_documents = [
 ];
 
 const delete_offer = (req, res) => {
-    if(req.user.role === 'admin'){
+    if(req.user.role === 'admin' || req.user.role === 'Sadmin'){
         const offer_id = req.params.id;
         db.query(`DELETE FROM offers WHERE offer_id = ${offer_id}`, (err, result) => {
             if(err){

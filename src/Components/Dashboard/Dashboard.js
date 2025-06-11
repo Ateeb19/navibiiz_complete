@@ -866,8 +866,6 @@ const Dashboard = () => {
 
     return matchesSearch && matchesDate;
   });
-
-  console.log(filteredOffers);
   const [edit_company, setEdit_company] = useState(false);
   const handle_edit_company = (company) => {
     setEdit_company(!edit_company);
@@ -4111,8 +4109,11 @@ const Dashboard = () => {
                                 <td className="text-secondary">{item.userName}</td>
                                 <td className="text-dark"><b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></td>
                                 <td className="text-secondary">{item.company_name}</td>
-                                <td className="text-secondary">
-                                  <span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', color: ' #006E09' }}>{item.status} </span>
+                                <td className="text-secondary"
+                                  style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
+                                  onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
+                                >
+                                  <span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete'? 'Completed': item.status === 'pending'? 'Panding' : 'Rejected'} {item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
                                 </td>
                                 {/* <td className="text-secondary">
                                   <span
