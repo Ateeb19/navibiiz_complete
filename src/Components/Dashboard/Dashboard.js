@@ -4113,7 +4113,7 @@ const Dashboard = () => {
                                   style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
                                   onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
                                 >
-                                  <span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete'? 'Completed': item.status === 'pending'? 'Panding' : 'Rejected'} {item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
+                                  <span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete'? 'Accepted': item.status === 'pending'? 'Pending' : 'Rejected'} {item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
                                 </td>
                                 {/* <td className="text-secondary">
                                   <span
