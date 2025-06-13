@@ -41,15 +41,15 @@ const CompaniesList = () => {
 
     const handlePickupCountryClear = () => {
         setSelectedPickupCountry("");
-        
+
         // Update localStorage while preserving other filters
         const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
         const updatedFilters = {
-          ...savedFilters,
-          selectedPickupCountry: ""
+            ...savedFilters,
+            selectedPickupCountry: ""
         };
         localStorage.setItem("filters", JSON.stringify(updatedFilters));
-      };
+    };
 
     const handleDestinationCountrySelect = (country) => {
         setSelectedDestinationCountry(country);
@@ -68,58 +68,58 @@ const CompaniesList = () => {
 
     useEffect(() => {
         const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
-        
+
         // Handle home page navigation
         if (location.state?.fromHomePage) {
-          // Create new filters with home page's pickup country
-          const newFilters = {
-            ...savedFilters,
-            selectedPickupCountry: location.state.pickupCountry || "",
-            // Reset other filters when coming from home
-            selectedServices: [],
-            selectedDestinationCountry: "",
-            selectedDuration: [],
-            searchQuery: ""
-          };
-          
-          // Save to localStorage
-          localStorage.setItem("filters", JSON.stringify(newFilters));
-          
-          // Update state
-          setSelectedPickupCountry(newFilters.selectedPickupCountry);
-          setSelectedServices(newFilters.selectedServices);
-          setSelectedDestinationCountry(newFilters.selectedDestinationCountry);
-          setSelectedDuration(newFilters.selectedDuration);
-          setSearchQuery(newFilters.searchQuery);
-          
-          // Clear the navigation state to prevent reapplication
-          navigate(location.pathname, { replace: true, state: {} });
+            // Create new filters with home page's pickup country
+            const newFilters = {
+                ...savedFilters,
+                selectedPickupCountry: location.state.pickupCountry || "",
+                // Reset other filters when coming from home
+                selectedServices: [],
+                selectedDestinationCountry: "",
+                selectedDuration: [],
+                searchQuery: ""
+            };
+
+            // Save to localStorage
+            localStorage.setItem("filters", JSON.stringify(newFilters));
+
+            // Update state
+            setSelectedPickupCountry(newFilters.selectedPickupCountry);
+            setSelectedServices(newFilters.selectedServices);
+            setSelectedDestinationCountry(newFilters.selectedDestinationCountry);
+            setSelectedDuration(newFilters.selectedDuration);
+            setSearchQuery(newFilters.searchQuery);
+
+            // Clear the navigation state to prevent reapplication
+            navigate(location.pathname, { replace: true, state: {} });
         }
         // Normal load (not from home page)
         else {
-          setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
-          setSelectedServices(savedFilters.selectedServices || []);
-          setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
-          setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
-          setSearchQuery(savedFilters.searchQuery || "");
+            setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
+            setSelectedServices(savedFilters.selectedServices || []);
+            setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
+            setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
+            setSearchQuery(savedFilters.searchQuery || "");
         }
-      
+
         setFiltersLoaded(true);
-      }, [location.state]);
-      
-      // This remains the same - persists filter changes
-      useEffect(() => {
+    }, [location.state]);
+
+    // This remains the same - persists filter changes
+    useEffect(() => {
         if (filtersLoaded) {
-          const filtersToSave = {
-            selectedServices,
-            selectedPickupCountry,
-            selectedDestinationCountry,
-            selectedDuration,
-            searchQuery,
-          };
-          localStorage.setItem("filters", JSON.stringify(filtersToSave));
+            const filtersToSave = {
+                selectedServices,
+                selectedPickupCountry,
+                selectedDestinationCountry,
+                selectedDuration,
+                searchQuery,
+            };
+            localStorage.setItem("filters", JSON.stringify(filtersToSave));
         }
-      }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery, filtersLoaded]);
+    }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery, filtersLoaded]);
 
     // Update your filter persistence useEffect
     useEffect(() => {
@@ -388,7 +388,16 @@ const CompaniesList = () => {
                                                                 <span><strong className="fs-5 pe-2">{item.company_name}</strong><span className="text-primary"><HiBadgeCheck /></span></span>
                                                                 <h6 className="text-primary" onClick={() => View_details(item)}><u>View Details</u></h6>
                                                             </div>
-                                                            <p className="mt-2"><span className="text-warning pe-1"><FaStar /></span> 4.65 <span className="text-secondary">(20 Ratings)</span></p>
+                                                            <p className="mt-2">
+                                                                <span className="text-warning pe-1"><FaStar /></span>
+                                                                {item.Ratting && item.Ratting.length > 0
+                                                                    ? (
+                                                                        item.Ratting.reduce((acc, cur) => acc + parseFloat(cur.ratting), 0) /
+                                                                        item.Ratting.length
+                                                                    ).toFixed(2)
+                                                                    : "No Ratings"}{" "}
+                                                                <span className="text-secondary">({item.Ratting.length} Rating)</span>
+                                                            </p>
                                                             <p className="mt-2 text-start text-secondary">{item.description.split(" ").slice(0, 30).join(" ") + "..."}</p>
                                                             <div className="d-flex flex-column flex-md-row gap-4">
                                                                 <div className="pe-3 border-end border-1">

@@ -11,15 +11,25 @@ import { IoIosMailOpen, IoMdArrowRoundBack } from "react-icons/io";
 import { RiContactsBook3Fill } from "react-icons/ri";
 import { useAlert } from "../alert/Alert_message";
 import Form from 'react-bootstrap/Form';
-
+import { MdOutlineDescription, MdOutlineRateReview } from 'react-icons/md';
+import axios from 'axios';
 
 const CompanyDetails = () => {
+    const port = process.env.REACT_APP_SECRET;
     const { id } = useParams();
     const { showAlert } = useAlert();
     const [company, setCompany] = useState(null);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
     const [details_company, setDetails_company] = useState(false);
+
+    const [rating, setRating] = useState(0)
+
+    const handleRating = (rate: number) => {
+        setRating(rate)
+    }
+    const [description, setDescrition] = useState("");
+
 
     useEffect(() => {
         const storedCompany = localStorage.getItem(`company_${id}`);
@@ -40,9 +50,52 @@ const CompanyDetails = () => {
             navigate('/login');
         }
     }
+
+    const display_review = () => {
+        if (token) {
+            setReview(true)
+        } else {
+            showAlert('Please login to contact the company.');
+            localStorage.setItem("redirectAfterLogin", `/company_details/${id}`);
+            navigate('/login');
+        }
+    }
+    const onsubmit_review = () => {
+        if (rating === '') {
+            showAlert("Give Ratting ")
+            return;
+        }
+        if (rating < 0.5) {
+            showAlert("Ratting Should be more than 0")
+            return;
+        }
+        if (description === '') {
+            showAlert("Enter the description")
+            return;
+        }
+        axios.put(`${port}/company/add/review`, {
+            company_id: id,
+            rating: rating,
+            description: description,
+        }, {
+            headers: {
+                Authorization: token,
+            }
+        }).then((response) => {
+            if (response.data.status === true) {
+                setReview(false);
+                setDescrition("");
+                setRating('');
+                showAlert(response.data.message);
+            }
+            console.log(response.data);
+        }).catch((err) => console.log(err));
+    }
     if (!company) {
         return <h2 className="text-danger">Company details not found.</h2>
     }
+
+
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center  mt-5 pt-5">
@@ -81,14 +134,15 @@ const CompanyDetails = () => {
                                         </strong>
                                     </div>
                                     <div className='mt-1'>
-                                        <span>
-                                            <FaStar className="text-warning" />{" "}
-                                            <span className="text-secondary">
-                                                4.85{" "}
-                                                <span className="text-primary">
-                                                    (<u>20 Reviews</u>)
-                                                </span>
-                                            </span>
+                                        <span className="text-primary">
+                                            <span className="text-warning pe-1"><FaStar /></span>
+                                            {company.Ratting && company.Ratting.length > 0
+                                                ? (
+                                                    company.Ratting.reduce((acc, cur) => acc + parseFloat(cur.ratting), 0) /
+                                                    company.Ratting.length
+                                                ).toFixed(2)
+                                                : "No Ratings"}{" "}
+                                            <u>({company.Ratting.length} Rating)</u>
                                         </span>
                                     </div>
                                 </div>
@@ -202,32 +256,34 @@ const CompanyDetails = () => {
                                 <div className='d-flex flex-row align-items-between justify-content-between'>
                                     <div className=''>
                                         <h4>Ratings & Reviews</h4>
-                                        <span className="text-primary">20 Reviews</span>
+                                        <span className="text-primary">{company.Ratting.length} Review</span>
                                     </div>
                                     <div className=''>
-                                        <button className='btn-main-review' onClick={() => setReview(true)}>Add a Review</button>
+                                        <button className='btn-main-review' onClick={display_review}>Add a Review</button>
                                     </div>
                                 </div>
-                                <div className="rounded p-3 mt-3" style={{ backgroundColor: '#fff' }}>
-                                    <Rating initialValue={4.5} readonly allowFraction size={25} />
-                                    <p className="text-secondary mt-2">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                        eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    </p>
-                                    <div className="d-flex align-items-center gap-3">
-                                        <div
-                                            className="rounded-circle overflow-hidden"
-                                            style={{ width: "60px", aspectRatio: "1/1" }}
-                                        >
-                                            <img
-                                                src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
-                                                alt="Profile"
-                                                className="w-100 h-100 object-fit-cover"
-                                            />
-                                        </div>
-                                        <strong className="fs-5">Micheal Wilson</strong>
-                                    </div>
-                                </div>
+
+                                {company.Ratting.length > 0 ? (
+                                    <>
+                                        {company.Ratting.map((item, index) => (
+                                            <>
+                                                <div className="rounded p-3 mt-3" style={{ backgroundColor: '#fff' }}>
+                                                    <Rating initialValue={item.ratting} readonly allowFraction size={25} />
+                                                    <p className="text-secondary mt-2">
+                                                        {item.description}
+                                                    </p>
+                                                    <div className="d-flex align-items-center gap-3">
+                                                        <strong className="fs-5">{item.user_name}</strong>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <>
+                                        <h5> No Review</h5>
+                                    </>
+                                )}
                             </div>
                         </div>
 
@@ -280,23 +336,23 @@ const CompanyDetails = () => {
                                 <div className='title-head'><h3>Submit Review</h3></div>
 
                                 <div className='details-wrap d-flex flex-row align-items-between justify-content-between w-100 text-start'>
-                                    <span>< FaBuilding className='fs-4 w-50' style={{ color: '#de8316' }} />Rating -: </span>
-                                    <Form.Select aria-label="Default select example" className='w-50'>
-                                        <option>Select Rating</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                        <option value="3">Four</option>
-                                        <option value="3">Five</option>
-                                    </Form.Select>
+                                    <span className="w-50 gap-3"> < MdOutlineRateReview className='fs-4' style={{ color: '#de8316' }} /> Rating -: </span>
+
+                                    <Rating
+                                        onClick={handleRating}
+                                        initialValue={rating}
+                                        allowFraction
+                                        size={30}
+                                    />
                                 </div>
 
                                 <div className='details-wrap w-100 text-start'>
-                                    <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${company.email}"`}>{company.email}</a></span>
+                                    <span className=''>< MdOutlineDescription className='fs-4' style={{ color: '#de8316' }} />  Description :</span>
+                                    <textarea cols="45" rows="4" className='input-field-review mt-3' placeholder="Enter description here..." value={description} onChange={(e) => setDescrition(e.target.value)} />
                                 </div>
 
-                                <div className='details-wrap w-100 text-start'>
-                                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {company.contect_no}</span>
+                                <div className='review-submit-btn w-100 d-flex justify-content-end'>
+                                    <button onClick={onsubmit_review}>Submit</button>
                                 </div>
                             </div>
                         </div>

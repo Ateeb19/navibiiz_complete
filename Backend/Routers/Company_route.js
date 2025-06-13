@@ -13,6 +13,7 @@ const {
     Change_date,
     Add_New_country,
     display_company,
+    submit_review,
 } = require('../Controllers/Company_controller.js');
 
 
@@ -28,6 +29,7 @@ Routers.route('/update_company_service/:id').put(AuthenticateToken, Update_compa
 Routers.route('/delete_country').put(AuthenticateToken, Delete_Country);
 Routers.route('/change_date').put(AuthenticateToken, Change_date);
 Routers.route('/add_new_country').put(AuthenticateToken, Add_New_country);
+Routers.route('/add/review').put(AuthenticateToken, submit_review)
 
 
 module.exports = Routers;

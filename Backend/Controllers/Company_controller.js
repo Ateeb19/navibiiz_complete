@@ -42,7 +42,7 @@ const uploadDir = path.join(__dirname, '../send_transport_img');
 
 if (!fs.existsSync(uploadDir)) {
     try {
-        fs.mkdirSync(uploadDir, { recursive: true }); 
+        fs.mkdirSync(uploadDir, { recursive: true });
     } catch (err) {
         console.error('Error creating upload directory:', err);
     }
@@ -562,6 +562,7 @@ const display_company = async (req, res) => {
 
         for (const element of result1) {
             const name = `company_${element.id}`;
+            const company_id = element.id;
             const created_by = element.created_by;
             try {
                 const countries = await new Promise((resolve, reject) => {
@@ -575,18 +576,31 @@ const display_company = async (req, res) => {
                 console.error(`Error fetching countries for ${name}:`, err);
                 element.Countries = []; // Set to empty array on error
             }
-            try{
+            try {
                 const total_delivery = await new Promise((resolve, reject) => {
-                    db.query (`SELECT COUNT(*) AS total_delivery FROM offers WHERE status = 'complete' AND created_by_email = ?`, [created_by], (err, data) => {
-                        if(err) return reject(err);
+                    db.query(`SELECT COUNT(*) AS total_delivery FROM offers WHERE status = 'complete' AND created_by_email = ?`, [created_by], (err, data) => {
+                        if (err) return reject(err);
                         resolve(data);
                     });
                 });
                 element.total_delivery = total_delivery[0].total_delivery;
-            } catch(err) {
+            } catch (err) {
                 console.error('Error fetching total delivery:', err);
                 element.total_delivery = 0;
             }
+            try {
+                const ratting = await new Promise((resolve, reject) => {
+                    db.query(`SELECT * FROM ratting WHERE company_id = ?`,[company_id], (err, rattings) => {
+                        if (err) return reject(err);
+                        resolve(rattings);
+                    });
+                });
+                element.Ratting = ratting;
+            } catch (err) {
+                console.error(`Error fetching countries for ${name}:`, err);
+                element.Ratting = []; // Set to empty array on error
+            }
+
         }
 
         res.json({ message: result1, status: true });
@@ -595,6 +609,42 @@ const display_company = async (req, res) => {
         res.json({ message: `Error in database: ${error.message}`, status: false });
     }
 };
+
+const submit_review = (req, res) => {
+    const user_id = req.user.userid;
+    const user_name = req.user.username
+    const company_id = req.body.company_id;
+    const rating = req.body.rating;
+    const description = req.body.description;
+
+    db.query('SELECT * FROM ratting WHERE user_id = ? AND company_id = ? ', [user_id, company_id], (err, result) => {
+        if (err) {
+            res.json({ message: 'error in database', status: false });
+            return;
+        } else {
+            if (result.length > 0) {
+                res.json({ message: 'Review alrady submitted', status: true });
+            } else {
+                db.query("INSERT INTO ratting SET ?", {
+                    user_id: user_id,
+                    company_id: company_id,
+                    ratting: rating,
+                    description: description,
+                    user_name: user_name
+                }, (err, result1) => {
+                    if (err) {
+                        res.json({ message: "error in database", status: false });
+                        console.log("error", err);
+                    } else {
+                        res.json({ message: 'Review Submitted', status: true })
+
+                    }
+                })
+            }
+        }
+    })
+
+}
 
 module.exports = {
     Company_Register,
@@ -607,5 +657,6 @@ module.exports = {
     Delete_Country,
     Change_date,
     Add_New_country,
-    display_company
+    display_company,
+    submit_review
 };
