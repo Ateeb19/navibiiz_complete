@@ -55,7 +55,7 @@ const CompanyDetails = () => {
         if (token) {
             setReview(true)
         } else {
-            showAlert('Please login to contact the company.');
+            showAlert('Please login to add a review.');
             localStorage.setItem("redirectAfterLogin", `/company_details/${id}`);
             navigate('/login');
         }
