@@ -132,4 +132,36 @@
     .hero-wrapper {
         padding: 0px 0px 50px 0;
     }
+
+    .mission-wrappr {
+        margin-top: 1px;
+    }
+
+    .search-result-wrap {
+        margin-left: 1px;
+    }
+
+    .login-tab-wrapper {
+        width: 100%;
+    }
+
+    .footer_img {
+        height: 60px;
+    }
+
+    .shipping-selection {
+        max-width: 100% !important;
+    }
+
+    .dashboard-offer-selection{
+        width: 90% !important;
+    }
+
+    .super-admin-offer{
+        width: 100% !important;
+    }
+
+    .user-offer-width{
+        width: 100% !important;
+    }
 }

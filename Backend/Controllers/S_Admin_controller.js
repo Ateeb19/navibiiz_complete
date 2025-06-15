@@ -18,16 +18,24 @@ const Display_All_company = (req, res) => {
                 }
                 const companyDataPromises = companies.map((company) => {
                     return new Promise((resolve) => {
-                        db.query(`SELECT * FROM company_${company.id}`, (err, tableData) => {
-                            if (err) {
-                                console.error(`Error fetching data for ${company.company_name}:`, err);
-                                resolve({ ...company, tableData: [], error: "Error fetching table data" });
-                            } else {
-                                resolve({ ...company, tableData });
+                        db.query(`SELECT * FROM company_${company.id}`, (err1, tableData) => {
+                            if (err1) {
+                                console.error(`Error fetching data for ${company.company_name}:`, err1);
+                                return resolve({ ...company, tableData: [], ratting: [], error: "Error fetching table data" });
                             }
+
+                            db.query(`SELECT * FROM ratting WHERE company_id =? `, [company.id], (err2, ratting) => {
+                                if (err2) {
+                                    console.log(`Error featching data for ${company.company_name}: `, err2);
+                                    return resolve({ ...company, tableData: [], ratting: [], error: "Error featching ratting data" });
+                                }
+
+                                resolve({ ...company, tableData, ratting });
+                            });
                         });
                     });
                 });
+
                 Promise.all(companyDataPromises)
                     .then((companiesWithTableData) => {
                         res.json({
@@ -237,6 +245,8 @@ const payment_history = (req, res) => {
         })
     }
 }
+
+
 const compnay_info_details = (req, res) => {
     if (req.user.role === 'Sadmin') {
         const company_id = req.params.id;
@@ -252,9 +262,11 @@ const compnay_info_details = (req, res) => {
             }
 
             const company = result[0];
-
+            
             const dynamicTableName = `company_${company_id}`;
-            db.query(`SELECT * FROM ??`, [dynamicTableName], (tableErr, tableData) => {
+            const tableQuery = `SELECT * FROM \`${dynamicTableName}\``;
+
+            db.query(tableQuery, (tableErr, tableData) => {
                 if (tableErr) {
                     console.error(`Error fetching data from table ${dynamicTableName}:`, tableErr);
                     return res.json({
@@ -262,13 +274,40 @@ const compnay_info_details = (req, res) => {
                         status: false,
                         company,
                         tableData: [],
+                        avg_rating: "0",
+                        total_reviews: 0,
                         tableError: true
                     });
                 }
 
-                res.json({
-                    message: [{ ...company, tableData }],
-                    status: true
+                db.query(`SELECT ratting FROM ratting WHERE company_id = ?`, [company_id], (ratErr, rattingRows) => {
+                    if (ratErr) {
+                        console.log('Error fetching ratings:', ratErr);
+                        return res.json({
+                            message: 'Error fetching rating data',
+                            status: false,
+                            company,
+                            tableData,
+                            avg_rating: "0",
+                            total_reviews: 0,
+                            rattingError: true
+                        });
+                    }
+
+                    // Calculate average rating and total reviews
+                    const totalReviews = rattingRows.length;
+                    const totalRating = rattingRows.reduce((sum, r) => sum + parseFloat(r.ratting || 0), 0);
+                    const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : "0";
+
+                    // Combine all in a single company object
+                    company.tableData = tableData;
+                    company.avg_rating = avgRating;
+                    company.total_reviews = totalReviews;
+
+                    res.json({
+                        message: [company],
+                        status: true
+                    });
                 });
             });
         });
@@ -276,6 +315,48 @@ const compnay_info_details = (req, res) => {
         res.json({ message: 'You are not Super Admin', status: false });
     }
 };
+
+
+
+// const compnay_info_details = (req, res) => {
+//     if (req.user.role === 'Sadmin') {
+//         const company_id = req.params.id;
+
+//         db.query(`SELECT * FROM companies_info WHERE id = ?`, [company_id], (err, result) => {
+//             if (err) {
+//                 console.error("Error fetching company info:", err);
+//                 return res.json({ message: 'Error in database', status: false });
+//             }
+
+//             if (result.length === 0) {
+//                 return res.json({ message: 'Company not found', status: false });
+//             }
+
+//             const company = result[0];
+
+//             const dynamicTableName = `company_${company_id}`;
+//             db.query(`SELECT * FROM ??`, [dynamicTableName], (tableErr, tableData) => {
+//                 if (tableErr) {
+//                     console.error(`Error fetching data from table ${dynamicTableName}:`, tableErr);
+//                     return res.json({
+//                         message: 'Error fetching data from company table',
+//                         status: false,
+//                         company,
+//                         tableData: [],
+//                         tableError: true
+//                     });
+//                 }
+
+//                 res.json({
+//                     message: [{ ...company, tableData }],
+//                     status: true
+//                 });
+//             });
+//         });
+//     } else {
+//         res.json({ message: 'You are not Super Admin', status: false });
+//     }
+// };
 
 const edit_company_details = (req, res) => {
     const company_id = req.params.id;
@@ -520,41 +601,41 @@ const edit_company_documents = [
 ];
 
 const payment_details = (req, res) => {
-  if (req.user.role === 'Sadmin') {
-    const user_email = req.body.user_email;
-    const offer_id = req.body.offer_id;
-    const details = {};
+    if (req.user.role === 'Sadmin') {
+        const user_email = req.body.user_email;
+        const offer_id = req.body.offer_id;
+        const details = {};
 
-    db.query(`SELECT name FROM users WHERE email = ?`, [user_email], (err, result1) => {
-      if (err || !result1.length) {
-        console.log(err || 'User not found');
-        return res.status(500).json({ message: 'Error fetching user name', status: false });
-      }
-      details.user_name = result1[0].name;
+        db.query(`SELECT name FROM users WHERE email = ?`, [user_email], (err, result1) => {
+            if (err || !result1.length) {
+                console.log(err || 'User not found');
+                return res.status(500).json({ message: 'Error fetching user name', status: false });
+            }
+            details.user_name = result1[0].name;
 
-      db.query(`SELECT created_by_email FROM offers WHERE offer_id = ?`, [offer_id], (err, result2) => {
-        if (err || !result2.length) {
-          console.log(err || 'Offer not found');
-          return res.status(500).json({ message: 'Error fetching offer', status: false });
-        }
-        details.company_email = result2[0].created_by_email;
+            db.query(`SELECT created_by_email FROM offers WHERE offer_id = ?`, [offer_id], (err, result2) => {
+                if (err || !result2.length) {
+                    console.log(err || 'Offer not found');
+                    return res.status(500).json({ message: 'Error fetching offer', status: false });
+                }
+                details.company_email = result2[0].created_by_email;
 
-        db.query(`SELECT company_name, contect_no FROM companies_info WHERE created_by = ?`, [details.company_email], (err, result3) => {
-          if (err || !result3.length) {
-            console.log(err || 'Company not found');
-            return res.status(500).json({ message: 'Error fetching company info', status: false });
-          }
+                db.query(`SELECT company_name, contect_no FROM companies_info WHERE created_by = ?`, [details.company_email], (err, result3) => {
+                    if (err || !result3.length) {
+                        console.log(err || 'Company not found');
+                        return res.status(500).json({ message: 'Error fetching company info', status: false });
+                    }
 
-          details.company_name = result3[0].company_name;
-          details.company_contact = result3[0].contect_no;
+                    details.company_name = result3[0].company_name;
+                    details.company_contact = result3[0].contect_no;
 
-          res.json({ message: details, status: true });
+                    res.json({ message: details, status: true });
+                });
+            });
         });
-      });
-    });
-  } else {
-    res.status(403).json({ message: 'Only super admin can access', status: false });
-  }
+    } else {
+        res.status(403).json({ message: 'Only super admin can access', status: false });
+    }
 };
 
 

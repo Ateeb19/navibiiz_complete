@@ -274,7 +274,7 @@ const Offers = () => {
             <section className="search-result-wrapper w-100">
                 <div className="container">
                     <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-3 mt-md-5 w-100">
-                        <div className="d-flex flex-column align-items-start p-3 ps-5 pb-5 col-12 col-md-3">
+                        <div className="d-flex flex-column align-items-start p-3 ps-md-5 pb-5 col-12 col-md-3">
                             <div className="title-head">
                                 <h3><span style={{ color: ' #de8316' }}><FaFilter /> </span>Filters by :</h3>
                             </div>
@@ -336,7 +336,7 @@ const Offers = () => {
                             </div>
 
                         </div>
-                        <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-1">
+                        <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-md-4 col-12 col-md-9 border-start border-1">
                             <div className="search-result-wrap w-100">
                                 <div className="title-head text-start">
                                     <h3>Search Results </h3>
@@ -364,7 +364,7 @@ const Offers = () => {
                                                                 {item.receiver_country.slice(0, 3)}
                                                             </p>
                                                             <p className="mt-2 text-start text-secondary">{item.sender_description ? item.sender_description.split(" ").slice(0, 30).join(" ") + "..." : item.sender_description}</p>
-                                                            <div className="d-flex flex-column flex-md-row gap-4">
+                                                            <div className="d-flex flex-column flex-md-row gap-4 text-start">
                                                                 <div className="pe-3 border-end border-1">
                                                                     <FaLocationDot className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Weight: {item.p_weight}</span>
                                                                 </div>
@@ -495,8 +495,8 @@ const Offers = () => {
                                                 <div className="offer-details-wrap">
                                                     <h5 className="text-start w-100 mb-3 fs-6">Product Details</h5>
 
-                                                    <div className="d-flex flex-wrap gap-3 w-100">
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -512,7 +512,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -530,7 +530,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -547,9 +547,9 @@ const Offers = () => {
                                                         </div>
 
                                                     </div>
-                                                    <div className="d-flex flex-wrap gap-3 mt-3 w-100">
+                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -565,7 +565,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -581,7 +581,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -602,8 +602,8 @@ const Offers = () => {
                                                 <div className="offer-details-wrap">
                                                     <h5 className="text-start w-100 mb-3 fs-6">Pick Up Information</h5>
 
-                                                    <div className="d-flex flex-wrap gap-3 w-100">
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -619,7 +619,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -635,7 +635,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -651,8 +651,8 @@ const Offers = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="d-flex flex-wrap gap-3 mt-3 w-100">
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -668,7 +668,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -690,8 +690,8 @@ const Offers = () => {
 
                                                     <h5 className="text-start w-100 mb-3 fs-6">Delivery Information</h5>
 
-                                                    <div className="d-flex flex-wrap gap-3 w-100">
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -707,7 +707,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -723,7 +723,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -739,8 +739,8 @@ const Offers = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="d-flex flex-wrap gap-3 mt-3 w-100">
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -756,7 +756,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -772,7 +772,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -793,8 +793,8 @@ const Offers = () => {
                                                 <div className="offer-details-wrap">
                                                     <h5 className="text-start w-100 mb-3 fs-6">Customer Information</h5>
 
-                                                    <div className="d-flex flex-wrap gap-3 w-100">
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -810,7 +810,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -826,7 +826,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                 style={{
@@ -845,7 +845,7 @@ const Offers = () => {
                                                 </div>
 
                                                 <div className="offer-details-wrap">
-                                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 p-3">
+                                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 p-3 text-start">
                                                         <div className="title-head">
                                                             <h3 >Bidding Information</h3>
                                                         </div>

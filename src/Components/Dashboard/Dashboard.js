@@ -514,23 +514,54 @@ const Dashboard = () => {
   });
 
 
+  // const handleViewClick = async (company) => {
+  //   const companyId = company.id;
+
+  //   localStorage.setItem('selected_company_id', companyId);
+  //   localStorage.setItem('activeSection', 'company_detail');
+
+
+
+  //   try {
+  //     const response = await axios.get(`${port}/s_admin/company_info_detail/${companyId}`, {
+  //       headers: {
+  //         Authorization: token,
+  //       }
+  //     });
+  //     const data = response.data;
+  //     if (data.status && data.message.length > 0) {
+  //       setSelectedCompany(data.message);
+  //       setActiveSection('company_detail');
+  //       console.log(selectedCompany);
+  //     } else {
+  //       console.error('No data received or invalid format');
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to fetch company details:', error);
+  //   }
+  // };
+
   const handleViewClick = async (company) => {
     const companyId = company.id;
 
     localStorage.setItem('selected_company_id', companyId);
     localStorage.setItem('activeSection', 'company_detail');
+    localStorage.setItem('shouldReloadOnce', 'true');
 
     try {
       const response = await axios.get(`${port}/s_admin/company_info_detail/${companyId}`, {
-        headers: {
-          Authorization: token,
-        }
+        headers: { Authorization: token },
       });
+
       const data = response.data;
 
       if (data.status && data.message.length > 0) {
         setSelectedCompany(data.message[0]);
         setActiveSection('company_detail');
+
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 200);
       } else {
         console.error('No data received or invalid format');
       }
@@ -729,19 +760,16 @@ const Dashboard = () => {
   }
   const [show_company_details, setShow_company_details] = useState('');
   const handle_user_offer_details = (offer_id, groupage_id) => {
-    // console.log(offer_id);
     axios.get(`${port}/user/company_details/${offer_id}`, {
       headers: {
         Authorization: token,
       }
     }).then((res) => {
-      console.log(res.data);
       if (res.data.status === true) {
         setShow_company_details(res.data.message);
       } else {
         setShow_company_details('');
       }
-      // console.log(show_company_details);
     }).catch((err) => console.log(err));
   }
 
@@ -1091,6 +1119,7 @@ const Dashboard = () => {
       return;
     }
 
+
     axios.post(`${port}/s_admin/add_new_country/${selectedCompany.id}`, newCountryData, {
       headers: {
         Authorization: token,
@@ -1125,7 +1154,6 @@ const Dashboard = () => {
       showAlert('Something went wrong!');
     });
   };
-
 
   useEffect(() => {
     featchCompanydata();
@@ -1227,7 +1255,6 @@ const Dashboard = () => {
       }
     )
       .then((response) => {
-        console.log(response.data);
         if (response.data.status === true) {
           const combinedDetails = {
             ...item,
@@ -1242,7 +1269,7 @@ const Dashboard = () => {
         console.error('API error:', err);
       });
   };
-  console.log(payment_details);
+
 
   const Menu = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -1268,7 +1295,7 @@ const Dashboard = () => {
                 </Link>
               </li>
 
-              {userRole === 'Sadmin' || userRole === 'admin' ? (
+              {userRole === 'Sadmin' ? (
                 <>
                   <li className="nav-item mb-4 text-start" style={activeSection === 'companies' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                     <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Companies"); setActiveSection("companies"); localStorage.setItem("activeSection", "companies"); setShowOfferDetails(null); }}>
@@ -1294,24 +1321,31 @@ const Dashboard = () => {
                   )}
                 </>
               ) : (
-                <>
-                  <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Orders"); setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelected_groupage(null); }}>
-                      <FaBoxOpen /> Orders
-                    </Link>
-                  </li>
 
+                <>
+                  {userRole === 'user' && (
+                    <>
+                      <li className="nav-item mb-4 text-start" style={activeSection === 'orders' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Orders"); setActiveSection("orders"); localStorage.setItem("activeSection", "orders"); setSelected_groupage(null); }}>
+                          <FaBoxOpen /> Orders
+                        </Link>
+                      </li>
+                    </>
+                  )}
                   <li className="nav-item mb-4 text-start" style={activeSection === 'user_offers' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
                     <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Offers"); setActiveSection("user_offers"); localStorage.setItem("activeSection", "user_offers"); setSelected_groupage(null); }}>
                       <MdPayment /> Offers
                     </Link>
                   </li>
-
-                  <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
-                    <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payment History"); setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelected_groupage(null); }}>
-                      <MdPayment /> Payment History
-                    </Link>
-                  </li>
+                  {userRole === 'user' && (
+                    <>
+                      <li className="nav-item mb-4 text-start" style={activeSection === 'payment_history' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}>
+                        <Link to="#" className="nav-link text-white" onClick={() => { handleSelect("Payment History"); setActiveSection("payment_history"); localStorage.setItem("activeSection", "payment_history"); setSelected_groupage(null); }}>
+                          <MdPayment /> Payment History
+                        </Link>
+                      </li>
+                    </>
+                  )}
                 </>
               )}
 
@@ -1323,7 +1357,11 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="" style={{ marginTop: '80px', height: '89vh', overflow: 'hidden' }}>
+    <div className="" style={{
+      marginTop: '80px',
+      height: '89vh',
+      overflow: isMobile ? 'auto' : 'hidden'
+    }}>
       <ConfirmationModal
         show={showModal}
         message={modalMessage}
@@ -1421,14 +1459,13 @@ const Dashboard = () => {
             {userRole === 'Sadmin' ? (
               <>
                 <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%', paddingBottom: '40px', overflow: 'auto' }}>
+                  {isMobile && (
+                    <div className="w-100 d-flex justify-content-start">
+                      <Menu />
+                    </div>
+                  )}
                   <div className="dashbord-info-wrap">
-
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                      {isMobile && (
-                        <div className="w-100 d-flex justify-content-start">
-                          <Menu />
-                        </div>
-                      )}
                       <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
                         <div className="p-3">
                         </div>
@@ -1503,14 +1540,13 @@ const Dashboard = () => {
             ) : userRole === 'admin' ? (
               <>
                 <div className="bg-light" style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100%', paddingBottom: '40px', overflow: 'auto' }}>
+                  {isMobile && (
+                    <div className="w-100 d-flex justify-content-start">
+                      <Menu />
+                    </div>
+                  )}
                   <div className="dashbord-info-wrap">
-
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                      {isMobile && (
-                        <div className="w-100 d-flex justify-content-start">
-                          <Menu />
-                        </div>
-                      )}
                       <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
                         <div className="p-3">
                         </div>
@@ -1566,13 +1602,13 @@ const Dashboard = () => {
             ) : (
               <>
                 <div style={{ width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto', marginTop: '80px', paddingBottom: '40px' }}>
+                  {isMobile && (
+                    <div className="w-100 d-flex justify-content-start">
+                      <Menu />
+                    </div>
+                  )}
                   <div className="dashbord-info-wrap">
                     <div className="d-flex flex-wrap justify-content-end align-items-center mt-2 gap-3">
-                      {isMobile && (
-                        <div className="w-100 d-flex justify-content-start">
-                          <Menu />
-                        </div>
-                      )}
                       <div className="border-start p-2 border-3 border-dark">
                         <Dropdown>
                           <Dropdown.Toggle className="fs-5 w-100 text-secondary" variant="light" id="dropdown-basic">
@@ -1627,13 +1663,14 @@ const Dashboard = () => {
 
         {activeSection === 'profile_view' && (
           <>
-            <div className="bg-light px-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
-              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                {isMobile && (
-                  <div className="w-100 d-flex justify-content-start">
-                    <Menu />
-                  </div>
-                )}
+            <div className="bg-light px-md-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+              {isMobile && (
+                <div className="w-100 d-flex justify-content-start">
+                  <Menu />
+                </div>
+              )}
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 py-2 px-md-2">
+
                 <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
                   <div className="border-start p-2 border-3 border-dark">
                     <Dropdown>
@@ -1962,8 +1999,8 @@ const Dashboard = () => {
                                 <td className="text-secondary">{item.sender_country}</td>
                                 <td className="text-secondary">{item.receiver_country}</td>
                                 <td className="text-secondary">{item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date}</td>
-                                <td className="text-secondary">
-                                  <span className="p-2 fw-bold" style={{
+                                <td className="text-secondary d-flex align-items-center justify-content-center">
+                                  <span className="p-2 fw-bold d-flex flex-column align-items-center justify-content-center w-75 user-offer-width" style={{
                                     backgroundColor: item.payment_status === 'panding' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)',
                                     color: item.payment_status === 'panding' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)'
                                   }}>
@@ -2862,7 +2899,7 @@ const Dashboard = () => {
                 zIndex: 9999
               }}
             >
-              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection"
                 style={{
                   width: '55%',
                   height: '90vh',
@@ -3055,7 +3092,7 @@ const Dashboard = () => {
                 zIndex: 9999
               }}
             >
-              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection"
                 style={{
                   width: '55%',
                   height: '90vh',
@@ -3230,13 +3267,14 @@ const Dashboard = () => {
           <>
             {userRole === 'Sadmin' && (
               <>
-                <div className="bg-light px-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+                <div className="bg-light px-md-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+
+                  {isMobile && (
+                    <div className="w-100 d-flex justify-content-start">
+                      <Menu />
+                    </div>
+                  )}
                   <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                    {isMobile && (
-                      <div className="w-100 d-flex justify-content-start">
-                        <Menu />
-                      </div>
-                    )}
                     <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
                       <div className="border-start p-2 border-3 border-dark">
                         <Dropdown>
@@ -3331,13 +3369,14 @@ const Dashboard = () => {
         {activeSection === "company_detail" && (
           <>
 
-            <div className="bg-light px-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+            <div className="bg-light px-md-3" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
+
+              {isMobile && (
+                <div className="w-100 d-flex justify-content-start">
+                  <Menu />
+                </div>
+              )}
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2">
-                {isMobile && (
-                  <div className="w-100 d-flex justify-content-start">
-                    <Menu />
-                  </div>
-                )}
                 <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
                   <div className="border-start p-2 border-3 border-dark">
                     <Dropdown>
@@ -3366,8 +3405,8 @@ const Dashboard = () => {
 
                     {selectedCompany ? (
                       <>
-                        <div className="row align-items-center">
-                          <div className="col-12 col-md-2 d-flex justify-content-center" onClick={() => setHandle_profile_edit(!handle_profile_edit)}>
+                        <div className="row align-items-center text-start">
+                          <div className="col-12 col-md-2 d-flex  justify-content-start" onClick={() => setHandle_profile_edit(!handle_profile_edit)}>
                             <img src={selectedCompany.logo ? selectedCompany.logo : '/Images/avtar_webloon.webp'} alt="" className="img-fluid rounded-circle" width="150px" />
                             {edit_company && (
                               <>
@@ -3377,28 +3416,29 @@ const Dashboard = () => {
                               </>
                             )}
                           </div>
-                          <div className="col-12 col-md-6 text-center text-md-start mt-3 mt-md-0">
+                          <div className="col-12 col-md-6 text-start mt-3 mt-md-0">
                             <h2>{selectedCompany.company_name}</h2>
-                            <label className="d-flex align-items-center justify-content-center justify-content-md-start">
+                            <label className="d-flex align-items-center justify-content-start">
                               <IoStar className="text-warning fs-5" />
-                              <span className="text-secondary"> 4.85</span>
-                              <span className="text-primary"> (20 Reviews)</span>
+                              <span className="text-secondary"> {selectedCompany.avg_rating}</span>
+                              <span className="text-primary"> ({selectedCompany.total_reviews} Reviews)</span>
                             </label>
                           </div>
-                          <div className="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
+                          <div className="col-12 col-md-4 text-end mt-3 mt-md-0">
                             <h4 className="text-primary" style={{ cursor: 'pointer' }} onClick={handle_edit_company}><RiPencilFill /> Edit Details</h4>
                           </div>
                         </div>
 
-                        <div className="row mt-5 text-center text-md-start">
+                        <div className="row mt-5 text-start">
                           {[
                             { icon: <FaPhoneAlt />, label: 'Contact Number', value: selectedCompany.contect_no },
                             { icon: <MdEmail />, label: 'Email ID', value: selectedCompany.email },
-                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1 ? selectedCompany.location1.split(",")[0].trim() : 'Location' },
+                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1?.split(",")[0].trim() || 'Location' },
+                            // { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1 ? selectedCompany.location1.split(",")[0].trim() : 'Location' },
                           ].map((item, index) => {
                             const isEditable = edit_company && index !== 1;
                             return (
-                              <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                              <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-start  mb-3"
                                 onClick={() => {
                                   if (!isEditable) return;
 
@@ -3450,14 +3490,17 @@ const Dashboard = () => {
                           })}
                         </div>
 
-                        <div className="row mt-4 text-center text-md-start">
+                        <div className="row mt-4 text-start">
                           {[
-                            { icon: <FaCity />, label: 'State', value: selectedCompany.location1.split(",")[1]?.trim() },
-                            { icon: <FaCity />, label: 'City', value: selectedCompany.location1.split(",")[2]?.trim() },
+                            { icon: <FaCity />, label: 'State', value: selectedCompany.location1?.split(",")[1]?.trim() || 'Location' },
+                            { icon: <FaCity />, label: 'City', value: selectedCompany.location1?.split(",")[2]?.trim() || 'Location' },
+
+                            // { icon: <FaCity />, label: 'State', value: selectedCompany.location1.split(",")[1]?.trim() },
+                            // { icon: <FaCity />, label: 'City', value: selectedCompany.location1.split(",")[2]?.trim() },
                             {
                               icon: <FaLocationDot />,
                               label: 'Shipping Countries',
-                              value: selectedCompany.tableData[0]?.countries,
+                              value: selectedCompany.tableData?.[0]?.countries || 'N/A',
                               extra: <span className="text-primary" onClick={handleScrollToMore}> & more</span>
                             },
                           ].map((item, index) => {
@@ -3466,7 +3509,7 @@ const Dashboard = () => {
                             return (
                               <div
                                 key={index}
-                                className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                                className="col-12 col-md-4 d-flex align-items-start justify-content-start mb-3"
                                 onClick={() => {
                                   if (!isEditable) return;
 
@@ -3516,13 +3559,13 @@ const Dashboard = () => {
                         </div>
 
 
-                        <div className="row mt-4 text-center text-md-start">
+                        <div className="row mt-4 text-start">
                           {[
                             { icon: <FaPaypal />, label: 'Paypal Id', value: selectedCompany?.paypal_id ? selectedCompany.paypal_id : 'N/A' },
                             { icon: <MdSwitchAccount />, label: 'Account Holder Name', value: selectedCompany.account_holder_name ? selectedCompany.account_holder_name : 'N/A' },
                             { icon: <BsBank2 />, label: 'IBA Number', value: selectedCompany.iban_number ? selectedCompany.iban_number : 'N/A' },
                           ].map((item, index) => (
-                            <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                            <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-start mb-3"
                               onClick={() => {
                                 if (!edit_company) return;
                                 setEditPopupOpen(true);
@@ -3551,14 +3594,14 @@ const Dashboard = () => {
                           ))}
                         </div>
 
-                        <div className="row mt-5 text-center text-md-start">
+                        <div className="row mt-5 text-start">
                           {[
                             { icon: <IoMdDocument />, label: 'Financial Document', value: selectedCompany.financialDocument ? selectedCompany.financialDocument : 'N/A' },
                             { icon: <FaPassport />, label: 'Passport CEO MD', value: selectedCompany.passport_CEO_MD ? selectedCompany.passport_CEO_MD : 'N/A' },
                             { icon: <IoMdDocument />, label: 'Registration Document', value: selectedCompany.registrationDocument ? selectedCompany.registrationDocument : 'N/A' },
                           ].map((item, index) => (
                             <div key={index}
-                              className="col-12 col-md-4 d-flex align-items-start justify-content-center justify-content-md-start mb-3"
+                              className="col-12 col-md-4 d-flex align-items-start justify-content-start mb-3"
                               onClick={() => {
                                 if (!edit_company) return;
                                 setEdit_company_document(true);
@@ -3650,9 +3693,9 @@ const Dashboard = () => {
                                 <tbody>
                                   {selectedCompany.tableData.map((item, index) => (
                                     <tr key={index}>
-                                      <td className="text-secondary">{item.service_type}</td>
-                                      <td className="text-secondary">{item.countries}</td>
-                                      <td className="text-secondary">{item.duration}</td>
+                                      <td className="text-secondary text-start text-md-center">{item.service_type}</td>
+                                      <td className="text-secondary text-start text-md-center">{item.countries}</td>
+                                      <td className="text-secondary text-start text-md-center">{item.duration}</td>
                                       {edit_company && (
                                         <td>
                                           <button
@@ -4027,6 +4070,8 @@ const Dashboard = () => {
             </div>
           </>
         )}
+
+
         {activeSection === "offers" && (
           <>
             <div className="bg-light" style={{ marginTop: '80px', paddingBottom: '90px', width: '100%', maxWidth: isMobile ? "100%" : "85%", height: '100vh', overflow: 'auto' }}>
@@ -4113,7 +4158,7 @@ const Dashboard = () => {
                                   style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
                                   onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
                                 >
-                                  <span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete'? 'Accepted': item.status === 'pending'? 'Pending' : 'Rejected'} {item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
+                                  <span className="px-3 py-2 d-flex flex-column w-100 text-center align-items-center justify-content-center" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : (<span className="d-flex flex-row text-center align-items-center justify-content-center gap-2 w-100">Rejected <AiFillDelete /></span>)}</span>
                                 </td>
                                 {/* <td className="text-secondary">
                                   <span
@@ -4151,7 +4196,7 @@ const Dashboard = () => {
                 zIndex: 9999
               }}
             >
-              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark"
+              <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark "
                 style={{
                   width: '90%',
                   maxWidth: '1100px',
@@ -4170,7 +4215,7 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className="d-flex flex-row justify-content-start align-items-center">
+                <div className="d-flex flex-row justify-content-start align-items-start">
                   <div className="m-2 border border-1 border-secondary rounded-1" style={{ width: '10%' }}>
                     <img src={showOfferDetails.img01} alt='' style={{ width: '100%', height: '100%' }} />
                   </div>
@@ -4199,9 +4244,9 @@ const Dashboard = () => {
                       { icon: <RiExpandHeightFill />, label: "Company Email ID", value: showOfferDetails.created_by_email ? showOfferDetails.created_by_email : 'N/A' }
                     ]
                   ].map((row, index) => (
-                    <div key={index} className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
+                    <div key={index} className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5">
                       {row.map((item, idx) => (
-                        <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                        <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                           <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                             style={{
                               width: '3rem',
@@ -4225,13 +4270,13 @@ const Dashboard = () => {
 
                   <h5 className="text-start w-100 mb-3">Product Information</h5>
 
-                  <div className="d-flex flex-wrap w-100 gap-3 gap-lg-5 ">
+                  <div className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5 ">
                     {[
                       { icon: <SiAnytype />, label: "Product Type", value: showOfferDetails.product_type },
                       { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Kg` },
                       { icon: <RiExpandHeightFill />, label: "Height", value: `${showOfferDetails.p_height} Cm` }
                     ].map((item, idx) => (
-                      <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                         <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                           style={{
                             width: '3rem',
@@ -4249,12 +4294,12 @@ const Dashboard = () => {
                     ))}
                   </div>
 
-                  <div className="d-flex flex-wrap w-100 gap-3 gap-lg-5 mt-3">
+                  <div className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5 mt-3">
                     {[
                       { icon: <FaRuler />, label: "Length", value: `${showOfferDetails.p_length} Cm` },
                       { icon: <RiExpandWidthFill />, label: "Width", value: `${showOfferDetails.p_width} Cm` }
                     ].map((item, idx) => (
-                      <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                      <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                         <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                           style={{
                             width: '3rem',
@@ -4276,8 +4321,9 @@ const Dashboard = () => {
 
                 <div className="offer-details-wrap">
                   <h5 className="text-start w-100 mb-3">Pick Up Information</h5>
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-between justify-content-start w-100 gap-5">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                  {/* <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-between justify-content-start w-100 gap-5"> */}
+                  <div className="d-flex flex-column flex-md-row flex-wrap align-items-start justify-content-start w-100 gap-4 gap-md-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4293,7 +4339,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4309,7 +4355,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4326,8 +4372,8 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                  <div className="d-flex flex-column flex-md-row flex-wrap align-items-start justify-content-start w-100 gap-4 gap-md-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4343,7 +4389,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4359,7 +4405,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4377,8 +4423,8 @@ const Dashboard = () => {
                   </div>
 
 
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                  <div className="d-flex flex-column flex-md-row flex-wrap align-items-start justify-content-start w-100 gap-4 gap-md-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4394,7 +4440,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4410,7 +4456,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4448,8 +4494,8 @@ const Dashboard = () => {
                 <div className="offer-details-wrap">
 
                   <h5 className="text-start w-100 mb-3">Delivery Information</h5>
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                  <div className="d-flex flex-column flex-md-row flex-wrap align-items-start justify-content-start w-100 gap-4 gap-md-5">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4465,7 +4511,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4481,7 +4527,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4498,8 +4544,8 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                  <div className="d-flex flex-column flex-md-row flex-wrap align-items-start justify-content-start w-100 gap-4 gap-md-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4515,7 +4561,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4531,7 +4577,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4549,8 +4595,8 @@ const Dashboard = () => {
                   </div>
 
 
-                  <div className="d-flex flex-row flex-wrap flex-md-nowrap align-items-start justify-content-start w-100 gap-5 mt-3">
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                  <div className="d-flex flex-column flex-md-row flex-wrap align-items-start justify-content-start w-100 gap-4 gap-md-5 mt-3">
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4566,7 +4612,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4582,7 +4628,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                    <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                       <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                         style={{
                           width: '3rem',
@@ -4788,9 +4834,9 @@ const Dashboard = () => {
                               },
                             ]
                           ].map((row, index) => (
-                            <div key={index} className="d-flex flex-wrap w-100 gap-3 gap-lg-5">
+                            <div key={index} className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5">
                               {row.map((item, idx) => (
-                                <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '30%' }}>
+                                <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>
                                   <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                     style={{
                                       width: '3rem',

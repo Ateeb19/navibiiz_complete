@@ -66,7 +66,7 @@ const Footer = () => {
                                 <p className="para-question text-start mb-4">
                                     Join our platform to connect with global customers and expand your logistics business Our platform is designed to streamline cross-border shipping by linking you with reliable providers who offer consistent, transparent, and timely service around the globe.
                                 </p>
-                                <div className="d-flex flex-row align-items-center justify-content-between w-100">
+                                <div className="d-flex flex-row align-items-center justify-content-between w-100 text-start">
                                     <div className="d-flex flex-row align-items-center justify-content-start question-call-email w-100 gap-4">
                                         <h5>Call Us</h5>
                                         <h6><IoCall />  <span className="text-dark">+49 176 60906264</span></h6>
@@ -92,7 +92,7 @@ const Footer = () => {
                 <div className="container">
                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <div className="d-flex flex-column align-items-start justify-content-start">
-                            <img src="/Images/novibiz/fulllogo_transparent_nobuffer.png" height='80px' alt="Logo" />
+                            <img src="/Images/novibiz/fulllogo_transparent_nobuffer.png" className="footer_img" alt="Logo" />
                         </div>
 
                         <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">

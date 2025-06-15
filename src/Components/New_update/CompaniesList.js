@@ -285,7 +285,7 @@ const CompaniesList = () => {
             <section className="search-result-wrapper w-100">
                 <div className="container">
                     <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-3 mt-md-5 w-100">
-                        <div className="d-flex flex-column align-items-start p-3 ps-5 pb-5 col-12 col-md-3 search-div">
+                        <div className="d-flex flex-column align-items-start p-3 ps-md-5 pb-5 col-12 col-md-3 search-div">
                             <div className="title-head">
                                 <h3><span style={{ color: ' #de8316' }}><FaFilter /> </span>Filters by :</h3>
                             </div>
@@ -366,7 +366,7 @@ const CompaniesList = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-4 col-12 col-md-9 border-start border-1">
+                        <div className="d-flex flex-column align-items-start justify-content-start p-3 ps-md-4 col-12 col-md-9 border-start border-1">
                             <div className="search-result-wrap w-100">
                                 <div className="title-head text-start"   >
                                     <h3>Search Results </h3>

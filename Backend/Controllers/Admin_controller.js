@@ -7,38 +7,70 @@ require('dotenv').config({ path: './.env' });
 
 
 const Display_company = (req, res) => {
-    db.query(`SELECT * FROM companies_info WHERE created_by = ?`, [req.user.useremail], (err, result) => {
-        if (err) {
-            console.error("Error fetching company info:", err);
-            return res.json({ message: 'Error in database', status: false });
-        }
-
-        if (result.length === 0) {
-            return res.json({ message: 'Company not found', status: false });
-        }
-
-        const company = result[0];
-
-        const company_id = result[0].id;
-        const dynamicTableName = `company_${company_id}`;
-        db.query(`SELECT * FROM ??`, [dynamicTableName], (tableErr, tableData) => {
-            if (tableErr) {
-                console.error(`Error fetching data from table ${dynamicTableName}:`, tableErr);
-                return res.json({
-                    message: 'Error fetching data from company table',
-                    status: false,
-                    company,
-                    tableData: [],
-                    tableError: true
-                });
+    if (req.user.role === 'admin') {
+        db.query(`SELECT * FROM companies_info WHERE created_by = ?`, [req.user.useremail], (err, result) => {
+            if (err) {
+                console.error("Error fetching company info:", err);
+                return res.json({ message: 'Error in database', status: false });
             }
 
-            res.json({
-                message: [{ ...company, tableData }],
-                status: true
+            if (result.length === 0) {
+                return res.json({ message: 'Company not found', status: false });
+            }
+
+            const company = result[0];
+
+            const company_id = result[0].id;
+            const dynamicTableName = `company_${company_id}`;
+
+            db.query(`SELECT * FROM ??`, [dynamicTableName], (tableErr, tableData) => {
+                if (tableErr) {
+                    console.error(`Error fetching data from table ${dynamicTableName}:`, tableErr);
+                    return res.json({
+                        message: 'Error fetching data from company table',
+                        status: false,
+                        company,
+                        tableData: [],
+                        avg_rating: "0",
+                        total_reviews: 0,
+                        tableError: true
+                    });
+                }
+
+                db.query(`SELECT ratting FROM ratting WHERE company_id = ?`, [company_id], (ratErr, rattingRows) => {
+                    if (ratErr) {
+                        console.log('Error fetching ratings:', ratErr);
+                        return res.json({
+                            message: 'Error fetching rating data',
+                            status: false,
+                            company,
+                            tableData,
+                            avg_rating: "0",
+                            total_reviews: 0,
+                            rattingError: true
+                        });
+                    }
+
+                    const totalReviews = rattingRows.length;
+                    const totalRating = rattingRows.reduce((sum, r) => sum + parseFloat(r.ratting || 0), 0);
+                    const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : "0";
+
+                    company.tableData = tableData;
+                    company.avg_rating = avgRating;
+                    company.total_reviews = totalReviews;
+
+                    res.json({
+                        message: [company],
+                        status: true
+                    });
+
+                });
             });
         });
-    });
+    } else {
+        res.json({ message: 'You are not Admin', status: false });
+    }
+
 };
 
 const Delete_company_admin = (req, res) => {
@@ -421,18 +453,18 @@ const edit_company_documents = [
 ];
 
 const delete_offer = (req, res) => {
-    if(req.user.role === 'admin' || req.user.role === 'Sadmin'){
+    if (req.user.role === 'admin' || req.user.role === 'Sadmin') {
         const offer_id = req.params.id;
         db.query(`DELETE FROM offers WHERE offer_id = ${offer_id}`, (err, result) => {
-            if(err){
+            if (err) {
                 console.log(err);
-                re.json({message: 'error in database', status: false});
-            }else{
-                res.json({message: 'Offer deleted success', status: true});
+                re.json({ message: 'error in database', status: false });
+            } else {
+                res.json({ message: 'Offer deleted success', status: true });
             }
         })
-    }else{
-        res.json({message: 'You are not super admin', status: false})
+    } else {
+        res.json({ message: 'You are not super admin', status: false })
     }
 }
 

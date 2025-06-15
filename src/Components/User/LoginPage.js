@@ -267,14 +267,14 @@ const LoginPage = () => {
                         required
                         type={show}
                         className="input-field" />
-                      <span className="fs-4 rounded" onMouseDown={HidePassword} onMouseUp={ShwoPassword} style={{ backgroundColor: "#ebebeb", padding: '12px 18px', height: '64px' }}>
+                      <span className="fs-4 rounded" onMouseDown={HidePassword} onMouseUp={ShwoPassword} style={{ backgroundColor: "#ebebeb", padding: '12px 18px', height: '54px' }}>
                         <IoEyeOutline /></span>
                     </div>
                   </>
                 )}
 
 
-                <div className="d-flex flex-row w-100 mb-3 align-items-center">
+                <div className="d-flex flex-row w-100 mb-3 align-items-center text-start gap-3">
                   <div className="d-flex flex-row w-50 justify-content-start">
                     {!forget_password && (
                       <>
