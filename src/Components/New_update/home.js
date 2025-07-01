@@ -178,28 +178,33 @@ const Home = () => {
     }
     const profiles = [
         {
-            name: 'Paris, France',
-            description: '“I compared prices from many logistics companies on Novibiz before shipping a car to Congo. The platform helped me choose the most reliable option at the best rate.” — Claire',
+            name: 'Sophie',
+            location: 'Paris, France',
+            description: '“I compared prices from many logistics companies on Novibiz before shipping a car to Congo. The platform helped me choose the most reliable option at the best rate.”',
+            img: '/Images/person02w.webp'
+        },
+        {
+            name: 'Claire',
+            location: 'Brussels, Belgium',
+            description: '“Before sending my equipment to Cameroon, I compared prices from many providers on Novibiz. It was easy to find the most affordable and trustworthy service.”',
+            img: '/Images/person04w.jpeg'
+        },
+        {
+            name: 'Marcel',
+            location: 'Berlin, Germany',
+            description: '“Shipping electronic devices to South Africa was simple. Novibiz arranged a home pickup, and I didn’t have to worry about logistics. Everything was taken care of.”',
             img: '/Images/person01.jpg'
         },
         {
-            name: 'Brussels, Belgium',
-            description: '“Before sending my equipment to Cameroon, I compared prices from many providers on Novibiz. It was easy to find the most affordable and trustworthy service.” — Mar',
-            img: '/Images/person02.webp'
+            name: 'Lena',
+            location: 'Cologne, Germany',
+            description: '“I had car parts to send to China, and Novibiz offered a home pickup option. It saved me time and made the whole shipping process effortless.”',
+            img: '/Images/person05w.jpg'
         },
         {
-            name: 'Berlin, Germany',
-            description: '“Shipping electronic devices to South Africa was simple. Novibiz arranged a home pickup, and I didn’t have to worry about logistics. Everything was taken care of.” — Lena',
-            img: '/Images/person03.jpg'
-        },
-        {
-            name: 'Cologne, Germany',
-            description: '“I had car parts to send to China, and Novibiz offered a home pickup option. It saved me time and made the whole shipping process effortless.” — Thomas',
-            img: '/Images/person04.jpeg'
-        },
-        {
-            name: 'Paris, France',
-            description: '“I found a reliable freight forwarder through Novibiz’s Yellow Pages to ship goods to the USA. The platform made the search fast and effective.” — Sophie',
+            name: 'Thomas',
+            location: 'Paris, France',
+            description: '“I found a reliable freight forwarder through Novibiz’s Yellow Pages to ship goods to the USA. The platform made the search fast and effective.”',
             img: '/Images/profile05.jpg'
         }
     ];
@@ -321,7 +326,7 @@ const Home = () => {
                         <div className="about-text-wrap text-start">
                             <h2>Comprehensive End-to-End Logistics Solutions for Reliable and Timely Delivery</h2>
                             <p>At Novibiz, we are committed to transforming the global logistics industry by offering innovative, transparent, and dependable services. Our mission is to enable businesses worldwide to benefit from seamless shipping solutions that exceed expectations, fostering sustainable growth and long-term success.</p>
-                            
+
                             <p>We partner with a trusted global network to ensure the safety and speed of every shipment. With our advanced technology, real-time tracking, and simplified shipment management, logistics become accessible and efficient for all our clients. At Novibiz, your satisfaction is our top priority.</p>
                         </div>
                         <div className="about-btn mt-3">
@@ -1384,7 +1389,7 @@ const Home = () => {
                         <Slider {...settings}>
                             {profiles.map((profile, index) => (
                                 <div key={index} className="p-3">
-                                    <div className="bg-white rounded-3 w-100 p-2 d-flex flex-column align-items-center text-center border review-rating">
+                                    <div className="testi-description-box bg-white rounded-3 w-100 p-2 d-flex flex-column align-items-center justify-content-between text-center border review-rating">
                                         <div className="testi-desc-wrapper text-start">
                                             <p>{profile.description}</p>
                                         </div>
@@ -1396,8 +1401,12 @@ const Home = () => {
                                                     alt={profile.name}
                                                 />
                                             </div>
-                                            <h5 className="mb-2">{profile.name}</h5>
+                                            <div className="d-flex flex-column align-items-start justify-content-start w-100">
+                                                <h5 className="mb-2">{profile.name}</h5>
+                                                <h5 className="mb-2">{profile.location}</h5>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                             ))}
