@@ -2597,7 +2597,7 @@ const Dashboard = () => {
                           <th scope="col"><h6>Transaction Id</h6></th>
                           <th scope="col"><h6>Paypal Id</h6></th>
                           <th scope="col"><h6>Offer Id</h6></th>
-                          <th scope="col"><h6>Amount ($)</h6></th>
+                          <th scope="col"><h6>Amount (€)</h6></th>
                         </tr>
                       </thead>
                       {user_payment_history && user_payment_history.length > 0 ? (
@@ -2721,7 +2721,7 @@ const Dashboard = () => {
                               <th scope="col"><h6>Order Id</h6></th>
                               <th scope="col"><h6>Product Name</h6></th>
                               <th scope="col"><h6>Offer To</h6></th>
-                              <th scope="col"><h6>Price ($)</h6></th>
+                              <th scope="col"><h6>Price (€)</h6></th>
                               <th scope="col"><h6>Pick Up Date</h6></th>
                               <th scope="col"><h6>Offer Status</h6></th>
                             </tr>
@@ -2826,7 +2826,7 @@ const Dashboard = () => {
                               <th scope="col"><h6>Order Id</h6></th>
                               <th scope="col"><h6>Product Name</h6></th>
                               <th scope="col"><h6>Offer From</h6></th>
-                              <th scope="col"><h6>Price ($)</h6></th>
+                              <th scope="col"><h6>Price (€)</h6></th>
                               <th scope="col"><h6>Delivery Duration</h6></th>
                               <th scope="col"><h6>Actions</h6></th>
                             </tr>
@@ -4130,7 +4130,7 @@ const Dashboard = () => {
                             <th scope="col"><h6>Product Name</h6></th>
                             <th scope="col"><h6>Date</h6></th>
                             <th scope="col"><h6>Offer Created By</h6></th>
-                            <th scope="col"><h6>Price ($)</h6></th>
+                            <th scope="col"><h6>Price (€)</h6></th>
                             <th scope="col"><h6>Offer From</h6></th>
                             <th scope="col"><h6>Status</h6></th>
                             {/* <th scope="col"><h6>Payment Status ($)</h6></th> */}
@@ -4727,7 +4727,7 @@ const Dashboard = () => {
                             <th scope="col"><h6>Offer Id</h6></th>
                             <th scope="col"><h6>Transaction Id</h6></th>
                             <th scope="col"><h6>Payment Receive Date</h6></th>
-                            <th scope="col"><h6>Amount ($)</h6></th>
+                            <th scope="col"><h6>Amount (€)</h6></th>
                             <th scope="col"><h6>Commission</h6></th>
                           </tr>
                         </thead>

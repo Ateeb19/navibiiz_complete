@@ -855,7 +855,7 @@ const Offers = () => {
                                                                 <span className="fs-5">Bid Amount</span>
                                                                 <span className="text-secondary text-start">Total amount the client will see on your proposal</span>
                                                             </div>
-                                                            <input type="text" className="form-control w-100 w-sm-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`$ ${bidAmount}`} />
+                                                            <input type="text" className="form-control w-100 w-sm-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`€ ${bidAmount}`} />
                                                         </div>
                                                         <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4">
                                                             <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-50">
