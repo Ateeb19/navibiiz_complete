@@ -157,9 +157,68 @@ const Send_groupage = () => {
         setIsVisible(false);
     };
 
+
+
+    const CLOUD_NAME = "dizzgvtgf";
+    const UPLOAD_PRESET = "groupage_img";
+
+    // const uploadImageToCloudinary = async (file) => {
+    //     const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+    //     const formData = new FormData();
+    //     formData.append("file", file);
+    //     formData.append("upload_preset", UPLOAD_PRESET);
+
+    //     const response = await fetch(url, {
+    //         method: "POST",
+    //         body: formData,
+    //     });
+
+    //     const data = await response.json();
+    //     return data.secure_url;
+    // };
+
+    const uploadImageToCloudinary = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+
+        try {
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+                formData
+            );
+            return response.data.secure_url; // ✅ MUST return
+        } catch (err) {
+            console.error("Cloudinary upload error:", err);
+            return null;
+        }
+    };
+    // const uploadAllImages = async () => {
+    //     const uploadPromises = selectedFiles.map((img) =>
+    //         uploadImageToCloudinary(img.file)
+    //     );
+    //     const uploadedUrls = await Promise.all(uploadPromises);
+    //     return uploadedUrls;
+    // };
+    const uploadAllImages = async () => {
+        try {
+            const promises = selectedFiles.map((fileObj) => uploadImageToCloudinary(fileObj.file));
+            const uploadedUrls = await Promise.all(promises);
+            console.log("Uploaded image URLs:", uploadedUrls);
+            return uploadedUrls;
+        } catch (err) {
+            console.error("Error uploading images:", err);
+            return [];
+        }
+    };
+
     const [validate, setValidate] = useState(false);
     const submitData = async () => {
         setValidate(true);
+
+        const uploadedImageUrls = await uploadAllImages();
+
+        // console.log('images updloaded from frontend urls -: ', uploadedImageUrls);
         const formData = new FormData();
         formData.append("productName", productName);
         formData.append("productType", productType);
@@ -167,9 +226,12 @@ const Send_groupage = () => {
         formData.append("Pheight", Pheight);
         formData.append("Plength", Plength);
         formData.append("Pwidth", Pwidth);
-        selectedFiles.forEach((fileObj, index) => {
-            formData.append("images", fileObj.file);
+        uploadedImageUrls.forEach((url) => {
+            formData.append("imageUrls[]", url);
         });
+        // selectedFiles.forEach((fileObj, index) => {
+        //     formData.append("images", fileObj.file);
+        // });
         formData.append("userName", userName);
         formData.append("userNumber", userNumber);
         formData.append("userEmail", userEmail);
@@ -193,14 +255,16 @@ const Send_groupage = () => {
         if (document) {
             formData.append("document", document);
         }
+
         try {
+                    console.log('hello world');
             const response = await axios.post(
                 `${port}/send_groupage/send_groupage_submit`,
                 formData,
                 {
                     headers: {
                         Authorization: token,
-                        "Content-Type": "multipart/form-data",
+                        // "Content-Type": "multipart/form-data",
                     },
                 }
             );
@@ -209,10 +273,16 @@ const Send_groupage = () => {
                 setIsVisible(false);
                 setCongrat(true);
             }
+                    console.log('hello world22');
+
         } catch (error) {
+                    console.log('hello world33');
+
             console.error("Error:", error);
             setValidate(false);
         }
+                console.log('hello world444');
+
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
@@ -737,7 +807,7 @@ const Send_groupage = () => {
                                 </div>
                             </div>
                             <div className="w-100 pt-4">
-                                <button className="btn btn-primary w-100" disabled={validate} onClick={() => {submitData(); setValidate(true)}}>Submit</button>
+                                <button className="btn btn-primary w-100" disabled={validate} onClick={() => { submitData(); setValidate(true) }}>Submit</button>
                             </div>
                         </div>
                     </div>
