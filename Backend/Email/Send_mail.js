@@ -2,24 +2,24 @@ const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     host: "smtp.ionos.de",
-    port: 587, 
-    secure: false, 
+    port: 465, 
+    secure: true, 
     auth: {
         user: "info@novibiz.com",
         pass: "Novibiz*2025",
     },
-    tls: {
-        rejectUnauthorized: false, 
-    },
+    // tls: {
+    //     rejectUnauthorized: false, 
+    // },
 });
 
-transporter.verify((error, success) => {
-    if (error) {
-        console.log('SMTP Connection Error:', error);
-    } else {
-        console.log('SMTP Server is ready to send emails.');
-    }
-});
+// transporter.verify((error, success) => {
+//     if (error) {
+//         console.log('SMTP Connection Error:', error);
+//     } else {
+//         console.log('SMTP Server is ready to send emails.');
+//     }
+// });
 
 const sendMail = async (to, subject, htmlContent) => {
     try {
