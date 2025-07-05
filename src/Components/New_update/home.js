@@ -255,9 +255,11 @@ const Home = () => {
     const filteredCompanies = company_info.filter(company => company.logo);
     const settings_logo = {
         dots: false,
-        infinite: true,
+        infinite: filteredCompanies.length > 1,
+        // infinite: true,
         speed: 500,
-        slidesToShow: 6, // Show 6 logos at once
+        slidesToShow: Math.min(filteredCompanies.length, 6),
+        // slidesToShow: 6,
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
