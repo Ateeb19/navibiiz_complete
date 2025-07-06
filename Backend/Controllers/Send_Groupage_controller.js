@@ -392,7 +392,7 @@ const show_all_groupage = (req, res) => {
 }
 
 const show_4_groupage = (req, res) => {
-    db.query('SELECT id, product_name, product_type, p_weight, p_height, p_length, p_width, sender_country, sender_state, sender_city, sender_zipcode,        receiver_country, receiver_state, receiver_city, sender_description, RIGHT(sender_contact, 4) AS sender_contact, RIGHT(receiver_contact, 4) AS receiver_contact,        img01, created_at, pickup_date FROM groupage where payment_status = "panding" ORDER BY created_at DESC LIMIT 4', (err, result) => {
+    db.query('SELECT id, product_name, product_type, p_weight, p_height, p_length, p_width, sender_country, sender_state, sender_city, sender_zipcode,        receiver_country, receiver_state, receiver_city, sender_description, RIGHT(sender_contact, 4) AS sender_contact, RIGHT(receiver_contact, 4) AS receiver_contact, img01, img02, img03, img04, img05, img06, img07, img08, img09, img10, created_at, pickup_date FROM groupage where payment_status = "panding" ORDER BY created_at DESC LIMIT 4', (err, result) => {
         if (err) {
             res.json({ message: 'error in database', status: false });
         } else {
