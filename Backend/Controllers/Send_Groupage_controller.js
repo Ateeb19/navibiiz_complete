@@ -433,7 +433,7 @@ const create_offer = (req, res) => {
                                         result[0].groupage_created_by,
                                         "Offer received from a company",
                                         `<h3>There is a new offer from a company.</h3>
-                                        <br><br><br><h4>Details-:</h4><p>Amount: $${amount}</p><p>Expected Date: ${data.expected_date}</p>`
+                                        <br><br><br><h4>Details-:</h4><p>Amount: €${amount}</p><p>Expected Date: ${data.expected_date}</p>`
                                     )
                                         .then(info => console.log({ info }))
                                         .catch(console.error);
