@@ -142,7 +142,7 @@ const CompanyDetails = () => {
                                                     company.Ratting.length
                                                 ).toFixed(2)
                                                 : "No Ratings"}{" "}
-                                            <u>({company.Ratting.length} Rating)</u>
+                                            <u>({company.Ratting.length} Reviews)</u>
                                         </span>
                                     </div>
                                 </div>
@@ -237,9 +237,16 @@ const CompanyDetails = () => {
                                 )}
                                 <span className="text-secondary d-block">
                                     <FaTruckMoving className="fs-5 me-1" style={{ color: '#de8316' }} /> Shipping{" "}
-                                    {company.container_service === '1' ? "Containers" : "Containers"}
+                                    {company.container_service === '1' && company.car_service === '1'
+                                        ? "Containers & Cars"
+                                        : company.container_service === '1'
+                                            ? "Containers"
+                                            : company.car_service === '1'
+                                                ? "Cars"
+                                                : ""}
+                                    {/* {company.container_service === '1' ? "Containers" : "Containers"}
                                     {(company.car_service === '1' && company.container_service === '1') ? " & " : ""}
-                                    {company.car_service === '1' ? "Cars" : ""}
+                                    {company.car_service === '1' ? "Cars" : ""} */}
                                 </span>
                                 <span className="text-secondary d-block">
                                     <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to –{" "}

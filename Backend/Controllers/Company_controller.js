@@ -554,7 +554,7 @@ const display_company = async (req, res) => {
     try {
         // Fetch all companies
         const result1 = await new Promise((resolve, reject) => {
-            db.query('SELECT * FROM companies_info', (err, data) => {
+            db.query('SELECT * FROM companies_info WHERE container_service = 1 OR car_service = 1', (err, data) => {
                 if (err) return reject(err);
                 resolve(data);
             });

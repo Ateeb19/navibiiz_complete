@@ -234,6 +234,8 @@ const CompaniesList = () => {
     const currentItems = filteredData.slice(offset, offset + itemsPerPage);
     const pageCount = Math.ceil(filteredData.length / itemsPerPage);
 
+    console.log(currentItems);
+
     useEffect(() => {
         const smoothScroll = () => {
             let scrollY = window.scrollY || document.documentElement.scrollTop;
@@ -396,7 +398,7 @@ const CompaniesList = () => {
                                                                         item.Ratting.length
                                                                     ).toFixed(2)
                                                                     : "No Ratings"}{" "}
-                                                                <span className="text-secondary">({item.Ratting.length} Rating)</span>
+                                                                <span className="text-secondary">({item.Ratting.length} Reviews)</span>
                                                             </p>
                                                             <p className="mt-2 text-start text-secondary">{item.description.split(" ").slice(0, 30).join(" ") + "..."}</p>
                                                             <div className="d-flex flex-column flex-md-row gap-4">
@@ -407,7 +409,13 @@ const CompaniesList = () => {
                                                                     <FaTruckLoading className='fs-4 pe-1    ' style={{ color: '#de8316' }} /> <span className="text-secondary">{item.total_delivery} Delivery Completed</span>
                                                                 </div>
                                                                 <div className="pe-3">
-                                                                    <FaTruckMoving className='fs-4 pe-1 ' style={{ color: '#de8316' }} /> <span className="text-secondary">Offers {item.container_service ? 'Containers' : ''}{item.car_service ? ' & Cars' : ''}</span>
+                                                                    <FaTruckMoving className='fs-4 pe-1 ' style={{ color: '#de8316' }} /> <span className="text-secondary">Offers {item.container_service === '1' && item.car_service === '1'
+                                                                        ? "Containers & Cars"
+                                                                        : item.container_service === '1'
+                                                                            ? "Containers"
+                                                                            : item.car_service === '1'
+                                                                                ? "Cars"
+                                                                                : ""}</span>
                                                                 </div>
                                                             </div>
                                                         </div>

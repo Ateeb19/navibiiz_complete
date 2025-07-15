@@ -3144,7 +3144,7 @@ const Dashboard = () => {
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Price Offered : </span>
-                        <span className="fw-bold">${selected_offer.price}</span>
+                        <span className="fw-bold">€{selected_offer.price}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Offer Received Date : </span>
