@@ -248,8 +248,22 @@ const CompanyDetails = () => {
                                     {(company.car_service === '1' && company.container_service === '1') ? " & " : ""}
                                     {company.car_service === '1' ? "Cars" : ""} */}
                                 </span>
+
+                                {company.Countries[0].region && (
+                                    <>
+                                        <span className="text-secondary d-block">
+                                            <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to Region–{" "}
+                                            {[...new Set(company.Countries.map(item => item.region.trim()))].map((region, index, arr) => (
+                                                <span key={index}>
+                                                    {region}
+                                                    {index < arr.length - 1 ? ", " : ""}
+                                                </span>
+                                            ))}
+                                        </span>
+                                    </>
+                                )}
                                 <span className="text-secondary d-block">
-                                    <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to –{" "}
+                                    <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to Countries–{" "}
                                     {[...new Set(company.Countries.map(item => item.countries.trim()))].map((country, index, arr) => (
                                         <span key={index}>
                                             {country}

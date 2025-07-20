@@ -164,6 +164,7 @@ const Company_Register = (req, res) => {
                 db.query(
                     `CREATE TABLE ${companyTable} (
                         id INT AUTO_INCREMENT PRIMARY KEY,
+                        region VARCHAR(255),
                         countries VARCHAR(255),
                         duration VARCHAR(255),
                         service_type VARCHAR(255)
@@ -178,6 +179,7 @@ const Company_Register = (req, res) => {
                                 db.query(
                                     `INSERT INTO ${companyTable} SET ?`,
                                     {
+                                        region: country.region,
                                         countries: country.country,
                                         duration: country.deliveryTime,
                                         service_type: type

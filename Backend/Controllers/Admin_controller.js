@@ -278,21 +278,40 @@ const Delete_company_details_country = (req, res) => {
 const add_company_country = (req, res) => {
     if (req.user.role === 'admin') {
         const company_id = req.params.id;
-        db.query(
-            `INSERT INTO company_${company_id} (countries, duration, service_type) VALUES (?, ?, ?)`,
-            [req.body.country, req.body.duration, req.body.name],
-            (err, result) => {
-                if (err) {
-                    console.error('Insert error:', err);
-                    return res.status(500).json({ status: false, message: 'Insert failed', error: err });
+        if (req.body.region) {
+            db.query(
+                `INSERT INTO company_${company_id} (region, countries, duration, service_type) VALUES (?, ?, ?, ?)`,
+                [req.body.region, req.body.country, req.body.duration, req.body.name],
+                (err, result) => {
+                    if (err) {
+                        console.error('Insert error:', err);
+                        return res.status(500).json({ status: false, message: 'Insert failed', error: err });
+                    }
+                    res.json({
+                        status: true,
+                        message: 'New country added successfully',
+                        insertedId: result.insertId
+                    });
                 }
-                res.json({
-                    status: true,
-                    message: 'New country added successfully',
-                    insertedId: result.insertId
-                });
-            }
-        );
+            );
+        } else {
+            db.query(
+                `INSERT INTO company_${company_id} (countries, duration, service_type) VALUES (?, ?, ?)`,
+                [req.body.country, req.body.duration, req.body.name],
+                (err, result) => {
+                    if (err) {
+                        console.error('Insert error:', err);
+                        return res.status(500).json({ status: false, message: 'Insert failed', error: err });
+                    }
+                    res.json({
+                        status: true,
+                        message: 'New country added successfully',
+                        insertedId: result.insertId
+                    });
+                }
+            );
+        }
+
     } else {
         res.json({ message: 'You are not Super Admin', status: false })
     }

@@ -26,6 +26,9 @@ import { GoPencil } from "react-icons/go";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 // import PayPalButton from "./Paypal_0222";
 import { AiFillDelete } from "react-icons/ai";
+import Region_selector from "./Region_selector";
+import Region_countries_selector from "./Region_country_selector";
+
 
 
 
@@ -1063,10 +1066,23 @@ const Dashboard = () => {
 
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [newCountryData, setNewCountryData] = useState({
+    region: '',
     country: '',
     duration: '',
     name: ''
   });
+
+  const [activeRegion, setActiveRegion] = useState('');
+  const handle_region = (value) => {
+    setActiveRegion(value);
+  }
+  const handle_region_country = (value) => {
+    if (activeRegion) {
+      setNewCountryData({ region: activeRegion, country: value, duration: '', name: '' });
+    } else {
+      return;
+    }
+  }
 
   const handleServiceCheckboxChange = (e) => {
     const { value } = e.target;
@@ -1077,9 +1093,16 @@ const Dashboard = () => {
   };
 
   const handle_add_new_country = () => {
-    if (!newCountryData.country || !newCountryData.duration || !newCountryData.name) {
-      showAlert('Please select all the fields.');
-      return;
+    if (selectedCompany.tableData[0].region) {
+      if (!newCountryData.region || !newCountryData.country || !newCountryData.duration || !newCountryData.name) {
+        showAlert('Please select all the fields.');
+        return;
+      } else {
+        if (!newCountryData.country || !newCountryData.duration || !newCountryData.name) {
+          showAlert('Please select all the fields.');
+          return;
+        }
+      }
     }
 
     if (userRole === 'admin') {
@@ -1093,6 +1116,7 @@ const Dashboard = () => {
           setShowAddPopup(false);
           const newRow = {
             id: response.data.insertedId,
+            region: newCountryData.region,
             countries: newCountryData.country,
             duration: newCountryData.duration,
             service_type: newCountryData.name
@@ -1104,6 +1128,7 @@ const Dashboard = () => {
           }));
 
           setNewCountryData({
+            region: '',
             country: '',
             duration: '',
             name: '',
@@ -1130,6 +1155,7 @@ const Dashboard = () => {
         setShowAddPopup(false);
         const newRow = {
           id: response.data.insertedId,
+          region: newCountryData.region,
           countries: newCountryData.country,
           duration: newCountryData.duration,
           service_type: newCountryData.name
@@ -1141,6 +1167,7 @@ const Dashboard = () => {
         }));
 
         setNewCountryData({
+          region: '',
           country: '',
           duration: '',
           name: '',
@@ -1155,6 +1182,7 @@ const Dashboard = () => {
     });
   };
 
+  console.log(selectedCompany);
   useEffect(() => {
     featchCompanydata();
     featchAllUsers();
@@ -3684,6 +3712,11 @@ const Dashboard = () => {
                               <thead>
                                 <tr>
                                   <th scope="col"><h6>Transport Offered</h6></th>
+                                  {selectedCompany.tableData[0].region && (
+                                    <>
+                                      <th scope="col"><h6>Destination Region</h6></th>
+                                    </>
+                                  )}
                                   <th scope="col"><h6>Destination Countries</h6></th>
                                   <th scope="col"><h6>Delivery Duration</h6></th>
                                   {edit_company && <th scope="col"><h6>Action</h6></th>}
@@ -3694,6 +3727,11 @@ const Dashboard = () => {
                                   {selectedCompany.tableData.map((item, index) => (
                                     <tr key={index}>
                                       <td className="text-secondary text-start text-md-center">{item.service_type}</td>
+                                      {item.region && (
+                                        <>
+                                          <td className="text-secondary text-start text-md-center">{item.region}</td>
+                                        </>
+                                      )}
                                       <td className="text-secondary text-start text-md-center">{item.countries}</td>
                                       <td className="text-secondary text-start text-md-center">{item.duration}</td>
                                       {edit_company && (
@@ -3859,18 +3897,54 @@ const Dashboard = () => {
                         <h3>Add New Country</h3>
                       </div>
                       <div className="modal-body">
-                        <div className="mb-3 text-start">
-                          <label className="input-label w-100">Country</label>
-                          <span><CountriesSelector
-                            onSelectCountry={(value) =>
-                              setNewCountryData({ ...newCountryData, country: value })
-                            }
-                            label="Select the country"
-                            value={newCountryData.country}
-                            paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
-                            required
-                          /></span>
-                        </div>
+                        {selectedCompany.tableData[0].region ? (
+                          <>
+                            <div className="mb-3 text-start">
+                              <label className="input-label w-100">Region</label>
+                              <span><Region_selector
+                                onSelectRegion={handle_region}
+                                // onSelectRegion={(value) =>
+                                //   setNewCountryData({ ...newCountryData, region: value })
+                                // }
+                                label="Select the region"
+                                value={newCountryData.country}
+                                paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                required
+                              /></span>
+                            </div>
+
+                            <div className="mb-3 text-start">
+                              <label className="input-label w-100">Country</label>
+                              <span><Region_countries_selector
+                                selectedRegion={activeRegion}
+                                onSelectCountry={handle_region_country}
+                                // selectedRegion={(value) =>
+                                //   setNewCountryData({ ...newCountryData, country: value })
+                                // }            
+                                label="Select the country"
+                                value={newCountryData.country}
+                                paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                required
+                              /></span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="mb-3 text-start">
+                              <label className="input-label w-100">Country</label>
+                              <span>
+                                <CountriesSelector
+                                  onSelectCountry={(value) => setNewCountryData({ ...newCountryData, regioin: '', country: value })}
+                                  label="Select the country"
+                                  value={newCountryData.country}
+                                  paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                  required
+                                />
+                              </span>
+                            </div>
+                          </>
+                        )}
+
                         <div className="mb-3 text-start">
                           <label className="input-label w-100">Delivary Duration</label>
                           <input

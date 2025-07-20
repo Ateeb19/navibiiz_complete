@@ -6,6 +6,7 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { useDropzone } from "react-dropzone";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Countries_selector from "./Countries_selector";
+import Region_selector from "./Region_selector";
 import State_selector from "./State_selector";
 import Form from 'react-bootstrap/Form';
 
@@ -16,6 +17,7 @@ import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import { Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Region_countries_selector from "./Region_country_selector";
 
 const DragAndDrop = ({ accept, onFileDrop, label }) => {
     const onDrop = useCallback(
@@ -274,55 +276,141 @@ const Registration = () => {
         }
     };
 
+
+    //countiner
     const [selectedContainerCountries, setSelectedContainerCountries] = useState([]);
-    const handleContainerCountry = (value) => {
-        if (value && !selectedContainerCountries.some((item) => item.country === value)) {
-            setSelectedContainerCountries([...selectedContainerCountries, { country: value, deliveryTime: "" }]);
-        }
+    const [activeRegion, setActiveRegion] = useState("");
+
+    const handleContainerRegion = (value) => {
+        setActiveRegion(value);
     };
+    // const handleContainerRegion = (value) => {
+    //     if (value && !selectedContainerCountries.some((item) => item.country === value)) {
+    //         setSelectedContainerCountries([...selectedContainerCountries, { region: value, country: '', deliveryTime: "" }]);
+    //     }
+    // };
+
+    const handleContainerCountry = (value) => {
+        if (!value || !activeRegion) return;
+
+        setSelectedContainerCountries(prev => {
+            const alreadyExists = prev.some(
+                item => item.region === activeRegion && item.country === value
+            );
+
+            if (alreadyExists) return prev;
+
+            return [
+                ...prev,
+                { region: activeRegion, country: value, deliveryTime: "" }
+            ];
+        });
+    };
+    // const handleContainerCountry = (index, value) => {
+    //     if (value && !selectedContainerCountries.some((item) => item.country === value)) {
+    //         const updateCountry = [...selectedContainerCountries];
+    //         updateCountry[index].country = value.country;
+    //         setSelectedContainerCountries(updateCountry);
+    //     }
+    // };
     const handleDeliveryTimeChange_container = (index, value) => {
         const updatedCountries = [...selectedContainerCountries];
         updatedCountries[index].deliveryTime = value;
         setSelectedContainerCountries(updatedCountries);
     };
     const handleRemoveContainerCountry = (indexToRemove) => {
-        const updatedCountries = selectedContainerCountries.filter((_, index) => index !== indexToRemove);
-        setSelectedContainerCountries(updatedCountries);
+        setSelectedContainerCountries(prev =>
+            prev.filter((_, index) => index !== indexToRemove)
+        );
     };
+    // const handleRemoveContainerCountry = (indexToRemove) => {
+    //     const updatedCountries = selectedContainerCountries.filter((_, index) => index !== indexToRemove);
+    //     setSelectedContainerCountries(updatedCountries);
+    // };
 
     //Groupage service
     const [selectedGroupageCountries, setSelectedGroupageCountries] = useState([]);
-    const handleGroupageCountry = (value) => {
-        if (value && !selectedGroupageCountries.some((item) => item.country === value)) {
-            setSelectedGroupageCountries([...selectedGroupageCountries, { country: value, deliveryTime: "" }]);
-        }
+    const [activeGroupageRegion, setActiveGroupageRegion] = useState("");
+
+    const handleGroupageRegion = (value) => {
+        setActiveGroupageRegion(value);
     };
+    const handleGroupageCountry = (value) => {
+        if (!value || !activeGroupageRegion) return;
+
+        setSelectedGroupageCountries(prev => {
+            const alreadyExists = prev.some(
+                item => item.region === activeGroupageRegion && item.country === value
+            );
+
+            if (alreadyExists) return prev;
+
+            return [
+                ...prev,
+                { region: activeGroupageRegion, country: value, deliveryTime: "" }
+            ];
+        });
+    };
+    // const handleGroupageCountry = (value) => {
+    //     if (value && !selectedGroupageCountries.some((item) => item.country === value)) {
+    //         setSelectedGroupageCountries([...selectedGroupageCountries, { country: value, deliveryTime: "" }]);
+    //     }
+    // };
+
     const handleDeliveryTimeChange_groupage = (index, value) => {
         const updatedCountries = [...selectedGroupageCountries];
         updatedCountries[index].deliveryTime = value;
         setSelectedGroupageCountries(updatedCountries);
     };
+
     const handleRemoveGroupageCountry = (indexToRemove) => {
-        const updatedCountries = selectedGroupageCountries.filter((_, index) => index !== indexToRemove);
-        setSelectedGroupageCountries(updatedCountries);
+        setSelectedGroupageCountries(prev =>
+            prev.filter((_, index) => index !== indexToRemove)
+        );
     };
 
     //Car service
     const [selectedCarCountries, setSelectedCarCountries] = useState([]);
-    const handleCarCountry = (value) => {
-        if (value && !selectedCarCountries.some((item) => item.country === value)) {
-            setSelectedCarCountries([...selectedCarCountries, { country: value, deliveryTime: "" }]);
-        }
+    const [activeCarRegion, setActiveCarRegion] = useState("");
+
+    const handleCarRegion = (value) => {
+        setActiveCarRegion(value);
     };
+    const handleCarCountry = (value) => {
+        if (!value || !activeCarRegion) return;
+
+        setSelectedCarCountries(prev => {
+            const alreadyExists = prev.some(
+                item => item.region === activeCarRegion && item.country === value
+            );
+
+            if (alreadyExists) return prev;
+
+            return [
+                ...prev,
+                { region: activeCarRegion, country: value, deliveryTime: "" }
+            ];
+        });
+    };
+    // const handleCarCountry = (value) => {
+    //     if (value && !selectedCarCountries.some((item) => item.country === value)) {
+    //         setSelectedCarCountries([...selectedCarCountries, { country: value, deliveryTime: "" }]);
+    //     }
+    // };
     const handleDeliveryTimeChange_car = (index, value) => {
         const updatedCountries = [...selectedCarCountries];
         updatedCountries[index].deliveryTime = value;
         setSelectedCarCountries(updatedCountries);
     };
     const handleRemoveCarCountry = (indexToRemove) => {
-        const updatedCountries = selectedCarCountries.filter((_, index) => index !== indexToRemove);
-        setSelectedCarCountries(updatedCountries);
+        setSelectedCarCountries(prev =>
+            prev.filter((_, index) => index !== indexToRemove)
+        );
     };
+    // const handleRemoveCarCountry = (indexToRemove) => {
+    //     const updatedCountries = selectedCarCountries.filter((_, index) => index !== indexToRemove);
+    //     setSelectedCarCountries(updatedCountries);
+    // };
 
     const handleregester = async () => {
         const value = {
@@ -848,11 +936,35 @@ const Registration = () => {
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
                                                     <label className="shipping-input-label">Countries we ship Container to<span className="text-danger">*</span></label>
-                                                    <Countries_selector onSelectCountry={(value) => handleContainerCountry(value)} lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                                                    <div className="d-flex w-100 flex-row align-items-center gap-3">
+
+                                                        <Region_selector
+                                                            onSelectRegion={handleContainerRegion}
+                                                            lable="Select the Region" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+
+
+                                                        <Region_countries_selector
+                                                            selectedRegion={activeRegion}
+                                                            onSelectCountry={handleContainerCountry}
+                                                            lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                                                    </div>
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
-                                                        <lable className="shipping-input-label regerser-country-label">Countries Selected</lable>
+                                                        <lable className="shipping-input-label regerser-country-label">Region Selected</lable>
+                                                        {selectedContainerCountries.map((item, index) => (
+                                                            <input
+                                                                key={index}
+                                                                type="text"
+                                                                value={item.region}
+                                                                className="shipping-input-field"
+                                                                readOnly
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
+                                                        <lable className="shipping-input-label regerser-country-label">Country Selected</lable>
                                                         {selectedContainerCountries.map((item, index) => (
                                                             <input
                                                                 key={index}
@@ -906,9 +1018,34 @@ const Registration = () => {
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
                                                     <label className="shipping-input-label">Countries we ship Car to<span className="text-danger">*</span></label>
-                                                    <Countries_selector onSelectCountry={(value) => handleCarCountry(value)} label='Select the Country' className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+
+                                                    <div className="d-flex w-100 flex-row align-items-center gap-3">
+
+                                                        <Region_selector
+                                                            onSelectRegion={handleCarRegion}
+                                                            lable="Select the Region" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+
+
+                                                        <Region_countries_selector
+                                                            selectedRegion={activeCarRegion}
+                                                            onSelectCountry={handleCarCountry}
+                                                            lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                                                    </div>
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
+                                                    <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
+                                                        <lable className="shipping-input-label regerser-country-label">Region Selected</lable>
+                                                        {selectedCarCountries.map((item, index) => (
+                                                            <input
+                                                                key={index}
+                                                                type="text"
+                                                                value={item.region}
+                                                                className="shipping-input-field"
+                                                                readOnly
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                            />
+                                                        ))}
+                                                    </div>
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
                                                         <lable className="shipping-input-label regerser-country-label">Countries Selected</lable>
                                                         {selectedCarCountries.map((item, index) => (
@@ -963,9 +1100,33 @@ const Registration = () => {
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
                                                     <label className="shipping-input-label">Countries we ship Groupage to<span className="text-danger">*</span></label>
-                                                    <Countries_selector onSelectCountry={(value) => handleGroupageCountry(value)} label="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                                                    <div className="d-flex w-100 flex-row align-items-center gap-3">
+
+                                                        <Region_selector
+                                                            onSelectRegion={handleGroupageRegion}
+                                                            lable="Select the Region" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+
+
+                                                        <Region_countries_selector
+                                                            selectedRegion={activeGroupageRegion}
+                                                            onSelectCountry={handleGroupageCountry}
+                                                            lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                                                    </div>
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
+                                                    <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
+                                                        <lable className="shipping-input-label regerser-country-label">Region Selected</lable>
+                                                        {selectedGroupageCountries.map((item, index) => (
+                                                            <input
+                                                                key={index}
+                                                                type="text"
+                                                                value={item.region}
+                                                                className="shipping-input-field"
+                                                                readOnly
+                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                            />
+                                                        ))}
+                                                    </div>
                                                     <div className="d-flex flex-column align-items-start w-50 p-3 gap-2">
                                                         <lable className="shipping-input-label regerser-country-label">Countries Selected</lable>
                                                         {selectedGroupageCountries.map((item, index) => (
