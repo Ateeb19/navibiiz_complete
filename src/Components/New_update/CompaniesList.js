@@ -5,6 +5,7 @@ import { FaLocationDot, FaMapLocationDot, FaCircleCheck, FaCircleXmark } from "r
 import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaUserEdit } from "react-icons/fa";
 import { HiBadgeCheck } from "react-icons/hi";
 import Countries_selector from "../Dashboard/Countries_selector";
+import Region_selector from "../Dashboard/Region_selector";
 import { Rating } from 'react-simple-star-rating';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ReactPaginate from "react-paginate";
@@ -27,10 +28,44 @@ const CompaniesList = () => {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedServices, setSelectedServices] = useState([]);
+    const [selectedPickupRegion, setSelectedPickupRegion] = useState('');
     const [selectedPickupCountry, setSelectedPickupCountry] = useState('');
+    const [selectedDestinationRegion, setSelectedDestinationRegion] = useState('');
     const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
     const [selectedDuration, setSelectedDuration] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+
+    const handlePickupRegionSelect = (region) => {
+        setSelectedPickupRegion(region);
+        console.log('this the current region -: ', selectedPickupRegion)
+        const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+        savedFilters.selectedPickupregion = region;
+        localStorage.setItem("filters", JSON.stringify(savedFilters));
+    };
+
+    // CLEAR destination region
+    const handlePickupRegionClear = () => {
+        setSelectedPickupRegion("");
+        const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
+        savedFilters.selectedPickupregion = "";
+        localStorage.setItem("filters", JSON.stringify(savedFilters));
+    };
+
+    const handleDestinationRegionSelect = (region) => {
+        setSelectedDestinationRegion(region);
+        console.log('this the current destination region -: ', selectedDestinationRegion);
+        const savedFilters = JSON.parse(localStorage.getItem("filters")) || {};
+        savedFilters.selectedDestinationRegion = region;
+        localStorage.setItem("filters", JSON.stringify(savedFilters));
+    };
+
+    // CLEAR destination region
+    const handleDestinationRegionClear = () => {
+        setSelectedDestinationRegion("");
+        const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
+        savedFilters.selectedDestinationRegion = "";
+        localStorage.setItem("filters", JSON.stringify(savedFilters));
+    };
 
     const handlePickupCountrySelect = (country) => {
         setSelectedPickupCountry(country);
@@ -66,16 +101,57 @@ const CompaniesList = () => {
 
     const [filtersLoaded, setFiltersLoaded] = useState(false);
 
+    // useEffect(() => {
+    //     const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
+
+    //     // Handle home page navigation
+    //     if (location.state?.fromHomePage) {
+    //         // Create new filters with home page's pickup country
+    //         const newFilters = {
+    //             ...savedFilters,
+    //             selectedPickupCountry: location.state.pickupCountry || "",
+    //             // Reset other filters when coming from home
+    //             selectedServices: [],
+    //             selectedDestinationCountry: "",
+    //             selectedDuration: [],
+    //             searchQuery: ""
+    //         };
+
+    //         // Save to localStorage
+    //         localStorage.setItem("filters", JSON.stringify(newFilters));
+
+    //         // Update state
+    //         setSelectedPickupCountry(newFilters.selectedPickupCountry);
+    //         setSelectedServices(newFilters.selectedServices);
+    //         setSelectedDestinationCountry(newFilters.selectedDestinationCountry);
+    //         setSelectedDuration(newFilters.selectedDuration);
+    //         setSearchQuery(newFilters.searchQuery);
+
+    //         // Clear the navigation state to prevent reapplication
+    //         navigate(location.pathname, { replace: true, state: {} });
+    //     }
+    //     // Normal load (not from home page)
+    //     else {
+    //         setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
+    //         setSelectedServices(savedFilters.selectedServices || []);
+    //         setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
+    //         setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
+    //         setSearchQuery(savedFilters.searchQuery || "");
+    //     }
+
+    //     setFiltersLoaded(true);
+    // }, [location.state]);
+
     useEffect(() => {
         const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
 
-        // Handle home page navigation
         if (location.state?.fromHomePage) {
-            // Create new filters with home page's pickup country
+            // If coming from the home page, reset filters but keep pickup country (and optionally pickup region if you pass it)
             const newFilters = {
                 ...savedFilters,
                 selectedPickupCountry: location.state.pickupCountry || "",
-                // Reset other filters when coming from home
+                selectedPickupRegion: "",  // Reset pickup region when coming from home
+                selectedDestinationRegion: "",  // Reset destination region too
                 selectedServices: [],
                 selectedDestinationCountry: "",
                 selectedDuration: [],
@@ -87,17 +163,21 @@ const CompaniesList = () => {
 
             // Update state
             setSelectedPickupCountry(newFilters.selectedPickupCountry);
+            setSelectedPickupRegion(newFilters.selectedPickupRegion);
+            setSelectedDestinationRegion(newFilters.selectedDestinationRegion);
             setSelectedServices(newFilters.selectedServices);
             setSelectedDestinationCountry(newFilters.selectedDestinationCountry);
             setSelectedDuration(newFilters.selectedDuration);
             setSearchQuery(newFilters.searchQuery);
 
-            // Clear the navigation state to prevent reapplication
+            // Clear the navigation state so it doesn’t reapply every render
             navigate(location.pathname, { replace: true, state: {} });
-        }
-        // Normal load (not from home page)
-        else {
+
+        } else {
+            // Normal page load — load all saved filters
             setSelectedPickupCountry(savedFilters.selectedPickupCountry || "");
+            setSelectedPickupRegion(savedFilters.selectedPickupRegion || "");
+            setSelectedDestinationRegion(savedFilters.selectedDestinationRegion || "");
             setSelectedServices(savedFilters.selectedServices || []);
             setSelectedDestinationCountry(savedFilters.selectedDestinationCountry || "");
             setSelectedDuration(Array.isArray(savedFilters.selectedDuration) ? savedFilters.selectedDuration : []);
@@ -107,47 +187,71 @@ const CompaniesList = () => {
         setFiltersLoaded(true);
     }, [location.state]);
 
-    // This remains the same - persists filter changes
     useEffect(() => {
         if (filtersLoaded) {
             const filtersToSave = {
                 selectedServices,
+                selectedPickupRegion,
                 selectedPickupCountry,
+                selectedDestinationRegion,
                 selectedDestinationCountry,
                 selectedDuration,
                 searchQuery,
             };
             localStorage.setItem("filters", JSON.stringify(filtersToSave));
         }
-    }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery, filtersLoaded]);
+    }, [
+        selectedServices,
+        selectedPickupRegion,
+        selectedPickupCountry,
+        selectedDestinationRegion,
+        selectedDestinationCountry,
+        selectedDuration,
+        searchQuery,
+        filtersLoaded
+    ]);
+
+    // // This remains the same - persists filter changes
+    // useEffect(() => {
+    //     if (filtersLoaded) {
+    //         const filtersToSave = {
+    //             selectedServices,
+    //             selectedPickupCountry,
+    //             selectedDestinationCountry,
+    //             selectedDuration,
+    //             searchQuery,
+    //         };
+    //         localStorage.setItem("filters", JSON.stringify(filtersToSave));
+    //     }
+    // }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery, filtersLoaded]);
 
     // Update your filter persistence useEffect
-    useEffect(() => {
-        if (filtersLoaded) {
-            const filtersToSave = {
-                selectedServices,
-                selectedPickupCountry,
-                selectedDestinationCountry,
-                selectedDuration,
-                searchQuery,
-            };
-            localStorage.setItem("filters", JSON.stringify(filtersToSave));
-        }
-    }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery, filtersLoaded]);
+    // useEffect(() => {
+    //     if (filtersLoaded) {
+    //         const filtersToSave = {
+    //             selectedServices,
+    //             selectedPickupCountry,
+    //             selectedDestinationCountry,
+    //             selectedDuration,
+    //             searchQuery,
+    //         };
+    //         localStorage.setItem("filters", JSON.stringify(filtersToSave));
+    //     }
+    // }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery, filtersLoaded]);
 
 
-    useEffect(() => {
-        if (filtersLoaded) {
-            const filtersToSave = {
-                selectedServices,
-                selectedPickupCountry,
-                selectedDestinationCountry,
-                selectedDuration,
-                searchQuery,
-            };
-            localStorage.setItem("filters", JSON.stringify(filtersToSave));
-        }
-    }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery]);
+    // useEffect(() => {
+    //     if (filtersLoaded) {
+    //         const filtersToSave = {
+    //             selectedServices,
+    //             selectedPickupCountry,
+    //             selectedDestinationCountry,
+    //             selectedDuration,
+    //             searchQuery,
+    //         };
+    //         localStorage.setItem("filters", JSON.stringify(filtersToSave));
+    //     }
+    // }, [selectedServices, selectedPickupCountry, selectedDestinationCountry, selectedDuration, searchQuery]);
 
 
 
@@ -158,6 +262,19 @@ const CompaniesList = () => {
                 selectedServices.length === 0 ||
                 selectedServices.includes('containers') && company.container_service === '1' ||
                 selectedServices.includes('car') && company.car_service === '1';
+
+            const pickupRegionMatch =
+                !selectedPickupRegion ||
+                company.Countries.some(country =>
+                    country.region && country.region.includes(selectedPickupRegion)
+                );
+            // Object.values({
+            //     region1: company.region1,
+            //     region2: company.region2,
+            //     region3: company.region3,
+            //     region4: company.region4,
+            //     region5: company.region5,
+            // }).some(region => region && region.includes(selectedPickupRegion));
 
 
             const pickupCountryMatch =
@@ -175,7 +292,11 @@ const CompaniesList = () => {
                     location10: company.location10,
                 }).some(location => location && location.includes(selectedPickupCountry));
 
-
+            const destinationRegionMatch =
+                !selectedDestinationRegion ||
+                company.Countries.some(country =>
+                    country.region && country.region.includes(selectedDestinationRegion)
+                );
 
             const destinationCountryMatch =
                 !selectedDestinationCountry ||
@@ -206,8 +327,12 @@ const CompaniesList = () => {
                     country.countries.toLowerCase().includes(searchQuery.toLowerCase())
                 );
 
-
-            return serviceMatch && pickupCountryMatch && destinationCountryMatch && durationMatch && (locationMatch || countryMatch);
+            const regionMatch =
+                !searchQuery ||
+                company.Countries.some((country) =>
+                    country.region && country.region.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            return serviceMatch && pickupRegionMatch && pickupCountryMatch && destinationRegionMatch && destinationCountryMatch && durationMatch && (locationMatch || countryMatch || regionMatch);
         }).sort((a) => data.id);
     };
 
@@ -291,11 +416,17 @@ const CompaniesList = () => {
                             <div className="title-head">
                                 <h3><span style={{ color: ' #de8316' }}><FaFilter /> </span>Filters by :</h3>
                             </div>
-                            {(selectedPickupCountry || selectedDestinationCountry) && (
+                            {(selectedPickupCountry || selectedDestinationCountry || selectedPickupRegion || selectedDestinationRegion) && (
                                 <>
                                     <div className="d-flex flex-column align-items-start w-100 mt-3 border-bottom border-2 pb-1 text-start">
+                                        {selectedPickupRegion && (<><span className="mb-2 w-100"><h6 style={{ fontWeight: '600' }}>Pick up Region:</h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedPickupRegion}< RxCross2 onClick={() => {
+                                            handlePickupRegionClear();
+                                        }} /> </div></span> </>)}
                                         {selectedPickupCountry && (<><span className="mb-2 w-100"><h6 style={{ fontWeight: '600' }}>Pick up Country:</h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedPickupCountry}< RxCross2 onClick={() => {
                                             handlePickupCountryClear();
+                                        }} /> </div></span> </>)}
+                                        {selectedDestinationRegion && (<><span className="mb-2 w-100"><h6 style={{ fontWeight: '600' }}>Destination Region:</h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedDestinationRegion}< RxCross2 onClick={() => {
+                                            handleDestinationRegionClear();
                                         }} /> </div></span> </>)}
                                         {selectedDestinationCountry && (<><span className="w-100"><h6 style={{ fontWeight: '600' }}>Destination Country: </h6> <div className="d-flex justify-content-between align-items-center w-100">{selectedDestinationCountry} < RxCross2 onClick={() => {
                                             setSelectedDestinationCountry('');
@@ -336,10 +467,22 @@ const CompaniesList = () => {
                                     <label className="text-secondary">Cars</label>
                                 </div>
                             </div>
-                            <div className="d-flex flex-column align-items-start w-100 mt-4 mb-4 border-bottom border-2 pb-4">
+                            <div className="d-flex flex-column align-items-start w-100 mt-4 mb-4 ">
+                                <h6>PICK UP REGION</h6>
+                                <span className="w-100 w-md-75">
+                                    <Region_selector onSelectRegion={handlePickupRegionSelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
+                                </span>
+                            </div>
+                            <div className="d-flex flex-column align-items-start w-100 mb-4 border-bottom border-2 pb-4">
                                 <h6>PICK UP COUNTRY</h6>
                                 <span className="w-100 w-md-75">
                                     <Countries_selector onSelectCountry={handlePickupCountrySelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
+                                </span>
+                            </div>
+                            <div className="d-flex flex-column align-items-start w-100  mb-4 ">
+                                <h6>DESTINATION REGION</h6>
+                                <span className="w-100 w-md-75">
+                                    <Region_selector onSelectRegion={handleDestinationRegionSelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
                                 </span>
                             </div>
                             <div className="d-flex flex-column align-items-start w-100  mb-4 border-bottom border-2 pb-4">
