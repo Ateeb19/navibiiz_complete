@@ -91,6 +91,7 @@ const CompanyDetails = () => {
             console.log(response.data);
         }).catch((err) => console.log(err));
     }
+    console.log(company);
     if (!company) {
         return <h2 className="text-danger">Company details not found.</h2>
     }
@@ -235,6 +236,7 @@ const CompanyDetails = () => {
                                         </span>
                                     </>
                                 )}
+
                                 <span className="text-secondary d-block">
                                     <FaTruckMoving className="fs-5 me-1" style={{ color: '#de8316' }} /> Shipping{" "}
                                     {company.container_service === '1' && company.car_service === '1'
@@ -249,7 +251,35 @@ const CompanyDetails = () => {
                                     {company.car_service === '1' ? "Cars" : ""} */}
                                 </span>
 
-                                {company.Countries[0].region && (
+
+                                <span className="text-secondary d-block">
+                                    <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} />
+                                    Ship to Region –{" "}
+                                    {[...new Set(
+                                        company.Countries
+                                            .map(item => item.region?.trim())
+                                            .filter(region => region && region !== '')
+                                    )].map((region, index, arr) => (
+                                        <span key={index}>
+                                            {region}{index < arr.length - 1 ? ", " : ""}
+                                        </span>
+                                    ))}
+                                </span>
+
+                                <span className="text-secondary d-block">
+                                    <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} />
+                                    Countries –{" "}
+                                    {[...new Set(
+                                        company.Countries
+                                            .map(item => item.countries?.trim())
+                                            .filter(country => country && country !== '')
+                                    )].map((country, index, arr) => (
+                                        <span key={index}>
+                                            {country}{index < arr.length - 1 ? ", " : ""}
+                                        </span>
+                                    ))}
+                                </span>
+                                {/* {company.Countries[0].region && (
                                     <>
                                         <span className="text-secondary d-block">
                                             <FaMapLocationDot className="fs-5 me-1" style={{ color: '#de8316' }} /> Ship to Region–{" "}
@@ -270,7 +300,7 @@ const CompanyDetails = () => {
                                             {index < arr.length - 1 ? ", " : ""}
                                         </span>
                                     ))}
-                                </span>
+                                </span> */}
                             </div>
 
                             <div className="p-4 company-details-wrap">

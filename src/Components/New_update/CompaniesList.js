@@ -467,24 +467,24 @@ const CompaniesList = () => {
                                     <label className="text-secondary">Cars</label>
                                 </div>
                             </div>
-                            <div className="d-flex flex-column align-items-start w-100 mt-4 mb-4 ">
+                            {/* <div className="d-flex flex-column align-items-start w-100 mt-4 mb-4 ">
                                 <h6>PICK UP REGION</h6>
                                 <span className="w-100 w-md-75">
                                     <Region_selector onSelectRegion={handlePickupRegionSelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
                                 </span>
-                            </div>
-                            <div className="d-flex flex-column align-items-start w-100 mb-4 border-bottom border-2 pb-4">
+                            </div> */}
+                            <div className="d-flex flex-column align-items-start w-100 mb-4 pt-4">
                                 <h6>PICK UP COUNTRY</h6>
                                 <span className="w-100 w-md-75">
                                     <Countries_selector onSelectCountry={handlePickupCountrySelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
                                 </span>
                             </div>
-                            <div className="d-flex flex-column align-items-start w-100  mb-4 ">
+                            {/* <div className="d-flex flex-column align-items-start w-100  mb-4 ">
                                 <h6>DESTINATION REGION</h6>
                                 <span className="w-100 w-md-75">
                                     <Region_selector onSelectRegion={handleDestinationRegionSelect} bgcolor='#f6f6f6' borderradiuscount='5px' paddingcount='12px' />
                                 </span>
-                            </div>
+                            </div> */}
                             <div className="d-flex flex-column align-items-start w-100  mb-4 border-bottom border-2 pb-4">
                                 <h6>DESTINATION COUNTRY</h6>
                                 <span className="w-100 w-md-75">
