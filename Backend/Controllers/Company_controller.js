@@ -176,6 +176,7 @@ const Company_Register = (req, res) => {
 
                         const insertCountryData = (countries, type) => {
                             countries.forEach((country) => {
+                                // console.log('service_type: ',type, '** region: ', country.region, '** country: ', country.country, '** duration: ', country.deliveryTime, '\n');
                                 db.query(
                                     `INSERT INTO ${companyTable} SET ?`,
                                     {

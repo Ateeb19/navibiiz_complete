@@ -4,15 +4,30 @@ import React, { useState } from "react";
 const Region_selector = ({ onSelectRegion, label='Select the Region', bgcolor='#d6d6d6', bordercolor= '1px solid #d6d6d6', margincount = '0px', paddingcount = '3px' ,borderradiuscount='0', fontsizefont ='', width = 'auto' }) => {
 
     const [region, setReion] = useState([
-        'Africa',
-        'Asia',
-        'Europe',
+        'Northern Africa',
+        'Western Africa',
+        'Middle Africa',
+        'Eastern Africa',
+        'Southern Africa',
         'North America',
-        'South America',
-        'Oceania',
-        'Caribbean',
         'Central America',
+        'South America',
+        'Caribbean',
+        'Central Asia',
+        'Southern Asia',
+        'South-Eastern Asia',
+        'Eastern Asia',
+        'Western Asia',
+        'Northern Europe',
+        'Western Europe',
+        'Eastern Europe',
+        'Southern Europe',
+        'Australia and New Zealand',
+        'Melanesia',
+        'Micronesia',
+        'Polynesia',
     ]);
+
     // axios.get('https://countriesnow.space/api/v0.1/countries/positions')
     // .then((response) => {
     //     setCountries(response.data.data);
@@ -28,7 +43,7 @@ const Region_selector = ({ onSelectRegion, label='Select the Region', bgcolor='#
     };
     return (
         <div className="w-100" style={{width: width}}>
-            <select id="region-selector" className='form-select' style={{backgroundColor: bgcolor, border: bordercolor, borderRadius: borderradiuscount,padding:paddingcount , fontSize: fontsizefont, margin: margincount, fontFamily: 'montserrat', cursor: 'pointer' }} value={selectedRegion} onChange={handleChange}>
+            <select id="region-selector" className='form-select' style={{backgroundColor: bgcolor, border: bordercolor, borderRadius: borderradiuscount,padding:paddingcount , fontSize: fontsizefont, margin: margincount, fontFamily: 'montserrat', cursor: 'pointer' }} onChange={handleChange}>
                 <option value="">{label}</option>
                 {region.map((region,index) => (
                     <option key={index} value={region}>

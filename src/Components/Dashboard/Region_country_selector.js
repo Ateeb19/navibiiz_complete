@@ -20,7 +20,7 @@ const Region_countries_selector = ({
     if (selectedRegion) {
         console.log("this is the region -: ", selectedRegion);
       axios
-        .get(`https://restcountries.com/v3.1/region/${selectedRegion}`)
+        .get(`https://restcountries.com/v3.1/subregion/${selectedRegion}`)
         .then((response) => {
           // restcountries.com v3 API returns an array of objects with `name.common`
           const countryList = response.data.map((c) => ({

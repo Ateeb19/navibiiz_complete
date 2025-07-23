@@ -1075,7 +1075,11 @@ const Dashboard = () => {
   const [activeRegion, setActiveRegion] = useState('');
   const handle_region = (value) => {
     setActiveRegion(value);
-  }
+    setNewCountryData(prev => ({
+      ...prev,
+      region: value
+    }));
+  };
   const handle_region_country = (value) => {
     if (activeRegion) {
       setNewCountryData({ region: activeRegion, country: value, duration: '', name: '' });
@@ -1094,14 +1098,14 @@ const Dashboard = () => {
 
   const handle_add_new_country = () => {
     if (selectedCompany.tableData[0].region) {
-      if (!newCountryData.region || !newCountryData.country || !newCountryData.duration || !newCountryData.name) {
-        showAlert('Please select all the fields.');
+      // if(!newCountryData.region )
+      if (!newCountryData.region && !newCountryData.country) {
+        showAlert("Select Region or Country");
         return;
-      } else {
-        if (!newCountryData.country || !newCountryData.duration || !newCountryData.name) {
-          showAlert('Please select all the fields.');
-          return;
-        }
+      }
+      if (!newCountryData.duration || !newCountryData.name) {
+        showAlert('Fill Duration and service');
+        return;
       }
     }
 
@@ -3712,11 +3716,7 @@ const Dashboard = () => {
                               <thead>
                                 <tr>
                                   <th scope="col"><h6>Transport Offered</h6></th>
-                                  {selectedCompany.tableData[0].region && (
-                                    <>
-                                      <th scope="col"><h6>Destination Region</h6></th>
-                                    </>
-                                  )}
+                                  <th scope="col"><h6>Destination Region</h6></th>
                                   <th scope="col"><h6>Destination Countries</h6></th>
                                   <th scope="col"><h6>Delivery Duration</h6></th>
                                   {edit_company && <th scope="col"><h6>Action</h6></th>}
@@ -3727,11 +3727,7 @@ const Dashboard = () => {
                                   {selectedCompany.tableData.map((item, index) => (
                                     <tr key={index}>
                                       <td className="text-secondary text-start text-md-center">{item.service_type}</td>
-                                      {item.region && (
-                                        <>
-                                          <td className="text-secondary text-start text-md-center">{item.region}</td>
-                                        </>
-                                      )}
+                                      <td className="text-secondary text-start text-md-center">{item.region}</td>
                                       <td className="text-secondary text-start text-md-center">{item.countries}</td>
                                       <td className="text-secondary text-start text-md-center">{item.duration}</td>
                                       {edit_company && (
@@ -3897,22 +3893,22 @@ const Dashboard = () => {
                         <h3>Add New Country</h3>
                       </div>
                       <div className="modal-body">
-                        {selectedCompany.tableData[0].region ? (
-                          <>
-                            <div className="mb-3 text-start">
-                              <label className="input-label w-100">Region</label>
-                              <span><Region_selector
-                                onSelectRegion={handle_region}
-                                // onSelectRegion={(value) =>
-                                //   setNewCountryData({ ...newCountryData, region: value })
-                                // }
-                                label="Select the region"
-                                value={newCountryData.country}
-                                paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
-                                required
-                              /></span>
-                            </div>
+                        <div className="mb-3 text-start">
+                          <label className="input-label w-100">Region</label>
+                          <span><Region_selector
+                            onSelectRegion={handle_region}
+                            // onSelectRegion={(value) =>
+                            //   setNewCountryData({ ...newCountryData, region: value })
+                            // }
+                            label="Select the region"
+                            value={newCountryData.country}
+                            paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                            required
+                          /></span>
+                        </div>
 
+                        {activeRegion ? (
+                          <>
                             <div className="mb-3 text-start">
                               <label className="input-label w-100">Country</label>
                               <span><Region_countries_selector

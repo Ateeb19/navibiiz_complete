@@ -1257,7 +1257,14 @@ svg {
     /* margin: 50px auto 0 auto; */
 }
 
-.footer_img{
+.footer_img {
     height: 80px;
 }
 
+.btn-country-add {
+    background-color: #79f141;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-size: 15px;
+}

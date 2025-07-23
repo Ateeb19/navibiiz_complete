@@ -279,10 +279,12 @@ const Registration = () => {
 
     //countiner
     const [selectedContainerCountries, setSelectedContainerCountries] = useState([]);
-    const [activeRegion, setActiveRegion] = useState("");
+    const [activeRegion, setActiveRegion] = useState(" ");
+    const [activeCountry, setActiveCountry] = useState(" ");
 
     const handleContainerRegion = (value) => {
         setActiveRegion(value);
+        setActiveCountry(" ");
     };
     // const handleContainerRegion = (value) => {
     //     if (value && !selectedContainerCountries.some((item) => item.country === value)) {
@@ -291,21 +293,43 @@ const Registration = () => {
     // };
 
     const handleContainerCountry = (value) => {
-        if (!value || !activeRegion) return;
+        setActiveCountry(value);
 
+
+        // if (!value || !activeRegion) return;
+
+        // setSelectedContainerCountries(prev => {
+        //     const alreadyExists = prev.some(
+        //         item => item.region === activeRegion && item.country === value
+        //     );
+
+        //     if (alreadyExists) return prev;
+
+        //     return [
+        //         ...prev,
+        //         { region: activeRegion, country: value, deliveryTime: "" }
+        //     ];
+        // });
+    };
+
+    const handle_add_country_region = () => {
+        if (!activeRegion && !activeCountry) {
+            showAlert("Select Region or Country");
+            return;
+        }
         setSelectedContainerCountries(prev => {
             const alreadyExists = prev.some(
-                item => item.region === activeRegion && item.country === value
+                item => item.region === activeRegion && item.country === activeCountry
             );
 
             if (alreadyExists) return prev;
 
             return [
                 ...prev,
-                { region: activeRegion, country: value, deliveryTime: "" }
+                { region: activeRegion, country: activeCountry, deliveryTime: "" }
             ];
         });
-    };
+    }
     // const handleContainerCountry = (index, value) => {
     //     if (value && !selectedContainerCountries.some((item) => item.country === value)) {
     //         const updateCountry = [...selectedContainerCountries];
@@ -330,27 +354,49 @@ const Registration = () => {
 
     //Groupage service
     const [selectedGroupageCountries, setSelectedGroupageCountries] = useState([]);
-    const [activeGroupageRegion, setActiveGroupageRegion] = useState("");
+    const [activeGroupageRegion, setActiveGroupageRegion] = useState(" ");
+    const [activeGroupageCountry, setActiveGroupageCountry] = useState(" ");
 
     const handleGroupageRegion = (value) => {
         setActiveGroupageRegion(value);
+        setActiveGroupageCountry(" ");
     };
     const handleGroupageCountry = (value) => {
-        if (!value || !activeGroupageRegion) return;
+        setActiveGroupageCountry(value);
 
+        // if (!value || !activeGroupageRegion) return;
+
+        // setSelectedGroupageCountries(prev => {
+        //     const alreadyExists = prev.some(
+        //         item => item.region === activeGroupageRegion && item.country === value
+        //     );
+
+        //     if (alreadyExists) return prev;
+
+        //     return [
+        //         ...prev,
+        //         { region: activeGroupageRegion, country: value, deliveryTime: "" }
+        //     ];
+        // });
+    };
+    const handle_groupage_add_country_region = () => {
+        if (!activeGroupageRegion && !activeGroupageCountry) {
+            showAlert("Select Region or Country");
+            return;
+        }
         setSelectedGroupageCountries(prev => {
             const alreadyExists = prev.some(
-                item => item.region === activeGroupageRegion && item.country === value
+                item => item.region === activeGroupageRegion && item.country === activeGroupageCountry
             );
 
             if (alreadyExists) return prev;
 
             return [
                 ...prev,
-                { region: activeGroupageRegion, country: value, deliveryTime: "" }
+                { region: activeGroupageRegion, country: activeGroupageCountry, deliveryTime: "" }
             ];
         });
-    };
+    }
     // const handleGroupageCountry = (value) => {
     //     if (value && !selectedGroupageCountries.some((item) => item.country === value)) {
     //         setSelectedGroupageCountries([...selectedGroupageCountries, { country: value, deliveryTime: "" }]);
@@ -371,32 +417,51 @@ const Registration = () => {
 
     //Car service
     const [selectedCarCountries, setSelectedCarCountries] = useState([]);
-    const [activeCarRegion, setActiveCarRegion] = useState("");
+    const [activeCarRegion, setActiveCarRegion] = useState(" ");
+    const [activeCarCountry, setActiveCarCountry] = useState(" ");
 
     const handleCarRegion = (value) => {
         setActiveCarRegion(value);
+        setActiveCarCountry(" ");
     };
     const handleCarCountry = (value) => {
-        if (!value || !activeCarRegion) return;
+        setActiveCarCountry(value);
 
+        // if (!value || !activeCarRegion) return;
+
+        // setSelectedCarCountries(prev => {
+        //     const alreadyExists = prev.some(
+        //         item => item.region === activeCarRegion && item.country === value
+        //     );
+
+        //     if (alreadyExists) return prev;
+
+        //     return [
+        //         ...prev,
+        //         { region: activeCarRegion, country: value, deliveryTime: "" }
+        //     ];
+        // });
+    };
+
+    const handle_car_add_country_region = () => {
+        if (!activeCarRegion && !activeCarCountry) {
+            showAlert("Select Region or Country");
+            return;
+        }
         setSelectedCarCountries(prev => {
             const alreadyExists = prev.some(
-                item => item.region === activeCarRegion && item.country === value
+                item => item.region === activeCarRegion && item.country === activeCarCountry
             );
 
             if (alreadyExists) return prev;
 
             return [
                 ...prev,
-                { region: activeCarRegion, country: value, deliveryTime: "" }
+                { region: activeCarRegion, country: activeCarCountry, deliveryTime: "" }
             ];
         });
-    };
-    // const handleCarCountry = (value) => {
-    //     if (value && !selectedCarCountries.some((item) => item.country === value)) {
-    //         setSelectedCarCountries([...selectedCarCountries, { country: value, deliveryTime: "" }]);
-    //     }
-    // };
+    }
+
     const handleDeliveryTimeChange_car = (index, value) => {
         const updatedCountries = [...selectedCarCountries];
         updatedCountries[index].deliveryTime = value;
@@ -942,11 +1007,26 @@ const Registration = () => {
                                                             onSelectRegion={handleContainerRegion}
                                                             lable="Select the Region" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
 
+                                                        {activeRegion ? (
+                                                            <>
+                                                                <Region_countries_selector
+                                                                    selectedRegion={activeRegion}
+                                                                    onSelectCountry={handleContainerCountry}
+                                                                    lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
 
-                                                        <Region_countries_selector
-                                                            selectedRegion={activeRegion}
-                                                            onSelectCountry={handleContainerCountry}
-                                                            lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Countries_selector
+                                                                    onSelectCountry={handleContainerCountry}
+                                                                    label="Select the country"
+                                                                    className="w-100"
+                                                                    paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                                                />
+                                                            </>
+                                                        )}
+
+                                                        <button className="btn btn-light text-info border border-info d-flex flex-row" onClick={handle_add_country_region}> <IoMdAddCircleOutline className="fs-4" /> Add</button>
                                                     </div>
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
@@ -1018,7 +1098,7 @@ const Registration = () => {
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
                                                     <label className="shipping-input-label">Countries we ship Car to<span className="text-danger">*</span></label>
-
+                                                    {/* 
                                                     <div className="d-flex w-100 flex-row align-items-center gap-3">
 
                                                         <Region_selector
@@ -1030,6 +1110,34 @@ const Registration = () => {
                                                             selectedRegion={activeCarRegion}
                                                             onSelectCountry={handleCarCountry}
                                                             lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                                                    </div> */}
+
+                                                    <div className="d-flex w-100 flex-row align-items-center gap-3">
+
+                                                        <Region_selector
+                                                            onSelectRegion={handleCarRegion}
+                                                            lable="Select the Region" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+
+                                                        {activeCarRegion ? (
+                                                            <>
+                                                                <Region_countries_selector
+                                                                    selectedRegion={activeCarRegion}
+                                                                    onSelectCountry={handleCarCountry}
+                                                                    lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Countries_selector
+                                                                    onSelectCountry={handleCarCountry}
+                                                                    label="Select the country"
+                                                                    className="w-100"
+                                                                    paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                                                />
+                                                            </>
+                                                        )}
+
+                                                        <button className="btn btn-light text-info border border-info d-flex flex-row" onClick={handle_car_add_country_region}> <IoMdAddCircleOutline className="fs-4" /> Add</button>
                                                     </div>
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
@@ -1100,7 +1208,7 @@ const Registration = () => {
                                             <div className="d-flex flex-column align-items-start justify-content-start mt-4 w-100">
                                                 <div className="d-flex w-100 flex-column align-items-start gap-2">
                                                     <label className="shipping-input-label">Countries we ship Groupage to<span className="text-danger">*</span></label>
-                                                    <div className="d-flex w-100 flex-row align-items-center gap-3">
+                                                    {/* <div className="d-flex w-100 flex-row align-items-center gap-3">
 
                                                         <Region_selector
                                                             onSelectRegion={handleGroupageRegion}
@@ -1111,6 +1219,34 @@ const Registration = () => {
                                                             selectedRegion={activeGroupageRegion}
                                                             onSelectCountry={handleGroupageCountry}
                                                             lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+                                                    </div> */}
+
+                                                    <div className="d-flex w-100 flex-row align-items-center gap-3">
+
+                                                        <Region_selector
+                                                            onSelectRegion={handleGroupageRegion}
+                                                            lable="Select the Region" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+
+                                                        {activeGroupageRegion ? (
+                                                            <>
+                                                                <Region_countries_selector
+                                                                    selectedRegion={activeGroupageRegion}
+                                                                    onSelectCountry={handleGroupageCountry}
+                                                                    lable="Select the Country" className="w-100" paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' />
+
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Countries_selector
+                                                                    onSelectCountry={handleGroupageCountry}
+                                                                    label="Select the country"
+                                                                    className="w-100"
+                                                                    paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                                                />
+                                                            </>
+                                                        )}
+
+                                                        <button className="btn btn-light text-info border border-info d-flex flex-row" onClick={handle_groupage_add_country_region}> <IoMdAddCircleOutline className="fs-4" /> Add</button>
                                                     </div>
                                                 </div>
                                                 <div className="d-flex flex-md-row align-items-start justify-content-start w-100">
