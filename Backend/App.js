@@ -16,6 +16,7 @@ app.use(cors({
         'http://217.154.86.64:3000',
         'https://novibiz.com',
         'https://www.novibiz.com',
+        'http://betanovibiz.site',
         'https://p000tqb6-3000.inc1.devtunnels.ms',
     ],
     methods: ["POST", "GET", 'PUT', 'DELETE', 'OPTIONS'],
