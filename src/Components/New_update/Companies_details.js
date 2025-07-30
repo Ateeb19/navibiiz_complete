@@ -364,9 +364,9 @@ const CompanyDetails = () => {
                                         </>
                                     )}
                                 </div>
-                                <button className="w-100 btn-main mt-4" onClick={handle_contact}>
+                                {/* <button className="w-100 btn-main mt-4" onClick={handle_contact}>
                                     Contact Company
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>

@@ -787,6 +787,8 @@ const Dashboard = () => {
     }).catch((err) => { console.log(err); });
   }
 
+  console.log('data-: ', selected_offer);
+
   const handleDeleteoffer = (item) => {
     openDeleteModal("Are you sure you want to delete this offer?", () => {
       axios.delete(`${port}/send_groupage/delete_offer_user/${item}`, {
@@ -802,21 +804,57 @@ const Dashboard = () => {
   }
 
   const duration_calculate = (departure_date, pickup_date) => {
-    const firstPickupDate = pickup_date.split(" - ")[0];
+  const isDateRange = /^([A-Za-z]{3,}) \d{1,2}, \d{4} - ([A-Za-z]{3,}) \d{1,2}, \d{4}$/.test(departure_date);
 
-    const departureDateObj = new Date(departure_date);
-    const pickupDateObj = new Date(firstPickupDate.split("/").reverse().join("-"));
-
-    const diffInTime = departureDateObj - pickupDateObj;
-
-    const durationInDays = diffInTime / (1000 * 60 * 60 * 24);
-
-    const duration =
-      durationInDays >= 30
-        ? `${Math.floor(durationInDays / 30)} month(s)`
-        : `${durationInDays} day(s)`;
-    return duration;
+  if (!isDateRange) {
+    // If not a date range, return the string (cleaned)
+    return departure_date.replaceAll("_", " ");
   }
+
+  // If it's a date range, extract the end date
+  const endDateStr = departure_date.split(" - ")[1];
+  const endDateObj = new Date(endDateStr);
+
+  let pickupDateStr = pickup_date;
+
+  if (pickup_date.includes(" - ")) {
+    pickupDateStr = pickup_date.split(" - ")[0];
+  }
+
+  // Try to parse pickupDateStr (assume it's in dd/mm/yyyy or yyyy-mm-dd)
+  let pickupDateObj;
+  if (pickupDateStr.includes("/")) {
+    pickupDateObj = new Date(pickupDateStr.split("/").reverse().join("-")); // dd/mm/yyyy → yyyy-mm-dd
+  } else {
+    pickupDateObj = new Date(pickupDateStr);
+  }
+
+  const diffInMs = endDateObj - pickupDateObj;
+  const diffInDays = Math.round(diffInMs / (1000 * 60 * 60 * 24));
+
+  if (isNaN(diffInDays)) return "Invalid duration";
+
+  return diffInDays >= 30
+    ? `${Math.floor(diffInDays / 30)} month(s)`
+    : `${diffInDays} day(s)`;
+};
+
+  // const duration_calculate = (departure_date, pickup_date) => {
+  //   const firstPickupDate = pickup_date.split(" - ")[0];
+
+  //   const departureDateObj = new Date(departure_date);
+  //   const pickupDateObj = new Date(firstPickupDate.split("/").reverse().join("-"));
+
+  //   const diffInTime = departureDateObj - pickupDateObj;
+
+  //   const durationInDays = diffInTime / (1000 * 60 * 60 * 24);
+
+  //   const duration =
+  //     durationInDays >= 30
+  //       ? `${Math.floor(durationInDays / 30)} month(s)`
+  //       : `${durationInDays} day(s)`;
+  //   return duration;
+  // }
 
   const delete_offer_admin = (offer_id) => {
     openDeleteModal(`Are you sure you want to delete this offer ?`, () => {
@@ -3261,6 +3299,7 @@ const Dashboard = () => {
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Delivery Duration : </span>
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
+                        {/* <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span> */}
                       </div>
                     </div>
 

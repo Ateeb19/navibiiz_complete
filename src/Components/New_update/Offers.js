@@ -19,6 +19,11 @@ import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { RxCross2 } from "react-icons/rx";
 
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+
+
 const Offers = () => {
     const navigate = useNavigate();
     const { showAlert } = useAlert();
@@ -187,13 +192,36 @@ const Offers = () => {
     const [dateError, setDateError] = useState(false);
     const [offer_success, setOffer_success] = useState(false);
 
+    const [dateRange, setDateRange] = useState([
+        {
+            startDate: new Date(),
+            endDate: new Date(),
+            key: 'selection',
+        },
+    ]);
+
+    const formattedRange = `${dateRange[0].startDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })} - ${dateRange[0].endDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })}`;
+
+    const handleSelect = (ranges) => {
+        setDateRange([ranges.selection]);
+        console.log(formattedRange);
+    };
+
     const handleSubmit_offer = (details) => {
         if (bidAmount === '') {
             showAlert('Please fill all the fields');
             return;
         }
-        
-        if (!expetedDate) {
+
+        if (!dateRange) {
             showAlert('Please fill all the fields');
             setDateError(true);
             return;
@@ -208,7 +236,7 @@ const Offers = () => {
         const data = {
             offer_id: details.id,
             offer_amount: integerBidAmount,
-            expected_date: expetedDate
+            expected_date: formattedRange
         };
 
         axios.post(`${port}/send_groupage/create_offer`, data, {
@@ -857,11 +885,17 @@ const Offers = () => {
                                                             </div>
                                                             <input type="text" className="form-control w-100 w-sm-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`€ ${bidAmount}`} />
                                                         </div>
-                                                        <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4">
-                                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-50">
+                                                        <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-start justify-content-between w-100 gap-3 mt-4">
+                                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-50 w-sm-50">
                                                                 <span className="text-secondary text-start">How long will this product take to deliver?</span>
+
+
+                                                                <div style={{ marginTop: '1rem' }}>
+                                                                    <span className="fs-6">From:</span> {dateRange[0].startDate.toDateString()}<br />
+                                                                    <span className="fs-6">To:</span> {dateRange[0].endDate.toDateString()}
+                                                                </div>
                                                             </div>
-                                                            <Form.Select
+                                                            {/* <Form.Select
                                                                 style={{
                                                                     border: dateError ? '1px solid rgb(178, 0, 0)' : '',
                                                                     boxShadow: dateError ? '0 0 10px rgb(178, 0, 0)' : '',
@@ -876,7 +910,17 @@ const Offers = () => {
                                                                 <option value="less_than_15_days">Less Than 15 Days</option>
                                                                 <option value="more_than_15_days">More Than 15 Days</option>
                                                                 <option value="more_than_30_days">More Than 30 Days</option>
-                                                            </Form.Select>
+                                                            </Form.Select> */}
+
+                                                            <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
+                                                                <DateRange
+                                                                    ranges={dateRange}
+                                                                    onChange={handleSelect}
+                                                                    moveRangeOnFirstSelection={false}
+                                                                    editableDateInputs={true}
+                                                                />
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
