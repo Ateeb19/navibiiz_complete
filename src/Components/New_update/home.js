@@ -31,6 +31,7 @@ import { IoIosCall } from "react-icons/io";
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
+    console.log('this is the current port for backend api -: ', port);
     const { showAlert } = useAlert();
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
