@@ -22,6 +22,7 @@ import { RxCross2 } from "react-icons/rx";
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import ToggleButton from 'react-toggle-button';
 
 
 const Offers = () => {
@@ -37,6 +38,8 @@ const Offers = () => {
     const [bidAmount, setBidAmount] = useState('');
     const [expetedDate, setExpetedDate] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+    const [toggleValue, setToggleValue] = useState(true);
+    const [office_address, setOffice_address] = useState('');
     // const handlePickupCountrySelect = (country) => {
     //     setSelectedPickupCountry(country);
     // };
@@ -233,10 +236,17 @@ const Offers = () => {
             return;
         }
 
+        if(!toggleValue){
+            if(!office_address){
+                showAlert("Fill the Office Address");
+                return;
+            }
+        }
         const data = {
             offer_id: details.id,
             offer_amount: integerBidAmount,
-            expected_date: formattedRange
+            expected_date: formattedRange,
+            office_address: office_address,
         };
 
         axios.post(`${port}/send_groupage/create_offer`, data, {
@@ -885,7 +895,7 @@ const Offers = () => {
                                                             </div>
                                                             <input type="text" className="form-control w-100 w-sm-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`€ ${bidAmount}`} />
                                                         </div>
-                                                        <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-start justify-content-between w-100 gap-3 mt-4">
+                                                        <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-start justify-content-between w-100 gap-3 border-bottom border-2 pb-2 mt-4">
                                                             <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-50 w-sm-50">
                                                                 <span className="text-secondary text-start">How long will this product take to deliver?</span>
 
@@ -922,6 +932,49 @@ const Offers = () => {
                                                             </div>
 
                                                         </div>
+
+                                                        <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4 pb-2">
+                                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-100">
+                                                                <span className="text-secondary text-start">Company will pickup the groupage from customer given address.</span>
+                                                            </div>
+                                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-25 w-sm-100">
+                                                                <ToggleButton
+                                                                    value={toggleValue}
+                                                                    onToggle={(val) => setToggleValue(!val)}
+                                                                    activeLabel="Yes"
+                                                                    inactiveLabel="No"
+                                                                    colors={{
+                                                                        activeThumb: {
+                                                                            base: 'rgb(0, 17, 255)',
+                                                                        },
+                                                                        inactiveThumb: {
+                                                                            base: 'rgba(78, 155, 255, 1)',
+                                                                        },
+                                                                        active: {
+                                                                            base: 'rgb(44, 121, 253)',
+                                                                            hover: 'rgb(55, 105, 190)',
+                                                                        },
+                                                                        inactive: {
+                                                                            base: 'rgb(75, 75, 75)',
+                                                                            hover: 'rgb(175, 175, 175)',
+                                                                        },
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        {!toggleValue && (
+                                                            <>
+                                                                <div className="form-floating w-100">
+                                                                    <textarea class="form-control" style={{ height: '100px' }} value={office_address} onChange={(e) => setOffice_address(e.target.value)}/>
+                                                                    <label for="floatingTextarea2">Office Address</label>
+                                                                </div>
+                                                            </>
+                                                        )}
+
+                                                        {/* <div className="d-flex w-100 flex-column align-items-start  justify-content-start">                                           
+                                                            <span className="text-secondary text-start">Office Address -:</span>
+                                                            <textarea className="w-100" cols={5} rows={5} />
+                                                        </div> */}
                                                     </div>
                                                 </div>
                                                 <div className="d-flex w-100 justify-content-end">

@@ -804,40 +804,40 @@ const Dashboard = () => {
   }
 
   const duration_calculate = (departure_date, pickup_date) => {
-  const isDateRange = /^([A-Za-z]{3,}) \d{1,2}, \d{4} - ([A-Za-z]{3,}) \d{1,2}, \d{4}$/.test(departure_date);
+    const isDateRange = /^([A-Za-z]{3,}) \d{1,2}, \d{4} - ([A-Za-z]{3,}) \d{1,2}, \d{4}$/.test(departure_date);
 
-  if (!isDateRange) {
-    // If not a date range, return the string (cleaned)
-    return departure_date.replaceAll("_", " ");
-  }
+    if (!isDateRange) {
+      // If not a date range, return the string (cleaned)
+      return departure_date.replaceAll("_", " ");
+    }
 
-  // If it's a date range, extract the end date
-  const endDateStr = departure_date.split(" - ")[1];
-  const endDateObj = new Date(endDateStr);
+    // If it's a date range, extract the end date
+    const endDateStr = departure_date.split(" - ")[1];
+    const endDateObj = new Date(endDateStr);
 
-  let pickupDateStr = pickup_date;
+    let pickupDateStr = pickup_date;
 
-  if (pickup_date.includes(" - ")) {
-    pickupDateStr = pickup_date.split(" - ")[0];
-  }
+    if (pickup_date.includes(" - ")) {
+      pickupDateStr = pickup_date.split(" - ")[0];
+    }
 
-  // Try to parse pickupDateStr (assume it's in dd/mm/yyyy or yyyy-mm-dd)
-  let pickupDateObj;
-  if (pickupDateStr.includes("/")) {
-    pickupDateObj = new Date(pickupDateStr.split("/").reverse().join("-")); // dd/mm/yyyy → yyyy-mm-dd
-  } else {
-    pickupDateObj = new Date(pickupDateStr);
-  }
+    // Try to parse pickupDateStr (assume it's in dd/mm/yyyy or yyyy-mm-dd)
+    let pickupDateObj;
+    if (pickupDateStr.includes("/")) {
+      pickupDateObj = new Date(pickupDateStr.split("/").reverse().join("-")); // dd/mm/yyyy → yyyy-mm-dd
+    } else {
+      pickupDateObj = new Date(pickupDateStr);
+    }
 
-  const diffInMs = endDateObj - pickupDateObj;
-  const diffInDays = Math.round(diffInMs / (1000 * 60 * 60 * 24));
+    const diffInMs = endDateObj - pickupDateObj;
+    const diffInDays = Math.round(diffInMs / (1000 * 60 * 60 * 24));
 
-  if (isNaN(diffInDays)) return "Invalid duration";
+    if (isNaN(diffInDays)) return "Invalid duration";
 
-  return diffInDays >= 30
-    ? `${Math.floor(diffInDays / 30)} month(s)`
-    : `${diffInDays} day(s)`;
-};
+    return diffInDays >= 30
+      ? `${Math.floor(diffInDays / 30)} month(s)`
+      : `${diffInDays} day(s)`;
+  };
 
   // const duration_calculate = (departure_date, pickup_date) => {
   //   const firstPickupDate = pickup_date.split(" - ")[0];
@@ -2898,6 +2898,7 @@ const Dashboard = () => {
                               <th scope="col"><h6>Offer From</h6></th>
                               <th scope="col"><h6>Price (€)</h6></th>
                               <th scope="col"><h6>Delivery Duration</h6></th>
+                              <th scope="col"><h6>Handin to Office</h6></th>
                               <th scope="col"><h6>Actions</h6></th>
                             </tr>
                           </thead>
@@ -2922,6 +2923,7 @@ const Dashboard = () => {
                                     <td className="text-secondary">
                                       {item.delivery_duration.replace(/_/g, ' ')}
                                     </td>
+                                    <td className="text-secondary">{item.office_address ? <>Yes</> : <>No</>}</td>
                                     <td className="d-flex align-items-center justify-content-center w-100 gap-3">
                                       <button
                                         className="btn btn-sm text-light"
@@ -3301,6 +3303,14 @@ const Dashboard = () => {
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
                         {/* <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span> */}
                       </div>
+                      {selected_offer.office_address && (
+                        <>
+                          <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                            <span className="text-secondary">Office Address : </span>
+                            <span>{selected_offer.office_address}</span>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     {/* <button onClick={() => {

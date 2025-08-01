@@ -414,7 +414,8 @@ const create_offer = (req, res) => {
                 if (result.length === 0) {
                     const commission = ((data.offer_amount * 30) / 100).toFixed(1);
                     console.log(commission, '2');
-                    db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, commission: commission, expeted_date: data.expected_date, accepted: 0, status: 'pending' }, (err, result) => {
+                    console.log('address-:', data.office_address);
+                    db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, commission: commission, expeted_date: data.expected_date, office_address: data.office_address, accepted: 0, status: 'pending' }, (err, result) => {
                         if (err) {
                             console.log(err, '12')
                             res.json({ message: 'error in database', status: false });
@@ -433,7 +434,10 @@ const create_offer = (req, res) => {
                                         result[0].groupage_created_by,
                                         "Offer received from a company",
                                         `<h3>There is a new offer from a company.</h3>
-                                        <br><br><br><h4>Details-:</h4><p>Amount: €${amount}</p><p>Expected Date: ${data.expected_date}</p>`
+                                        <br><br><br><h4>Details-:</h4><p>Amount: €${amount}</p><p>Expected Date: ${data.expected_date}</p>
+                                        <br><br><h4>Note -: Company will not pickup the groupage, You have to handin the groupage to company address</h4><br><br>
+                                        <h5>Company Office Address -:</h5>
+                                        <p>${data.office_address}</p>`
                                     )
                                         .then(info => console.log({ info }))
                                         .catch(console.error);
@@ -495,6 +499,7 @@ const show_offers_user = (req, res) => {
                     created_date: offer.created_at,
                     price: Number((parseFloat(offer.amount) + parseFloat(offer.commission)).toFixed(2)),
                     delivery_duration: offer.expeted_date,
+                    office_address: offer.office_address,
                     accepted: offer.accepted,
                     status: offer.status,
                 };
