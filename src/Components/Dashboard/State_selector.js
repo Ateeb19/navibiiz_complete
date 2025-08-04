@@ -51,7 +51,6 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 const State_selector = ({
-  selectedCountry,
   onSelectState,
   paddingcount = "",
   fontsizefont = "",
@@ -62,25 +61,22 @@ const State_selector = ({
 }) => {
   const [states, setStates] = useState([]);
   const [selectedState, setSelectedState] = useState("");
+  const selectedCountry = localStorage.getItem('selectedCountry');
 
   useEffect(() => {
     if (selectedCountry) {
       axios
-        .post(
-          "https://countriesnow.space/api/v0.1/countries/states",
-          { country: selectedCountry },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((response) => {
-          setStates(response.data.data.states || []);
+        .get(`https://api.countrystatecity.in/v1/countries/${selectedCountry}/states`, {
+          headers: {
+            "X-CSCAPI-KEY": "a1hSc1BTUGlyQk5PWmx6eWtuSDMxOG50OGNHZGdoTXl2TGx3SXRBYw==",
+          },
         })
-        .catch((err) => console.log(err));
+        .then((response) => {
+          setStates(response.data || []);
+        })
+        .catch((err) => console.log("Error fetching states:", err));
     }
-  }, [selectedCountry]); // only runs when selectedCountry changes
+  }, [selectedCountry]);
 
   const handleChange = (event) => {
     const state = event.target.value;
@@ -120,3 +116,7 @@ const State_selector = ({
 };
 
 export default State_selector;
+
+
+
+//  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

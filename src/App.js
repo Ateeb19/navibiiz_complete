@@ -22,7 +22,7 @@ import Terms_conditions from './Components/Support/Terms_conditions';
 import Privacy_policy from './Components/Support/Privacy_policy';
 import Refund_policy from './Components/Support/Refund_policy';
 import Contact_us from './Components/New_update/Contact_us.';
-
+import Test from './Components/Dashboard/Test'
 const AppContent = () => {
   useInactivityLogout();
 
@@ -30,6 +30,7 @@ const AppContent = () => {
     <div className="App">
       <ScrollToTop />
       <Routes>
+        <Route Component={Test} path='/test' />
         <Route Component={CompleateDashbboard} path='/dashboard' />
         <Route Component={Home} path='/' />
         <Route Component={Offers} path='/offers' />
