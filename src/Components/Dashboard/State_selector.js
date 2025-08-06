@@ -115,9 +115,4 @@ const State_selector = ({
   );
 };
 
-<<<<<<< HEAD
 export default State_selector;
-// not define
-=======
-export default State_selector;
->>>>>>> 3ce46fd (update)
