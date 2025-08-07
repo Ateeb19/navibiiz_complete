@@ -3,8 +3,8 @@ const axios = require('axios');
 require('dotenv').config();
 
 // console.log(process.env.PAYPAL_SECRET, 'hello \n',process.env.PAYPAL_CLIENT_ID);
-const base = 'https://api-m.paypal.com';
-// const base = 'https://api-m.sandbox.paypal.com';
+// const base = 'https://api-m.paypal.com';
+const base = 'https://api-m.sandbox.paypal.com';
 async function generateAccessToken() {
     const auth = Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`).toString('base64');
 
