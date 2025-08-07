@@ -19,7 +19,7 @@ function OfferDetails({ selected_offer }) {
 
     const createOrder = async () => {
         const { data } = await axios.post(`${port}/paypal/api/create-order`, {
-            amount: selected_offer.price,
+            amount: selected_offer.commission,
         });
         return data.id;
     };

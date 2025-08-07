@@ -289,16 +289,19 @@ const user_upcoming = (req, res) => {
 
 const comapny_details = (req, res) => {
     const id = req.params.id;
-    db.query('SELECT created_by_email FROM offers WHERE offer_id = ?', [id], (err, result) => {
+    db.query('SELECT created_by_email, office_address FROM offers WHERE offer_id = ?', [id], (err, result) => {
         if(err){
             res.json({message: "error in database", status: false});
         }else{
-            console.log(result[0].created_by_email);
-            db.query('SELECT company_name, email, contact_person_name, contect_no FROM companies_info WHERE email = ?', [result[0].created_by_email], (err, result) => {
+            // console.log(result[0].created_by_email);
+            db.query('SELECT company_name, email, contact_person_name, contect_no FROM companies_info WHERE created_by = ?', [result[0].created_by_email], (err, result01) => {
                 if(err){
                     res.json({message: "error in database", status: false});
                 }else{
-                    res.json({message: result[0], status: true});
+                    console.log(result01);
+                    let data = {...result[0], ...result01[0]};
+                    // console.log('this is data', data);
+                    res.json({message: data, status: true});
                 }
             })
         }

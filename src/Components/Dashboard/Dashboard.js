@@ -786,7 +786,6 @@ const Dashboard = () => {
       setSelected_offer({ ...response.data.message, ...item });
     }).catch((err) => { console.log(err); });
   }
-
   console.log('data-: ', selected_offer);
 
   const handleDeleteoffer = (item) => {
@@ -804,6 +803,11 @@ const Dashboard = () => {
   }
 
   const duration_calculate = (departure_date, pickup_date) => {
+    // Handle null, undefined, or "null" pickup_date
+    if (!pickup_date || pickup_date === "null") {
+      return "Pickup date not available";
+    }
+
     const isDateRange = /^([A-Za-z]{3,}) \d{1,2}, \d{4} - ([A-Za-z]{3,}) \d{1,2}, \d{4}$/.test(departure_date);
 
     if (!isDateRange) {
@@ -838,6 +842,7 @@ const Dashboard = () => {
       ? `${Math.floor(diffInDays / 30)} month(s)`
       : `${diffInDays} day(s)`;
   };
+
 
   // const duration_calculate = (departure_date, pickup_date) => {
   //   const firstPickupDate = pickup_date.split(" - ")[0];
@@ -3150,6 +3155,13 @@ const Dashboard = () => {
                   <div className='details-wrap w-100 text-start'>
                     <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {show_company_details.contect_no}</span>
                   </div>
+                  {show_company_details.office_address && (
+                    <>
+                      <div className='details-wrap w-100 text-start'>
+                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Office Address-: {show_company_details.office_address}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -3172,7 +3184,7 @@ const Dashboard = () => {
                 }}
               >
                 <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}>
-                  {/* <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gTPRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL" }}> */}
+                {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY" }}> */}
                   <div className="d-flex flex-column justify-content-start align-items-start w-100">
                     <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
                       ✕
@@ -3303,14 +3315,14 @@ const Dashboard = () => {
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
                         {/* <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span> */}
                       </div>
-                      {selected_offer.office_address && (
+                      {/* {selected_offer.office_address && (
                         <>
                           <div className="d-flex flex-row align-items-start justify-content-between w-100">
                             <span className="text-secondary">Office Address : </span>
                             <span>{selected_offer.office_address}</span>
                           </div>
                         </>
-                      )}
+                      )} */}
                     </div>
 
                     {/* <button onClick={() => {

@@ -498,6 +498,7 @@ const show_offers_user = (req, res) => {
                     offer_id: offer.offer_id,
                     created_date: offer.created_at,
                     price: Number((parseFloat(offer.amount) + parseFloat(offer.commission)).toFixed(2)),
+                    commission: offer.commission,
                     delivery_duration: offer.expeted_date,
                     office_address: offer.office_address,
                     accepted: offer.accepted,
