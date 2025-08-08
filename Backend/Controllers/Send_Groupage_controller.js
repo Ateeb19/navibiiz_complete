@@ -412,7 +412,7 @@ const create_offer = (req, res) => {
                 res.json({ message: 'error in database', status: false });
             } else {
                 if (result.length === 0) {
-                    const commission = ((data.offer_amount * 30) / 100).toFixed(1);
+                    const commission = ((data.offer_amount * 10) / 100).toFixed(1);
                     console.log(commission, '2');
                     console.log('address-:', data.office_address);
                     db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, commission: commission, expeted_date: data.expected_date, office_address: data.office_address, accepted: 0, status: 'pending' }, (err, result) => {
@@ -447,7 +447,7 @@ const create_offer = (req, res) => {
                         }
                     });
                 } else {
-                    const commission = (data.offer_amount * 30) / 100;
+                    const commission = (data.offer_amount * 10) / 100;
                     db.query('UPDATE offers SET amount = ?, commission = ?, expeted_date = ? WHERE groupage_id = ? AND created_by_id = ?', [data.offer_amount, commission, data.expected_date, data.offer_id, req.user.userid], (err, result) => {
                         if (err) {
                             console.log(err, '123')
