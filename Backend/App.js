@@ -41,13 +41,13 @@ app.use(express.urlencoded({ extended: true, limit: '200mb' }));
 
 
 
-db.connect((err) => {
-    if (err) {
-        console.log('database not connected \n', err);
-    } else {
-        console.log('database connected');
-    }
-})
+// db.connect((err) => {
+//     if (err) {
+//         console.log('database not connected \n', err);
+//     } else {
+//             console.log('database connected');
+//         }
+//     })
 
 app.use('/hello', (req, res) => {
     res.json({ message: 'hello world' });
