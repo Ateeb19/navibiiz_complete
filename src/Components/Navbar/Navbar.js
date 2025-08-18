@@ -137,7 +137,7 @@ const Navbar = () => {
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-4 flex-grow-1 me-4">
           <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Home</Link>
           <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >About Us</Link>
-          <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Companies</Link>
+          <Link to="/companies_list" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Transporter</Link>
           <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Shipments</Link>
         </div>
 
@@ -198,7 +198,7 @@ const Navbar = () => {
             <div className="d-flex flex-column text-center py-4 text-light">
               <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "1rem" }} >Home</Link>
               <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About Us</Link>
-              <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Companies</Link>
+              <Link to="/companies_list" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Transporter</Link>
               <Link to="/offers" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Shipments</Link>
               {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
                 <Link to="/register_company" >

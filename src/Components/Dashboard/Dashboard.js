@@ -2903,7 +2903,7 @@ const Dashboard = () => {
                               <th scope="col"><h6>Offer From</h6></th>
                               <th scope="col"><h6>Price (€)</h6></th>
                               <th scope="col"><h6>Delivery Duration</h6></th>
-                              <th scope="col"><h6>Handin to Office</h6></th>
+                              <th scope="col"><h6>Transporter Pickup</h6></th>
                               <th scope="col"><h6>Actions</h6></th>
                             </tr>
                           </thead>
@@ -3122,10 +3122,10 @@ const Dashboard = () => {
                       <span className="text-secondary">Zip Code : </span>
                       <span>{show_admin_offer.receiver_zipcode}</span>
                     </div>
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                    {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Delivery Duration : </span>
                       <span>{show_admin_offer.expeted_date}</span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -3183,8 +3183,11 @@ const Dashboard = () => {
                   overflowY: 'auto'
                 }}
               >
-                {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}> */}
-                <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY" }}>
+                {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX", currency: "EUR" }}> */}
+                <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gTPRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL", currency: "EUR" }}>
+
+                  
+                {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY", currency: "EUR" }}> */}
                   <div className="d-flex flex-column justify-content-start align-items-start w-100">
                     <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
                       ✕
@@ -3310,11 +3313,11 @@ const Dashboard = () => {
                         <span className="text-secondary">Zip Code : </span>
                         <span>{selected_offer.receiver_zipcode}</span>
                       </div>
-                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                      {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Delivery Duration : </span>
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
-                        {/* <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span> */}
-                      </div>
+                        <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
+                      </div> */}
                       {/* {selected_offer.office_address && (
                         <>
                           <div className="d-flex flex-row align-items-start justify-content-between w-100">

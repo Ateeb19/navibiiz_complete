@@ -161,7 +161,7 @@ const Notification = () => {
                                         </div>
                                     </>
                                 )}
-                                <strong>New Companies Regestered</strong>
+                                <strong>New Transporter Regestered</strong>
                                 {notification_companyData && (
                                     <>
                                         <div className="d-flex flex-column align-items-start justify-content-start">
