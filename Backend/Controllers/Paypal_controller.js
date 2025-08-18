@@ -28,8 +28,8 @@ const capture_order_route = async (req, res) => {
             purchase_units: [
                 {
                     amount: {
-                        currency_code: 'USD',
-                        // currency_code: 'EUR',
+                        // currency_code: 'USD',
+                        currency_code: 'EUR',
                         value: req.body.amount,
                     },
                 },
