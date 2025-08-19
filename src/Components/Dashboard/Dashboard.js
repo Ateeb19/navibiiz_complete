@@ -7,7 +7,7 @@ import Navbar from "../Navbar/Navbar";
 import { MdDashboard, MdPayment, MdEmail, MdDelete, MdAttachEmail, MdConfirmationNumber, MdKeyboardDoubleArrowDown, MdSwitchAccount, MdAlternateEmail, MdOutlineKey, MdFileDownload, MdPermContactCalendar, MdOutlineDateRange } from "react-icons/md";
 import { FaUsers, FaUserGear, FaWeightScale, FaUserTie, FaLocationDot, FaCity, FaBuildingFlag, FaSackDollar } from "react-icons/fa6";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck, FaPassport, FaBuilding, FaUserAlt } from "react-icons/fa";
+import { FaPhoneAlt, FaBoxOpen, FaEye, FaTruckLoading, FaRuler, FaUser, FaFlag, FaMapPin, FaCalendarCheck, FaInfoCircle, FaPaypal, FaUserCheck, FaPassport, FaBuilding, FaUserAlt, FaRegCheckCircle } from "react-icons/fa";
 import { PiContactlessPaymentFill, PiHandCoinsBold, PiShippingContainerDuotone } from "react-icons/pi";
 import { BsCarFrontFill, BsBuildingsFill, BsBank2, BsBuildingFillCheck } from "react-icons/bs";
 import { IoIosMailOpen, IoMdDocument } from "react-icons/io";
@@ -28,8 +28,9 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { AiFillDelete } from "react-icons/ai";
 import Region_selector from "./Region_selector";
 import Region_countries_selector from "./Region_country_selector";
-
-
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import { LuCircleX } from "react-icons/lu";
 
 
 const DragAndDrop = ({ accept, onFileDrop, label }) => {
@@ -761,20 +762,7 @@ const Dashboard = () => {
       }
     }).catch((err) => { console.log(err); });
   }
-  const [show_company_details, setShow_company_details] = useState('');
-  const handle_user_offer_details = (offer_id, groupage_id) => {
-    axios.get(`${port}/user/company_details/${offer_id}`, {
-      headers: {
-        Authorization: token,
-      }
-    }).then((res) => {
-      if (res.data.status === true) {
-        setShow_company_details(res.data.message);
-      } else {
-        setShow_company_details('');
-      }
-    }).catch((err) => console.log(err));
-  }
+
 
   const [selected_offer, setSelected_offer] = useState(null);
   const handleShowOffer = (item) => {
@@ -787,6 +775,27 @@ const Dashboard = () => {
     }).catch((err) => { console.log(err); });
   }
   console.log('data-: ', selected_offer);
+
+  const [show_company_details, setShow_company_details] = useState(null);
+  const handle_user_offer_details = (offer_id, groupage_id, price, commission) => {
+    axios.get(`${port}/user/company_details/${offer_id}`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((res) => {
+      if (res.data.status === true) {
+        setShow_company_details({
+          data: res.data.message,
+          price: price - commission,
+          commission: commission
+        });
+      } else {
+        setShow_company_details(null);
+      }
+    }).catch((err) => console.log(err));
+  }
+  console.log('companydata-: ', show_company_details);
+
 
   const handleDeleteoffer = (item) => {
     openDeleteModal("Are you sure you want to delete this offer?", () => {
@@ -1345,6 +1354,11 @@ const Dashboard = () => {
       });
   };
 
+  const Link11 = ({ id, children, title }) => (
+    <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
+      <span>{children}</span>
+    </OverlayTrigger>
+  );
 
   const Menu = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -2901,7 +2915,8 @@ const Dashboard = () => {
                               <th scope="col"><h6>Order Id</h6></th>
                               <th scope="col"><h6>Product Name</h6></th>
                               <th scope="col"><h6>Offer From</h6></th>
-                              <th scope="col"><h6>Price (€)</h6></th>
+                              <th scope="col"><h6>Total Amount (€)</h6></th>
+                              <th scope="col"><h6>Amount to pay now (€)</h6></th>
                               <th scope="col"><h6>Delivery Duration</h6></th>
                               <th scope="col"><h6>Transporter Pickup</h6></th>
                               <th scope="col"><h6>Actions</h6></th>
@@ -2916,7 +2931,7 @@ const Dashboard = () => {
                                     key={index}
                                     onClick={() =>
                                       item.accepted === '1'
-                                        ? handle_user_offer_details(item.offer_id, item.groupage_id)
+                                        ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission)
                                         : null
                                     }
                                     style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}
@@ -2925,6 +2940,7 @@ const Dashboard = () => {
                                     <td className="text-secondary">{item.product_name}</td>
                                     <td className="text-secondary">XXXXX-XXX</td>
                                     <td className="text-secondary">{item.price}</td>
+                                    <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td>
                                     <td className="text-secondary">
                                       {item.delivery_duration.replace(/_/g, ' ')}
                                     </td>
@@ -2936,7 +2952,7 @@ const Dashboard = () => {
                                         onClick={() => handleShowOffer(item)}
                                         disabled={item.accepted === '1'}
                                       >
-                                        Accept
+                                        <FaRegCheckCircle className="fs-3"/>                                        
                                       </button>
                                       <button
                                         className="btn btn-sm text-light"
@@ -2944,7 +2960,7 @@ const Dashboard = () => {
                                         onClick={() => handleDeleteoffer(item.offer_id)}
                                         disabled={item.accepted === '1'}
                                       >
-                                        Reject
+                                        <LuCircleX className="fs-3"/>
                                       </button>
                                     </td>
                                   </tr>
@@ -3132,7 +3148,7 @@ const Dashboard = () => {
             </div>
           </>
         )}
-        {show_company_details && (
+        {show_company_details !== null && (
           <>
             <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
               <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: 'auto' }}>
@@ -3145,23 +3161,30 @@ const Dashboard = () => {
                   <div className='title-head'><h3>Company Details</h3></div>
 
                   <div className='details-wrap w-100 text-start'>
-                    <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {show_company_details.company_name}</span>
+                    <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {show_company_details?.data?.company_name}</span>
                   </div>
 
                   <div className='details-wrap w-100 text-start'>
-                    <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${show_company_details.email}"`}>{show_company_details.email}</a></span>
+                    <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${show_company_details?.data?.email}"`}>{show_company_details?.data?.email}</a></span>
                   </div>
 
                   <div className='details-wrap w-100 text-start'>
-                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {show_company_details.contect_no}</span>
+                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {show_company_details?.data?.contect_no}</span>
                   </div>
-                  {show_company_details.office_address && (
+                  {show_company_details?.data?.office_address && (
                     <>
                       <div className='details-wrap w-100 text-start'>
-                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Office Address-: {show_company_details.office_address}</span>
+                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Office Address-: {show_company_details?.data?.office_address}</span>
                       </div>
                     </>
                   )}
+                  <div className='details-wrap w-100 text-start'>
+                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount pay to Transporter-: €{show_company_details?.price}</span>
+                  </div>
+
+                  <div className='details-wrap w-100 text-start'>
+                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount payed-: €{show_company_details?.commission}</span>
+                  </div>
                 </div>
               </div>
 
@@ -3186,8 +3209,8 @@ const Dashboard = () => {
                 {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX", currency: "EUR" }}> */}
                 <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gTPRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL", currency: "EUR" }}>
 
-                  
-                {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY", currency: "EUR" }}> */}
+
+                  {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY", currency: "EUR" }}> */}
                   <div className="d-flex flex-column justify-content-start align-items-start w-100">
                     <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
                       ✕
@@ -3232,6 +3255,14 @@ const Dashboard = () => {
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Price Offered : </span>
                         <span className="fw-bold">€{selected_offer.price}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">10% Amount to Pay : </span>
+                        <span className="fw-bold">€{selected_offer.commission}</span>
+                      </div>
+                      <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                        <span className="text-secondary">Remaining amount will pay to Transporter : </span>
+                        <span className="fw-bold">€{selected_offer.price - selected_offer.commission}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Offer Received Date : </span>
