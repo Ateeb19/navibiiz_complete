@@ -159,7 +159,7 @@ const Home = () => {
         localStorage.setItem("filters", JSON.stringify(filters));
 
         // Navigate with state
-        navigate('/companies_list', {
+        navigate('/transporters_list', {
             state: {
                 fromHomePage: true,
                 pickupCountry: pickupCountry
@@ -170,7 +170,7 @@ const Home = () => {
 
     const View_details = (item) => {
         localStorage.setItem(`company_${item.id}`, JSON.stringify(item));
-        navigate(`/company_details/${item.id}`, { state: { company: item } });
+        navigate(`/transporter/${item.id}`, { state: { company: item } });
     };
 
     const [groupage_detail, setGroupage_detail] = useState(null);
@@ -181,7 +181,7 @@ const Home = () => {
         {
             name: 'Sophie',
             location: 'Paris, France',
-            description: '“I compared prices from many logistics Transporter on Novibiz before shipping a car to Congo. The platform helped me choose the most reliable option at the best rate.”',
+            description: '“I compared prices from many logistics Transporters on Novibiz before shipping a car to Congo. The platform helped me choose the most reliable option at the best rate.”',
             img: '/Images/person02w.webp'
         },
         {
@@ -311,7 +311,7 @@ const Home = () => {
                             </div>
 
                             <div className="d-flex text-black flex-row align-items-center justify-content-between home-search-country" onClick={handleSearch} >
-                                <div>Search Transporter</div>
+                                <div>Search Transporters</div>
                                 <div style={{ cursor: 'pointer' }}><IoSearch className="fs-5" /></div>
                             </div>
                         </div>
@@ -351,7 +351,7 @@ const Home = () => {
             <div className="container mt-5 mb-4">
                 <div className="home-company-wrap d-flex flex-column justify-content-center align-items-center">
                     <div className="home-heading d-flex flex-row align-items-center justify-content-between w-100">
-                        <h2>Transporter that trusted our services</h2>
+                        <h2>Transporters that trusted our services</h2>
                         <div className="d-flex flex-row align-items-center justify-content-center gap-2 slider-btn">
                             <button onClick={() => sliderRef.current?.slickPrev()}>
                                 <FaArrowLeftLong />
@@ -1310,7 +1310,7 @@ const Home = () => {
                         <div className="flex-grow-1 text-light text-center">
                             <div className="stats-wrap">
                                 <h3>50+</h3>
-                                <p>Verified Logistics Transporter</p>
+                                <p>Verified Logistics Transporters</p>
                             </div>
                         </div>
                         <div className="flex-grow-1 text-light text-center">
@@ -1351,7 +1351,7 @@ const Home = () => {
                             <div className="build-wrap text-start h-100 p-3">
                                 <h2><FaBox /></h2>
                                 <h5>Easy Shipment Details</h5>
-                                <p>Simply provide your shipment information to receive a tailored list of logistics Transporter.</p>
+                                <p>Simply provide your shipment information to receive a tailored list of logistics Transporters.</p>
                             </div>
                         </div>
 

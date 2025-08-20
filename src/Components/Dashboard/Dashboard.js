@@ -900,6 +900,7 @@ const Dashboard = () => {
       }
     }).catch((err) => { });
   }
+
   const [show_admin_offer, setShow_admin_offer] = useState('');
   const handle_admin_selected_offer = (offer_id, groupage_id) => {
     axios.get(`${port}/admin/selected_offer`, {
@@ -2811,7 +2812,10 @@ const Dashboard = () => {
                               <th scope="col"><h6>Product Name</h6></th>
                               <th scope="col"><h6>Offer To</h6></th>
                               <th scope="col"><h6>Price (€)</h6></th>
+                              <th scope="col"><h6>Platform fee (€)</h6></th>
+                              <th scope="col"><h6>Amount Receive (€)</h6></th>
                               <th scope="col"><h6>Pick Up Date</h6></th>
+                              <th scope="col"><h6>Product Pick Up</h6></th>
                               <th scope="col"><h6>Offer Status</h6></th>
                             </tr>
                           </thead>
@@ -2831,11 +2835,14 @@ const Dashboard = () => {
                                   <td className="text-secondary">{item.product_name}</td>
                                   <td className="text-secondary">{item.sender_name}</td>
                                   <td className="text-secondary">{item.amount}</td>
+                                  <td className="text-secondary">{item.commission}</td>
+                                  <td className="text-secondary"><Link11 title="This is the final amount you will receive from customer" id="t-1">{item.amount - item.commission}</Link11></td>
                                   <td className="text-secondary">{item.pickup_date}</td>
+                                  <td className="text-secondary">{item.office_address ? 'No': 'Yes'}</td>
                                   <td className="text-secondary"
                                     style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
                                     onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
-                                  ><span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status} {item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
+                                  ><span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : 'Rejected'}{item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
                                   </td>
                                 </tr>
                               ))}
@@ -2944,7 +2951,7 @@ const Dashboard = () => {
                                     <td className="text-secondary">
                                       {item.delivery_duration.replace(/_/g, ' ')}
                                     </td>
-                                    <td className="text-secondary">{item.office_address ? <>Yes</> : <>No</>}</td>
+                                    <td className="text-secondary">{item.office_address ? <>No</> : <>Yes</>}</td>
                                     <td className="d-flex align-items-center justify-content-center w-100 gap-3">
                                       <button
                                         className="btn btn-sm text-light"
@@ -3158,7 +3165,7 @@ const Dashboard = () => {
                 ></button>
 
                 <div className='d-flex flex-column align-items-start'>
-                  <div className='title-head'><h3>Company Details</h3></div>
+                  <div className='title-head'><h3>Transporter Details</h3></div>
 
                   <div className='details-wrap w-100 text-start'>
                     <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {show_company_details?.data?.company_name}</span>

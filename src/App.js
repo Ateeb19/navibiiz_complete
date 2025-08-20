@@ -34,7 +34,7 @@ const AppContent = () => {
         <Route Component={CompleateDashbboard} path='/dashboard' />
         <Route Component={Home} path='/' />
         <Route Component={Offers} path='/offers' />
-        <Route Component={CompaniesList} path='/companies_list' />
+        <Route Component={CompaniesList} path='/transporters_list' />
         <Route Component={send_groupage} path='/send_groupage' />
         <Route Component={Notification} path='/notification' />
         <Route Component={Regester_company} path='/register_company' />
@@ -45,7 +45,7 @@ const AppContent = () => {
         <Route Component={Refund_policy} path='/refund_policy' />
         <Route Component={Contact_us} path='/contact_us' />
         <Route Component={ResetPassword} path='/reset_password/:token' />
-        <Route path="/company_details/:id" element={<CompanyDetails />} />
+        <Route path="/transporter_details/:id" element={<CompanyDetails />} />
       </Routes>
     </div>
   );

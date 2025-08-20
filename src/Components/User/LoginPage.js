@@ -212,7 +212,7 @@ const LoginPage = () => {
                         style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#de8316" : "", color: selected === "company" ? "white" : "" }}
                         onClick={() => { setSelected('company'); if (isSignup) { navigate('/register_company') } }}
                       >
-                        <p onClick={() => setSelected('company')}>As a Transporter</p>
+                        <p onClick={() => setSelected('company')}>As a Transporters</p>
                       </div>
                     </div>
                   </div>

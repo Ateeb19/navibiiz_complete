@@ -46,7 +46,7 @@ const CompanyDetails = () => {
             setDetails_company(true);
         } else {
             showAlert('Please login to contact the company.');
-            localStorage.setItem("redirectAfterLogin", `/company_details/${id}`);
+            localStorage.setItem("redirectAfterLogin", `/transporter_details/${id}`);
             navigate('/login');
         }
     }
@@ -56,7 +56,7 @@ const CompanyDetails = () => {
             setReview(true)
         } else {
             showAlert('Please login to add a review.');
-            localStorage.setItem("redirectAfterLogin", `/company_details/${id}`);
+            localStorage.setItem("redirectAfterLogin", `/transporter_details/${id}`);
             navigate('/login');
         }
     }

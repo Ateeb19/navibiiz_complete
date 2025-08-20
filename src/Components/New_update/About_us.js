@@ -125,7 +125,7 @@ const About_us = () => {
                             <div className="about-footer-wrap w-100">
                                 <h6>Trusted Network of Logistics Partners</h6>
                                 <p>
-                                    Gain access to a curated network of reliable shipping Transporter operating across Europe and
+                                    Gain access to a curated network of reliable shipping Transporters operating across Europe and
                                     internationally, ensuring secure and timely deliveries.
                                 </p>
                             </div>

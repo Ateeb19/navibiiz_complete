@@ -100,7 +100,7 @@ const Footer = () => {
                             <ul>
                                 <li onClick={() => navigate('/')}>Home</li>
                                 <li onClick={() => navigate('/about_us')}>About Us</li>
-                                <li onClick={() => navigate('/companies_list')}>Company List</li>
+                                <li onClick={() => navigate('/transporters_list')}>Company List</li>
                                 <li onClick={() => navigate('/offers')}>Offers</li>
                                 <li onClick={() => navigate('/contact_us')}>Contact Us</li>
                             </ul>

@@ -428,16 +428,14 @@ const create_offer = (req, res) => {
                                 else {
                                     res.json({ message: 'Data inserted successfully', status: true });
                                     console.log('email', result[0].groupage_created_by)
-                                    const amount = parseFloat(data.offer_amount) + parseFloat(commission);
-                                    console.log(amount, '-: Amount');
+                                    // const amount = parseFloat(data.offer_amount) + parseFloat(commission);
+                                    // console.log(amount, '-: Amount');
                                     sendMail(
                                         result[0].groupage_created_by,
                                         "Offer received from a company",
                                         `<h3>There is a new offer from a company.</h3>
-                                        <br><br><br><h4>Details-:</h4><p>Amount: €${amount}</p><p>Expected Date: ${data.expected_date}</p>
-                                        <br><br><h4>Note -: Company will not pickup the groupage, You have to handin the groupage to company address</h4><br><br>
-                                        <h5>Company Office Address -:</h5>
-                                        <p>${data.office_address}</p>`
+                                        <br><br><br><h4>Details-:</h4><p>Amount: €${data.offer_amount}</p><p>Expected Date: ${data.expected_date}</p>
+                                        ${data.office_address ? `<br><br><h4>Note -: Company will not pickup the groupage, You have to handin the groupage to company address</h4><br><br> <h5>Company Office Address -:</h5> <p>${data.office_address}</p>` : ``}`
                                     )
                                         .then(info => console.log({ info }))
                                         .catch(console.error);
@@ -497,7 +495,7 @@ const show_offers_user = (req, res) => {
                     product_name: groupage.product_name || "N/A",
                     offer_id: offer.offer_id,
                     created_date: offer.created_at,
-                    price: Number((parseFloat(offer.amount) + parseFloat(offer.commission)).toFixed(2)),
+                    price: Number((parseFloat(offer.amount)).toFixed(2)),
                     commission: offer.commission,
                     delivery_duration: offer.expeted_date,
                     office_address: offer.office_address,

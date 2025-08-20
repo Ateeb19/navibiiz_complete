@@ -161,7 +161,7 @@ const Notification = () => {
                                         </div>
                                     </>
                                 )}
-                                <strong>New Transporter Regestered</strong>
+                                <strong>New Transporters Regestered</strong>
                                 {notification_companyData && (
                                     <>
                                         <div className="d-flex flex-column align-items-start justify-content-start">
@@ -183,7 +183,7 @@ const Notification = () => {
                                                         </p>
                                                     </div>
                                                     <div className="text-primary">
-                                                        <span onClick={() => navigate('/companies_list')}>See Details</span>
+                                                        <span onClick={() => navigate('/transporters_list')}>See Details</span>
                                                     </div>
                                                 </div>
                                             ))}
@@ -214,7 +214,7 @@ const Notification = () => {
                                                         </p>
                                                     </div>
                                                     <div className="text-primary">
-                                                        <span onClick={() => navigate('/companies_list')}>See Details</span>
+                                                        <span onClick={() => navigate('/transporters_list')}>See Details</span>
                                                     </div>
                                                 </div>
                                             ))}
