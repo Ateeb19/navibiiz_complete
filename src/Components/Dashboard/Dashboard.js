@@ -2812,8 +2812,8 @@ const Dashboard = () => {
                               <th scope="col"><h6>Product Name</h6></th>
                               <th scope="col"><h6>Offer To</h6></th>
                               <th scope="col"><h6>Price (€)</h6></th>
-                              <th scope="col"><h6>Platform fee (€)</h6></th>
-                              <th scope="col"><h6>Amount Receive (€)</h6></th>
+                              {/* <th scope="col"><h6>Platform fee (€)</h6></th> */}
+                              {/* <th scope="col"><h6>Amount Receive (€)</h6></th> */}
                               <th scope="col"><h6>Pick Up Date</h6></th>
                               <th scope="col"><h6>Product Pick Up</h6></th>
                               <th scope="col"><h6>Offer Status</h6></th>
@@ -2835,8 +2835,8 @@ const Dashboard = () => {
                                   <td className="text-secondary">{item.product_name}</td>
                                   <td className="text-secondary">{item.sender_name}</td>
                                   <td className="text-secondary">{item.amount}</td>
-                                  <td className="text-secondary">{item.commission}</td>
-                                  <td className="text-secondary"><Link11 title="This is the final amount you will receive from customer" id="t-1">{item.amount - item.commission}</Link11></td>
+                                  {/* <td className="text-secondary">{item.commission}</td> */}
+                                  {/* <td className="text-secondary"><Link11 title="This is the final amount you will receive from customer" id="t-1">{item.amount - item.commission}</Link11></td> */}
                                   <td className="text-secondary">{item.pickup_date}</td>
                                   <td className="text-secondary">{item.office_address ? 'No': 'Yes'}</td>
                                   <td className="text-secondary"
@@ -2946,7 +2946,7 @@ const Dashboard = () => {
                                     <td className="text-primary">#{item.order_id}</td>
                                     <td className="text-secondary">{item.product_name}</td>
                                     <td className="text-secondary">XXXXX-XXX</td>
-                                    <td className="text-secondary">{item.price}</td>
+                                    <td className="text-secondary">{parseFloat(item.price) + parseFloat(item.commission)}</td>
                                     <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td>
                                     <td className="text-secondary">
                                       {item.delivery_duration.replace(/_/g, ' ')}
@@ -3186,7 +3186,7 @@ const Dashboard = () => {
                     </>
                   )}
                   <div className='details-wrap w-100 text-start'>
-                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount pay to Transporter-: €{show_company_details?.price}</span>
+                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount pay to Transporter-: €{parseFloat(show_company_details?.price) + parseFloat(show_company_details?.commission)}</span>
                   </div>
 
                   <div className='details-wrap w-100 text-start'>
@@ -3261,15 +3261,15 @@ const Dashboard = () => {
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Price Offered : </span>
-                        <span className="fw-bold">€{selected_offer.price}</span>
+                        <span className="fw-bold">€{parseFloat(selected_offer.price) + parseFloat(selected_offer.commission)}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">10% Amount to Pay : </span>
                         <span className="fw-bold">€{selected_offer.commission}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                        <span className="text-secondary">Remaining amount will pay to Transporter : </span>
-                        <span className="fw-bold">€{selected_offer.price - selected_offer.commission}</span>
+                        <span className="text-secondary">Amount pay to Transporter : </span>
+                        <span className="fw-bold">€{selected_offer.price}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Offer Received Date : </span>
