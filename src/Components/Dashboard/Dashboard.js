@@ -2743,8 +2743,13 @@ const Dashboard = () => {
               </div>
 
               <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
-                <div className="d-flex ps-4 w-100 justify-content-start">
+                <div className="d-flex flex-column ps-4 w-100 justify-content-start align-items-start">
                   <label className="fs-3"><strong>Offers List</strong></label>
+                  {userRole === 'user' && (
+                    <>
+                      <lable className='fs-6'><strong>Note -: </strong> You are paying 10% of the amount now and the remaining amount you can pay directly to the company.</lable>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -2838,7 +2843,7 @@ const Dashboard = () => {
                                   {/* <td className="text-secondary">{item.commission}</td> */}
                                   {/* <td className="text-secondary"><Link11 title="This is the final amount you will receive from customer" id="t-1">{item.amount - item.commission}</Link11></td> */}
                                   <td className="text-secondary">{item.pickup_date}</td>
-                                  <td className="text-secondary">{item.office_address ? 'No': 'Yes'}</td>
+                                  <td className="text-secondary">{item.office_address ? 'No' : 'Yes'}</td>
                                   <td className="text-secondary"
                                     style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
                                     onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
@@ -2862,6 +2867,7 @@ const Dashboard = () => {
               ) : (
                 <>
                   <div className="dashboard-wrapper-box">
+
                     <div className="table-wrap">
 
                       <div className="table-filter-wrap">
@@ -2947,7 +2953,8 @@ const Dashboard = () => {
                                     <td className="text-secondary">{item.product_name}</td>
                                     <td className="text-secondary">XXXXX-XXX</td>
                                     <td className="text-secondary">{parseFloat(item.price) + parseFloat(item.commission)}</td>
-                                    <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td>
+                                    {/* <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td> */}
+                                    <td className="text-secondary">{item.commission}</td>
                                     <td className="text-secondary">
                                       {item.delivery_duration.replace(/_/g, ' ')}
                                     </td>
@@ -2959,7 +2966,7 @@ const Dashboard = () => {
                                         onClick={() => handleShowOffer(item)}
                                         disabled={item.accepted === '1'}
                                       >
-                                        <FaRegCheckCircle className="fs-3"/>                                        
+                                        <FaRegCheckCircle className="fs-3" />
                                       </button>
                                       <button
                                         className="btn btn-sm text-light"
@@ -2967,7 +2974,7 @@ const Dashboard = () => {
                                         onClick={() => handleDeleteoffer(item.offer_id)}
                                         disabled={item.accepted === '1'}
                                       >
-                                        <LuCircleX className="fs-3"/>
+                                        <LuCircleX className="fs-3" />
                                       </button>
                                     </td>
                                   </tr>
