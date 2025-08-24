@@ -242,6 +242,8 @@ const Offers = () => {
                 return;
             }
         }
+        
+          
         const data = {
             offer_id: details.id,
             offer_amount: integerBidAmount,
