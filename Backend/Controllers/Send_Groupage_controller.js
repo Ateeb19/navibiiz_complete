@@ -432,10 +432,10 @@ const create_offer = (req, res) => {
                                     // console.log(amount, '-: Amount');
                                     sendMail(
                                         result[0].groupage_created_by,
-                                        "Offer received from a company",
-                                        `<h3>There is a new offer from a company.</h3>
+                                        "Offer received from a transporter",
+                                        `<h3>There is a new offer from a transporter.</h3>
                                         <br><br><br><h4>Details-:</h4><p>Amount: €${data.offer_amount}</p><p>Expected Date: ${data.expected_date}</p>
-                                        ${data.office_address ? `<br><br><h4>Note -: Company will not pickup the groupage, You have to handin the groupage to company address</h4><br><br> <h5>Company Office Address -:</h5> <p>${data.office_address}</p>` : ``}`
+                                        ${data.office_address ? `<br><br><h4>Note -: The transporter does not pick up the groupage. Please bring it to their address.</h4><br><br> <h5>Transporter's Adress -: </h5> <p>${data.office_address}</p>` : ``}`
                                     )
                                         .then(info => console.log({ info }))
                                         .catch(console.error);
