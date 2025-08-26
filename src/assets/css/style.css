@@ -1268,3 +1268,30 @@ svg {
     border-radius: 6px;
     font-size: 15px;
 }
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 97%;
+}
+
+.marquee__track {
+  display: inline-flex;
+  animation: scrollLeft 13s linear infinite;
+}
+
+.text {
+  margin-right: 2rem; /* adjust gap, set to 0 for no space */
+}
+
+/* Seamless loop */
+@keyframes scrollLeft {
+  from {
+    transform: translateX(-10);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+

@@ -25,7 +25,7 @@ const LoginPage = () => {
     const handleResize = () => {
       setMobileView(window.innerWidth < 1000);
     };
-    handleResize(); 
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -109,7 +109,12 @@ const LoginPage = () => {
           }
         })
         if (!response.data.status) {
-          showAlert(response.data.message);
+          if (response.data.type === 'individual') {
+            showAlert("Login as a transporter");
+          } else {
+            showAlert("Login as an individual");
+          }
+
           return
         }
         const token = response.data.token;
@@ -181,7 +186,7 @@ const LoginPage = () => {
 
   return (
     <div className="login-bg-wrapper">
-      <div className="d-flex align-items-center justify-content-center justify-content-md-end" style={{ minHeight: "100vh"}}>
+      <div className="d-flex align-items-center justify-content-center justify-content-md-end" style={{ minHeight: "100vh" }}>
         <div className="login-wrap">
           <div className="d-flex flex-column align-items-start">
             <div className="login-logo-wrap">
@@ -212,7 +217,7 @@ const LoginPage = () => {
                         style={{ cursor: "pointer", backgroundColor: selected === "company" ? "#de8316" : "", color: selected === "company" ? "white" : "" }}
                         onClick={() => { setSelected('company'); if (isSignup) { navigate('/register_company') } }}
                       >
-                        <p onClick={() => setSelected('company')}>As a Transporters</p>
+                        <p onClick={() => setSelected('company')}>As a Transporter</p>
                       </div>
                     </div>
                   </div>

@@ -2199,7 +2199,7 @@ const Dashboard = () => {
                           </div>
                           <div className="d-flex flex-column align-items-start gap-2">
                             <span className="text-secondary offer-submit-sub-head">Weight</span>
-                            <h6>{selected_groupage.p_weight} Kg</h6>
+                            <h6>{selected_groupage.p_weight} Pounds</h6>
                           </div>
                         </div>
                       </div>
@@ -2747,7 +2747,33 @@ const Dashboard = () => {
                   <label className="fs-3"><strong>Offers List</strong></label>
                   {userRole === 'user' && (
                     <>
-                      <lable className='fs-6'><strong>Note -: </strong> You are paying 10% of the amount now and the remaining amount you can pay directly to the company.</lable>
+                      {/* <marquee behavior="scroll" direction="left" scrollamount="12">
+                        <label className="fs-6 me-4">
+                          <strong>Note -: </strong> You are paying 10% of the amount now and the remaining amount you can pay directly to the company.
+                        </label>
+                        <label className="fs-6 me-4">
+                          <strong>Note -: </strong> You are paying 10% of the amount now and the remaining amount you can pay directly to the company.
+                        </label>
+                        <label className="fs-6 me-4">
+                          <strong>Note -: </strong> You are paying 10% of the amount now and the remaining amount you can pay directly to the company.
+                        </label>
+                      </marquee> */}
+                      <div className="marquee">
+                        <div className="marquee__track">
+                          <span className="text">
+                            <strong>Note -: </strong> You will pay 10% of the total amount now, and the remaining balance will be paid directly to the transporter.
+                          </span>
+                          <span className="text">
+                            <strong>Note -: </strong> You will pay 10% of the total amount now, and the remaining balance will be paid directly to the transporter.
+                          </span>
+                          <span className="text">
+                            <strong>Note -: </strong> You will pay 10% of the total amount now, and the remaining balance will be paid directly to the transporter.
+                          </span>
+                          <span className="text">
+                            <strong>Note -: </strong> You will pay 10% of the total amount now, and the remaining balance will be paid directly to the transporter.
+                          </span>
+                        </div>
+                      </div>
                     </>
                   )}
                 </div>
@@ -3244,26 +3270,26 @@ const Dashboard = () => {
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Weight : </span>
-                        <span>{selected_offer.p_weight}</span>
+                        <span>{selected_offer.p_weight} {selected_offer.p_weight && "Punds"}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Height :  </span>
-                        <span>{selected_offer.p_height}</span>
+                        <span>{selected_offer.p_height} {selected_offer.p_height && "Cm"}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Length : </span>
-                        <span>{selected_offer.p_length}</span>
+                        <span>{selected_offer.p_length} {selected_offer.p_length && "Cm"}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Width : </span>
-                        <span>{selected_offer.p_width}</span>
+                        <span>{selected_offer.p_width} {selected_offer.p_width && "Cm"}</span>
                       </div>
                     </div>
 
-                    <h5 className="mt-3">Company Information</h5>
+                    <h5 className="mt-3">Transporter Information</h5>
                     <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                        <span className="text-secondary">Company Name : </span>
+                        <span className="text-secondary">Transporter Name : </span>
                         <span>XXXX-XX</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
@@ -3271,7 +3297,7 @@ const Dashboard = () => {
                         <span className="fw-bold">€{parseFloat(selected_offer.price) + parseFloat(selected_offer.commission)}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                        <span className="text-secondary">10% Amount to Pay : </span>
+                        <span className="text-secondary">Amount to Pay Now: </span>
                         <span className="fw-bold">€{selected_offer.commission}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
@@ -4452,7 +4478,7 @@ const Dashboard = () => {
                   <div className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5 ">
                     {[
                       { icon: <SiAnytype />, label: "Product Type", value: showOfferDetails.product_type },
-                      { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Kg` },
+                      { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Pounds` },
                       { icon: <RiExpandHeightFill />, label: "Height", value: `${showOfferDetails.p_height} Cm` }
                     ].map((item, idx) => (
                       <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>

@@ -81,7 +81,7 @@ const login = (req, res) => {
                     if (result[0].user_type === value[2]) {
                         res.json({ message: "user login success", status: true, role: req.session.role, token, id: result[0].id, name: result[0].name, email: result[0].email, company: result[0].company, user_type: result[0].user_type });
                     } else {
-                        res.json({ message: `You can not login with ${value[2]} type. \nSelect the correct user type`, status: false })
+                        res.json({ message: `You can not login with ${value[2]} type. \nSelect the correct user type`, type: value[2], status: false })
                     }
                 }
                 else {
