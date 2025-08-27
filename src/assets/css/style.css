@@ -1277,20 +1277,25 @@ svg {
 
 .marquee__track {
   display: inline-flex;
-  animation: scrollLeft 13s linear infinite;
+  animation: scrollLeft 15s linear infinite;
 }
 
 .text {
-  margin-right: 2rem; /* adjust gap, set to 0 for no space */
+  margin-right: 2rem;
+
+}
+
+.text strong{
+    color: #c63d3d;
 }
 
 /* Seamless loop */
 @keyframes scrollLeft {
   from {
-    transform: translateX(-10);
+    transform: translateX(-50%);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(-0%);
   }
 }
 

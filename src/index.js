@@ -13,4 +13,4 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
-swDev();
+// swDev();

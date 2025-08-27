@@ -257,7 +257,7 @@ const Offers = () => {
             },
         }).then((response) => {
             if (response.data.status === false) {
-                showAlert('Login as a company to submit an offer');
+                showAlert('Login as a transporter to submit an offer');
                 navigate('/login');
             } else {
                 showAlert("Offer Created Successfully!");
@@ -267,7 +267,7 @@ const Offers = () => {
                 setExpetedDate('');
             }
         }).catch((err) => {
-            showAlert('Login as a company to submit an offer');
+            showAlert('Login as a transporter to submit an offer');
             setOffer_success(false);
             navigate('/login');
         });

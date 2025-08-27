@@ -146,9 +146,9 @@ const Navbar = () => {
             <Link to="/register_company" >
               <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: " #FFFFFF" , color: '#012A52', fontWeight:'500'}}>
                 {(userInfo && userInfo.role === 'Sadmin') ? (
-                  <span><IoIosAddCircleOutline className="fs-4" /> Add New Company</span>
+                  <span><IoIosAddCircleOutline className="fs-4" /> Add New Transporter</span>
                 ) : (
-                  'Register Your Company'
+                  'Register Transporter'
                 )}
               </button>
             </Link>
@@ -157,7 +157,7 @@ const Navbar = () => {
             <>
               <Link to="/send_groupage" >
                 <button className="btn m-1" style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500' }}>
-                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Groupage Shipping</span>
+                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
                 </button>
               </Link>
 
@@ -174,7 +174,7 @@ const Navbar = () => {
             <>
               <Link to="/send_groupage" >
                 <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500'}}>
-                  <BsSendFill /> Groupage Shipping
+                  <BsSendFill /> Send Groupage
                 </button>
               </Link>
               <Link to="/login" >
@@ -204,9 +204,9 @@ const Navbar = () => {
                 <Link to="/register_company" >
                   <button className="btn m-1" style={{ fontSize: "1rem", backgroundColor: "#FFFFFF" }}>
                     {(userInfo && userInfo.role === 'Sadmin') ? (
-                      <span><IoIosAddCircleOutline /> Add New Company</span>
+                      <span><IoIosAddCircleOutline /> Add New Transporter</span>
                     ) : (
-                      'Register Your Company'
+                      'Register Transporter'
                     )}
                   </button>
                 </Link>
@@ -215,7 +215,7 @@ const Navbar = () => {
                 <>
                   <Link to="/send_groupage" className="py-2">
                     <button className="btn w-100" style={{ fontSize: "1rem", backgroundColor: "#FFFFFF", color: '#012A52' }}>
-                      <BsSendFill /> Groupage Shipping
+                      <BsSendFill /> Send Groupage
                     </button>
                   </Link>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
@@ -232,7 +232,7 @@ const Navbar = () => {
 
                   <Link to="/send_groupage" >
                     <button className="btn w-100 mt-2" style={{ fontSize: "1rem", backgroundColor: "#FFFFFF", color: '#012A52' }}>
-                      <BsSendFill /> Groupage Shipping
+                      <BsSendFill /> Send Groupage
                     </button>
                   </Link>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
