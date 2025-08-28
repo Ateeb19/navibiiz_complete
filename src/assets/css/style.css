@@ -1277,7 +1277,7 @@ svg {
 
 .marquee__track {
   display: inline-flex;
-  animation: scrollLeft 15s linear infinite;
+  animation: scrollLeft 14s linear infinite;
 }
 
 .text {
@@ -1292,10 +1292,10 @@ svg {
 /* Seamless loop */
 @keyframes scrollLeft {
   from {
-    transform: translateX(-50%);
+    transform: translateX(-10%);
   }
   to {
-    transform: translateX(-0%);
+    transform: translateX(-50%);
   }
 }
 
