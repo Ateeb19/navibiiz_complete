@@ -435,8 +435,10 @@ const create_offer = (req, res) => {
                                         "Offer received from a transporter",
                                         `<h3>There is a new offer from a transporter.</h3>
                                         <br><br><br><h4>Details-:</h4><p>Amount: €${data.offer_amount + commission}</p><p>Pickup Date: ${data.expected_date}</p>
-                                        ${data.office_address ? `<br><br><h4>Note -: The transporter does not pick up the groupage. Please bring it to their address.</h4><br><br> <h5>Transporter's Adress -: </h5> <p>${data.office_address}</p>` : `<br><br><h4>Note -: The transporter will pick up the groupage from your pickup address.</h4><br><br>`}`
+                                        ${data.office_address ? `<br><br><h4>Note -: The transporter does not pick up the groupage. Please bring it to their address.</h4><br><br> ` 
+                                            :`<br><br><h4>Note -: The transporter will pick up the groupage from your pickup address.</h4><br><br>`}`
                                     )
+                                    // <h5>Transporter's Adress -: </h5> <p>${data.office_address}</p>
                                         .then(info => console.log({ info }))
                                         .catch(console.error);
 
