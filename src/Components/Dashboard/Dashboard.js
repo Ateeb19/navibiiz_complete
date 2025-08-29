@@ -2868,7 +2868,7 @@ const Dashboard = () => {
                                   <td className="text-secondary">{item.amount}</td>
                                   {/* <td className="text-secondary">{item.commission}</td> */}
                                   {/* <td className="text-secondary"><Link11 title="This is the final amount you will receive from customer" id="t-1">{item.amount - item.commission}</Link11></td> */}
-                                  <td className="text-secondary">{item.pickup_date}</td>
+                                  <td className="text-secondary">{item.expeted_date}</td>
                                   <td className="text-secondary">{item.office_address ? 'No' : 'Yes'}</td>
                                   <td className="text-secondary"
                                     style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}

@@ -434,7 +434,7 @@ const create_offer = (req, res) => {
                                         result[0].groupage_created_by,
                                         "Offer received from a transporter",
                                         `<h3>There is a new offer from a transporter.</h3>
-                                        <br><br><br><h4>Details-:</h4><p>Amount: €${data.offer_amount}</p><p>Pickup Date: ${data.expected_date}</p>
+                                        <br><br><br><h4>Details-:</h4><p>Amount: €${data.offer_amount + commission}</p><p>Pickup Date: ${data.expected_date}</p>
                                         ${data.office_address ? `<br><br><h4>Note -: The transporter does not pick up the groupage. Please bring it to their address.</h4><br><br> <h5>Transporter's Adress -: </h5> <p>${data.office_address}</p>` : `<br><br><h4>Note -: The transporter will pick up the groupage from your pickup address.</h4><br><br>`}`
                                     )
                                         .then(info => console.log({ info }))

@@ -28,6 +28,8 @@ import "slick-carousel/slick/slick-theme.css";
 import { PiBoxArrowUpBold } from "react-icons/pi";
 import { GiCardPickup } from "react-icons/gi";
 import { IoIosCall } from "react-icons/io";
+import ToggleButton from 'react-toggle-button';
+import { DateRange } from 'react-date-range';
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -214,22 +216,65 @@ const Home = () => {
     const [expetedDate, setExpetedDate] = useState('');
     const [dateError, setDateError] = useState(false);
     const [offer_success, setOffer_success] = useState(false);
+    const [office_address, setOffice_address] = useState('');
+    const [toggleValue, setToggleValue] = useState(true);
+
+
+    const [dateRange, setDateRange] = useState([
+        {
+            startDate: new Date(),
+            endDate: new Date(),
+            key: 'selection',
+        },
+    ]);
+
+    const formattedRange = `${dateRange[0].startDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })} - ${dateRange[0].endDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    })}`;
+
+    const handleSelect = (ranges) => {
+        setDateRange([ranges.selection]);
+        console.log(formattedRange);
+    };
+
 
     const handleSubmit_offer = (details) => {
         if (bidAmount === '') {
             showAlert('Please fill all the fields');
             return;
         }
-        if (!expetedDate) {
+
+        if (!dateRange) {
             showAlert('Please fill all the fields');
             setDateError(true);
             return;
         }
 
+        const integerBidAmount = parseFloat(parseFloat(bidAmount).toFixed(2));
+        if (integerBidAmount < 1) {
+            showAlert('Bid amount cannot be Zero 0');
+            return;
+        }
+
+        if (!toggleValue) {
+            if (!office_address) {
+                showAlert("Fill the Office Address");
+                return;
+            }
+        }
+
+
         const data = {
             offer_id: details.id,
-            offer_amount: bidAmount,
-            expected_date: expetedDate
+            offer_amount: integerBidAmount,
+            expected_date: formattedRange,
+            office_address: office_address,
         };
 
         axios.post(`${port}/send_groupage/create_offer`, data, {
@@ -238,7 +283,7 @@ const Home = () => {
             },
         }).then((response) => {
             if (response.data.status === false) {
-                showAlert('Login as a company to submit an offer');
+                showAlert('Login as a transporter to submit an offer');
                 navigate('/login');
             } else {
                 showAlert("Offer Created Successfully!");
@@ -248,7 +293,7 @@ const Home = () => {
                 setExpetedDate('');
             }
         }).catch((err) => {
-            showAlert('Login as a company to submit an offer');
+            showAlert('Login as a transporter to submit an offer');
             setOffer_success(false);
             navigate('/login');
         });
@@ -818,7 +863,7 @@ const Home = () => {
                                         ><FaWeightScale /></div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary offer-submit-sub-head">Weight</span>
-                                            <h6>{groupage_detail.p_weight} Kg</h6>
+                                            <h6>{groupage_detail.p_weight} Pounds</h6>
                                         </div>
                                     </div>
 
@@ -1120,7 +1165,7 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            <div className="offer-details-wrap">
+                            {/* <div className="offer-details-wrap">
                                 <div className="d-flex flex-column align-items-start justify-content-start w-100 p-3">
                                     <div className="title-head">
                                         <h3 >Bidding Information</h3>
@@ -1154,6 +1199,102 @@ const Home = () => {
                                             <option value="more_than_30_days">More Than 30 Days</option>
                                         </Form.Select>
                                     </div>
+                                </div>
+                            </div> */}
+
+                            <div className="offer-details-wrap">
+                                <div className="d-flex flex-column align-items-start justify-content-start w-100 p-3 text-start">
+                                    <div className="title-head">
+                                        <h3 >Bidding Information</h3>
+                                    </div>
+                                    <span className="mt-1">What is the full amount you want to bid for this order?</span>
+                                    <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4 border-bottom border-2 pb-2">
+                                        <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-50">
+                                            <span className="fs-5">Bid Amount</span>
+                                            <span className="text-secondary text-start">Total amount the client will see on your proposal</span>
+                                        </div>
+                                        <input type="text" className="form-control w-100 w-sm-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`€ ${bidAmount}`} />
+                                    </div>
+                                    <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-start justify-content-between w-100 gap-3 border-bottom border-2 pb-2 mt-4">
+                                        <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-50 w-sm-50">
+                                            <span className="text-secondary text-start">How long will this product take to deliver?</span>
+
+
+                                            <div style={{ marginTop: '1rem' }}>
+                                                <span className="fs-6">From:</span> {dateRange[0].startDate.toDateString()}<br />
+                                                <span className="fs-6">To:</span> {dateRange[0].endDate.toDateString()}
+                                            </div>
+                                        </div>
+                                        {/* <Form.Select
+                                                                                            style={{
+                                                                                                border: dateError ? '1px solid rgb(178, 0, 0)' : '',
+                                                                                                boxShadow: dateError ? '0 0 10px rgb(178, 0, 0)' : '',
+                                                                                            }}
+                                                                                            value={expetedDate}
+                                                                                            onChange={(e) => {
+                                                                                                setExpetedDate(e.target.value);
+                                                                                                setDateError(false); // reset error when changed
+                                                                                            }}
+                                                                                        >
+                                                                                            <option value="">Select Expected Days</option>
+                                                                                            <option value="less_than_15_days">Less Than 15 Days</option>
+                                                                                            <option value="more_than_15_days">More Than 15 Days</option>
+                                                                                            <option value="more_than_30_days">More Than 30 Days</option>
+                                                                                        </Form.Select> */}
+
+                                        <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
+                                            <DateRange
+                                                ranges={dateRange}
+                                                onChange={handleSelect}
+                                                moveRangeOnFirstSelection={false}
+                                                editableDateInputs={true}
+                                            />
+                                        </div>
+
+                                    </div>
+
+                                    <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4 pb-2">
+                                        <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-100">
+                                            <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span>
+                                        </div>
+                                        <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-25 w-sm-100">
+                                            <ToggleButton
+                                                value={toggleValue}
+                                                onToggle={(val) => setToggleValue(!val)}
+                                                activeLabel="Yes"
+                                                inactiveLabel="No"
+                                                colors={{
+                                                    activeThumb: {
+                                                        base: 'rgb(0, 17, 255)',
+                                                    },
+                                                    inactiveThumb: {
+                                                        base: 'rgba(78, 155, 255, 1)',
+                                                    },
+                                                    active: {
+                                                        base: 'rgb(44, 121, 253)',
+                                                        hover: 'rgb(55, 105, 190)',
+                                                    },
+                                                    inactive: {
+                                                        base: 'rgb(75, 75, 75)',
+                                                        hover: 'rgb(175, 175, 175)',
+                                                    },
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    {!toggleValue && (
+                                        <>
+                                            <div className="form-floating w-100">
+                                                <textarea class="form-control" style={{ height: '100px' }} value={office_address} onChange={(e) => setOffice_address(e.target.value)} />
+                                                <label for="floatingTextarea2">Office Address</label>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {/* <div className="d-flex w-100 flex-column align-items-start  justify-content-start">                                           
+                                                                                        <span className="text-secondary text-start">Office Address -:</span>
+                                                                                        <textarea className="w-100" cols={5} rows={5} />
+                                                                                    </div> */}
                                 </div>
                             </div>
                             <div className="d-flex w-100 justify-content-end">
