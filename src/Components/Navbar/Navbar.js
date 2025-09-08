@@ -7,10 +7,13 @@ import { FaBell } from "react-icons/fa"
 import axios from "axios";
 import { IoIosAddCircleOutline } from "react-icons/io"
 import { useAlert } from "../alert/Alert_message";
+import { useTranslation } from "react-i18next";
+import Translater from "./Translater";
 
 
 const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
+  const { t } = useTranslation();
   const { showAlert } = useAlert();
   const token = localStorage.getItem('token');
   const port = process.env.REACT_APP_SECRET;
@@ -135,16 +138,17 @@ const Navbar = () => {
         </div>
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-4 flex-grow-1 me-4">
-          <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Home</Link>
-          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >About Us</Link>
-          <Link to="/transporters_list" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Transporters</Link>
-          <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight:'500' }} >Shipments</Link>
+          {/* <Translater /> */}
+          <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >Home</Link>
+          <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >{t("about_us")}</Link>
+          <Link to="/transporters_list" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >Transporters</Link>
+          <Link to="/offers" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >Shipments</Link>
         </div>
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-2">
           {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
             <Link to="/register_company" >
-              <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: " #FFFFFF" , color: '#012A52', fontWeight:'500'}}>
+              <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: " #FFFFFF", color: '#012A52', fontWeight: '500' }}>
                 {(userInfo && userInfo.role === 'Sadmin') ? (
                   <span><IoIosAddCircleOutline className="fs-4" /> Add New Transporter</span>
                 ) : (
@@ -156,7 +160,7 @@ const Navbar = () => {
           {token ? (
             <>
               <Link to="/send_groupage" >
-                <button className="btn m-1" style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500' }}>
+                <button className="btn m-1" style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}>
                   <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
                 </button>
               </Link>
@@ -173,12 +177,12 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/send_groupage" >
-                <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: "#FFFFFF", color: '#012A52', fontWeight:'500'}}>
+                <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}>
                   <BsSendFill /> Send Groupage
                 </button>
               </Link>
               <Link to="/login" >
-                <button className="btn btn-light m-1" style={{ fontSize: "16px", color: "#012A52" , fontWeight:'500'}}>
+                <button className="btn btn-light m-1" style={{ fontSize: "16px", color: "#012A52", fontWeight: '500' }}>
                   <FaUser /> Login
                 </button>
               </Link>

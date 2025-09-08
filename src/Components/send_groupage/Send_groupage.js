@@ -675,7 +675,7 @@ const Send_groupage = () => {
                                                         <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Product Information</h5>
                                                         <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>Product Name :</span> <span> {productName ? (<h6>{productName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Weight :</span> <span> {Pweight ? (<h6>{Pweight.slice(0, 4)}... Pounds</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Weight :</span> <span> {Pweight ? (<h6>{Pweight.slice(0, 4)}... Kg</h6>) : (<span>N/A</span>)}</span></div>
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>Height :</span> <span> {Pheight ? (<h6>{Pheight.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>Length : </span> <span> {Plength ? (<h6>{Plength.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>Width : </span> <span> {Pwidth ? (<h6>{Pwidth.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
@@ -774,7 +774,7 @@ const Send_groupage = () => {
                                 <div className="d-flex flex-column align-items-start w-100 gap-2 pt-2 border-bottom border-2 pb-3">
                                     <strong className="fs-6 pb-1">Product Information</strong>
                                     <div className="d-flex justify-content-between w-100"><span className="text-secondary">Product Name :</span> <span>{productName ? (<>{productName}</>) : (<>N/A</>)}</span>  </div>
-                                    <div className="d-flex justify-content-between w-100"><span className="text-secondary">Weight :</span> <span>{Pweight ? (<>{Pweight} Pounds</>) : (<>N/A</>)}</span>  </div>
+                                    <div className="d-flex justify-content-between w-100"><span className="text-secondary">Weight :</span> <span>{Pweight ? (<>{Pweight} Kg</>) : (<>N/A</>)}</span>  </div>
                                     <div className="d-flex justify-content-between w-100"><span className="text-secondary">Height :</span> <span>{Pheight ? (<>{Pheight} Cm</>) : (<>N/A</>)}</span>  </div>
                                     <div className="d-flex justify-content-between w-100"><span className="text-secondary">Length :</span> <span>{Plength ? (<>{Plength} Cm</>) : (<>N/A</>)}</span>  </div>
                                     <div className="d-flex justify-content-between w-100"><span className="text-secondary">Width :</span> <span>{Pwidth ? (<>{Pwidth} Cm</>) : (<>N/A</>)}</span>  </div>

@@ -582,7 +582,7 @@ const Offers = () => {
                                                             ><FaWeightScale /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
                                                                 <span className="text-secondary offer-submit-sub-head">Weight</span>
-                                                                <h6>{groupage_detail.p_weight} Pounds</h6>
+                                                                <h6>{groupage_detail.p_weight} Kg</h6>
                                                             </div>
                                                         </div>
 

@@ -2199,7 +2199,7 @@ const Dashboard = () => {
                           </div>
                           <div className="d-flex flex-column align-items-start gap-2">
                             <span className="text-secondary offer-submit-sub-head">Weight</span>
-                            <h6>{selected_groupage.p_weight} Pounds</h6>
+                            <h6>{selected_groupage.p_weight} Kg</h6>
                           </div>
                         </div>
                       </div>
@@ -2845,7 +2845,7 @@ const Dashboard = () => {
                               <th scope="col"><h6>Price (€)</h6></th>
                               {/* <th scope="col"><h6>Platform fee (€)</h6></th> */}
                               {/* <th scope="col"><h6>Amount Receive (€)</h6></th> */}
-                              <th scope="col"><h6>Pick Up Date</h6></th>
+                              <th scope="col"><h6>Delivery Duration</h6></th>
                               <th scope="col"><h6>Product Pick Up</h6></th>
                               <th scope="col"><h6>Offer Status</h6></th>
                             </tr>
@@ -3087,19 +3087,19 @@ const Dashboard = () => {
                     </div>
                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Weight : </span>
-                      <span>{show_admin_offer.p_weight}</span>
+                      <span>{show_admin_offer.p_weight}  {show_admin_offer.p_weight ? "Kg" : ""}</span>
                     </div>
                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Height :  </span>
-                      <span>{show_admin_offer.p_height}</span>
+                      <span>{show_admin_offer.p_height}  {show_admin_offer.p_height ? "Cm" : ""}</span>
                     </div>
                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Length : </span>
-                      <span>{show_admin_offer.p_length}</span>
+                      <span>{show_admin_offer.p_length}  {show_admin_offer.p_length ? "Cm" : ""}</span>
                     </div>
                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Width : </span>
-                      <span>{show_admin_offer.p_width}</span>
+                      <span>{show_admin_offer.p_width}  {show_admin_offer.p_width ? "Cm" : ""}</span>
                     </div>
                   </div>
 
@@ -3246,8 +3246,8 @@ const Dashboard = () => {
                   overflowY: 'auto'
                 }}
               >
-                {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX", currency: "EUR" }}> */}
-                <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gTPRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL", currency: "EUR" }}>
+                <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX", currency: "EUR" }}>
+                {/* <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gT/PRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL", currency: "EUR" }}> */}
 
 
                   {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY", currency: "EUR" }}> */}
@@ -3270,7 +3270,7 @@ const Dashboard = () => {
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Weight : </span>
-                        <span>{selected_offer.p_weight} {selected_offer.p_weight && "Punds"}</span>
+                        <span>{selected_offer.p_weight} {selected_offer.p_weight && "Kg"}</span>
                       </div>
                       <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Height :  </span>
@@ -4478,7 +4478,7 @@ const Dashboard = () => {
                   <div className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5 ">
                     {[
                       { icon: <SiAnytype />, label: "Product Type", value: showOfferDetails.product_type },
-                      { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Pounds` },
+                      { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Kg` },
                       { icon: <RiExpandHeightFill />, label: "Height", value: `${showOfferDetails.p_height} Cm` }
                     ].map((item, idx) => (
                       <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '30%' }}>

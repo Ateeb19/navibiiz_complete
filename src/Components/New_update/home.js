@@ -30,11 +30,14 @@ import { GiCardPickup } from "react-icons/gi";
 import { IoIosCall } from "react-icons/io";
 import ToggleButton from 'react-toggle-button';
 import { DateRange } from 'react-date-range';
+import { useTranslation } from "react-i18next";
+
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
     console.log('this is the current port for backend api -: ', port);
     const { showAlert } = useAlert();
+    const { t } = useTranslation();
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
     const [offers_details, setOffers_details] = useState([]);
@@ -340,7 +343,7 @@ const Home = () => {
                             <div className="hero-wrap-head">
                                 <h1>Delivering Your <span style={{ color: '#FFC31C' }}>Goods</span> Globally with Trusted <span style={{ color: '#FFC31C' }}>Logistics</span> Partners</h1>
                                 <p>
-                                    Our platform is designed to streamline cross-border shipping by linking you with reliable providers who offer consistent, transparent, and timely service around the globe.
+                                    {t("Our platform is designed to streamline cross-border shipping by linking you with reliable providers who offer consistent, transparent, and timely service around the globe.")}
                                 </p>
                             </div>
                         </div>
@@ -863,7 +866,7 @@ const Home = () => {
                                         ><FaWeightScale /></div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary offer-submit-sub-head">Weight</span>
-                                            <h6>{groupage_detail.p_weight} Pounds</h6>
+                                            <h6>{groupage_detail.p_weight} Kg</h6>
                                         </div>
                                     </div>
 
