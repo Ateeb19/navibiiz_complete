@@ -239,13 +239,27 @@ const CompanyDetails = () => {
 
                                 <span className="text-secondary d-block">
                                     <FaTruckMoving className="fs-5 me-1" style={{ color: '#de8316' }} /> Shipping{" "}
-                                    {company.container_service === '1' && company.car_service === '1'
+                                    {company.container_service === '1' && company.car_service === '1' && company.groupage_service === '1' ? "Containers, Cars & Groupage"
+                                        : company.container_service === '1' && company.groupage_service === '1'
+                                            ? "Containers & Groupage"
+                                            : company.car_service === '1' && company.groupage_service === '1'
+                                                ? "Cars & Groupage"
+                                                : company.container_service === '1' && company.car_service === '1'
+                                                    ? "Containers & Cars"
+                                                    : company.container_service === '1'
+                                                        ? "Containers"
+                                                        : company.car_service === '1'
+                                                            ? "Cars"
+                                                            : company.groupage_service === '1' ?
+                                                                "Groupages"
+                                                                : ""}
+                                    {/* {company.container_service === '1' && company.car_service === '1'
                                         ? "Containers & Cars"
                                         : company.container_service === '1'
                                             ? "Containers"
                                             : company.car_service === '1'
                                                 ? "Cars"
-                                                : ""}
+                                                : ""} */}
                                     {/* {company.container_service === '1' ? "Containers" : "Containers"}
                                     {(company.car_service === '1' && company.container_service === '1') ? " & " : ""}
                                     {company.car_service === '1' ? "Cars" : ""} */}

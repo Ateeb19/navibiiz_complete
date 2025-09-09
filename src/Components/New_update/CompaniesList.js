@@ -25,6 +25,7 @@ const CompaniesList = () => {
     }
     let sortedCompanies = Object.values(data).filter(item => typeof item === 'object' && item.id);
     let companies = sortedCompanies.sort((a, b) => b.id - a.id);
+    // console.log(companies)
 
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedServices, setSelectedServices] = useState([]);
@@ -552,13 +553,20 @@ const CompaniesList = () => {
                                                                     <FaTruckLoading className='fs-4 pe-1    ' style={{ color: '#de8316' }} /> <span className="text-secondary">{item.total_delivery} Delivery Completed</span>
                                                                 </div>
                                                                 <div className="pe-3">
-                                                                    <FaTruckMoving className='fs-4 pe-1 ' style={{ color: '#de8316' }} /> <span className="text-secondary">Offers {item.container_service === '1' && item.car_service === '1'
+                                                                    <FaTruckMoving className='fs-4 pe-1 ' style={{ color: '#de8316' }} /> <span className="text-secondary">Offers {item.container_service === '1' && item.car_service === '1' && item.groupage_service === '1' ? "Containers, Cars & Groupage"
+                                                                        : item.container_service === '1' && item.groupage_service === '1' 
+                                                                        ? "Containers & Groupage" 
+                                                                        : item.car_service === '1' && item.groupage_service === '1' 
+                                                                        ? "Cars & Groupage"
+                                                                        :   item.container_service === '1' && item.car_service === '1'
                                                                         ? "Containers & Cars"
                                                                         : item.container_service === '1'
                                                                             ? "Containers"
                                                                             : item.car_service === '1'
                                                                                 ? "Cars"
-                                                                                : ""}</span>
+                                                                                : item.groupage_service === '1' ?
+                                                                                    "Groupages"
+                                                                                    : ""}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
