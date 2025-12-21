@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSendFill } from "react-icons/bs";
 import { MdDashboardCustomize } from "react-icons/md";
-import { FaUser, FaBars, FaTimes } from "react-icons/fa";
+import { FaUser, FaBars, FaTimes, FaBoxOpen } from "react-icons/fa";
 import { FaBell } from "react-icons/fa"
 import axios from "axios";
 import { IoIosAddCircleOutline } from "react-icons/io"
 import { useAlert } from "../alert/Alert_message";
 import { useTranslation } from "react-i18next";
 import Translater from "./Translater";
-
+import { HiMiniRectangleStack } from "react-icons/hi2";
 
 const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
@@ -19,7 +19,7 @@ const Navbar = () => {
   const port = process.env.REACT_APP_SECRET;
   const navigate = useNavigate();
   const isRedirecting = useRef(false);
-
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     const fetchToken = () => {
       axios
@@ -95,14 +95,18 @@ const Navbar = () => {
     localStorage.setItem("isVisible", "false");
   }
   const location = useLocation();
+  const isDashboardRoute = location.pathname.startsWith("/dashboard");
   const navStyle = {
-    backgroundColor: location.pathname === '/dashboard' ? ' #00232f' : ' #012A52',
+    backgroundColor: isDashboardRoute ? ' #00232f' : ' #012A52',
     position: 'fixed',
     top: 0,
     left: 0,
     width: '100%',
     zIndex: 1050,
   };
+  const nav_drop_down = {
+    backgroundColor: isDashboardRoute ? ' #00232f' : ' #012A52',
+  }
 
   return (
     <div className="container-fluid">
@@ -159,11 +163,28 @@ const Navbar = () => {
           )}
           {token ? (
             <>
-              <Link to="/send_groupage" >
-                <button className="btn m-1" style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}>
+              {/* <Link to="/send_groupage" > */}
+              <div className="d-flex flex-column align-items-start justify-content-start"
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+              >
+                <button
+                  className="btn m-1"
+                  style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+
+                >
                   <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
                 </button>
-              </Link>
+
+                {open && (
+                  <div className="dropdown-menu dropdown-menu-navbar d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                    <button onClick={() => { navigate('/send_groupage/item') }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                    <button onClick={() => { navigate('/send_groupage/box') }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                  </div>
+                )}
+              </div>
+
+              {/* </Link> */}
 
               <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
@@ -176,11 +197,30 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/send_groupage" >
+              {/* <Link to="/send_groupage" >
                 <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}>
                   <BsSendFill /> Send Groupage
                 </button>
-              </Link>
+              </Link> */}
+              <div className="d-flex flex-column align-items-start justify-content-start"
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+              >
+                <button
+                  className="btn m-1"
+                  style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+
+                >
+                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
+                </button>
+
+                {open && (
+                  <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                    <button onClick={() => { navigate('/send_groupage/item') }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                    <button onClick={() => { navigate('/send_groupage/box') }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                  </div>
+                )}
+              </div>
               <Link to="/login" >
                 <button className="btn btn-light m-1" style={{ fontSize: "16px", color: "#012A52", fontWeight: '500' }}>
                   <FaUser /> Login
@@ -217,11 +257,30 @@ const Navbar = () => {
               )}
               {token ? (
                 <>
-                  <Link to="/send_groupage" className="py-2">
+                  {/* <Link to="/send_groupage" className="py-2">
                     <button className="btn w-100" style={{ fontSize: "1rem", backgroundColor: "#FFFFFF", color: '#012A52' }}>
                       <BsSendFill /> Send Groupage
                     </button>
-                  </Link>
+                  </Link> */}
+                  <div className="d-flex flex-column align-items-start justify-content-start"
+                    onMouseEnter={() => setOpen(true)}
+                    onMouseLeave={() => setOpen(false)}
+                  >
+                    <button
+                      className="btn m-1"
+                      style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+
+                    >
+                      <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
+                    </button>
+
+                    {open && (
+                      <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                        <button onClick={() => { navigate('/send_groupage/item') }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                        <button onClick={() => { navigate('/send_groupage/box') }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                      </div>
+                    )}
+                  </div>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
                   {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                     <Link to="/dashboard" >
@@ -234,11 +293,30 @@ const Navbar = () => {
               ) : (
                 <>
 
-                  <Link to="/send_groupage" >
+                  {/* <Link to="/send_groupage" >
                     <button className="btn w-100 mt-2" style={{ fontSize: "1rem", backgroundColor: "#FFFFFF", color: '#012A52' }}>
                       <BsSendFill /> Send Groupage
                     </button>
-                  </Link>
+                  </Link> */}
+                  <div className="d-flex flex-column align-items-start justify-content-start"
+                    onMouseEnter={() => setOpen(true)}
+                    onMouseLeave={() => setOpen(false)}
+                  >
+                    <button
+                      className="btn m-1"
+                      style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+
+                    >
+                      <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
+                    </button>
+
+                    {open && (
+                      <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                        <button onClick={() => { navigate('/send_groupage/item') }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                        <button onClick={() => { navigate('/send_groupage/box') }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                      </div>
+                    )}
+                  </div>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
                   <Link to="/login" >
                     <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>

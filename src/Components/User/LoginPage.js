@@ -109,12 +109,15 @@ const LoginPage = () => {
           }
         })
         if (!response.data.status) {
+          if (!response.data.type) {
+            showAlert(response.data.message);
+            return
+          }
           if (response.data.type === 'individual') {
             showAlert("Login as a transporter");
           } else {
             showAlert("Login as an individual");
           }
-
           return
         }
         const token = response.data.token;

@@ -22,7 +22,8 @@
 .hero-wrapper {
     width: 100%;
     padding: 120px 0;
-    background-image: url(../../../public/Images/bg_image_home.jpg);
+    background-image: url(../../../public/Images/bg_image_home.10ad0c8391dbf54da63d_11zon.webp);
+
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -45,7 +46,7 @@
 }
 
 .pickup-wrap {
-    margin: 40px 0;
+    margin: 18px 0;
     width: 700px;
     border-radius: 15px;
     background-color: #ffffff;
@@ -287,7 +288,7 @@
 
 .login-tab-wrapper {
     margin: 25px 0 15px 0;
-    width: 50%;
+    width: 54%;
 }
 
 .tab-btn {
@@ -913,6 +914,7 @@ svg {
     padding: 12px 30px;
     border-radius: 10px;
     font-weight: 500;
+    border: 0px;
 }
 
 .contact-info {
@@ -1077,7 +1079,7 @@ svg {
     z-index: -1;
 }
 
-.about-wrap-head h1 {
+.about-wrap-head h2 {
     font-size: 56px;
     font-weight: bold;
     color: #fff;
@@ -1287,6 +1289,19 @@ svg {
 
 .text strong{
     color: #c63d3d;
+}
+
+.dropdown-menu-navbar{
+    /* background-color: #012a52 !important; */
+    margin-top: 42px !important;
+    padding: 1px 0px !important;
+    color: #fff !important;
+}
+
+.groupage-btn{
+    background-color: transparent !important;
+    color: #ffc31c !important;
+    font-weight: 800;
 }
 
 /* Seamless loop */

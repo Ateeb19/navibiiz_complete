@@ -66,12 +66,12 @@ const Footer = () => {
                                 <p className="para-question text-start mb-4">
                                     Join our platform to connect with global customers and expand your logistics business Our platform is designed to streamline cross-border shipping by linking you with reliable providers who offer consistent, transparent, and timely service around the globe.
                                 </p>
-                                <div className="d-flex flex-row align-items-center justify-content-between w-100 text-start">
-                                    <div className="d-flex flex-row align-items-center justify-content-start question-call-email w-100 gap-4">
+                                <div className="row w-100 text-start mb-3">
+                                    <div className="col-xl-6 col-12 d-flex flex-row align-items-center justify-content-start question-call-email gap-4">
                                         <h5>Call Us</h5>
                                         <h6><IoCall />  <span className="text-dark">+49 176 60906264</span></h6>
                                     </div>
-                                    <div className="d-flex flex-row align-items-center justify-content-start question-call-email w-100 gap-4">
+                                    <div className="col-xl-6 col-12 d-flex flex-row align-items-center justify-content-start question-call-email gap-4">
                                         <h5>Email us:</h5>
                                         <h6><MdEmail />  <a href="mailto:info@novibiz.com"
                                             style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}><span className="text-dark">info@novibiz.com</span></a></h6>
@@ -90,12 +90,12 @@ const Footer = () => {
 
             <section className="footer-bottom w-100">
                 <div className="container">
-                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                        <div className="d-flex flex-column align-items-start justify-content-start">
+                    <div className="row w-100">
+                        <div className="col-xl-3 col-12 d-flex flex-column align-items-start justify-content-start mb-3">
                             <img src="/Images/novibiz/fulllogo_transparent_nobuffer.png" className="footer_img" alt="Logo" />
                         </div>
 
-                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                        <div className="col-xl-3 col-12 d-flex flex-column text-start align-items-start justify-content-start footer-list">
                             <h4 className="mb-3">Company</h4>
                             <ul>
                                 <li onClick={() => navigate('/')}>Home</li>
@@ -106,7 +106,7 @@ const Footer = () => {
                             </ul>
                         </div>
 
-                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                        <div className="col-xl-3 col-12 d-flex flex-column text-start align-items-start justify-content-start footer-list">
                             <h4 className="mb-3">Support</h4>
                             <ul>
                                 <li onClick={() => navigate('/terms_conditions')}>Term & Conditions</li>
@@ -115,7 +115,7 @@ const Footer = () => {
                             </ul>
                         </div>
 
-                        <div className="d-flex flex-column text-start align-items-start justify-content-start footer-list">
+                        <div className="col-xl-3 col-12 d-flex flex-column text-start align-items-start justify-content-start footer-list">
                             <h4 className="mb-3">Follow Us</h4>
                             <div className="d-flex flex-wrap align-items-center justify-content-start gap-3">
                                 <a href="https://www.instagram.com/novibiz1/" target="_blank" rel="noopener noreferrer">

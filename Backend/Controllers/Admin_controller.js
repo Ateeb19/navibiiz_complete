@@ -108,7 +108,7 @@ const Display_offers = (req, res) => {
             }
             const groupageIds = [...new Set(offersResult.map(offer => offer.groupage_id))];
 
-            db.query('SELECT id, product_name, pickup_date, sender_name FROM groupage WHERE id IN (?)', [groupageIds], (err, groupageResult) => {
+            db.query('SELECT id, product_name, box_dimension, pickup_date, sender_name FROM groupage WHERE id IN (?)', [groupageIds], (err, groupageResult) => {
                 if (err) {
                     console.log(err);
                     return res.json({ message: 'Error fetching groupage data', status: false });
@@ -123,6 +123,7 @@ const Display_offers = (req, res) => {
                     const groupage = groupageMap[offer.groupage_id] || {};
                     return {
                         ...offer,
+                        box_dimension: groupage.box_dimension || null,
                         product_name: groupage.product_name || null,
                         pickup_date: groupage.pickup_date || null,
                         sender_name: groupage.sender_name || null

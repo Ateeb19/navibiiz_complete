@@ -5,6 +5,7 @@ const fs = require('fs');
 const db = require('../Db_Connection');
 require('dotenv').config({ path: './.env' });
 const sendMail = require('../Email/Send_mail');
+const { response } = require('express');
 
 
 cloudinary.config({
@@ -238,7 +239,7 @@ const send_groupage_submit = (req, res) => {
                 imageUrls = [data["imageUrls[]"]];
             }
         }
-        console.log(imageUrls);
+        // console.log(imageUrls);
 
         const documentFile = req.file;
         let documentUrl = null;
@@ -255,9 +256,14 @@ const send_groupage_submit = (req, res) => {
         }
 
         const responseData = {
+            boxInfo : {
+                box_dimension: data.box_dimension ? data.box_dimension: null,
+                box_number: data.box_number ? data.box_number: null,
+                box_description: data.box_description ? data.box_description: null,
+            },
             productInfo: {
-                productName: data.productName,
-                productType: data.productType,
+                productName: data.productName ? data.productName: null,
+                productType: data.productType ? data.productType: null,
                 dimensions: {
                     weight: data.Pweight,
                     height: data.Pheight,
@@ -267,28 +273,28 @@ const send_groupage_submit = (req, res) => {
                 images: imageUrls,
             },
             pickUpInfo: {
-                userName: data.userName,
-                userNumber: data.userNumber,
-                userEmail: data.userEmail,
-                userCountry: data.userCountry,
-                userState: data.userState,
-                userCity: data.userCity,
-                streetAddress: data.streetAddress,
-                zipCode: data.zipCode,
-                picking_period: data.picking_period,
-                userDescription: data.userDescription,
+                userName: data.userName ? data.userName: null,
+                userNumber: data.userNumber ? data.userNumber: null,
+                userEmail: data.userEmail ? data.userEmail: null,
+                userCountry: data.userCountry ? data.userCountry: null,
+                userState: data.userState ? data.userState: null,
+                userCity: data.userCity ? data.userCity: null,
+                streetAddress: data.streetAddress ? data.streetAddress: null,
+                zipCode: data.zipCode ? data.zipCode: null,
+                picking_period: data.picking_period ? data.picking_period: null,
+                userDescription: data.userDescription ? data.userDescription: null,
             },
             deliveryInfo: {
-                senderName: data.senderName,
-                senderNumber: data.senderNumber,
-                senderEmail: data.senderEmail,
-                senderCountry: data.senderCountry,
-                senderState: data.senderState,
-                senderCity: data.senderCity,
-                senderStreetAddress: data.senderStreetAddress,
-                senderZipCode: data.senderZipCode,
-                departureDate: data.departureDate,
-                senderDescription: data.senderDescription,
+                senderName: data.senderName ? data.senderName: null,
+                senderNumber: data.senderNumber ? data.senderNumber: null,
+                senderEmail: data.senderEmail ? data.senderEmail: null,
+                senderCountry: data.senderCountry ? data.senderCountry: null,
+                senderState: data.senderState ? data.senderState: null,
+                senderCity: data.senderCity ? data.senderCity: null,
+                senderStreetAddress: data.senderStreetAddress ? data.senderStreetAddress: null,
+                senderZipCode: data.senderZipCode ? data.senderZipCode: null,
+                departureDate: data.departureDate ? data.departureDate: null,
+                senderDescription: data.senderDescription ? data.senderDescription: null,
             },
             additionalInfo: {
                 document: documentUrl,
@@ -303,6 +309,10 @@ const send_groupage_submit = (req, res) => {
             payment_status: 'panding',
             product_name: responseData.productInfo.productName,
             product_type: responseData.productInfo.productType,
+            box:  (responseData.boxInfo.box_dimension && responseData.boxInfo.box_number) ? 1 : 0,
+            box_dimension: responseData.boxInfo.box_dimension,
+            box_number: safeNumber(responseData.boxInfo.box_number),
+            box_info: responseData.boxInfo.box_description,
             p_weight: safeNumber(responseData.productInfo.dimensions.weight),
             p_height: safeNumber(responseData.productInfo.dimensions.height),
             p_length: safeNumber(responseData.productInfo.dimensions.length),
@@ -382,7 +392,7 @@ const delete_groupage = (req, res) => {
 
 //show all groupage user
 const show_all_groupage = (req, res) => {
-    db.query('SELECT id, product_name, product_type, p_weight, p_height, p_length, p_width, sender_country, sender_state, sender_city, sender_zipcode, receiver_country, receiver_state, receiver_city, sender_description, RIGHT(sender_contact, 4) AS sender_contact, RIGHT(receiver_contact, 4) AS receiver_contact, img01, img02, img03, img04, img05, img06, img07, img08, img09, img10, created_at, pickup_date, payment_status FROM groupage where payment_status = "panding" ', (err, result) => {
+    db.query('SELECT id, product_name, product_type, box, box_dimension, box_number, box_info, p_weight, p_height, p_length, p_width, sender_country, sender_state, sender_city, sender_zipcode, receiver_country, receiver_state, receiver_city, sender_description, RIGHT(sender_contact, 4) AS sender_contact, RIGHT(receiver_contact, 4) AS receiver_contact, img01, img02, img03, img04, img05, img06, img07, img08, img09, img10, created_at, pickup_date, payment_status FROM groupage where payment_status = "panding" ', (err, result) => {
         if (err) {
             res.json({ message: 'error in database', status: false });
         } else {

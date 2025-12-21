@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Stepper } from 'primereact/stepper';
 import { StepperPanel } from 'primereact/stepperpanel';
 import { Button } from 'primereact/button';
 import { useDropzone } from "react-dropzone";
-import Countries_selector from "../Dashboard/Countries_selector";
-import State_selector from "../Dashboard/State_selector";
+import Countries_selector from "../Selector/Countries_selector";
+import State_selector from "../Selector/State_selector";
 import axios from "axios";
 import { DateRange } from 'react-date-range';
 import "react-date-range/dist/styles.css";
@@ -60,16 +60,20 @@ const Send_groupage = () => {
     const stepperRef = useRef(null);
     const [currentStep, setCurrentStep] = useState(1);
     const alertShown = useRef(false);
+
+    const { type } = useParams();
     useEffect(() => {
         if (!token || token.length === 0) {
             if (!alertShown.current) {
                 showAlert('Login first!');
                 alertShown.current = true;
-                localStorage.setItem('redirectAfterLogin', '/send_groupage');
+                localStorage.setItem('redirectAfterLogin', `/send_groupage/${type}`);
                 navigate('/login')
             }
         }
     }, [])
+
+
 
     const [selectedFiles, setSelectedFiles] = useState([]);
 
@@ -103,40 +107,54 @@ const Send_groupage = () => {
     const endDateFormatted = state[0].endDate ? format(state[0].endDate, "dd/MM/yyyy") : "Select End Date";
     // const picking_period = `${startDateFormatted} - ${endDateFormatted}`;
 
-    const [picking_period, setPicking_period] = useState(null);
-    const [productName, setProductName] = useState(null);
-    const [productType, setProductType] = useState(null);
-    const [Pweight, setPweight] = useState(null);
-    const [Pheight, setPheight] = useState(null);
-    const [Plength, setPlength] = useState(null);
-    const [Pwidth, setPwidth] = useState(null);
+    const [picking_period, setPicking_period] = useState('');
+    const [productName, setProductName] = useState('');
+    const [productType, setProductType] = useState('');
+    const [box_dimension, setBox_dimension] = useState('');
+    const [box_number, setBox_number] = useState('');
+    const [box_description, setBox_description] = useState('');
+    const [Pweight, setPweight] = useState('');
+    const [Pheight, setPheight] = useState('');
+    const [Plength, setPlength] = useState('');
+    const [Pwidth, setPwidth] = useState('');
 
-    const [userName, setUserName] = useState(null);
-    const [userNumber, setUserNumber] = useState(null);
-    const [userEmail, setUserEmail] = useState(null);
-    const [streetAddress, setStreetAddress] = useState(null);
-    const [zipCode, setZipCode] = useState(null);
-    const [pick_up_date, setPick_up_date] = useState(null);
-    const [userCountry, setUserCountry] = useState(null);
-    const [userState, setUserState] = useState(null);
-    const [userCity, setUserCity] = useState(null);
-    const [userDescription, setUserDescription] = useState(null);
+    const [userName, setUserName] = useState('');
+    const [userNumber, setUserNumber] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [streetAddress, setStreetAddress] = useState('');
+    const [zipCode, setZipCode] = useState('');
+    const [pick_up_date, setPick_up_date] = useState('');
+    const [userCountry, setUserCountry] = useState('');
+    const [userState, setUserState] = useState('');
+    const [userCity, setUserCity] = useState('');
+    const [userDescription, setUserDescription] = useState('');
 
-    const [senderName, setSenderName] = useState(null);
-    const [senderNumber, setSenderNumber] = useState(null);
-    const [senderEmail, setSenderEmail] = useState(null);
-    const [senderStreetAddress, setSenderStreetAddress] = useState(null);
-    const [senderZipCode, setSenderZipCode] = useState(null);
-    const [departure_date, setDeparture_date] = useState(null);
-    const [senderCountry, setSenderCountry] = useState(null);
-    const [senderState, setSenderState] = useState(null);
-    const [senderCity, setSenderCity] = useState(null);
-    const [document, setDocument] = useState(null);
-    const [senderDescription, setSenderDescription] = useState(null);
+    const [senderName, setSenderName] = useState('');
+    const [senderNumber, setSenderNumber] = useState('');
+    const [senderEmail, setSenderEmail] = useState('');
+    const [senderStreetAddress, setSenderStreetAddress] = useState('');
+    const [senderZipCode, setSenderZipCode] = useState('');
+    const [departure_date, setDeparture_date] = useState('');
+    const [senderCountry, setSenderCountry] = useState('');
+    const [senderState, setSenderState] = useState('');
+    const [senderCity, setSenderCity] = useState('');
+    const [document, setDocument] = useState('');
+    const [senderDescription, setSenderDescription] = useState('');
     const [selectedCountry, setSelectedCountry] = useState("");
 
+    const Dimension = [
+        { label: 'Small(S) (30 x 20 x 10 cm)' },
+        { label: 'Medium(M) (40 x 30 x 20 cm)' },
+        { label: 'Large(L) (60 x 40 x 40 cm)' },
+        { label: 'Extra Large(XL) (80 x 60 x 60 cm)' },
+    ];
+
     const validateStep1 = () => {
-        return productName;
+        if (type === 'item') {
+            return productName;
+        } else {
+            return box_dimension && box_number;
+        }
     };
     const validateStep2 = () => {
         return userName && userNumber && userEmail && userCountry && userState && userCity && streetAddress && zipCode && state;
@@ -222,6 +240,9 @@ const Send_groupage = () => {
         const formData = new FormData();
         formData.append("productName", productName);
         formData.append("productType", productType);
+        formData.append("box_dimension", box_dimension);
+        formData.append("box_number", box_number);
+        formData.append("box_description", box_description);
         formData.append("Pweight", Pweight);
         formData.append("Pheight", Pheight);
         formData.append("Plength", Plength);
@@ -257,7 +278,6 @@ const Send_groupage = () => {
         }
 
         try {
-                    console.log('hello world');
             const response = await axios.post(
                 `${port}/send_groupage/send_groupage_submit`,
                 formData,
@@ -273,16 +293,11 @@ const Send_groupage = () => {
                 setIsVisible(false);
                 setCongrat(true);
             }
-                    console.log('hello world22');
 
         } catch (error) {
-                    console.log('hello world33');
-
             console.error("Error:", error);
             setValidate(false);
         }
-                console.log('hello world444');
-
     };
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
@@ -307,8 +322,9 @@ const Send_groupage = () => {
 
 
                                         <Stepper linear desabled ref={stepperRef} onStepChange={(step) => setCurrentStep(step)} style={{ flexBasis: 'auto', width: '100%' }}>
-                                            <StepperPanel header="Product Information">
-                                                <StepperPanel header="Basic Details">
+                                            <StepperPanel header={type === 'item' ? "Product Information" : "Box Information"}>
+
+                                                {type === 'item' ? <>
                                                     <div className="shipping-form-wrapper">
                                                         <div className="row">
                                                             <div className="col-12">
@@ -436,7 +452,105 @@ const Send_groupage = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </StepperPanel>
+                                                </> : <>
+                                                    <div className="shipping-form-wrapper">
+                                                        <div className="row">
+                                                            <div className="col-12">
+                                                                <div className="border-2 border-dashed surface-border border-round surface-ground p-1">
+                                                                    <div className="text-center mb-3">
+                                                                        <DragAndDrop
+                                                                            accept="image/*"
+                                                                            multiple={true}
+                                                                            onFileDrop={handleFileDrop}
+                                                                            label="Drag and drop images here, or click to select (Max: 10 images)"
+                                                                        />
+                                                                    </div>
+
+                                                                    {selectedFiles.length > 0 && (
+                                                                        <div className="d-flex flex-wrap justify-content-center gap-2">
+                                                                            {selectedFiles.map((img, index) => (
+                                                                                <div key={index} className="position-relative">
+                                                                                    <img
+                                                                                        src={img.preview}
+                                                                                        alt={`Selected ${index}`}
+                                                                                        className="rounded border border-1 border-dark"
+                                                                                        style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                                                                                    />
+                                                                                    <button
+                                                                                        onClick={() => handleRemoveImage(index)}
+                                                                                        className="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle"
+                                                                                        style={{
+                                                                                            transform: "translate(50%, -50%)",
+                                                                                            width: "20px",
+                                                                                            height: "20px",
+                                                                                            display: "flex",
+                                                                                            alignItems: "center",
+                                                                                            justifyContent: "center",
+                                                                                            padding: "0",
+                                                                                        }}
+                                                                                    >
+                                                                                        ×
+                                                                                    </button>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+
+
+                                                                    <div className="row mt-4">
+                                                                        <div className="col-12 col-md-6 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Box Dimension <span className="text-danger">*</span></label>
+                                                                            <select className="shipping-input-field"
+                                                                                value={box_dimension}
+                                                                                onChange={(e) => setBox_dimension(e.target.value)} >
+                                                                                <option value="" disabled hidden>
+                                                                                    Please choose category
+                                                                                </option>
+                                                                                {Dimension.map((dim, key) => (
+                                                                                    <>
+                                                                                        <option value={dim.label}>{dim.label}</option>
+                                                                                    </>
+                                                                                ))}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div className="col-12 col-md-6 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Number of Boxes <span className="text-danger">*</span></label>
+                                                                            <input
+                                                                                className="shipping-input-field"
+                                                                                type="text"
+                                                                                value={box_number}
+                                                                                placeholder="Enter number of boxes"
+                                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                                required
+                                                                                onChange={(e) => setBox_number(e.target.value)}
+                                                                                onKeyDown={(e) => {
+                                                                                    if (
+                                                                                        e.key === "Backspace" ||
+                                                                                        e.key === "Delete" ||
+                                                                                        e.key === "ArrowLeft" ||
+                                                                                        e.key === "ArrowRight" ||
+                                                                                        e.key === "Tab"
+                                                                                    ) {
+                                                                                        return;
+                                                                                    }
+                                                                                    if (!/[0-9]/.test(e.key)) {
+                                                                                        e.preventDefault();
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="d-flex flex-column text-align-start justify-content-start align-items-start w-100 mt-4">
+                                                                        <lable className="shipping-input-label">Short info inside the box</lable>
+                                                                        <textarea className="shipping-input-field" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows={4} placeholder="Short info inside the box....." />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </>}
+
                                             </StepperPanel>
 
 
@@ -672,14 +786,23 @@ const Send_groupage = () => {
                                             <div className="d-flex flex-column align-items-start w-100">
                                                 {currentStep === 1 ? (
                                                     <>
-                                                        <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Product Information</h5>
-                                                        <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Product Name :</span> <span> {productName ? (<h6>{productName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Weight :</span> <span> {Pweight ? (<h6>{Pweight.slice(0, 4)}... Kg</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Height :</span> <span> {Pheight ? (<h6>{Pheight.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Length : </span> <span> {Plength ? (<h6>{Plength.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Width : </span> <span> {Pwidth ? (<h6>{Pwidth.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
-                                                        </div>
+                                                        {type === 'item' ? <>
+                                                            <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Product Information</h5>
+                                                            <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Product Name :</span> <span> {productName ? (<h6>{productName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Weight :</span> <span> {Pweight ? (<h6>{Pweight.slice(0, 4)}... Kg</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Height :</span> <span> {Pheight ? (<h6>{Pheight.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Length : </span> <span> {Plength ? (<h6>{Plength.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Width : </span> <span> {Pwidth ? (<h6>{Pwidth.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
+                                                            </div>
+                                                        </> : <>
+
+                                                            <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Box Information</h5>
+                                                            <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Box Dimension :</span> <span> {box_dimension ? (<h6>{box_dimension.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Number of Boxes :</span> <span> {box_number ? (<h6>{box_number.length > 4 ? `${box_number.slice(0, 4)}...` : box_number}</h6>) : (<span>N/A</span>)}</span></div>
+                                                            </div>
+                                                        </>}
                                                     </>
                                                 ) : currentStep === 2 ? (
                                                     <>
@@ -807,7 +930,9 @@ const Send_groupage = () => {
                                 </div>
                             </div>
                             <div className="w-100 pt-4">
-                                <button className="btn btn-primary w-100" disabled={validate} onClick={() => { submitData(); setValidate(true) }}>Submit</button>
+                                <button className="btn btn-primary w-100"
+                                    disabled={validate}
+                                    onClick={() => { submitData(); setValidate(true) }}>Submit</button>
                             </div>
                         </div>
                     </div>

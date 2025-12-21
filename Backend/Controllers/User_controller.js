@@ -85,11 +85,11 @@ const login = (req, res) => {
                     }
                 }
                 else {
-                    res.json({ message: "email or password is wrong", status: false });
+                    res.json({ message: "Email or password is wrong", status: false, type: false });
                 }
             } else
                 if (result.length === 0) {
-                    res.json({ message: "email or password is wrong", status: false })
+                    res.json({ message: "Email or password is wrong", status: false, type: false })
                 }
         }
     })
@@ -117,7 +117,7 @@ const update_user_name = (req, res) => {
             console.log(err);
             res.json({ message: 'error in database', status: false });
         } else {
-            res.json({ message: 'Name updated success, Login agmin to see update Name!', status: true });
+            res.json({ message: 'Name updated.', status: true });
         }
     })
 }
