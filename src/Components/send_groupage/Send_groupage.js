@@ -205,7 +205,7 @@ const Send_groupage = () => {
                 `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
                 formData
             );
-            return response.data.secure_url; // ✅ MUST return
+            return response.data.secure_url;
         } catch (err) {
             console.error("Cloudinary upload error:", err);
             return null;
@@ -543,7 +543,7 @@ const Send_groupage = () => {
 
                                                                     <div className="d-flex flex-column text-align-start justify-content-start align-items-start w-100 mt-4">
                                                                         <lable className="shipping-input-label">Short info inside the box</lable>
-                                                                        <textarea className="shipping-input-field" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows={4} placeholder="Short info inside the box....." />
+                                                                        <textarea className="shipping-input-field" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows={4} placeholder="Short info inside the box....." onChange={(e) => setBox_description(e.target.value)}/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -894,14 +894,23 @@ const Send_groupage = () => {
                             ></button>
                             <div className="d-flex flex-column align-items-start w-100">
                                 <strong className="fs-5">Review your order</strong>
-                                <div className="d-flex flex-column align-items-start w-100 gap-2 pt-2 border-bottom border-2 pb-3">
-                                    <strong className="fs-6 pb-1">Product Information</strong>
-                                    <div className="d-flex justify-content-between w-100"><span className="text-secondary">Product Name :</span> <span>{productName ? (<>{productName}</>) : (<>N/A</>)}</span>  </div>
-                                    <div className="d-flex justify-content-between w-100"><span className="text-secondary">Weight :</span> <span>{Pweight ? (<>{Pweight} Kg</>) : (<>N/A</>)}</span>  </div>
-                                    <div className="d-flex justify-content-between w-100"><span className="text-secondary">Height :</span> <span>{Pheight ? (<>{Pheight} Cm</>) : (<>N/A</>)}</span>  </div>
-                                    <div className="d-flex justify-content-between w-100"><span className="text-secondary">Length :</span> <span>{Plength ? (<>{Plength} Cm</>) : (<>N/A</>)}</span>  </div>
-                                    <div className="d-flex justify-content-between w-100"><span className="text-secondary">Width :</span> <span>{Pwidth ? (<>{Pwidth} Cm</>) : (<>N/A</>)}</span>  </div>
-                                </div>
+                                {type === 'item' ? <>
+                                    <div className="d-flex flex-column align-items-start w-100 gap-2 pt-2 border-bottom border-2 pb-3">
+                                        <strong className="fs-6 pb-1">Product Information</strong>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Product Name :</span> <span>{productName ? (<>{productName}</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Weight :</span> <span>{Pweight ? (<>{Pweight} Kg</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Height :</span> <span>{Pheight ? (<>{Pheight} Cm</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Length :</span> <span>{Plength ? (<>{Plength} Cm</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Width :</span> <span>{Pwidth ? (<>{Pwidth} Cm</>) : (<>N/A</>)}</span>  </div>
+                                    </div>
+                                </> : <>
+                                    <div className="d-flex flex-column align-items-start w-100 gap-2 pt-2 border-bottom border-2 pb-3">
+                                        <strong className="fs-6 pb-1">Box Information</strong>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Box Dimension :</span> <span>{box_dimension ? (<>{box_dimension}</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Number of Boxes :</span> <span>{box_number ? (<>{box_number}</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Box Info :</span> <span>{box_description ? (<>{box_description}</>) : (<>N/A</>)}</span>  </div>
+                                    </div>
+                                </>}
 
                                 <div className="d-flex flex-column align-items-start w-100 gap-2 pt-4 border-bottom border-2 pb-3">
                                     <strong className="fs-6 pb-1">Pick Up Information</strong>

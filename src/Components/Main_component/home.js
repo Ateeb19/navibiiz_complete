@@ -27,10 +27,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { PiBoxArrowUpBold } from "react-icons/pi";
 import { GiCardPickup } from "react-icons/gi";
-import { IoIosCall } from "react-icons/io";
+import { IoIosCall, IoIosInformationCircle } from "react-icons/io";
 import ToggleButton from 'react-toggle-button';
 import { DateRange } from 'react-date-range';
 import { useTranslation } from "react-i18next";
+import { BsFillBoxSeamFill } from "react-icons/bs";
+import { RxDimensions } from "react-icons/rx";
 
 
 const Home = () => {
@@ -527,7 +529,7 @@ const Home = () => {
                             {offers_details.length > 0 ? (
                                 <>
                                     {offers_details.map((company, index) => (
-                                        <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-3"  onClick={() => submit_offer(company)}>
+                                        <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-3" onClick={() => submit_offer(company)}>
                                             <div className="company-box-wrap">
                                                 <div className="d-flex flex-column align-items-start company-box-text">
                                                     <div className="image-div">
@@ -537,7 +539,7 @@ const Home = () => {
                                                             className="w-100 h-100 object-fit-cover"
                                                         />
                                                     </div>
-                                                    <h5 className="mt-3">{company.product_name}</h5>
+                                                    <h5 className="mt-3">{company.box ? 'Boxes' : company.product_name}</h5>
                                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                                         <div className="d-flex flex-row align-items-start justify-content-start gap-2 offer-pickup"><h6>Pickup: </h6> <p>{company.sender_country}</p></div>
                                                         <span className="submit-offer" onClick={() => submit_offer(company)}>Submit Offer <PiBoxArrowUpBold style={{ fontSize: '16px' }} /></span>
@@ -773,7 +775,7 @@ const Home = () => {
                             <span className="mt-2 text-start w-100">Offer ID: <span className="text-primary"> #{groupage_detail.id}</span></span>
 
                             <div className="offer-details-wrap">
-                                <h5 className="text-start w-100 mb-3 fs-6">Product Images</h5>
+                                <h5 className="text-start w-100 mb-3 fs-6">{groupage_detail.box ? "Box Images" : "Product Images"}</h5>
                                 <div className="d-flex flex-wrap gap-2"
                                     onClick={() => {
                                         const imageList = [
@@ -815,8 +817,173 @@ const Home = () => {
                             </div>
 
 
+                            {groupage_detail.box ? <>
+                                <div className="offer-details-wrap">
+                                    <h5 className="text-start w-100 mb-3 fs-6">Box Details</h5>
 
-                            <div className="offer-details-wrap">
+                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '45%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RxDimensions /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Box dimensions</span>
+                                                <h6>{groupage_detail.box_dimension}</h6>
+                                            </div>
+                                        </div>
+
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '45%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            >
+                                                <BsFillBoxSeamFill />
+                                            </div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Number of Boxes</span>
+                                                <h6>{groupage_detail.box_number}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '90%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><IoIosInformationCircle /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Box Info</span>
+                                                <h6>{groupage_detail.box_info ? groupage_detail.box_info : 'null'}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </> : <>
+                                <div className="offer-details-wrap">
+                                    <h5 className="text-start w-100 mb-3 fs-6">Product Details</h5>
+
+                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><MdOutlineDriveFileRenameOutline /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Product Name</span>
+                                                <h6>{groupage_detail.product_name}</h6>
+                                            </div>
+                                        </div>
+
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            >
+                                                <SiAnytype />
+                                            </div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Product Type</span>
+                                                <h6>{groupage_detail.product_type ? groupage_detail.product_type : 'null'}</h6>
+                                            </div>
+                                        </div>
+
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaWeightScale /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Weight</span>
+                                                <h6>{groupage_detail.p_weight} Kg</h6>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandHeightFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Height</span>
+                                                <h6>{groupage_detail.p_height} Cm</h6>
+                                            </div>
+                                        </div>
+
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><FaRuler /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Length</span>
+                                                <h6>{groupage_detail.p_length} Cm</h6>
+                                            </div>
+                                        </div>
+
+                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                            <div
+                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                style={{
+                                                    width: '3rem',
+                                                    height: '3rem',
+                                                    backgroundColor: '#E1F5FF',
+                                                    aspectRatio: '1 / 1'
+                                                }}
+                                            ><RiExpandWidthFill /></div>
+                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                <span className="text-secondary offer-submit-sub-head">Width</span>
+                                                <h6>{groupage_detail.p_width} Cm</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>}
+                            {/* <div className="offer-details-wrap">
                                 <h5 className="text-start w-100 mb-3 fs-6">Product Details</h5>
 
                                 <div className="d-flex flex-wrap gap-3 w-100">
@@ -921,7 +1088,7 @@ const Home = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="offer-details-wrap">
                                 <h5 className="text-start w-100 mb-3 fs-6">Pick Up Information</h5>
@@ -1493,7 +1660,7 @@ const Home = () => {
                     <div className="row w-100 mt-3">
                         <div className="col-12 col-sm-6 col-lg-3 mb-4">
                             <div className="build-wrap text-start h-100 p-3">
-                                <h2><FaBox  className="home-icons"/></h2>
+                                <h2><FaBox className="home-icons" /></h2>
                                 <h5>Easy Shipment Details</h5>
                                 <p>Simply provide your shipment information to receive a tailored list of logistics Transporters.</p>
                             </div>
