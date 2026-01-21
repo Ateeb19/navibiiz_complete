@@ -96,10 +96,10 @@ function OfferDetails({ selected_offer }) {
 
                             <div className="success-button">
                                 <button className="btn-success" onClick={() => {
-                                    navigate('/dashboard');
+                                    navigate('/dashboard/payment');
                                     localStorage.setItem('activeSection', 'dashboard')
                                     setTraansactionId('');
-                                    window.location.reload();
+                                    // window.location.reload();
                                 }}>Go To Dashboard</button>
                             </div>
                         </div>

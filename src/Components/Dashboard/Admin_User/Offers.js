@@ -521,7 +521,7 @@ const Offers = () => {
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Box info : </span>
                                             <span>{show_admin_offer.box_info}</span>
-                                        </div>                                        
+                                        </div>
                                     </> : <>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Product Name : </span>
@@ -529,7 +529,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Product Type : </span>
-                                            <span>{show_admin_offer.product_type}</span>
+                                            <span>{show_admin_offer.product_type ? show_admin_offer.product_type : '-' }</span>
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Weight : </span>
@@ -580,15 +580,22 @@ const Offers = () => {
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Street Address : </span>
-                                        <span>{show_admin_offer.sender_address}</span>
+                                        <span>{show_admin_offer.sender_address ? show_admin_offer.sender_address : '-'}</span>
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Zip Code : </span>
-                                        <span>{show_admin_offer.sender_zipcode}</span>
+                                        <span>{show_admin_offer.sender_zipcode ? show_admin_offer.sender_zipcode : '-'}</span>
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Pick Up Date : </span>
-                                        <span>{show_admin_offer.pickup_date.includes('Select End Date') ? show_admin_offer.pickup_date.split(' - ')[0] : show_admin_offer.pickup_date}</span>
+                                        <span>{
+                                            show_admin_offer.pickup_date && show_admin_offer.pickup_date !== 'null'
+                                                    ? show_admin_offer.pickup_date.includes('Select End Date')
+                                                        ? show_admin_offer.pickup_date.split(' - ')[0] || '-'
+                                                        : show_admin_offer.pickup_date.split(' - ')[0] || '-'
+                                                    : '-'
+                                            // show_admin_offer.pickup_date.includes('Select End Date') ? show_admin_offer.pickup_date.split(' - ')[0] : show_admin_offer.pickup_date
+                                        }</span>
                                     </div>
                                 </div>
 
@@ -604,27 +611,27 @@ const Offers = () => {
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Email ID : </span>
-                                        <span>{show_admin_offer.receiver_email}</span>
+                                        <span>{show_admin_offer.receiver_email ? show_admin_offer.receiver_email : '-'}</span>
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Country : </span>
-                                        <span>{show_admin_offer.receiver_country}</span>
+                                        <span>{show_admin_offer.receiver_country ? show_admin_offer.receiver_country : '-'}</span>
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">State : </span>
-                                        <span>{show_admin_offer.receiver_state}</span>
+                                        <span>{show_admin_offer.receiver_state ? show_admin_offer.receiver_state : '-'}</span>
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">City : </span>
-                                        <span>{show_admin_offer.receiver_city}</span>
+                                        <span>{show_admin_offer.receiver_city ? show_admin_offer.receiver_city : '-'}</span>
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Street Address : </span>
-                                        <span>{show_admin_offer.receiver_address}</span>
+                                        <span>{show_admin_offer.receiver_address ? show_admin_offer.receiver_address : '-'}</span>
                                     </div>
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Zip Code : </span>
-                                        <span>{show_admin_offer.receiver_zipcode}</span>
+                                        <span>{show_admin_offer.receiver_zipcode ? show_admin_offer.receiver_zipcode : '-'}</span>
                                     </div>
                                     {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Delivery Duration : </span>
@@ -788,15 +795,22 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Street Address : </span>
-                                            <span>{selected_offer.sender_address}</span>
+                                            <span>{selected_offer.sender_address ? selected_offer.sender_address : '-'}</span>
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Zip Code : </span>
-                                            <span>{selected_offer.sender_zipcode}</span>
+                                            <span>{selected_offer.sender_zipcode ? selected_offer.sender_zipcode : '-'}</span>
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Pick Up Date : </span>
-                                            <span>{selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date}</span>
+                                            <span>{
+                                                selected_offer.pickup_date && selected_offer.pickup_date !== 'null'
+                                                    ? selected_offer.pickup_date.includes('Select End Date')
+                                                        ? selected_offer.pickup_date.split(' - ')[0] || '-'
+                                                        : selected_offer.pickup_date.split(' - ')[0] || '-'
+                                                    : '-'
+                                                // selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date
+                                            }</span>
                                         </div>
                                     </div>
 
@@ -812,27 +826,27 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Email ID : </span>
-                                            <span>{selected_offer.receiver_email}</span>
+                                            <span>{selected_offer.receiver_email ? selected_offer.receiver_email : '-'}</span>
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Country : </span>
-                                            <span>{selected_offer.receiver_country}</span>
+                                            <span>{selected_offer.receiver_country ? selected_offer.receiver_country : '-'}</span>
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">State : </span>
-                                            <span>{selected_offer.receiver_state}</span>
+                                            <span>{selected_offer.receiver_state ? selected_offer.receiver_state : '-'}</span>
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">City : </span>
-                                            <span>{selected_offer.receiver_city}</span>
+                                            <span>{selected_offer.receiver_city ? selected_offer.receiver_city : '-'}</span>
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Street Address : </span>
-                                            <span>{selected_offer.receiver_address}</span>
+                                            <span>{selected_offer.receiver_address ? selected_offer.receiver_address : '-'}</span>
                                         </div>
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Zip Code : </span>
-                                            <span>{selected_offer.receiver_zipcode}</span>
+                                            <span>{selected_offer.receiver_zipcode ? selected_offer.receiver_zipcode : '-'}</span>
                                         </div>
                                         {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Delivery Duration : </span>

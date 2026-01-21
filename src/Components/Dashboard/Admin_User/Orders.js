@@ -44,7 +44,7 @@ const Orders = () => {
     useEffect(() => {
         displayGroupageUser();
     }, []);
-    
+
     const cancelDelete = () => {
         setShowModal(false);
         showAlert("Delete canceled");
@@ -166,10 +166,18 @@ const Orders = () => {
                                             {groupageUser.map((item, index) => (
                                                 <tr key={index}>
                                                     <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => handle_show_groupage_details(item)}>#{item.id}</td>
-                                                    <td className="text-secondary">{item.box ? "Boxes" : item.product_name ? item.product_name : 'null'}</td>
-                                                    <td className="text-secondary">{item.sender_country ? item.sender_country : 'null'}</td>
-                                                    <td className="text-secondary">{item.receiver_country ? item.receiver_country : 'null'}</td>
-                                                    <td className="text-secondary">{item.pickup_date ? item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date : 'null'}</td>
+                                                    <td className="text-secondary">{item.box ? "Boxes" : item.product_name ? item.product_name : '-'}</td>
+                                                    <td className="text-secondary">{item.sender_country ? item.sender_country : '-'}</td>
+                                                    <td className="text-secondary">{item.receiver_country ? item.receiver_country : '-'}</td>
+                                                    <td className="text-secondary">{
+                                                        item.pickup_date && item.pickup_date !== 'null'
+                                                            ? item.pickup_date.includes('Select End Date')
+                                                                ? item.pickup_date.split(' - ')[0] || '-'
+                                                                : item.pickup_date.split(' - ')[0] || '-'
+                                                            : '-'
+                                                    }
+                                                    </td>
+                                                    {/* <td className="text-secondary">{item.pickup_date ? item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] === 'null' ? '-' : item.pickup_date.split(' - ')[0] : item.pickup_date : '-'}</td> */}
                                                     <td className="text-secondary d-flex align-items-center justify-content-center">
                                                         <span className="p-2 fw-bold d-flex flex-column align-items-center justify-content-center w-75 user-offer-width" style={{
                                                             backgroundColor: item.payment_status === 'panding' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)',
@@ -324,7 +332,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head">Product Type</span>
-                                                        <h6>{selected_groupage.product_type ? selected_groupage.product_type : 'null'}</h6>
+                                                        <h6>{selected_groupage.product_type ? selected_groupage.product_type : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -532,7 +540,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Street Address</span>
-                                                        <h6>{selected_groupage.sender_address}</h6>
+                                                        <h6>{selected_groupage.sender_address ? selected_groupage.sender_address : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -550,7 +558,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Zip Code</span>
-                                                        <h6>{selected_groupage.sender_zipcode}</h6>
+                                                        <h6>{selected_groupage.sender_zipcode ? selected_groupage.sender_zipcode : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -568,7 +576,14 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Pick Up Date</span>
-                                                        <h6>{selected_groupage.pickup_date ? selected_groupage.pickup_date.includes('Select End Date') ? `${selected_groupage.pickup_date.split(' - ')[0]} -` : selected_groupage.pickup_date : 'null'}</h6>
+                                                        <h6>{
+                                                               selected_groupage.pickup_date && selected_groupage.pickup_date !== 'null'
+                                                            ? selected_groupage.pickup_date.includes('Select End Date')
+                                                                ? selected_groupage.pickup_date.split(' - ')[0] || '-'
+                                                                : selected_groupage.pickup_date.split(' - ')[0] || '-'
+                                                            : '-'
+                                                            // selected_groupage.pickup_date ? selected_groupage.pickup_date.includes('Select End Date') ? `${selected_groupage.pickup_date.split(' - ')[0]} -` : selected_groupage.pickup_date : 'null'
+                                                        }</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -586,7 +601,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Pick Up Notes</span>
-                                                        <p className="text-start"><h6>{selected_groupage.sender_description ? selected_groupage.sender_description : 'null'}</h6></p>
+                                                        <p className="text-start"><h6>{selected_groupage.sender_description ? selected_groupage.sender_description : '-'}</h6></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -648,7 +663,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Email Address</span>
-                                                        <h6>{selected_groupage.receiver_email}</h6>
+                                                        <h6>{selected_groupage.receiver_email ? selected_groupage.receiver_email : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -666,7 +681,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Country</span>
-                                                        <h6>{selected_groupage.receiver_country}</h6>
+                                                        <h6>{selected_groupage.receiver_country ? selected_groupage.receiver_country : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -684,7 +699,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">State</span>
-                                                        <h6>{selected_groupage.receiver_state}</h6>
+                                                        <h6>{selected_groupage.receiver_state ? selected_groupage.receiver_state : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -702,7 +717,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">City</span>
-                                                        <h6>{selected_groupage.receiver_city}</h6>
+                                                        <h6>{selected_groupage.receiver_city ? selected_groupage.receiver_city : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -720,7 +735,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Street Address</span>
-                                                        <h6 className="text-start">{selected_groupage.receiver_address ? selected_groupage.receiver_address : "null"}</h6>
+                                                        <h6 className="text-start">{selected_groupage.receiver_address ? selected_groupage.receiver_address : "-"}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -738,7 +753,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Zip Code</span>
-                                                        <h6 className="text-start">{selected_groupage.receiver_zipcode ? selected_groupage.receiver_zipcode : 'null'}</h6>
+                                                        <h6 className="text-start">{selected_groupage.receiver_zipcode ? selected_groupage.receiver_zipcode : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -756,7 +771,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Preferred Delivery Date</span>
-                                                        <h6 className="text-start">{selected_groupage.departure_date ? selected_groupage.departure_date : 'null'}</h6>
+                                                        <h6 className="text-start">{selected_groupage.departure_date ? selected_groupage.departure_date : '-'}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -774,7 +789,7 @@ const Orders = () => {
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head text-start">Delivery Notes</span>
-                                                        <p className="text-start"><h6>{selected_groupage.receiver_description ? selected_groupage.receiver_description : 'null'}</h6></p>
+                                                        <p className="text-start"><h6>{selected_groupage.receiver_description ? selected_groupage.receiver_description : '-'}</h6></p>
                                                     </div>
                                                 </div>
                                             </div>

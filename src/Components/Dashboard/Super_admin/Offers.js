@@ -136,11 +136,11 @@ const Offers = () => {
                                                         }
                                                         show_offer_details(item)
                                                     }}>#{item.offer_id}</td>
-                                                    <td className="text-secondary">{item.box ? item.box_dimension : item.product_name ? item.product_name : 'null'}</td>
+                                                    <td className="text-secondary">{item.box ? item.box_dimension : item.product_name ? item.product_name : '-'}</td>
                                                     <td className="text-secondary">
-                                                        {item.created_at ? new Date(item.created_at).toISOString().split("T")[0] : ""}
+                                                        {item.created_at ? new Date(item.created_at).toISOString().split("T")[0] : "-"}
                                                     </td>
-                                                    <td className="text-secondary">{item.userName}</td>
+                                                    <td className="text-secondary">{item.userName ? item.userName : '-'}</td>
                                                     <td className="text-dark"><b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></td>
                                                     <td className="text-secondary">{item.company_name}</td>
                                                     <td className="text-secondary"
@@ -215,19 +215,19 @@ const Offers = () => {
                                 <h5 className="text-start w-100 mb-3" >Payment Information</h5>
                                 {[
                                     [
-                                        { icon: <SiAnytype />, label: "Amount Received", value: showOfferDetails.payment_info_amount ? showOfferDetails.payment_info_amount : 'N/A' },
+                                        { icon: <SiAnytype />, label: "Amount Received", value: showOfferDetails.payment_info_amount ? showOfferDetails.payment_info_amount : '-' },
                                         { icon: <FaWeightScale />, label: "Commission Earned", value: showOfferDetails.commission },
-                                        { icon: <RiExpandHeightFill />, label: "Payment Status", value: showOfferDetails.payment_info_status ? showOfferDetails.payment_info_status : 'N/A' }
+                                        { icon: <RiExpandHeightFill />, label: "Payment Status", value: showOfferDetails.payment_info_status ? showOfferDetails.payment_info_status : '-' }
                                     ],
                                     [
-                                        { icon: <SiAnytype />, label: "Paid By", value: showOfferDetails.user_email ? showOfferDetails.user_email : 'N/A' },
-                                        { icon: <FaWeightScale />, label: "Transaction ID", value: showOfferDetails.transaction_id ? showOfferDetails.transaction_id : 'N/A' },
+                                        { icon: <SiAnytype />, label: "Paid By", value: showOfferDetails.user_email ? showOfferDetails.user_email : '-' },
+                                        { icon: <FaWeightScale />, label: "Transaction ID", value: showOfferDetails.transaction_id ? showOfferDetails.transaction_id : '-' },
                                         { icon: <RiExpandHeightFill />, label: "Offer Status ", value: showOfferDetails.status === 'pending' ? 'Pending' : showOfferDetails.status === 'rejected' ? 'Rejected' : 'Success' }
                                     ],
                                     [
                                         { icon: <SiAnytype />, label: "Company Name", value: showOfferDetails.company_name },
                                         { icon: <FaWeightScale />, label: "Company Contact Number", value: showOfferDetails.contect_no },
-                                        { icon: <RiExpandHeightFill />, label: "Company Email ID", value: showOfferDetails.created_by_email ? showOfferDetails.created_by_email : 'N/A' }
+                                        { icon: <RiExpandHeightFill />, label: "Company Email ID", value: showOfferDetails.created_by_email ? showOfferDetails.created_by_email : '-' }
                                     ]
                                 ].map((row, index) => (
                                     <div key={index} className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5">
@@ -260,7 +260,7 @@ const Offers = () => {
                                     <div className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5 ">
                                         {[
                                             { icon: <SiAnytype />, label: "Box dimensions", value: showOfferDetails.box_dimension },
-                                            { icon: <FaWeightScale />, label: "Number of Boxes", value: `${showOfferDetails.box_number} Kg` },
+                                            { icon: <FaWeightScale />, label: "Number of Boxes", value: `${showOfferDetails.box_number}` },
                                         ].map((item, idx) => (
                                             <div key={idx} className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 super-admin-offer" style={{ width: '40%' }}>
                                                 <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -332,7 +332,7 @@ const Offers = () => {
 
                                     <div className="d-flex flex-column flex-md-row flex-wrap w-100 gap-3 gap-lg-5 ">
                                         {[
-                                            { icon: <SiAnytype />, label: "Product Type", value: showOfferDetails.product_type },
+                                            { icon: <SiAnytype />, label: "Product Type", value: showOfferDetails.product_type ? showOfferDetails.product_type : '-' },
                                             { icon: <FaWeightScale />, label: "Weight", value: `${showOfferDetails.p_weight} Kg` },
                                             { icon: <RiExpandHeightFill />, label: "Height", value: `${showOfferDetails.p_height} Cm` }
                                         ].map((item, idx) => (
@@ -496,7 +496,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Street Address</span>
-                                            <h6>{showOfferDetails.sender_address}</h6>
+                                            <h6>{showOfferDetails.sender_address ? showOfferDetails.sender_address : '-'}</h6>
                                         </div>
                                     </div>
 
@@ -512,7 +512,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Zip Code</span>
-                                            <h6>{showOfferDetails.sender_zipcode}</h6>
+                                            <h6>{showOfferDetails.sender_zipcode ? showOfferDetails.sender_zipcode : '-'}</h6>
                                         </div>
                                     </div>
 
@@ -528,7 +528,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Pick Up Date</span>
-                                            <h6>{showOfferDetails?.pickup_date?.includes('Select End Date') ? `${showOfferDetails?.pickup_date?.split(' - ')[0]} -` : showOfferDetails?.pickup_date}</h6>
+                                            <h6>{showOfferDetails?.pickup_date?.includes('Select End Date') ? `${showOfferDetails?.pickup_date?.split(' - ')[0]} -` : showOfferDetails?.pickup_date ? showOfferDetails?.pickup_date : '-'}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -544,7 +544,7 @@ const Offers = () => {
                                         }}><FaInfoCircle /></div>
                                         <div className="d-flex flex-column align-items-start">
                                             <span className="text-secondary">Pick Up Notes</span>
-                                            <p className="text-start"><h6>{showOfferDetails.sender_description}</h6></p>
+                                            <p className="text-start"><h6>{showOfferDetails.sender_description ? showOfferDetails.sender_description : '-'}</h6></p>
                                         </div>
                                     </div>
                                 </div>
@@ -599,7 +599,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Email Address</span>
-                                            <h6>{showOfferDetails.receiver_email}</h6>
+                                            <h6>{showOfferDetails.receiver_email ? showOfferDetails.receiver_email : '-' }</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -617,7 +617,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Country</span>
-                                            <h6>{showOfferDetails.receiver_country}</h6>
+                                            <h6>{showOfferDetails.receiver_country ? showOfferDetails.receiver_country : '-' }</h6>
                                         </div>
                                     </div>
 
@@ -633,7 +633,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">State</span>
-                                            <h6>{showOfferDetails.receiver_state}</h6>
+                                            <h6>{showOfferDetails.receiver_state ? showOfferDetails.receiver_state : '-' }</h6>
                                         </div>
                                     </div>
 
@@ -649,7 +649,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">City</span>
-                                            <h6>{showOfferDetails.receiver_city}</h6>
+                                            <h6>{showOfferDetails.receiver_city ? showOfferDetails.receiver_city : '-' }</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -668,7 +668,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Street Address</span>
-                                            <h6>{showOfferDetails.receiver_address}</h6>
+                                            <h6>{showOfferDetails.receiver_address ? showOfferDetails.receiver_address : '-' }</h6>
                                         </div>
                                     </div>
 
@@ -684,7 +684,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Zip Code</span>
-                                            <h6>{showOfferDetails.receiver_zipcode}</h6>
+                                            <h6>{showOfferDetails.receiver_zipcode ? showOfferDetails.receiver_zipcode : '-' }</h6>
                                         </div>
                                     </div>
 
@@ -700,7 +700,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Preferred Delivery Date</span>
-                                            <h6>{showOfferDetails.departure_date}</h6>
+                                            <h6>{showOfferDetails.departure_date ? showOfferDetails.departure_date : '-' }</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -719,7 +719,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Delivery Notes</span>
-                                            <h6 className="text-start">{showOfferDetails.receiver_description}</h6>
+                                            <h6 className="text-start">{showOfferDetails.receiver_description ? showOfferDetails.receiver_description : '-' }</h6>
                                         </div>
                                     </div>
                                 </div>

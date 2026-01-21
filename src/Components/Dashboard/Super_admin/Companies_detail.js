@@ -126,7 +126,7 @@ const Companies_detail = () => {
         fetch_company_detail();
     }, [])
 
-
+console.log(selectedCompany);
 
 
 
@@ -529,7 +529,7 @@ const Companies_detail = () => {
                                         {[
                                             { icon: <FaPhoneAlt />, label: 'Contact Number', value: selectedCompany.contect_no },
                                             { icon: <MdEmail />, label: 'Email ID', value: selectedCompany.email },
-                                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1?.split(",")[0].trim() || 'Location' },
+                                            { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1?.split(",")[0].trim() || '-' },
                                             // { icon: <FaLocationDot />, label: 'Country', value: selectedCompany.location1 ? selectedCompany.location1.split(",")[0].trim() : 'Location' },
                                         ].map((item, index) => {
                                             const isEditable = edit_company && index !== 1;
@@ -588,8 +588,8 @@ const Companies_detail = () => {
 
                                     <div className="row mt-4 text-start">
                                         {[
-                                            { icon: <FaCity />, label: 'State', value: selectedCompany.location1?.split(",")[1]?.trim() || 'Location' },
-                                            { icon: <FaCity />, label: 'City', value: selectedCompany.location1?.split(",")[2]?.trim() || 'Location' },
+                                            { icon: <FaCity />, label: 'State', value: selectedCompany.location1?.split(",")[1]?.trim() || '-' },
+                                            { icon: <FaCity />, label: 'City', value: selectedCompany.location1?.split(",")[2]?.trim() || '-' },
 
                                             // { icon: <FaCity />, label: 'State', value: selectedCompany.location1.split(",")[1]?.trim() },
                                             // { icon: <FaCity />, label: 'City', value: selectedCompany.location1.split(",")[2]?.trim() },
@@ -657,9 +657,9 @@ const Companies_detail = () => {
 
                                     <div className="row mt-4 text-start">
                                         {[
-                                            { icon: <FaPaypal />, label: 'Paypal Id', value: selectedCompany?.paypal_id ? selectedCompany.paypal_id : 'N/A' },
-                                            { icon: <MdSwitchAccount />, label: 'Account Holder Name', value: selectedCompany.account_holder_name ? selectedCompany.account_holder_name : 'N/A' },
-                                            { icon: <BsBank2 />, label: 'IBA Number', value: selectedCompany.iban_number ? selectedCompany.iban_number : 'N/A' },
+                                            { icon: <FaPaypal />, label: 'Paypal Id', value: selectedCompany?.paypal_id ? selectedCompany.paypal_id : '-' },
+                                            { icon: <MdSwitchAccount />, label: 'Account Holder Name', value: selectedCompany.account_holder_name ? selectedCompany.account_holder_name : '-' },
+                                            { icon: <BsBank2 />, label: 'IBA Number', value: selectedCompany.iban_number ? selectedCompany.iban_number : '-' },
                                         ].map((item, index) => (
                                             <div key={index} className="col-12 col-md-4 d-flex align-items-start justify-content-start mb-3"
                                                 onClick={() => {
@@ -740,7 +740,7 @@ const Companies_detail = () => {
                                                         </div>
 
                                                     ) : (
-                                                        <span className="text-dark  ms-3">N/A</span>
+                                                        <span className="text-dark  ms-3">-</span>
                                                     )}
                                                 </label>
                                                 {edit_company && (<div className="ms-2 fs-4 text-primary"> <GoPencil /></div>)}
@@ -790,10 +790,10 @@ const Companies_detail = () => {
                                                     <tbody>
                                                         {selectedCompany.tableData.map((item, index) => (
                                                             <tr key={index}>
-                                                                <td className="text-secondary text-start text-md-center">{item.service_type}</td>
-                                                                <td className="text-secondary text-start text-md-center">{item.region}</td>
-                                                                <td className="text-secondary text-start text-md-center">{item.countries}</td>
-                                                                <td className="text-secondary text-start text-md-center">{item.duration}</td>
+                                                                <td className="text-secondary text-start text-md-center">{item.service_type ? item.service_type : '-'}</td>
+                                                                <td className="text-secondary text-start text-md-center">{item.region && item.region.trim() !== "" ? item.region : "-"}</td>
+                                                                <td className="text-secondary text-start text-md-center">{item.countries ? item.countries : '-'}</td>
+                                                                <td className="text-secondary text-start text-md-center">{item.duration ? item.duration : '-'}</td>
                                                                 {edit_company && (
                                                                     <td>
                                                                         <button

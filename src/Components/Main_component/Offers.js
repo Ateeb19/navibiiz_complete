@@ -395,13 +395,13 @@ const Offers = () => {
                                                                 />
                                                             </div>
                                                             <div className="d-flex justify-content-between w-100">
-                                                                <span><strong className="fs-5 pe-2">{item.product_name? item.product_name : 'Boxes'}</strong></span>
+                                                                <span><strong className="fs-5 pe-2">{item.product_name ? item.product_name : 'Boxes'}</strong></span>
                                                                 <h5 className="" style={{ color: '#de8316' }} onClick={() => View_details(item)}><u>Submit Offer</u></h5>
                                                             </div>
                                                             <p className="mt-2 me-1">
-                                                                {item.sender_country.slice(0, 3)}{" "}
+                                                                {item.sender_country?.slice(0, 3)}{" "}
                                                                 <span className="text-primary me-1"><BsFillSendFill /></span>
-                                                                {item.receiver_country.slice(0, 3)}
+                                                                {item.receiver_country?.slice(0, 3)}
                                                             </p>
                                                             <p className="mt-2 text-start text-secondary">{item.sender_description ? item.sender_description.split(" ").slice(0, 30).join(" ") + "..." : item.sender_description}</p>
                                                             <div className="d-flex flex-column flex-md-row gap-4 text-start">
@@ -413,7 +413,14 @@ const Offers = () => {
                                                                     </>}
                                                                 </div>
                                                                 <div className="pe-3 border-end border-1">
-                                                                    <FaTruckLoading className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Pick up: {item.pickup_date ? item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date : 'null'}</span>
+                                                                    <FaTruckLoading className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Pick up: {
+                                                                        // item.pickup_date ? item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date : 'null'
+                                                                        item.pickup_date && item.pickup_date !== 'null'
+                                                                            ? item.pickup_date.includes('Select End Date')
+                                                                                ? item.pickup_date.split(' - ')[0] || '-'
+                                                                                : item.pickup_date.split(' - ')[0] || '-'
+                                                                            : '-'
+                                                                    }</span>
                                                                 </div>
                                                                 <div className="pe-3">
                                                                     <FaTruckMoving className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Posted {item.days_ago} </span>
@@ -624,7 +631,7 @@ const Offers = () => {
                                                                 </div>
                                                                 <div className="d-flex flex-column align-items-start gap-2">
                                                                     <span className="text-secondary offer-submit-sub-head">Product Type</span>
-                                                                    <h6>{groupage_detail.product_type ? groupage_detail.product_type : 'null'}</h6>
+                                                                    <h6>{groupage_detail.product_type ? groupage_detail.product_type : '-'}</h6>
                                                                 </div>
                                                             </div>
 
@@ -764,7 +771,7 @@ const Offers = () => {
                                                             ><BsFillFileZipFill /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
                                                                 <span className="text-secondary offer-submit-sub-head">Zip Code</span>
-                                                                <h6>{groupage_detail.sender_zipcode}</h6>
+                                                                <h6>{groupage_detail.sender_zipcode ? groupage_detail.sender_zipcode : '-'}</h6>
                                                             </div>
                                                         </div>
 
@@ -780,7 +787,14 @@ const Offers = () => {
                                                             ><GiCardPickup /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
                                                                 <span className="text-secondary offer-submit-sub-head">Pick Up Date</span>
-                                                                <h6 className="text-start">{groupage_detail.pickup_date ? groupage_detail.pickup_date.includes('Select End Date') ? groupage_detail.pickup_date.split('-')[0] : groupage_detail.pickup_date : 'null'}</h6>
+                                                                <h6 className="text-start">{
+                                                                    groupage_detail.pickup_date && groupage_detail.pickup_date !== 'null'
+                                                                        ? groupage_detail.pickup_date.includes('Select End Date')
+                                                                            ? groupage_detail.pickup_date.split(' - ')[0] || '-'
+                                                                            : groupage_detail.pickup_date.split(' - ')[0] || '-'
+                                                                        : '-'
+                                                                    // groupage_detail.pickup_date ? groupage_detail.pickup_date.includes('Select End Date') ? groupage_detail.pickup_date.split('-')[0] : groupage_detail.pickup_date : 'null'
+                                                                }</h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -852,7 +866,7 @@ const Offers = () => {
                                                             ><BiWorld /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
                                                                 <span className="text-secondary offer-submit-sub-head">Country</span>
-                                                                <h6>{groupage_detail.receiver_country}</h6>
+                                                                <h6>{groupage_detail.receiver_country ? groupage_detail.receiver_country : '-'}</h6>
                                                             </div>
                                                         </div>
 
@@ -868,7 +882,7 @@ const Offers = () => {
                                                             ><FaMapLocationDot /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
                                                                 <span className="text-secondary offer-submit-sub-head">State</span>
-                                                                <h6>{groupage_detail.receiver_state}</h6>
+                                                                <h6>{groupage_detail.receiver_state ? groupage_detail.receiver_state : '-'}</h6>
                                                             </div>
                                                         </div>
 
@@ -884,7 +898,7 @@ const Offers = () => {
                                                             ><FaCity /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
                                                                 <span className="text-secondary offer-submit-sub-head">City</span>
-                                                                <h6>{groupage_detail.receiver_city}</h6>
+                                                                <h6>{groupage_detail.receiver_city ? groupage_detail.receiver_city : '-'}</h6>
                                                             </div>
                                                         </div>
                                                     </div>

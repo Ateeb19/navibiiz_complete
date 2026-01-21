@@ -157,10 +157,12 @@ const Send_groupage = () => {
         }
     };
     const validateStep2 = () => {
-        return userName && userNumber && userEmail && userCountry && userState && userCity && streetAddress && zipCode && state;
+        // return userName && userNumber && userEmail && userCountry && userState && userCity && streetAddress && zipCode && state;
+        return userName && userNumber && userEmail && userCountry && userState && userCity;
     };
     const validateStep3 = () => {
-        return senderName && senderNumber && senderEmail && senderCountry && senderState && senderCity;
+        // return senderName && senderNumber && senderEmail && senderCountry && senderState && senderCity;
+        return senderName && senderNumber;
     };
     const isNextButtonDisabled = () => {
         if (currentStep === 1) return !validateStep1();
@@ -370,7 +372,7 @@ const Send_groupage = () => {
 
 
                                                                     <div className="row mt-4">
-                                                                        <div className="col-12 col-md-6 mb-2 text-start">
+                                                                        <div className="col-12 col-md-12 mb-2 text-start">
                                                                             <label className="shipping-input-label">Product Name <span className="text-danger">*</span></label>
                                                                             <input
                                                                                 className="shipping-input-field"
@@ -383,7 +385,7 @@ const Send_groupage = () => {
                                                                                 required
                                                                             />
                                                                         </div>
-                                                                        <div className="col-12 col-md-6 mb-2 text-start">
+                                                                        {/* <div className="col-12 col-md-6 mb-2 text-start">
                                                                             <label className="shipping-input-label">Product Type</label>
                                                                             <input
                                                                                 className="shipping-input-field"
@@ -395,10 +397,10 @@ const Send_groupage = () => {
                                                                                 style={{ backgroundColor: "rgb(214, 214, 214)" }}
                                                                                 required
                                                                             />
-                                                                        </div>
+                                                                        </div> */}
                                                                     </div>
 
-                                                                    <div className="row mt-4">
+                                                                    {/* <div className="row mt-4">
                                                                         <div className="col-6 col-md-3 mb-2 text-start">
                                                                             <label className="shipping-input-label">Weight (kg)</label>
                                                                             <input
@@ -447,7 +449,7 @@ const Send_groupage = () => {
                                                                                 required
                                                                             />
                                                                         </div>
-                                                                    </div>
+                                                                    </div> */}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -600,16 +602,16 @@ const Send_groupage = () => {
                                                     </div>
 
                                                     <div className="row mt-4">
-                                                        <div className="col-12 col-md-4 text-start">
+                                                        {/* <div className="col-12 col-md-4 text-start">
                                                             <label className="shipping-input-label">Street Address <span className="text-danger">*</span></label>
                                                             <input className="shipping-input-field" type="text" value={streetAddress} onChange={(e) => setStreetAddress(e.target.value)} placeholder="Enter your Street Address" style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
                                                         </div>
                                                         <div className="col-12 col-md-4 text-start">
                                                             <label className="shipping-input-label">Zip Code <span className="text-danger">*</span></label>
                                                             <input className="shipping-input-field" type="number" placeholder="Enter your Zip Code" value={zipCode} onChange={(e) => setZipCode(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
-                                                        </div>
+                                                        </div> */}
                                                         <div className="col-12 col-md-4 text-start">
-                                                            <label className="shipping-input-label">Picking Date<span className="text-danger">*</span></label>
+                                                            {/* <label className="shipping-input-label">Picking Date<span className="text-danger">*</span></label>
                                                             <input
                                                                 className="shipping-input-field"
                                                                 type="date"
@@ -618,7 +620,7 @@ const Send_groupage = () => {
                                                                 min={new Date().toISOString().split("T")[0]}
                                                                 required
                                                                 style={{ backgroundColor: 'rgb(214, 214, 214)' }}
-                                                            />
+                                                            /> */}
                                                             {/* <div style={{ position: "relative", width: "100%" }}>
                                                                 <input type="text" readOnly className="shipping-input-field" value={state[0].endDate ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}` : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`} onClick={() => setShowCalendar(!showCalendar)} style={{ cursor: "pointer", backgroundColor: 'rgb(214, 214, 214)' }} />
                                                                 {showCalendar && (
@@ -644,7 +646,7 @@ const Send_groupage = () => {
 
                                             <StepperPanel header="Delivery Information">
                                                 <div className="row justify-content-center mt-4">
-                                                    <div className="col-md-4  text-start">
+                                                    <div className="col-md-6  text-start">
                                                         <label className="shipping-input-label">Receiver Full Name <span className="text-danger">*</span></label>
                                                         <input
                                                             className="shipping-input-field"
@@ -656,7 +658,7 @@ const Send_groupage = () => {
                                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                                         />
                                                     </div>
-                                                    <div className="col-md-4  text-start">
+                                                    <div className="col-md-6  text-start">
                                                         <label className="shipping-input-label">Receiver Contact Number <span className="text-danger">*</span></label>
                                                         <PhoneInput
                                                             international
@@ -675,7 +677,7 @@ const Send_groupage = () => {
                                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                                         /> */}
                                                     </div>
-                                                    <div className="col-md-4  text-start">
+                                                    {/* <div className="col-md-4  text-start">
                                                         <label className="shipping-input-label">Receiver Email Address <span className="text-danger">*</span></label>
                                                         <input
                                                             className="shipping-input-field"
@@ -686,10 +688,10 @@ const Send_groupage = () => {
                                                             required
                                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                                         />
-                                                    </div>
+                                                    </div> */}
                                                 </div>
 
-                                                <div className="row justify-content-center mt-4">
+                                                {/* <div className="row justify-content-center mt-4">
                                                     <div className="col-md-4  text-start">
                                                         <label className="shipping-input-label">Country <span className="text-danger">*</span></label>
                                                         <Countries_selector
@@ -719,9 +721,9 @@ const Send_groupage = () => {
                                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                                         />
                                                     </div>
-                                                </div>
+                                                </div> */}
 
-                                                <div className="row justify-content-center mt-4">
+                                                {/* <div className="row justify-content-center mt-4">
                                                     <div className="col-md-4  text-start">
                                                         <label className="shipping-input-label">Receiver Street Address</label>
                                                         <input
@@ -758,7 +760,7 @@ const Send_groupage = () => {
                                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                                         />
                                                     </div>
-                                                </div>
+                                                </div> */}
 
                                                 <div className="mt-4  text-start">
                                                     <label className="shipping-input-label">Notes (if any)</label>
@@ -790,10 +792,10 @@ const Send_groupage = () => {
                                                             <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Product Information</h5>
                                                             <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
                                                                 <div className="d-flex justify-content-between w-100 p-2"> <span>Product Name :</span> <span> {productName ? (<h6>{productName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Weight :</span> <span> {Pweight ? (<h6>{Pweight.slice(0, 4)}... Kg</h6>) : (<span>N/A</span>)}</span></div>
+                                                                {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Weight :</span> <span> {Pweight ? (<h6>{Pweight.slice(0, 4)}... Kg</h6>) : (<span>N/A</span>)}</span></div>
                                                                 <div className="d-flex justify-content-between w-100 p-2"> <span>Height :</span> <span> {Pheight ? (<h6>{Pheight.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
                                                                 <div className="d-flex justify-content-between w-100 p-2"> <span>Length : </span> <span> {Plength ? (<h6>{Plength.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
-                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Width : </span> <span> {Pwidth ? (<h6>{Pwidth.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Width : </span> <span> {Pwidth ? (<h6>{Pwidth.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div> */}
                                                             </div>
                                                         </> : <>
 
@@ -814,9 +816,9 @@ const Send_groupage = () => {
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span >Country :</span> <span > {userCountry ? (<h6>{userCountry.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span >State :</span> <span > {userState ? (<h6>{userState.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span >City :</span> <span > {userCity ? (<h6>{userCity.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Street Address :</span> <span > {streetAddress ? (<h6>{streetAddress.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Zip Code :</span> <span > {zipCode ? (<h6>{zipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Picking Period :</span> <span > {picking_period ? (<h6>{picking_period.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span >Street Address :</span> <span > {streetAddress ? (<h6>{streetAddress.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Zip Code :</span> <span > {zipCode ? (<h6>{zipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span >Picking Period :</span> <span > {picking_period ? (<h6>{picking_period.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
                                                         </div>
                                                     </>
                                                 ) : (
@@ -825,12 +827,12 @@ const Send_groupage = () => {
                                                         <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>Full Name :</span> <span > {senderName ? (<h6>{senderName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>Contact Number :</span> <span > {senderNumber ? (<h6>{senderNumber.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Email ID :</span> <span > {senderEmail ? (<h6>{senderEmail.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Country :</span> <span > {senderCountry ? (<h6>{senderCountry.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Email ID :</span> <span > {senderEmail ? (<h6>{senderEmail.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Country :</span> <span > {senderCountry ? (<h6>{senderCountry.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
                                                             <div className="d-flex justify-content-between w-100 p-2"> <span>State :</span> <span > {senderState ? (<h6>{senderState.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>City :</span> <span > {senderCity ? (<h6>{senderCity.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Street Address :</span> <span > {senderStreetAddress ? (<h6>{senderStreetAddress.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Zip Code :</span> <span > {senderZipCode ? (<h6>{senderZipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>City :</span> <span > {senderCity ? (<h6>{senderCity.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Street Address :</span> <span > {senderStreetAddress ? (<h6>{senderStreetAddress.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Zip Code :</span> <span > {senderZipCode ? (<h6>{senderZipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
                                                         </div>
                                                     </>
                                                 )
@@ -898,10 +900,10 @@ const Send_groupage = () => {
                                     <div className="d-flex flex-column align-items-start w-100 gap-2 pt-2 border-bottom border-2 pb-3">
                                         <strong className="fs-6 pb-1">Product Information</strong>
                                         <div className="d-flex justify-content-between w-100"><span className="text-secondary">Product Name :</span> <span>{productName ? (<>{productName}</>) : (<>N/A</>)}</span>  </div>
-                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Weight :</span> <span>{Pweight ? (<>{Pweight} Kg</>) : (<>N/A</>)}</span>  </div>
+                                        {/* <div className="d-flex justify-content-between w-100"><span className="text-secondary">Weight :</span> <span>{Pweight ? (<>{Pweight} Kg</>) : (<>N/A</>)}</span>  </div>
                                         <div className="d-flex justify-content-between w-100"><span className="text-secondary">Height :</span> <span>{Pheight ? (<>{Pheight} Cm</>) : (<>N/A</>)}</span>  </div>
                                         <div className="d-flex justify-content-between w-100"><span className="text-secondary">Length :</span> <span>{Plength ? (<>{Plength} Cm</>) : (<>N/A</>)}</span>  </div>
-                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Width :</span> <span>{Pwidth ? (<>{Pwidth} Cm</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Width :</span> <span>{Pwidth ? (<>{Pwidth} Cm</>) : (<>N/A</>)}</span>  </div> */}
                                     </div>
                                 </> : <>
                                     <div className="d-flex flex-column align-items-start w-100 gap-2 pt-2 border-bottom border-2 pb-3">
@@ -920,22 +922,22 @@ const Send_groupage = () => {
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Country :</span> <span className="text-dark"> {userCountry ? (<span>{userCountry}</span>) : (<span>N/A</span>)}</span></div>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">State :</span> <span className="text-dark"> {userState ? (<span>{userState}</span>) : (<span>N/A</span>)}</span></div>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">City :</span> <span className="text-dark"> {userCity ? (<span>{userCity}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Street Address :</span> <span className="text-dark"> {streetAddress ? (<span>{streetAddress}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Zip Code :</span> <span className="text-dark"> {zipCode ? (<span>{zipCode}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Picking Period :</span> <span className="text-dark"> {picking_period ? (<span>{picking_period}</span>) : (<span>N/A</span>)}</span></div>
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Street Address :</span> <span className="text-dark"> {streetAddress ? (<span>{streetAddress}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Zip Code :</span> <span className="text-dark"> {zipCode ? (<span>{zipCode}</span>) : (<span>N/A</span>)}</span></div> */}
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Picking Period :</span> <span className="text-dark"> {picking_period ? (<span>{picking_period}</span>) : (<span>N/A</span>)}</span></div> */}
                                 </div>
 
                                 <div className="d-flex flex-column align-items-start w-100 gap-2 pt-4 pb-3">
                                     <strong className="fs-6 pb-1">Delivery Information</strong>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Full Name :</span> <span className="text-dark"> {senderName ? (<span>{senderName}</span>) : (<span>N/A</span>)}</span></div>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Contact Number :</span> <span className="text-dark"> {senderNumber ? (<span>{senderNumber}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Email ID :</span> <span className="text-dark"> {senderEmail ? (<span>{senderEmail}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Country :</span> <span className="text-dark"> {senderCountry ? (<span>{senderCountry}</span>) : (<span>N/A</span>)}</span></div>
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Email ID :</span> <span className="text-dark"> {senderEmail ? (<span>{senderEmail}</span>) : (<span>N/A</span>)}</span></div> */}
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Country :</span> <span className="text-dark"> {senderCountry ? (<span>{senderCountry}</span>) : (<span>N/A</span>)}</span></div>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">State :</span> <span className="text-dark"> {senderState ? (<span>{senderState}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">City :</span> <span className="text-dark"> {senderCity ? (<span>{senderCity}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Street Address :</span> <span className="text-dark"> {senderStreetAddress ? (<span>{senderStreetAddress}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">City :</span> <span className="text-dark"> {senderCity ? (<span>{senderCity}</span>) : (<span>N/A</span>)}</span></div> */}
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Street Address :</span> <span className="text-dark"> {senderStreetAddress ? (<span>{senderStreetAddress}</span>) : (<span>N/A</span>)}</span></div>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Zip Code :</span> <span className="text-dark"> {senderZipCode ? (<span>{senderZipCode}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Preferred Departure Date :</span> <span className="text-dark"> {departure_date ? (<span>{departure_date}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Preferred Departure Date :</span> <span className="text-dark"> {departure_date ? (<span>{departure_date}</span>) : (<span>N/A</span>)}</span></div> */}
                                 </div>
                             </div>
                             <div className="w-100 pt-4">
