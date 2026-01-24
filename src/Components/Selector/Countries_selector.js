@@ -35,7 +35,7 @@
 // export default Countries_selector;
 
 import React, { useState, useEffect } from "react";
-import { getCountries } from "@yusifaliyevpro/countries"; // ✅ New package
+import { getCountries } from "@yusifaliyevpro/countries"; //  New package
 
 const Countries_selector = ({
     onSelectCountry,

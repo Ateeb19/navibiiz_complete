@@ -1,0 +1,998 @@
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
+import { useNavigate, useParams } from 'react-router-dom'
+import { Stepper } from 'primereact/stepper';
+import { StepperPanel } from 'primereact/stepperpanel';
+import { Button } from 'primereact/button';
+import { useDropzone } from "react-dropzone";
+import Countries_selector from "../Selector/Countries_selector";
+import State_selector from "../Selector/State_selector";
+import axios from "axios";
+import { DateRange } from 'react-date-range';
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import { format } from "date-fns";
+import { useAlert } from "../alert/Alert_message";
+import PhoneInput from 'react-phone-number-input'
+
+const DragAndDrop = ({ accept, onFileDrop, label, multiple = true }) => {
+    const onDrop = useCallback(
+        (acceptedFiles) => {
+            if (multiple) {
+                onFileDrop(acceptedFiles);
+            } else if (acceptedFiles.length > 0) {
+                onFileDrop(acceptedFiles[0]);
+            }
+        },
+        [onFileDrop, multiple]
+    );
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept,
+        multiple,
+    });
+
+    return (
+        <div
+            {...getRootProps()}
+            style={{
+                border: "2px dashed #ddd",
+                padding: "20px",
+                textAlign: "center",
+                cursor: "pointer",
+                backgroundColor: isDragActive ? "#f0f8ff" : "white",
+                marginBottom: "20px",
+            }}
+        >
+            <input {...getInputProps()} />
+            <p>{label}</p>
+        </div>
+    );
+};
+
+const Send_groupage = () => {
+    const token = localStorage.getItem('token');
+    const { showAlert } = useAlert();
+    const port = process.env.REACT_APP_SECRET;
+    const navigate = useNavigate();
+    const stepperRef = useRef(null);
+    const [currentStep, setCurrentStep] = useState(1);
+    const alertShown = useRef(false);
+
+    const { type } = useParams();
+    useEffect(() => {
+        if (!token || token.length === 0) {
+            if (!alertShown.current) {
+                showAlert('Login first!');
+                alertShown.current = true;
+                localStorage.setItem('redirectAfterLogin', `/send_groupage/${type}`);
+                navigate('/login')
+            }
+        }
+    }, [])
+
+
+
+    const [selectedFiles, setSelectedFiles] = useState([]);
+
+    const handleFileDrop = (files) => {
+        if (selectedFiles.length + files.length > 10) {
+            showAlert('You can only upload up to 10 images.');
+            return;
+        }
+
+        const newFiles = files.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+        }));
+
+        setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    };
+
+    const handleRemoveImage = (index) => {
+        setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    };
+
+    const [showCalendar, setShowCalendar] = useState(false);
+    const [state, setState] = useState([
+        {
+            startDate: new Date(),
+            endDate: null,
+            key: 'selection'
+        }
+    ]);
+    const startDateFormatted = format(state[0].startDate, "dd/MM/yyyy");
+    const endDateFormatted = state[0].endDate ? format(state[0].endDate, "dd/MM/yyyy") : "Select End Date";
+    // const picking_period = `${startDateFormatted} - ${endDateFormatted}`;
+
+    const [picking_period, setPicking_period] = useState('');
+    const [productName, setProductName] = useState('');
+    const [productType, setProductType] = useState('');
+    const [box_dimension, setBox_dimension] = useState('');
+    const [box_number, setBox_number] = useState('');
+    const [box_description, setBox_description] = useState('');
+    const [Pweight, setPweight] = useState('');
+    const [Pheight, setPheight] = useState('');
+    const [Plength, setPlength] = useState('');
+    const [Pwidth, setPwidth] = useState('');
+
+    const [userName, setUserName] = useState('');
+    const [userNumber, setUserNumber] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [streetAddress, setStreetAddress] = useState('');
+    const [zipCode, setZipCode] = useState('');
+    const [pick_up_date, setPick_up_date] = useState('');
+    const [userCountry, setUserCountry] = useState('');
+    const [userState, setUserState] = useState('');
+    const [userCity, setUserCity] = useState('');
+    const [userDescription, setUserDescription] = useState('');
+
+    const [senderName, setSenderName] = useState('');
+    const [senderNumber, setSenderNumber] = useState('');
+    const [senderEmail, setSenderEmail] = useState('');
+    const [senderStreetAddress, setSenderStreetAddress] = useState('');
+    const [senderZipCode, setSenderZipCode] = useState('');
+    const [departure_date, setDeparture_date] = useState('');
+    const [senderCountry, setSenderCountry] = useState('');
+    const [senderState, setSenderState] = useState('');
+    const [senderCity, setSenderCity] = useState('');
+    const [document, setDocument] = useState('');
+    const [senderDescription, setSenderDescription] = useState('');
+    const [selectedCountry, setSelectedCountry] = useState("");
+
+    const Dimension = [
+        { label: 'Small(S) (30 x 20 x 10 cm)' },
+        { label: 'Medium(M) (40 x 30 x 20 cm)' },
+        { label: 'Large(L) (60 x 40 x 40 cm)' },
+        { label: 'Extra Large(XL) (80 x 60 x 60 cm)' },
+    ];
+
+    const validateStep1 = () => {
+        if (type === 'item') {
+            return productName;
+        } else {
+            return box_dimension && box_number;
+        }
+    };
+    const validateStep2 = () => {
+        // return userName && userNumber && userEmail && userCountry && userState && userCity && streetAddress && zipCode && state;
+        return userName && userNumber && userEmail && userCountry && userState && userCity;
+    };
+    const validateStep3 = () => {
+        // return senderName && senderNumber && senderEmail && senderCountry && senderState && senderCity;
+        return senderName && senderNumber;
+    };
+    const isNextButtonDisabled = () => {
+        if (currentStep === 1) return !validateStep1();
+        if (currentStep === 2) return !validateStep2();
+        if (currentStep === 3) return !validateStep3();
+        return false;
+    };
+    const [isVisible, setIsVisible] = useState(false);
+    const [congrat, setCongrat] = useState(false);
+
+    const handleClose = () => {
+        setIsVisible(false);
+    };
+
+
+
+    const CLOUD_NAME = "dizzgvtgf";
+    const UPLOAD_PRESET = "groupage_img";
+
+    // const uploadImageToCloudinary = async (file) => {
+    //     const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+    //     const formData = new FormData();
+    //     formData.append("file", file);
+    //     formData.append("upload_preset", UPLOAD_PRESET);
+
+    //     const response = await fetch(url, {
+    //         method: "POST",
+    //         body: formData,
+    //     });
+
+    //     const data = await response.json();
+    //     return data.secure_url;
+    // };
+
+    const uploadImageToCloudinary = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+
+        try {
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+                formData
+            );
+            return response.data.secure_url;
+        } catch (err) {
+            console.error("Cloudinary upload error:", err);
+            return null;
+        }
+    };
+    // const uploadAllImages = async () => {
+    //     const uploadPromises = selectedFiles.map((img) =>
+    //         uploadImageToCloudinary(img.file)
+    //     );
+    //     const uploadedUrls = await Promise.all(uploadPromises);
+    //     return uploadedUrls;
+    // };
+    const uploadAllImages = async () => {
+        try {
+            const promises = selectedFiles.map((fileObj) => uploadImageToCloudinary(fileObj.file));
+            const uploadedUrls = await Promise.all(promises);
+            console.log("Uploaded image URLs:", uploadedUrls);
+            return uploadedUrls;
+        } catch (err) {
+            console.error("Error uploading images:", err);
+            return [];
+        }
+    };
+
+    const [validate, setValidate] = useState(false);
+    const submitData = async () => {
+        setValidate(true);
+
+        const uploadedImageUrls = await uploadAllImages();
+
+        // console.log('images updloaded from frontend urls -: ', uploadedImageUrls);
+        const formData = new FormData();
+        formData.append("productName", productName);
+        formData.append("productType", productType);
+        formData.append("box_dimension", box_dimension);
+        formData.append("box_number", box_number);
+        formData.append("box_description", box_description);
+        formData.append("Pweight", Pweight);
+        formData.append("Pheight", Pheight);
+        formData.append("Plength", Plength);
+        formData.append("Pwidth", Pwidth);
+        uploadedImageUrls.forEach((url) => {
+            formData.append("imageUrls[]", url);
+        });
+        // selectedFiles.forEach((fileObj, index) => {
+        //     formData.append("images", fileObj.file);
+        // });
+        formData.append("userName", userName);
+        formData.append("userNumber", userNumber);
+        formData.append("userEmail", userEmail);
+        formData.append("userCountry", userCountry);
+        formData.append("userState", userState);
+        formData.append("userCity", userCity);
+        formData.append("streetAddress", streetAddress);
+        formData.append("zipCode", zipCode);
+        formData.append("picking_period", picking_period);
+        formData.append("userDescription", userDescription);
+        formData.append("senderName", senderName);
+        formData.append("senderNumber", senderNumber);
+        formData.append("senderEmail", senderEmail);
+        formData.append("senderCountry", senderCountry);
+        formData.append("senderState", senderState);
+        formData.append("senderCity", senderCity);
+        formData.append("senderStreetAddress", senderStreetAddress);
+        formData.append("senderZipCode", senderZipCode);
+        formData.append("departureDate", departure_date);
+        formData.append("senderDescription", senderDescription);
+        if (document) {
+            formData.append("document", document);
+        }
+
+        try {
+            const response = await axios.post(
+                `${port}/send_groupage/send_groupage_submit`,
+                formData,
+                {
+                    headers: {
+                        Authorization: token,
+                        // "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            if (response.data.status === true) {
+                setValidate(true);
+                setIsVisible(false);
+                setCongrat(true);
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            setValidate(false);
+        }
+    };
+    return (
+        <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
+            <div className='navbar-wrapper'>
+                <div className=" d-flex justify-content-center w-100">
+                    <Navbar />
+                </div>
+            </div>
+            <div className="d-flex flex-column align-items-center justify-content-start w-100 mt-5">
+
+                <section className="shipping-wrapper w-100">
+                    <div className="container-fluid">
+                        <div className="shipping-wrap-box w-100">
+                            <div className="title-head text-start">
+                                <h3>Shipping Information</h3>
+                            </div>
+                            <div className="shipping-wrap">
+                                {/* <div className="row align-items-start justify-content-between w-100 mt-4 ps-3"> */}
+                                <div className="row align-items-between justify-content-between w-100 mt-4 ps-3">
+                                    {/* <div className="col-12 col-md-9 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start" style={{ width: '73%' }}> */}
+                                    <div className="d-flex flex-column align-items-start justify-content-start col-md-9 col-12  border border-1 rounded-2 groupage-left" >
+
+
+                                        <Stepper linear desabled ref={stepperRef} onStepChange={(step) => setCurrentStep(step)} style={{ flexBasis: 'auto', width: '100%' }}>
+                                            <StepperPanel header={type === 'item' ? "Product Information" : "Box Information"}>
+
+                                                {type === 'item' ? <>
+                                                    <div className="shipping-form-wrapper">
+                                                        <div className="row">
+                                                            <div className="col-12">
+                                                                <div className="border-2 border-dashed surface-border border-round surface-ground p-1">
+                                                                    <div className="text-center mb-3">
+                                                                        <DragAndDrop
+                                                                            accept="image/*"
+                                                                            multiple={true}
+                                                                            onFileDrop={handleFileDrop}
+                                                                            label="Drag and drop images here, or click to select (Max: 10 images)"
+                                                                        />
+                                                                    </div>
+
+                                                                    {selectedFiles.length > 0 && (
+                                                                        <div className="d-flex flex-wrap justify-content-center gap-2">
+                                                                            {selectedFiles.map((img, index) => (
+                                                                                <div key={index} className="position-relative">
+                                                                                    <img
+                                                                                        src={img.preview}
+                                                                                        alt={`Selected ${index}`}
+                                                                                        className="rounded border border-1 border-dark"
+                                                                                        style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                                                                                    />
+                                                                                    <button
+                                                                                        onClick={() => handleRemoveImage(index)}
+                                                                                        className="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle"
+                                                                                        style={{
+                                                                                            transform: "translate(50%, -50%)",
+                                                                                            width: "20px",
+                                                                                            height: "20px",
+                                                                                            display: "flex",
+                                                                                            alignItems: "center",
+                                                                                            justifyContent: "center",
+                                                                                            padding: "0",
+                                                                                        }}
+                                                                                    >
+                                                                                        ×
+                                                                                    </button>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+
+
+                                                                    <div className="row mt-4">
+                                                                        <div className="col-12 col-md-12 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Product Name <span className="text-danger">*</span></label>
+                                                                            <input
+                                                                                className="shipping-input-field"
+                                                                                type="text"
+                                                                                value={productName}
+                                                                                onChange={(e) => setProductName(e.target.value)}
+                                                                                placeholder="Enter the product name"
+                                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                                autofill="on"
+                                                                                required
+                                                                            />
+                                                                        </div>
+                                                                        {/* <div className="col-12 col-md-6 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Product Type</label>
+                                                                            <input
+                                                                                className="shipping-input-field"
+                                                                                type="text"
+                                                                                value={productType}
+                                                                                onChange={(e) => setProductType(e.target.value)}
+                                                                                placeholder="Enter the product type"
+                                                                                autofill="on"
+                                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                                required
+                                                                            />
+                                                                        </div> */}
+                                                                    </div>
+
+                                                                    {/* <div className="row mt-4">
+                                                                        <div className="col-6 col-md-3 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Weight (kg)</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="shipping-input-field"
+                                                                                onChange={(e) => setPweight(e.target.value.replace(/[^0-9.]/g, ""))}
+                                                                                value={Pweight}
+                                                                                placeholder="Eg: 0"
+                                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                                required
+                                                                            />
+                                                                        </div>
+                                                                        <div className="col-6 col-md-3 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Height (cm)</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="shipping-input-field"
+                                                                                onChange={(e) => setPheight(e.target.value.replace(/[^0-9.]/g, ""))}
+                                                                                value={Pheight}
+                                                                                placeholder="Eg: 0"
+                                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                                required
+                                                                            />
+                                                                        </div>
+                                                                        <div className="col-6 col-md-3 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Length (cm)</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="shipping-input-field"
+                                                                                onChange={(e) => setPlength(e.target.value.replace(/[^0-9.]/g, ""))}
+                                                                                value={Plength}
+                                                                                placeholder="Eg: 0"
+                                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                                required
+                                                                            />
+                                                                        </div>
+                                                                        <div className="col-6 col-md-3 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Width (cm)</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="shipping-input-field"
+                                                                                onChange={(e) => setPwidth(e.target.value.replace(/[^0-9.]/g, ""))}
+                                                                                value={Pwidth}
+                                                                                placeholder="Eg: 0"
+                                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                                required
+                                                                            />
+                                                                        </div>
+                                                                    </div> */}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </> : <>
+                                                    <div className="shipping-form-wrapper">
+                                                        <div className="row">
+                                                            <div className="col-12">
+                                                                <div className="border-2 border-dashed surface-border border-round surface-ground p-1">
+                                                                    <div className="text-center mb-3">
+                                                                        <DragAndDrop
+                                                                            accept="image/*"
+                                                                            multiple={true}
+                                                                            onFileDrop={handleFileDrop}
+                                                                            label="Drag and drop images here, or click to select (Max: 10 images)"
+                                                                        />
+                                                                    </div>
+
+                                                                    {selectedFiles.length > 0 && (
+                                                                        <div className="d-flex flex-wrap justify-content-center gap-2">
+                                                                            {selectedFiles.map((img, index) => (
+                                                                                <div key={index} className="position-relative">
+                                                                                    <img
+                                                                                        src={img.preview}
+                                                                                        alt={`Selected ${index}`}
+                                                                                        className="rounded border border-1 border-dark"
+                                                                                        style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                                                                                    />
+                                                                                    <button
+                                                                                        onClick={() => handleRemoveImage(index)}
+                                                                                        className="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle"
+                                                                                        style={{
+                                                                                            transform: "translate(50%, -50%)",
+                                                                                            width: "20px",
+                                                                                            height: "20px",
+                                                                                            display: "flex",
+                                                                                            alignItems: "center",
+                                                                                            justifyContent: "center",
+                                                                                            padding: "0",
+                                                                                        }}
+                                                                                    >
+                                                                                        ×
+                                                                                    </button>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+
+
+                                                                    <div className="row mt-4">
+                                                                        <div className="col-12 col-md-6 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Box Dimension <span className="text-danger">*</span></label>
+                                                                            <select className="shipping-input-field"
+                                                                                value={box_dimension}
+                                                                                onChange={(e) => setBox_dimension(e.target.value)} >
+                                                                                <option value="" disabled hidden>
+                                                                                    Please choose category
+                                                                                </option>
+                                                                                {Dimension.map((dim, key) => (
+                                                                                    <>
+                                                                                        <option value={dim.label}>{dim.label}</option>
+                                                                                    </>
+                                                                                ))}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div className="col-12 col-md-6 mb-2 text-start">
+                                                                            <label className="shipping-input-label">Number of Boxes <span className="text-danger">*</span></label>
+                                                                            <input
+                                                                                className="shipping-input-field"
+                                                                                type="text"
+                                                                                value={box_number}
+                                                                                placeholder="Enter number of boxes"
+                                                                                style={{ backgroundColor: "rgb(214, 214, 214)" }}
+                                                                                required
+                                                                                onChange={(e) => setBox_number(e.target.value)}
+                                                                                onKeyDown={(e) => {
+                                                                                    if (
+                                                                                        e.key === "Backspace" ||
+                                                                                        e.key === "Delete" ||
+                                                                                        e.key === "ArrowLeft" ||
+                                                                                        e.key === "ArrowRight" ||
+                                                                                        e.key === "Tab"
+                                                                                    ) {
+                                                                                        return;
+                                                                                    }
+                                                                                    if (!/[0-9]/.test(e.key)) {
+                                                                                        e.preventDefault();
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="d-flex flex-column text-align-start justify-content-start align-items-start w-100 mt-4">
+                                                                        <lable className="shipping-input-label">Short info inside the box</lable>
+                                                                        <textarea className="shipping-input-field" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows={4} placeholder="Short info inside the box....." onChange={(e) => setBox_description(e.target.value)} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </>}
+
+                                            </StepperPanel>
+
+
+                                            <StepperPanel header="Pick-up Information">
+                                                <div className=""
+                                                    onClick={() => {
+                                                        if (showCalendar === true) {
+                                                            setShowCalendar(false);
+                                                        }
+                                                    }}
+                                                >
+                                                    <div className="row mt-4 ">
+                                                        <div className="col-12 col-md-4 text-start ">
+                                                            <label className="shipping-input-label">Full Name <span className="text-danger">*</span></label>
+                                                            <input className="shipping-input-field" type="text" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder="Enter your full name" style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                                        </div>
+                                                        <div className="col-12 col-md-4 text-start ">
+                                                            <label className="shipping-input-label">Contact Number <span className="text-danger">*</span></label>
+                                                            <PhoneInput
+                                                                international
+                                                                className="shipping-input-field-contact"
+                                                                style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                                defaultCountry="DE"
+                                                                value={userNumber}
+                                                                onChange={setUserNumber} />
+                                                            {/* <input className="shipping-input-field" type="tel" placeholder="Enter your contact number" value={userNumber} onChange={(e) => setUserNumber(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required /> */}
+                                                        </div>
+                                                        <div className="col-12 col-md-4 text-start">
+                                                            <label className="shipping-input-label">Email Address<span className="text-danger">*</span></label>
+                                                            <input className="shipping-input-field" type="email" placeholder="Enter your email id" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="row mt-4">
+                                                        <div className="col-12 col-md-4 text-start">
+                                                            <label className="shipping-input-label">Country<span className="text-danger">*</span></label>
+                                                            <Countries_selector onSelectCountry={(value) => { setUserCountry(value); setSelectedCountry(value) }} value={userCountry} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' required />
+                                                        </div>
+                                                        <div className="col-12 col-md-4 text-start">
+                                                            <label className="shipping-input-label">State<span className="text-danger">*</span></label>
+                                                            <State_selector selectedCountry={selectedCountry} onSelectState={(value) => setUserState(value)} value={userState} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' required />
+                                                        </div>
+                                                        <div className="col-12 col-md-4 text-start">
+                                                            <label className="shipping-input-label">City<span className="text-danger">*</span></label>
+                                                            <input className="shipping-input-field" type="text" placeholder="Enter the city name" style={{ backgroundColor: "rgb(214, 214, 214)" }} value={userCity} onChange={(e) => setUserCity(e.target.value)} required />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="row mt-4">
+                                                        {/* <div className="col-12 col-md-4 text-start">
+                                                            <label className="shipping-input-label">Street Address <span className="text-danger">*</span></label>
+                                                            <input className="shipping-input-field" type="text" value={streetAddress} onChange={(e) => setStreetAddress(e.target.value)} placeholder="Enter your Street Address" style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                                        </div>
+                                                        <div className="col-12 col-md-4 text-start">
+                                                            <label className="shipping-input-label">Zip Code <span className="text-danger">*</span></label>
+                                                            <input className="shipping-input-field" type="number" placeholder="Enter your Zip Code" value={zipCode} onChange={(e) => setZipCode(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                                        </div> */}
+                                                        <div className="col-12 col-md-4 text-start">
+                                                            {/* <label className="shipping-input-label">Picking Date<span className="text-danger">*</span></label>
+                                                            <input
+                                                                className="shipping-input-field"
+                                                                type="date"
+                                                                value={picking_period}
+                                                                onChange={(e) => setPicking_period(e.target.value)}
+                                                                min={new Date().toISOString().split("T")[0]}
+                                                                required
+                                                                style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                            /> */}
+                                                            {/* <div style={{ position: "relative", width: "100%" }}>
+                                                                <input type="text" readOnly className="shipping-input-field" value={state[0].endDate ? `${format(state[0].startDate, "dd/MM/yyyy")} - ${format(state[0].endDate, "dd/MM/yyyy")}` : `${format(state[0].startDate, "dd/MM/yyyy")} - Select End Date`} onClick={() => setShowCalendar(!showCalendar)} style={{ cursor: "pointer", backgroundColor: 'rgb(214, 214, 214)' }} />
+                                                                {showCalendar && (
+                                                                    <div style={{ position: "absolute", top: "45px", left: "0", right: "0", zIndex: 1000, background: "#fff", borderRadius: "8px", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)" }}>
+                                                                        <DateRange editableDateInputs={true} onChange={item => setState([item.selection])} moveRangeOnFirstSelection={false} ranges={state} />
+                                                                    </div>
+                                                                )}
+                                                            </div> */}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* <div className="row mt-4  text-start">
+                                                        <div className="col-12  text-start">
+                                                            <label className="shipping-input-label">Notes (if any)</label>
+                                                            <textarea className="shipping-input-field" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows="4" value={userDescription} onChange={(e) => setUserDescription(e.target.value)} placeholder="Type here ....."></textarea>
+                                                        </div>
+                                                    </div> */}
+
+
+                                                </div>
+                                            </StepperPanel>
+
+
+                                            <StepperPanel header="Delivery Information">
+                                                <div className="row justify-content-center mt-4">
+                                                    <div className="col-md-6  text-start">
+                                                        <label className="shipping-input-label">Receiver Full Name <span className="text-danger">*</span></label>
+                                                        <input
+                                                            className="shipping-input-field"
+                                                            type="text"
+                                                            value={senderName}
+                                                            onChange={(e) => setSenderName(e.target.value)}
+                                                            placeholder="Enter Receiver's full name"
+                                                            required
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-6  text-start">
+                                                        <label className="shipping-input-label">Receiver Contact Number <span className="text-danger">*</span></label>
+                                                        <PhoneInput
+                                                            international
+                                                            className="shipping-input-field-contact"
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                            defaultCountry="DE"
+                                                            value={senderNumber}
+                                                            onChange={setSenderNumber} />
+                                                        {/* <input
+                                                            className="shipping-input-field"
+                                                            type="tel"
+                                                            value={senderNumber}
+                                                            onChange={(e) => setSenderNumber(e.target.value)}
+                                                            placeholder="Enter Receiver's contact number"
+                                                            required
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        /> */}
+                                                    </div>
+                                                    {/* <div className="col-md-4  text-start">
+                                                        <label className="shipping-input-label">Receiver Email Address <span className="text-danger">*</span></label>
+                                                        <input
+                                                            className="shipping-input-field"
+                                                            type="email"
+                                                            value={senderEmail}
+                                                            onChange={(e) => setSenderEmail(e.target.value)}
+                                                            placeholder="Enter Receiver's email"
+                                                            required
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        />
+                                                    </div> */}
+                                                </div>
+                                                <div className="row justify-content-center mt-4">
+                                                    <div className="col-md-12  text-start">
+                                                        <label className="shipping-input-label">Country <span className="text-danger">*</span></label>
+                                                        <Countries_selector
+                                                            onSelectCountry={(value) => { setSenderCountry(value); setSelectedCountry(value) }}
+                                                            value={senderCountry} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                                            required
+                                                        />
+                                                    </div>
+                                                </div>
+
+
+                                                {/* <div className="row justify-content-center mt-4">
+                                                    <div className="col-md-4  text-start">
+                                                        <label className="shipping-input-label">Country <span className="text-danger">*</span></label>
+                                                        <Countries_selector
+                                                            onSelectCountry={(value) => { setSenderCountry(value); setSelectedCountry(value) }}
+                                                            value={senderCountry} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-4  text-start">
+                                                        <label className="shipping-input-label">State <span className="text-danger">*</span></label>
+                                                        <State_selector
+                                                            selectedCountry={selectedCountry}
+                                                            onSelectState={(value) => setSenderState(value)}
+                                                            value={senderState} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-4  text-start">
+                                                        <label className="shipping-input-label">City <span className="text-danger">*</span></label>
+                                                        <input
+                                                            className="shipping-input-field"
+                                                            type="text"
+                                                            value={senderCity}
+                                                            onChange={(e) => setSenderCity(e.target.value)}
+                                                            placeholder="Enter City Name"
+                                                            required
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        />
+                                                    </div>
+                                                </div> */}
+
+                                                {/* <div className="row justify-content-center mt-4">
+                                                    <div className="col-md-4  text-start">
+                                                        <label className="shipping-input-label">Receiver Street Address</label>
+                                                        <input
+                                                            className="shipping-input-field"
+                                                            type="text"
+                                                            value={senderStreetAddress}
+                                                            onChange={(e) => setSenderStreetAddress(e.target.value)}
+                                                            placeholder="Enter Receiver's Street Address"
+                                                            required
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-4  text-start">
+                                                        <label className="shipping-input-label">Receiver Zip Code</label>
+                                                        <input
+                                                            className="shipping-input-field"
+                                                            type="number"
+                                                            value={senderZipCode}
+                                                            onChange={(e) => setSenderZipCode(e.target.value)}
+                                                            placeholder="Enter Receiver's Zip Code"
+                                                            required
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-4  text-start">
+                                                        <label className="shipping-input-label">Preferred Departure Date</label>
+                                                        <input
+                                                            className="shipping-input-field"
+                                                            type="date"
+                                                            value={departure_date}
+                                                            onChange={(e) => setDeparture_date(e.target.value)}
+                                                            min={new Date().toISOString().split("T")[0]}
+                                                            required
+                                                            style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                        />
+                                                    </div>
+                                                </div> */}
+
+                                                {/* <div className="mt-4  text-start">
+                                                    <label className="shipping-input-label">Notes (if any)</label>
+                                                    <textarea
+                                                        className="shipping-input-field"
+                                                        value={senderDescription}
+                                                        onChange={(e) => setSenderDescription(e.target.value)}
+                                                        placeholder="Type here..."
+                                                        rows="4"
+                                                        style={{ backgroundColor: 'rgb(214, 214, 214)' }}
+                                                    />
+                                                </div> */}
+                                            </StepperPanel>
+
+
+                                        </Stepper>
+                                    </div>
+                                    {/* <div className="col-12 col-md-3 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start"> */}
+                                    <div className="d-flex flex-column align-items-start justify-content-start col-md-3 cod-12  border border-1 rounded-2">
+
+                                        <div className="d-flex flex-column align-items-start w-100">
+                                            <div className="p-2 pt-3">
+                                                <strong className="fs-5">Order Details</strong>
+                                            </div>
+                                            <div className="d-flex flex-column align-items-start w-100">
+                                                {currentStep === 1 ? (
+                                                    <>
+                                                        {type === 'item' ? <>
+                                                            <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Product Information</h5>
+                                                            <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Product Name :</span> <span> {productName ? (<h6>{productName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                                {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Weight :</span> <span> {Pweight ? (<h6>{Pweight.slice(0, 4)}... Kg</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Height :</span> <span> {Pheight ? (<h6>{Pheight.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Length : </span> <span> {Plength ? (<h6>{Plength.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Width : </span> <span> {Pwidth ? (<h6>{Pwidth.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                            </div>
+                                                        </> : <>
+
+                                                            <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Box Information</h5>
+                                                            <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Box Dimension :</span> <span> {box_dimension ? (<h6>{box_dimension.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Number of Boxes :</span> <span> {box_number ? (<h6>{box_number.length > 4 ? `${box_number.slice(0, 4)}...` : box_number}</h6>) : (<span>N/A</span>)}</span></div>
+                                                            </div>
+                                                        </>}
+                                                    </>
+                                                ) : currentStep === 2 ? (
+                                                    <>
+                                                        <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Pick Up Information</h5>
+                                                        <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Full Name :</span> <span > {userName ? (<h6>{userName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Contact Number :</span> <span > {userNumber ? (<h6>{userNumber.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Email ID :</span> <span > {userEmail ? (<h6>{userEmail.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Country :</span> <span > {userCountry ? (<h6>{userCountry.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >State :</span> <span > {userState ? (<h6>{userState.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >City :</span> <span > {userCity ? (<h6>{userCity.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span >Street Address :</span> <span > {streetAddress ? (<h6>{streetAddress.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Zip Code :</span> <span > {zipCode ? (<h6>{zipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span >Picking Period :</span> <span > {picking_period ? (<h6>{picking_period.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Delivery Information</h5>
+                                                        <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Full Name :</span> <span > {senderName ? (<h6>{senderName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Contact Number :</span> <span > {senderNumber ? (<h6>{senderNumber.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Email ID :</span> <span > {senderEmail ? (<h6>{senderEmail.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Country :</span> <span > {senderCountry ? (<h6>{senderCountry.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>State :</span> <span > {senderState ? (<h6>{senderState.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>City :</span> <span > {senderCity ? (<h6>{senderCity.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Street Address :</span> <span > {senderStreetAddress ? (<h6>{senderStreetAddress.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
+                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Zip Code :</span> <span > {senderZipCode ? (<h6>{senderZipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
+                                                        </div>
+                                                    </>
+                                                )
+                                                }
+
+                                            </div>
+                                        </div>
+                                        <div className="d-flex pt-4 justify-content-end w-100 p-2">
+                                            <Button
+                                                label="Next"
+                                                icon="pi pi-arrow-right"
+                                                className="btn rounded-2 w-100"
+                                                style={{ backgroundColor: '#1fa4e6', color: '#fff', fontWeight: '400' }}
+                                                iconPos="center"
+                                                disabled={isNextButtonDisabled()}
+                                                onClick={() => {
+                                                    if (currentStep < 3) {
+                                                        stepperRef.current.nextCallback();
+                                                        setCurrentStep((prev) => prev + 1);
+                                                    } else {
+                                                        setIsVisible(true);
+                                                    }
+                                                    window.scrollTo({ top: 0 });
+                                                }}
+                                            />
+                                        </div>
+
+                                        {currentStep !== 1 && (
+                                            <div className="d-flex pt-2 pb-4 justify-content-end w-100 p-2">
+                                                <Button
+                                                    label="Back"
+                                                    severity="secondary"
+                                                    icon="pi pi-arrow-left"
+                                                    className="btn rounded-2 w-100"
+                                                    style={{ backgroundColor: 'transparent', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
+                                                    iconPos="center"
+                                                    onClick={() => {
+                                                        stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); window.scrollTo({ top: 0 });
+                                                        window.scrollTo({ top: 0 });
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+                {isVisible && (
+                    <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+                        <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: '40rem', overflowY: 'auto' }}>
+                            <button
+                                className="btn-close position-absolute top-0 end-0 m-2"
+                                onClick={handleClose}
+                            ></button>
+                            <div className="d-flex flex-column align-items-start w-100">
+                                <strong className="fs-5">Review your order</strong>
+                                {type === 'item' ? <>
+                                    <div className="d-flex flex-column align-items-start w-100 gap-2 pt-2 border-bottom border-2 pb-3">
+                                        <strong className="fs-6 pb-1">Product Information</strong>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Product Name :</span> <span>{productName ? (<>{productName}</>) : (<>N/A</>)}</span>  </div>
+                                        {/* <div className="d-flex justify-content-between w-100"><span className="text-secondary">Weight :</span> <span>{Pweight ? (<>{Pweight} Kg</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Height :</span> <span>{Pheight ? (<>{Pheight} Cm</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Length :</span> <span>{Plength ? (<>{Plength} Cm</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Width :</span> <span>{Pwidth ? (<>{Pwidth} Cm</>) : (<>N/A</>)}</span>  </div> */}
+                                    </div>
+                                </> : <>
+                                    <div className="d-flex flex-column align-items-start w-100 gap-2 pt-2 border-bottom border-2 pb-3">
+                                        <strong className="fs-6 pb-1">Box Information</strong>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Box Dimension :</span> <span>{box_dimension ? (<>{box_dimension}</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Number of Boxes :</span> <span>{box_number ? (<>{box_number}</>) : (<>N/A</>)}</span>  </div>
+                                        <div className="d-flex justify-content-between w-100"><span className="text-secondary">Box Info :</span> <span>{box_description ? (<>{box_description}</>) : (<>N/A</>)}</span>  </div>
+                                    </div>
+                                </>}
+
+                                <div className="d-flex flex-column align-items-start w-100 gap-2 pt-4 border-bottom border-2 pb-3">
+                                    <strong className="fs-6 pb-1">Pick Up Information</strong>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Full Name :</span> <span className="text-dark"> {userName ? (<span>{userName}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Contact Number :</span> <span className="text-dark"> {userNumber ? (<span>{userNumber}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Email ID :</span> <span className="text-dark"> {userEmail ? (<span>{userEmail}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Country :</span> <span className="text-dark"> {userCountry ? (<span>{userCountry}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">State :</span> <span className="text-dark"> {userState ? (<span>{userState}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">City :</span> <span className="text-dark"> {userCity ? (<span>{userCity}</span>) : (<span>N/A</span>)}</span></div>
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Street Address :</span> <span className="text-dark"> {streetAddress ? (<span>{streetAddress}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Zip Code :</span> <span className="text-dark"> {zipCode ? (<span>{zipCode}</span>) : (<span>N/A</span>)}</span></div> */}
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Picking Period :</span> <span className="text-dark"> {picking_period ? (<span>{picking_period}</span>) : (<span>N/A</span>)}</span></div> */}
+                                </div>
+
+                                <div className="d-flex flex-column align-items-start w-100 gap-2 pt-4 pb-3">
+                                    <strong className="fs-6 pb-1">Delivery Information</strong>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Full Name :</span> <span className="text-dark"> {senderName ? (<span>{senderName}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Contact Number :</span> <span className="text-dark"> {senderNumber ? (<span>{senderNumber}</span>) : (<span>N/A</span>)}</span></div>
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Email ID :</span> <span className="text-dark"> {senderEmail ? (<span>{senderEmail}</span>) : (<span>N/A</span>)}</span></div> */}
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Country :</span> <span className="text-dark"> {senderCountry ? (<span>{senderCountry}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">State :</span> <span className="text-dark"> {senderState ? (<span>{senderState}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">City :</span> <span className="text-dark"> {senderCity ? (<span>{senderCity}</span>) : (<span>N/A</span>)}</span></div> */}
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Street Address :</span> <span className="text-dark"> {senderStreetAddress ? (<span>{senderStreetAddress}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Zip Code :</span> <span className="text-dark"> {senderZipCode ? (<span>{senderZipCode}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Preferred Departure Date :</span> <span className="text-dark"> {departure_date ? (<span>{departure_date}</span>) : (<span>N/A</span>)}</span></div> */}
+                                </div>
+                            </div>
+                            <div className="w-100 pt-4">
+                                <button className="btn btn-primary w-100"
+                                    disabled={validate}
+                                    onClick={() => { submitData(); setValidate(true) }}>Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {congrat && (
+                    <>
+                        <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+
+                            <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: '25rem' }}>
+
+                                <div className="success-img-wrap">
+                                    <img src="/Images/Party_Popper.png" alt="congratulation" />
+                                </div>
+
+                                <div className="title-head">
+                                    <h3 style={{ color: ' #1ba300' }}>CONGRATULATIONS</h3>
+                                </div>
+
+                                <div className="success-des-wrap">
+                                    <p>We have received your order request, we will send the offers from
+                                        different companies to your email & profile id within 24 hours</p>
+                                </div>
+
+                                <div className="success-button">
+                                    <button className="btn-success" onClick={() => navigate('/dashboard')}>Go To Dashboard</button>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </div>
+
+            <div className="w-100">
+                <Footer />
+            </div>
+        </div>
+    )
+}
+
+export default Send_groupage;

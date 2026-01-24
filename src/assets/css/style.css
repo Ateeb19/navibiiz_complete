@@ -993,7 +993,8 @@ svg {
 }
 
 .groupage-left {
-    width: 73% !important;
+    width: 100% !important;
+    /* width: 73% !important; */
 }
 
 .shipping-wrap-box {

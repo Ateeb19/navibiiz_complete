@@ -162,7 +162,7 @@ const Send_groupage = () => {
     };
     const validateStep3 = () => {
         // return senderName && senderNumber && senderEmail && senderCountry && senderState && senderCity;
-        return senderName && senderNumber;
+        return senderName && senderNumber && senderCountry;
     };
     const isNextButtonDisabled = () => {
         if (currentStep === 1) return !validateStep1();
@@ -320,7 +320,8 @@ const Send_groupage = () => {
                                 {/* <div className="row align-items-start justify-content-between w-100 mt-4 ps-3"> */}
                                 <div className="row align-items-between justify-content-between w-100 mt-4 ps-3">
                                     {/* <div className="col-12 col-md-9 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start" style={{ width: '73%' }}> */}
-                                    <div className="d-flex flex-column align-items-start justify-content-start col-md-9 col-12  border border-1 rounded-2 groupage-left" >
+                                    {/* <div className="d-flex flex-column align-items-start justify-content-start col-md-9 col-12  border border-1 rounded-2 groupage-left" > */}
+                                    <div className="d-flex flex-column align-items-start justify-content-start col-md-12 col-12  border border-1 rounded-2 groupage-left" >
 
 
                                         <Stepper linear desabled ref={stepperRef} onStepChange={(step) => setCurrentStep(step)} style={{ flexBasis: 'auto', width: '100%' }}>
@@ -545,7 +546,7 @@ const Send_groupage = () => {
 
                                                                     <div className="d-flex flex-column text-align-start justify-content-start align-items-start w-100 mt-4">
                                                                         <lable className="shipping-input-label">Short info inside the box</lable>
-                                                                        <textarea className="shipping-input-field" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows={4} placeholder="Short info inside the box....." onChange={(e) => setBox_description(e.target.value)}/>
+                                                                        <textarea className="shipping-input-field" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows={4} placeholder="Short info inside the box....." onChange={(e) => setBox_description(e.target.value)} />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -632,12 +633,12 @@ const Send_groupage = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="row mt-4  text-start">
+                                                    {/* <div className="row mt-4  text-start">
                                                         <div className="col-12  text-start">
                                                             <label className="shipping-input-label">Notes (if any)</label>
                                                             <textarea className="shipping-input-field" style={{ backgroundColor: 'rgb(214, 214, 214)' }} rows="4" value={userDescription} onChange={(e) => setUserDescription(e.target.value)} placeholder="Type here ....."></textarea>
                                                         </div>
-                                                    </div>
+                                                    </div> */}
 
 
                                                 </div>
@@ -690,6 +691,17 @@ const Send_groupage = () => {
                                                         />
                                                     </div> */}
                                                 </div>
+                                                <div className="row justify-content-center mt-4">
+                                                    <div className="col-md-12  text-start">
+                                                        <label className="shipping-input-label">Country <span className="text-danger">*</span></label>
+                                                        <Countries_selector
+                                                            onSelectCountry={(value) => { setSenderCountry(value); setSelectedCountry(value) }}
+                                                            value={senderCountry} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px'
+                                                            required
+                                                        />
+                                                    </div>
+                                                </div>
+
 
                                                 {/* <div className="row justify-content-center mt-4">
                                                     <div className="col-md-4  text-start">
@@ -762,7 +774,7 @@ const Send_groupage = () => {
                                                     </div>
                                                 </div> */}
 
-                                                <div className="mt-4  text-start">
+                                                {/* <div className="mt-4  text-start">
                                                     <label className="shipping-input-label">Notes (if any)</label>
                                                     <textarea
                                                         className="shipping-input-field"
@@ -772,112 +784,54 @@ const Send_groupage = () => {
                                                         rows="4"
                                                         style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                                     />
-                                                </div>
+                                                </div> */}
                                             </StepperPanel>
 
 
                                         </Stepper>
-                                    </div>
-                                    {/* <div className="col-12 col-md-3 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start"> */}
-                                    <div className="d-flex flex-column align-items-start justify-content-start col-md-3 cod-12  border border-1 rounded-2">
 
-                                        <div className="d-flex flex-column align-items-start w-100">
-                                            <div className="p-2 pt-3">
-                                                <strong className="fs-5">Order Details</strong>
-                                            </div>
-                                            <div className="d-flex flex-column align-items-start w-100">
-                                                {currentStep === 1 ? (
-                                                    <>
-                                                        {type === 'item' ? <>
-                                                            <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Product Information</h5>
-                                                            <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
-                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Product Name :</span> <span> {productName ? (<h6>{productName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                                {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Weight :</span> <span> {Pweight ? (<h6>{Pweight.slice(0, 4)}... Kg</h6>) : (<span>N/A</span>)}</span></div>
-                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Height :</span> <span> {Pheight ? (<h6>{Pheight.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
-                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Length : </span> <span> {Plength ? (<h6>{Plength.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div>
-                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Width : </span> <span> {Pwidth ? (<h6>{Pwidth.slice(0, 4)}... Cm</h6>) : (<span>N/A</span>)}</span></div> */}
-                                                            </div>
-                                                        </> : <>
-
-                                                            <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Box Information</h5>
-                                                            <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
-                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Box Dimension :</span> <span> {box_dimension ? (<h6>{box_dimension.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                                <div className="d-flex justify-content-between w-100 p-2"> <span>Number of Boxes :</span> <span> {box_number ? (<h6>{box_number.length > 4 ? `${box_number.slice(0, 4)}...` : box_number}</h6>) : (<span>N/A</span>)}</span></div>
-                                                            </div>
-                                                        </>}
-                                                    </>
-                                                ) : currentStep === 2 ? (
-                                                    <>
-                                                        <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Pick Up Information</h5>
-                                                        <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Full Name :</span> <span > {userName ? (<h6>{userName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Contact Number :</span> <span > {userNumber ? (<h6>{userNumber.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Email ID :</span> <span > {userEmail ? (<h6>{userEmail.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Country :</span> <span > {userCountry ? (<h6>{userCountry.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >State :</span> <span > {userState ? (<h6>{userState.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >City :</span> <span > {userCity ? (<h6>{userCity.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span >Street Address :</span> <span > {streetAddress ? (<h6>{streetAddress.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span >Zip Code :</span> <span > {zipCode ? (<h6>{zipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
-                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span >Picking Period :</span> <span > {picking_period ? (<h6>{picking_period.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <h5 className="p-2" style={{ fontSize: '16px', fontWeight: '500' }}>Delivery Information</h5>
-                                                        <div className="d-flex flex-column align-items-start w-100 order-details-wrap">
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Full Name :</span> <span > {senderName ? (<h6>{senderName.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Contact Number :</span> <span > {senderNumber ? (<h6>{senderNumber.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Email ID :</span> <span > {senderEmail ? (<h6>{senderEmail.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
-                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Country :</span> <span > {senderCountry ? (<h6>{senderCountry.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>State :</span> <span > {senderState ? (<h6>{senderState.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>City :</span> <span > {senderCity ? (<h6>{senderCity.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
-                                                            {/* <div className="d-flex justify-content-between w-100 p-2"> <span>Street Address :</span> <span > {senderStreetAddress ? (<h6>{senderStreetAddress.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div>
-                                                            <div className="d-flex justify-content-between w-100 p-2"> <span>Zip Code :</span> <span > {senderZipCode ? (<h6>{senderZipCode.slice(0, 4)}...</h6>) : (<span>N/A</span>)}</span></div> */}
-                                                        </div>
-                                                    </>
-                                                )
-                                                }
-
-                                            </div>
-                                        </div>
-                                        <div className="d-flex pt-4 justify-content-end w-100 p-2">
-                                            <Button
-                                                label="Next"
-                                                icon="pi pi-arrow-right"
-                                                className="btn rounded-2 w-100"
-                                                style={{ backgroundColor: '#1fa4e6', color: '#fff', fontWeight: '400' }}
-                                                iconPos="center"
-                                                disabled={isNextButtonDisabled()}
-                                                onClick={() => {
-                                                    if (currentStep < 3) {
-                                                        stepperRef.current.nextCallback();
-                                                        setCurrentStep((prev) => prev + 1);
-                                                    } else {
-                                                        setIsVisible(true);
-                                                    }
-                                                    window.scrollTo({ top: 0 });
-                                                }}
-                                            />
-                                        </div>
-
-                                        {currentStep !== 1 && (
-                                            <div className="d-flex pt-2 pb-4 justify-content-end w-100 p-2">
+                                        <div className="d-flex align-items-end justify-content-end w-100 ">
+                                            {currentStep !== 1 && (
+                                                <div className="d-flex justify-content-end p-2">
+                                                    <Button
+                                                        label="Back"
+                                                        severity="secondary"
+                                                        icon="pi pi-arrow-left"
+                                                        className="btn rounded-2 "
+                                                        style={{ backgroundColor: 'transparent', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
+                                                        iconPos="center"
+                                                        onClick={() => {
+                                                            stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); window.scrollTo({ top: 0 });
+                                                            window.scrollTo({ top: 0 });
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                            <div className="d-flex justify-content-end p-2">
                                                 <Button
-                                                    label="Back"
-                                                    severity="secondary"
-                                                    icon="pi pi-arrow-left"
-                                                    className="btn rounded-2 w-100"
-                                                    style={{ backgroundColor: 'transparent', border: '1px solid #ccc', color: '#1f1f1f', fontWeight: '400' }}
+                                                    label="Next"
+                                                    icon="pi pi-arrow-right"
+                                                    className="btn rounded-2 "
+                                                    style={{ backgroundColor: '#1fa4e6', color: '#fff', fontWeight: '400' }}
                                                     iconPos="center"
+                                                    disabled={isNextButtonDisabled()}
                                                     onClick={() => {
-                                                        stepperRef.current.prevCallback(); setCurrentStep((prev) => prev - 1); window.scrollTo({ top: 0 });
+                                                        if (currentStep < 3) {
+                                                            stepperRef.current.nextCallback();
+                                                            setCurrentStep((prev) => prev + 1);
+                                                        } else {
+                                                            setIsVisible(true);
+                                                        }
                                                         window.scrollTo({ top: 0 });
                                                     }}
                                                 />
                                             </div>
-                                        )}
+
+                                        </div>
 
                                     </div>
+                                    {/* <div className="col-12 col-md-3 border border-1 rounded-2 d-flex flex-column align-items-start justify-content-start"> */}
+
                                 </div>
                             </div>
                         </div>
@@ -932,8 +886,8 @@ const Send_groupage = () => {
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Full Name :</span> <span className="text-dark"> {senderName ? (<span>{senderName}</span>) : (<span>N/A</span>)}</span></div>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Contact Number :</span> <span className="text-dark"> {senderNumber ? (<span>{senderNumber}</span>) : (<span>N/A</span>)}</span></div>
                                     {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Email ID :</span> <span className="text-dark"> {senderEmail ? (<span>{senderEmail}</span>) : (<span>N/A</span>)}</span></div> */}
-                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Country :</span> <span className="text-dark"> {senderCountry ? (<span>{senderCountry}</span>) : (<span>N/A</span>)}</span></div>
-                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">State :</span> <span className="text-dark"> {senderState ? (<span>{senderState}</span>) : (<span>N/A</span>)}</span></div>
+                                    <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Country :</span> <span className="text-dark"> {senderCountry ? (<span>{senderCountry}</span>) : (<span>N/A</span>)}</span></div>
+                                    {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">State :</span> <span className="text-dark"> {senderState ? (<span>{senderState}</span>) : (<span>N/A</span>)}</span></div>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">City :</span> <span className="text-dark"> {senderCity ? (<span>{senderCity}</span>) : (<span>N/A</span>)}</span></div> */}
                                     {/* <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Street Address :</span> <span className="text-dark"> {senderStreetAddress ? (<span>{senderStreetAddress}</span>) : (<span>N/A</span>)}</span></div>
                                     <div className="d-flex justify-content-between w-100"> <span className="text-secondary">Zip Code :</span> <span className="text-dark"> {senderZipCode ? (<span>{senderZipCode}</span>) : (<span>N/A</span>)}</span></div>
