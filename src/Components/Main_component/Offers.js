@@ -781,8 +781,8 @@ const Offers = () => {
                                                                 }}
                                                             ><SiNamemc /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
-                                                                <span className="text-secondary offer-submit-sub-head">Name</span>
-                                                                <h6>{groupage_detail.sender_name}</h6>
+                                                                <span className="text-secondary offer-submit-sub-head">Customer Name</span>
+                                                                <h6>XXXX</h6>
                                                             </div>
                                                         </div>
 
@@ -797,8 +797,8 @@ const Offers = () => {
                                                                 }}
                                                             ><BiSolidContact /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
-                                                                <span className="text-secondary offer-submit-sub-head">Contact</span>
-                                                                <h6>{groupage_detail.sender_contact}</h6>
+                                                                <span className="text-secondary offer-submit-sub-head">Contact Number </span>
+                                                                <h6>{groupage_detail.sender_contact}...</h6>
                                                             </div>
                                                         </div>
 
@@ -813,11 +813,13 @@ const Offers = () => {
                                                                 }}
                                                             ><MdAttachEmail /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
-                                                                <span className="text-secondary offer-submit-sub-head">Email</span>
-                                                                <h6>{groupage_detail.sender_email}</h6>
+                                                                <span className="text-secondary offer-submit-sub-head">Email ID</span>
+                                                                <h6>XXXX</h6>
                                                             </div>
                                                         </div>
                                                     </div>
+
+
                                                     {/* <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
                                                         <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
@@ -980,7 +982,7 @@ const Offers = () => {
                                                     </div> */}
                                                 </div>
 
-                                                <div className="offer-details-wrap">
+                                                {/* <div className="offer-details-wrap">
                                                     <h5 className="text-start w-100 mb-3 fs-6">Customer Information</h5>
 
                                                     <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
@@ -1032,7 +1034,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> */}
 
                                                 <div className="offer-details-wrap">
                                                     <div className="d-flex flex-column align-items-start justify-content-start w-100 p-3 text-start">

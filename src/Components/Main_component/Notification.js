@@ -119,7 +119,7 @@ const Notification = () => {
                                                         </p>
                                                     </div>
                                                     <div className="text-primary">
-                                                        <span onClick={() => navigate('/offers')}>See Details</span>
+                                                        <span onClick={() => navigate('/shipments')}>See Details</span>
                                                     </div>
                                                 </div>
                                             ))}
@@ -154,7 +154,7 @@ const Notification = () => {
                                                         </p>
                                                     </div>
                                                     <div className="text-primary">
-                                                        <span onClick={() => navigate('/offers')}>See Details</span>
+                                                        <span onClick={() => navigate('/shipments')}>See Details</span>
                                                     </div>
                                                 </div>
                                             ))}

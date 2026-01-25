@@ -54,7 +54,7 @@ const AppContent = () => {
           <Route path='payment' element={<Payment_user />} />
         </Route>
         <Route Component={Home} path='/' />
-        <Route Component={Offers} path='/offers' />
+        <Route Component={Offers} path='/shipments' />
         {/* <Route Component={CompaniesList} path='/transporters_list' /> */}
         {/* <Route Component={send_groupage} path='/send_groupage' /> */}
         <Route path="/send_groupage" element={<Navigate to="/send_groupage/item" />} />
