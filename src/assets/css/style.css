@@ -46,18 +46,33 @@
 }
 
 .pickup-wrap {
-    margin: 18px 0;
+    /* margin: 18px 0;
     width: 700px;
     border-radius: 15px;
-    background-color: #ffffff;
+    background-color: #ffffff; */
+
 }
 
 .pickup-wrap button {
-    padding: 12px 20px;
+    /* padding: 12px 20px;
     border: none;
     border-radius: 5px;
     background-color: #2B7BA7;
-    color: #fff;
+    color: #fff; */
+    font-size: 1rem;
+    background-color: #ffffff;
+    color: #012A52;
+    font-weight: 500;
+}
+
+.pickup-wrap button:hover {
+    background-color: #ffffff !important;
+    color: #012A52 !important;
+}
+
+.pickup-wrap button:active {
+    background-color: #ffffff !important;
+    color: #012A52 !important;
 }
 
 .search-wrapper {
@@ -1305,6 +1320,11 @@ svg {
     font-weight: 800;
 }
 
+.groupage-btn-home{
+    background-color: transparent !important;
+    color: #FFC31C !important;
+    font-weight: 800;
+}
 /* Seamless loop */
 @keyframes scrollLeft {
   from {

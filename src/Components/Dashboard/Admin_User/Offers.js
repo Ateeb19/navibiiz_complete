@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaBuilding, FaRegCheckCircle } from "react-icons/fa";
+import { FaBuilding, FaEye, FaRegCheckCircle } from "react-icons/fa";
 import { LuCircleX } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../alert/Alert_message";
@@ -13,6 +13,7 @@ import { IoIosMailOpen } from "react-icons/io";
 import PaypalPayment from "../../Paypal/Paypal_payment";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ConfirmationModal from "../../alert/Conform_alert";
+import { IoTrashBin } from "react-icons/io5";
 
 const Offers = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -192,21 +193,26 @@ const Offers = () => {
                           <strong>Note -: </strong> You are paying 10% of the amount now and the remaining amount you can pay directly to the company.
                         </label>
                       </marquee> */}
-                                <div className="marquee">
+                                {/* <div className="marquee">
                                     <div className="marquee__track">
                                         <span className="text">
-                                            <strong>Note -: </strong> You will pay 10% of the total amount now, and the remaining balance will be paid directly to the transporter.
+                                            <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
                                         </span>
                                         <span className="text">
-                                            <strong>Note -: </strong> You will pay 10% of the total amount now, and the remaining balance will be paid directly to the transporter.
+                                            <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
                                         </span>
                                         <span className="text">
-                                            <strong>Note -: </strong> You will pay 10% of the total amount now, and the remaining balance will be paid directly to the transporter.
+                                            <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
                                         </span>
                                         <span className="text">
-                                            <strong>Note -: </strong> You will pay 10% of the total amount now, and the remaining balance will be paid directly to the transporter.
+                                            <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
                                         </span>
                                     </div>
+                                </div> */}
+                                <div className="text-start mt-2">
+                                    <span className="text">
+                                            <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
+                                        </span>
                                 </div>
                             </>
                         )}
@@ -408,6 +414,7 @@ const Offers = () => {
                                                                     : null
                                                             }
                                                             style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}
+                                                            className="justify-content-center align-items-center"
                                                         >
                                                             <td className="text-primary">#{item.order_id}</td>
                                                             <td className="text-secondary">{item.product_name}</td>
@@ -420,22 +427,27 @@ const Offers = () => {
                                                             </td>
                                                             <td className="text-secondary">{item.office_address ? <>No</> : <>Yes</>}</td>
                                                             <td className="d-flex align-items-center justify-content-center w-100 gap-3">
+                                                                {item.accepted === '1' ? <>
+                                                                <span className='p-2 fw-bold' style={{backgroundColor: '#bcffba', color: '#0b7e01'}}>Accepted</span>
+                                                                </> : <>
                                                                 <button
                                                                     className="btn btn-sm text-light"
-                                                                    style={{ backgroundColor: '#31b23c' }}
+                                                                    // style={{ backgroundColor: '#31b23c' }}
                                                                     onClick={() => handleShowOffer(item)}
                                                                     disabled={item.accepted === '1'}
                                                                 >
-                                                                    <FaRegCheckCircle className="fs-3" />
+                                                                    <FaEye className="fs-4" style={{ color: 'rgb(1, 42, 82)' }} />
                                                                 </button>
                                                                 <button
                                                                     className="btn btn-sm text-light"
-                                                                    style={{ backgroundColor: '#c63d3d' }}
+                                                                    
                                                                     onClick={() => handleDeleteoffer(item.offer_id)}
                                                                     disabled={item.accepted === '1'}
                                                                 >
-                                                                    <LuCircleX className="fs-3" />
+                                                                    <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }}/>
                                                                 </button>
+                                                                </>}
+                                                                
                                                             </td>
                                                         </tr>
                                                     ))}
@@ -527,7 +539,7 @@ const Offers = () => {
                                             <span className="text-secondary">Product Name : </span>
                                             <span>{show_admin_offer.product_name}</span>
                                         </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Product Type : </span>
                                             <span>{show_admin_offer.product_type ? show_admin_offer.product_type : '-' }</span>
                                         </div>
@@ -546,7 +558,7 @@ const Offers = () => {
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Width : </span>
                                             <span>{show_admin_offer.p_width}  {show_admin_offer.p_width ? "Cm" : ""}</span>
-                                        </div>
+                                        </div> */}
                                     </>}
 
                                 </div>
@@ -578,7 +590,7 @@ const Offers = () => {
                                         <span className="text-secondary">City : </span>
                                         <span>{show_admin_offer.sender_city}</span>
                                     </div>
-                                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                    {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Street Address : </span>
                                         <span>{show_admin_offer.sender_address ? show_admin_offer.sender_address : '-'}</span>
                                     </div>
@@ -596,7 +608,7 @@ const Offers = () => {
                                                     : '-'
                                             // show_admin_offer.pickup_date.includes('Select End Date') ? show_admin_offer.pickup_date.split(' - ')[0] : show_admin_offer.pickup_date
                                         }</span>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <h5 className="mt-3">Delivery Information</h5>
@@ -609,15 +621,15 @@ const Offers = () => {
                                         <span className="text-secondary">Contact Number : </span>
                                         <span>{show_admin_offer.receiver_contact}</span>
                                     </div>
-                                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                    {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Email ID : </span>
                                         <span>{show_admin_offer.receiver_email ? show_admin_offer.receiver_email : '-'}</span>
-                                    </div>
+                                    </div> */}
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Country : </span>
                                         <span>{show_admin_offer.receiver_country ? show_admin_offer.receiver_country : '-'}</span>
                                     </div>
-                                    <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                    {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">State : </span>
                                         <span>{show_admin_offer.receiver_state ? show_admin_offer.receiver_state : '-'}</span>
                                     </div>
@@ -632,7 +644,7 @@ const Offers = () => {
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                         <span className="text-secondary">Zip Code : </span>
                                         <span>{show_admin_offer.receiver_zipcode ? show_admin_offer.receiver_zipcode : '-'}</span>
-                                    </div>
+                                    </div> */}
                                     {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                       <span className="text-secondary">Delivery Duration : </span>
                       <span>{show_admin_offer.expeted_date}</span>
@@ -725,7 +737,7 @@ const Offers = () => {
                                             <span className="text-secondary">Product Name : </span>
                                             <span>{selected_offer.product_name}</span>
                                         </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Weight : </span>
                                             <span>{selected_offer.p_weight} {selected_offer.p_weight && "Kg"}</span>
                                         </div>
@@ -740,7 +752,7 @@ const Offers = () => {
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Width : </span>
                                             <span>{selected_offer.p_width} {selected_offer.p_width && "Cm"}</span>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <h5 className="mt-3">Transporter Information</h5>
@@ -793,7 +805,7 @@ const Offers = () => {
                                             <span className="text-secondary">City : </span>
                                             <span>{selected_offer.sender_city}</span>
                                         </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Street Address : </span>
                                             <span>{selected_offer.sender_address ? selected_offer.sender_address : '-'}</span>
                                         </div>
@@ -811,7 +823,7 @@ const Offers = () => {
                                                     : '-'
                                                 // selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date
                                             }</span>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <h5 className="mt-3">Delivery Information</h5>
@@ -824,15 +836,15 @@ const Offers = () => {
                                             <span className="text-secondary">Contact Number : </span>
                                             <span>{selected_offer.receiver_contact}</span>
                                         </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Email ID : </span>
                                             <span>{selected_offer.receiver_email ? selected_offer.receiver_email : '-'}</span>
-                                        </div>
+                                        </div> */}
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Country : </span>
                                             <span>{selected_offer.receiver_country ? selected_offer.receiver_country : '-'}</span>
                                         </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">State : </span>
                                             <span>{selected_offer.receiver_state ? selected_offer.receiver_state : '-'}</span>
                                         </div>
@@ -847,7 +859,7 @@ const Offers = () => {
                                         <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Zip Code : </span>
                                             <span>{selected_offer.receiver_zipcode ? selected_offer.receiver_zipcode : '-'}</span>
-                                        </div>
+                                        </div> */}
                                         {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Delivery Duration : </span>
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>

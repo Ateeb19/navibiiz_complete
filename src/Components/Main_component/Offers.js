@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import { FaLocationDot, FaMapLocationDot, FaWeightHanging, FaWeightScale } from "react-icons/fa6";
-import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaCity } from "react-icons/fa";
+import { FaTruckLoading, FaTruckMoving, FaStar, FaFilter, FaCity, FaCalendarAlt } from "react-icons/fa";
 import Countries_selector from "../Selector/Countries_selector";
 import axios from "axios";
 import { BsFillBoxSeamFill, BsFillFileZipFill, BsFillSendFill } from "react-icons/bs";
@@ -403,16 +403,21 @@ const Offers = () => {
                                                                 <span className="text-primary me-1"><BsFillSendFill /></span>
                                                                 {item.receiver_country?.slice(0, 3)}
                                                             </p>
-                                                            <p className="mt-2 text-start text-secondary">{item.sender_description ? item.sender_description.split(" ").slice(0, 30).join(" ") + "..." : item.sender_description}</p>
+                                                            {/* <p className="mt-2 text-start text-secondary">{item.sender_description ? item.sender_description.split(" ").slice(0, 30).join(" ") + "..." : item.sender_description}</p> */}
                                                             <div className="d-flex flex-column flex-md-row gap-4 text-start">
+
+                                                                <div className="pe-3">
+                                                                    <FaCalendarAlt className='fs-5 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Posted {item.days_ago} </span>
+                                                                </div>
                                                                 <div className="pe-3 border-end border-1">
                                                                     {item.box ? <>
                                                                         <BsFillBoxSeamFill className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">{item.box ? `Box No. : ${item.box_number}` : `Weight: ${item.p_weight}`}</span>
                                                                     </> : <>
-                                                                        <FaWeightHanging className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">{item.box ? `Box No. : ${item.box_number}` : `Weight: ${item.p_weight}`}</span>
+
+                                                                        {/* <FaWeightHanging className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">{item.box ? `Box No. : ${item.box_number}` : `Weight: ${item.p_weight}`}</span> */}
                                                                     </>}
                                                                 </div>
-                                                                <div className="pe-3 border-end border-1">
+                                                                {/* <div className="pe-3 border-end border-1">
                                                                     <FaTruckLoading className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Pick up: {
                                                                         // item.pickup_date ? item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] : item.pickup_date : 'null'
                                                                         item.pickup_date && item.pickup_date !== 'null'
@@ -421,10 +426,7 @@ const Offers = () => {
                                                                                 : item.pickup_date.split(' - ')[0] || '-'
                                                                             : '-'
                                                                     }</span>
-                                                                </div>
-                                                                <div className="pe-3">
-                                                                    <FaTruckMoving className='fs-4 pe-1' style={{ color: '#de8316' }} /> <span className="text-secondary">Posted {item.days_ago} </span>
-                                                                </div>
+                                                                </div> */}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -514,26 +516,33 @@ const Offers = () => {
                                                             setShow_image(true);
                                                         }}
                                                     >
-                                                        {[
-                                                            groupage_detail.img01, groupage_detail.img02, groupage_detail.img03, groupage_detail.img04, groupage_detail.img05,
-                                                            groupage_detail.img06, groupage_detail.img07, groupage_detail.img08, groupage_detail.img09, groupage_detail.img10,
-                                                        ]
-                                                            .filter(img => img)
-                                                            .map((img, index) => (
-                                                                <img
-                                                                    key={index}
-                                                                    src={img}
-                                                                    alt={`Product ${index + 1}`}
-                                                                    style={{
-                                                                        width: '18%',
-                                                                        maxWidth: '120px',
-                                                                        height: 'auto',
-                                                                        objectFit: 'cover',
-                                                                        borderRadius: '8px',
-                                                                    }}
-                                                                // onClick={() => setShow_image(img)}
-                                                                />
-                                                            ))}
+                                                        {groupage_detail.img01 ? (
+                                                            <>
+                                                                {[
+                                                                    groupage_detail.img01, groupage_detail.img02, groupage_detail.img03, groupage_detail.img04, groupage_detail.img05,
+                                                                    groupage_detail.img06, groupage_detail.img07, groupage_detail.img08, groupage_detail.img09, groupage_detail.img10,
+                                                                ]
+                                                                    .filter(img => img)
+                                                                    .map((img, index) => (
+                                                                        <img
+                                                                            key={index}
+                                                                            src={img}
+                                                                            alt={`Product ${index + 1}`}
+                                                                            style={{
+                                                                                width: '18%',
+                                                                                maxWidth: '120px',
+                                                                                height: 'auto',
+                                                                                objectFit: 'cover',
+                                                                                borderRadius: '8px',
+                                                                            }}
+                                                                        // onClick={() => setShow_image(img)}
+                                                                        />
+                                                                    ))}
+                                                            </>
+                                                        ) : <>
+                                                            <span>No Image provided.</span>
+                                                        </>}
+
                                                     </div>
                                                 </div>
 
@@ -617,7 +626,7 @@ const Offers = () => {
                                                                 </div>
                                                             </div>
 
-                                                            <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                                            {/* <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                                 <div
                                                                     className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                                     style={{
@@ -700,7 +709,7 @@ const Offers = () => {
                                                                     <span className="text-secondary offer-submit-sub-head">Width</span>
                                                                     <h6>{groupage_detail.p_width} Cm</h6>
                                                                 </div>
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     </div>
                                                 </>}
@@ -758,7 +767,7 @@ const Offers = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                    {/* <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
                                                         <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -797,7 +806,7 @@ const Offers = () => {
                                                                 }</h6>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
 
                                                 <div className="offer-details-wrap">
@@ -846,14 +855,30 @@ const Offers = () => {
                                                                     backgroundColor: '#E1F5FF',
                                                                     aspectRatio: '1 / 1'
                                                                 }}
+                                                            ><BiWorld /></div>
+                                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                                <span className="text-secondary offer-submit-sub-head">Country</span>
+                                                                <h6>{groupage_detail.receiver_country ? groupage_detail.receiver_country : '-'}</h6>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                                            <div
+                                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                                style={{
+                                                                    width: '3rem',
+                                                                    height: '3rem',
+                                                                    backgroundColor: '#E1F5FF',
+                                                                    aspectRatio: '1 / 1'
+                                                                }}
                                                             ><MdAttachEmail /></div>
                                                             <div className="d-flex flex-column align-items-start gap-2">
                                                                 <span className="text-secondary offer-submit-sub-head">Email ID</span>
                                                                 <h6>XXXX@gmail.com</h6>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
-                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                    {/* <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
                                                         <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                                             <div
                                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -901,7 +926,7 @@ const Offers = () => {
                                                                 <h6>{groupage_detail.receiver_city ? groupage_detail.receiver_city : '-'}</h6>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
 
                                                 <div className="offer-details-wrap">

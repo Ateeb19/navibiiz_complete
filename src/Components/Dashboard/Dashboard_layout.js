@@ -157,7 +157,7 @@ const Dashboard_layout = () => {
                                                 // style={activeSection === 'orders' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}
                                                 style={activeStyle("orders")}
                                             >
-                                                <Link to="" className="nav-link text-white" >
+                                                <Link to="/dashboard/orders" className="nav-link text-white" >
                                                     <FaBoxOpen /> Orders
                                                 </Link>
                                             </li>
@@ -167,7 +167,7 @@ const Dashboard_layout = () => {
                                         // style={activeSection === 'user_offers' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}
                                         style={activeStyle("user_offers")}
                                     >
-                                        <Link to="" className="nav-link text-white" >
+                                        <Link to="/dashboard/offers" className="nav-link text-white" >
                                             <MdPayment /> Offers
                                         </Link>
                                     </li>
@@ -177,7 +177,7 @@ const Dashboard_layout = () => {
                                                 // style={activeSection === 'payment_history' ? { backgroundColor: "06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}
                                                 style={activeStyle("payment_history")}
                                             >
-                                                <Link to="" className="nav-link text-white">
+                                                <Link to="/dashboard/payment" className="nav-link text-white">
                                                     <MdPayment /> Payment History
                                                 </Link>
                                             </li>

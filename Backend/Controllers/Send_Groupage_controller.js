@@ -422,9 +422,10 @@ const create_offer = (req, res) => {
                 res.json({ message: 'error in database', status: false });
             } else {
                 if (result.length === 0) {
-                    const commission = ((data.offer_amount * 10) / 100).toFixed(1);
-                    console.log(commission, '2');
-                    console.log('address-:', data.office_address);
+                    // const commission = ((data.offer_amount * 10) / 100).toFixed(1);
+                    const commission = 5;
+                    // console.log(commission, '2');
+                    // console.log('address-:', data.office_address);
                     db.query('INSERT INTO offers SET ?', { groupage_id: data.offer_id, created_by_email: req.user.useremail, created_by_id: req.user.userid, amount: data.offer_amount, commission: commission, expeted_date: data.expected_date, office_address: data.office_address, accepted: 0, status: 'pending' }, (err, result) => {
                         if (err) {
                             console.log(err, '12')
@@ -444,7 +445,8 @@ const create_offer = (req, res) => {
                                         result[0].groupage_created_by,
                                         "Offer received from a transporter",
                                         `<h3>There is a new offer from a transporter.</h3>
-                                        <br><br><br><h4>Details-:</h4><p>Total Amount: €${parseFloat(data.offer_amount) + parseFloat(commission)}</p><p>Delivery Duration: ${data.expected_date}</p>
+                                        <br><br>Please visit the app <a href="https://novibiz.com">novibiz.com</a> to confirm the offer.
+                                        <br><br><h4>Details-:</h4><p>Total Amount: €${parseFloat(data.offer_amount) + parseFloat(commission)}</p><p>Delivery Duration: ${data.expected_date}</p>
                                         ${data.office_address ? `<br><br><h4>Note -: The transporter does not pick up the groupage. Please bring it to their address.</h4><br><br> ` 
                                             :`<br><br><h4>Note -: The transporter will pick up the groupage from your pickup address.</h4><br><br>`}`
                                     )

@@ -218,9 +218,9 @@ const Dashboard = () => {
 
                             <div className="dashboard-wraper-box">
                                 <div className="row mt-3 g-3 justify-content-center">
-                                    {[{ count: total_amount_received ? parseFloat(total_amount_received).toFixed(2) : 'N/A', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
-                                    { count: total_commission ? parseFloat(total_commission).toFixed(2) : 'N/A', change: "-2%", text: "Commission Earned", icon: <BsCarFrontFill /> },
-                                    { count: amount_to_pay ? parseFloat(amount_to_pay).toFixed(2) : 'N/A', change: "+10%", text: "Total Amount Paid", icon: <FaTruckLoading /> }
+                                    {[{ count: total_amount_received ? parseFloat(total_amount_received).toFixed(2) : '0', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
+                                    { count: total_commission ? parseFloat(total_commission).toFixed(2) : '0', change: "-2%", text: "Commission Earned", icon: <BsCarFrontFill /> },
+                                    { count: amount_to_pay ? parseFloat(amount_to_pay).toFixed(2) : '0', change: "+10%", text: "Total Amount Paid", icon: <FaTruckLoading /> }
                                     ].map((item, index) => (
                                         <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                                             <div className=" dashboard-wrap-box ">
@@ -228,7 +228,7 @@ const Dashboard = () => {
                                                     {item.icon}
                                                 </div>
                                                 <h3 className="mt-3 fw-bold d-block">{item.count}</h3>
-                                                <label className="text-success fs-6 p-2">{item.change} Last Month</label>
+                                                {/* <label className="text-success fs-6 p-2">{item.change} Last Month</label> */}
                                                 <label className="fs-5 d-block">{item.text}</label>
                                             </div>
                                         </div>
@@ -247,7 +247,7 @@ const Dashboard = () => {
                                                     {item.icon}
                                                 </div>
                                                 <h3 className="mt-3 fw-bold d-block">{item.count}</h3>
-                                                <label className="text-success fs-6 p-2">{item.change} Last Month</label>
+                                                {/* <label className="text-success fs-6 p-2">{item.change} Last Month</label> */}
                                                 <label className="fs-5 d-block">{item.text}</label>
                                             </div>
                                         </div>
@@ -270,9 +270,9 @@ const Dashboard = () => {
 
                             <div className="dashboard-wraper-box">
                                 <div className="row mt-3 g-3 justify-content-center">
-                                    {[{ count: 'N/A', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
-                                    { count: admin_total_offers ? admin_total_offers : 'N/A', change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
-                                    { count: admin_offer_accecepted ? admin_offer_accecepted : 'N/A', change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> }
+                                    {[{ count: '0', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
+                                    { count: admin_total_offers ? admin_total_offers : '0', change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
+                                    { count: admin_offer_accecepted ? admin_offer_accecepted : '0', change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> }
                                     ].map((item, index) => (
                                         <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                                             <div className=" dashboard-wrap-box ">
@@ -280,7 +280,7 @@ const Dashboard = () => {
                                                     {item.icon}
                                                 </div>
                                                 <h3 className="mt-3 fw-bold d-block">{item.count}</h3>
-                                                <label className="text-success fs-6 p-2">{item.change} Last Month</label>
+                                                {/* <label className="text-success fs-6 p-2">{item.change} Last Month</label> */}
                                                 <label className="fs-5 d-block">{item.text}</label>
                                             </div>
                                         </div>
@@ -301,9 +301,9 @@ const Dashboard = () => {
 
                             <div className="dashboard-wraper-box">
                                 <div className="row mt-3 g-3 justify-content-center">
-                                    {[{ count: user_numbers_orders ? user_numbers_orders : 'N/A', change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
-                                    { count: user_upcomming ? user_upcomming : 'N/A', change: "-2%", text: "Upcoming Pick up", icon: <BsCarFrontFill /> },
-                                    { count: total_spending ? total_spending : 'N/A', change: "+10%", text: "Total Spending", icon: <FaTruckLoading /> }
+                                    {[{ count: user_numbers_orders ? user_numbers_orders : '0', change: "+5%", text: "Total Orders", icon: <PiShippingContainerDuotone /> },
+                                    { count: user_upcomming ? user_upcomming : '0', change: "-2%", text: "Upcoming Pick up", icon: <BsCarFrontFill /> },
+                                    { count: total_spending ? total_spending : '0', change: "+10%", text: "Total Spending", icon: <FaTruckLoading /> }
                                     ].map((item, index) => (
                                         <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                                             <div className=" dashboard-wrap-box ">
@@ -311,7 +311,7 @@ const Dashboard = () => {
                                                     {item.icon}
                                                 </div>
                                                 <h3 className="mt-3 fw-bold d-block">{item.count}</h3>
-                                                <label className="text-success fs-6 p-2">{item.change} Last Month</label>
+                                                {/* <label className="text-success fs-6 p-2">{item.change} Last Month</label> */}
                                                 <label className="fs-5 d-block">{item.text}</label>
                                             </div>
                                         </div>

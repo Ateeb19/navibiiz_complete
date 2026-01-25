@@ -7,7 +7,7 @@ import { BiSolidDetail } from "react-icons/bi";
 import { IoCall, IoChatbubblesSharp, IoLocationSharp } from "react-icons/io5";
 import { FaArrowLeftLong, FaArrowRightLong, FaLocationDot, FaTruckFast } from "react-icons/fa6";
 import { MdDeliveryDining, MdEmail, MdOutlineDriveFileRenameOutline } from "react-icons/md";
-import { FaBox, FaStar } from "react-icons/fa";
+import { FaBox, FaBoxOpen, FaStar } from "react-icons/fa";
 import Footer from "../Footer/Footer";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -33,6 +33,7 @@ import { DateRange } from 'react-date-range';
 import { useTranslation } from "react-i18next";
 import { BsFillBoxSeamFill } from "react-icons/bs";
 import { RxDimensions } from "react-icons/rx";
+import { HiMiniRectangleStack } from "react-icons/hi2";
 
 
 const Home = () => {
@@ -43,6 +44,8 @@ const Home = () => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
     const [offers_details, setOffers_details] = useState([]);
+    const [open, setOpen] = useState(false);
+
     const displayCompany = () => {
         axios.get(`${port}/company/display_company`)
             .then((response) => {
@@ -329,6 +332,9 @@ const Home = () => {
             },
         ],
     };
+    const toggleMenu = () => {
+        setOpen(prev => !prev);
+    };
     const sliderRef = useRef(null);
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
@@ -355,7 +361,7 @@ const Home = () => {
 
                             <button className="" onClick={handleSearch}><IoSearch /> Search Companies</button>
                         </div> */}
-                        <div className="d-flex flex-row justify-content-between align-items-center px-3 pickup-wrap gap-4">
+                        {/* <div className="d-flex flex-row justify-content-between align-items-center px-3 pickup-wrap gap-4">
                             <div className='home-country-selector'>
                                 <span><Countryselector label='Pick Up Country' borderradiuscount='5px' bgcolor='#ffffff' bordercolor='1px solid #ffffff' margincount='0 0 0 0' paddingcount="12px 10px" onSelectCountry={(country) => setPickupCountry(country)} /></span>
                             </div>
@@ -364,6 +370,25 @@ const Home = () => {
                                 <div>Search Transporters</div>
                                 <div style={{ cursor: 'pointer' }}><IoSearch className="fs-5" /></div>
                             </div>
+                        </div> */}
+                        <div className="d-flex flex-row justify-content-between align-items-center px-3 pickup-wrap gap-4 mt-3">
+                            <div className="" onMouseEnter={() => setOpen(true)}
+                                onMouseLeave={() => setOpen(false)}>
+                                <button className="btn " style={{padding: '12px 24px'}}
+                                    onClick={toggleMenu}>
+                                    Send Groupage
+                                </button>
+                                {open && (
+                                    <div className="dropdown-menu dropdown-menu-home  d-flex flex-column align-items-center justify-content-center gap-1 text-start">
+                                        <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn-home"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                                        <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn-home"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                                    </div>
+                                )}
+                            </div>
+
+                            <button className="btn" style={{padding: '12px 24px'}} onClick={() => navigate('/register_company')}>
+                                Register Transporter
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -793,26 +818,34 @@ const Home = () => {
                                         setShow_image(true);
                                     }}
                                 >
-                                    {[
-                                        groupage_detail.img01, groupage_detail.img02, groupage_detail.img03, groupage_detail.img04, groupage_detail.img05,
-                                        groupage_detail.img06, groupage_detail.img07, groupage_detail.img08, groupage_detail.img09, groupage_detail.img10,
-                                    ]
-                                        .filter(img => img)
-                                        .map((img, index) => (
-                                            <img
-                                                key={index}
-                                                src={img}
-                                                alt={`Product ${index + 1}`}
-                                                style={{
-                                                    width: '18%',
-                                                    maxWidth: '120px',
-                                                    height: 'auto',
-                                                    objectFit: 'cover',
-                                                    borderRadius: '8px',
-                                                }}
-                                            // onClick={() => setShow_image(img)}
-                                            />
-                                        ))}
+                                    {groupage_detail.img01 ? (
+                                        <>
+                                            {
+                                                [
+                                                    groupage_detail.img01, groupage_detail.img02, groupage_detail.img03, groupage_detail.img04, groupage_detail.img05,
+                                                    groupage_detail.img06, groupage_detail.img07, groupage_detail.img08, groupage_detail.img09, groupage_detail.img10,
+                                                ]
+                                                    .filter(img => img)
+                                                    .map((img, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={img}
+                                                            alt={`Product ${index + 1}`}
+                                                            style={{
+                                                                width: '18%',
+                                                                maxWidth: '120px',
+                                                                height: 'auto',
+                                                                objectFit: 'cover',
+                                                                borderRadius: '8px',
+                                                            }}
+                                                        // onClick={() => setShow_image(img)}
+                                                        />
+                                                    ))
+                                            }
+                                        </>
+                                    ) : <>
+                                        <span>No Image provided.</span>
+                                    </>}
                                 </div>
                             </div>
 
@@ -896,7 +929,7 @@ const Home = () => {
                                             </div>
                                         </div>
 
-                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                        {/* <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
                                             <div
                                                 className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                 style={{
@@ -979,7 +1012,7 @@ const Home = () => {
                                                 <span className="text-secondary offer-submit-sub-head">Width</span>
                                                 <h6>{groupage_detail.p_width} Cm</h6>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </>}
@@ -1142,7 +1175,7 @@ const Home = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="d-flex flex-wrap gap-3 mt-3 w-100">
+                                {/* <div className="d-flex flex-wrap gap-3 mt-3 w-100">
                                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
                                         <div
                                             className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -1174,7 +1207,7 @@ const Home = () => {
                                             <h6 className="text-start">{groupage_detail.pickup_date.includes('Select End Date') ? groupage_detail.pickup_date.split('-')[0] : groupage_detail.pickup_date}</h6>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="offer-details-wrap">
@@ -1223,14 +1256,29 @@ const Home = () => {
                                                 backgroundColor: '#E1F5FF',
                                                 aspectRatio: '1 / 1'
                                             }}
+                                        ><FaRuler /></div>
+                                        <div className="d-flex flex-column align-items-start gap-2">
+                                            <span className="text-secondary offer-submit-sub-head">Country</span>
+                                            <h6>{groupage_detail.receiver_country}</h6>
+                                        </div>
+                                    </div>
+                                    {/* <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
+                                        <div
+                                            className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                            style={{
+                                                width: '3rem',
+                                                height: '3rem',
+                                                backgroundColor: '#E1F5FF',
+                                                aspectRatio: '1 / 1'
+                                            }}
                                         ><RiExpandHeightFill /></div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary offer-submit-sub-head">Email ID</span>
                                             <h6>XXXX@gmail.com</h6>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
-                                <div className="d-flex flex-wrap gap-3 mt-3 w-100">
+                                {/* <div className="d-flex flex-wrap gap-3 mt-3 w-100">
                                     <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2" style={{ width: '100%', maxWidth: '30%' }}>
                                         <div
                                             className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
@@ -1278,7 +1326,7 @@ const Home = () => {
                                             <h6>{groupage_detail.receiver_city}</h6>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="offer-details-wrap">

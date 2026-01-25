@@ -180,8 +180,8 @@ const Orders = () => {
                                                     {/* <td className="text-secondary">{item.pickup_date ? item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] === 'null' ? '-' : item.pickup_date.split(' - ')[0] : item.pickup_date : '-'}</td> */}
                                                     <td className="text-secondary d-flex align-items-center justify-content-center">
                                                         <span className="p-2 fw-bold d-flex flex-column align-items-center justify-content-center w-75 user-offer-width" style={{
-                                                            backgroundColor: item.payment_status === 'panding' ? 'rgb(255, 191, 191)' : 'rgb(188, 255, 186)',
-                                                            color: item.payment_status === 'panding' ? 'rgb(252, 30, 30)' : 'rgb(16, 194, 0)'
+                                                            backgroundColor: item.payment_status === 'panding' ? 'rgb(255, 191, 191)' : '#bcffba',
+                                                            color: item.payment_status === 'panding' ? 'rgb(252, 30, 30)' : '#10c200'
                                                         }}>
                                                             {item.payment_status === 'panding' ? 'Unpaid' : 'Paid'}
                                                         </span>
@@ -331,13 +331,30 @@ const Orders = () => {
                                                         <SiAnytype />
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start gap-2">
+                                                        <span className="text-secondary offer-submit-sub-head">Product Name</span>
+                                                        <h6>{selected_groupage.product_name ? selected_groupage.product_name : '-'}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/* <div className="col-12 col-md-4">
+                                                <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
+                                                    <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                        style={{
+                                                            width: '3rem',
+                                                            height: '3rem',
+                                                            backgroundColor: '#E1F5FF',
+                                                            aspectRatio: '1 / 1'
+                                                        }}>
+                                                        <SiAnytype />
+                                                    </div>
+                                                    <div className="d-flex flex-column align-items-start gap-2">
                                                         <span className="text-secondary offer-submit-sub-head">Product Type</span>
                                                         <h6>{selected_groupage.product_type ? selected_groupage.product_type : '-'}</h6>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
-                                            <div className="col-12 col-md-4">
+                                            {/* <div className="col-12 col-md-4">
                                                 <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2">
                                                     <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                         style={{
@@ -409,7 +426,7 @@ const Orders = () => {
                                                         <h6>{selected_groupage.p_width} Cm</h6>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </>}
@@ -527,7 +544,7 @@ const Orders = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="col-md-4 col-12">
+                                            {/* <div className="col-md-4 col-12">
                                                 <div className="d-flex align-items-start p-2 gap-2">
                                                     <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                         style={{
@@ -561,9 +578,9 @@ const Orders = () => {
                                                         <h6>{selected_groupage.sender_zipcode ? selected_groupage.sender_zipcode : '-'}</h6>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
-                                            <div className="col-md-4 col-12">
+                                            {/* <div className="col-md-4 col-12">
                                                 <div className="d-flex align-items-start p-2 gap-2">
                                                     <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                         style={{
@@ -586,9 +603,9 @@ const Orders = () => {
                                                         }</h6>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
-                                            <div className="col-md-12">
+                                            {/* <div className="col-md-12">
                                                 <div className="d-flex align-items-start p-2 gap-2">
                                                     <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                         style={{
@@ -604,7 +621,7 @@ const Orders = () => {
                                                         <p className="text-start"><h6>{selected_groupage.sender_description ? selected_groupage.sender_description : '-'}</h6></p>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -650,7 +667,7 @@ const Orders = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="col-md-4 col-12">
+                                            {/* <div className="col-md-4 col-12">
                                                 <div className="d-flex align-items-start p-2 gap-2">
                                                     <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                         style={{
@@ -666,7 +683,7 @@ const Orders = () => {
                                                         <h6>{selected_groupage.receiver_email ? selected_groupage.receiver_email : '-'}</h6>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
                                             <div className="col-md-4 col-12">
                                                 <div className="d-flex align-items-start p-2 gap-2">
@@ -686,7 +703,7 @@ const Orders = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="col-md-4 col-12">
+                                            {/* <div className="col-md-4 col-12">
                                                 <div className="d-flex align-items-start p-2 gap-2">
                                                     <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                         style={{
@@ -756,9 +773,9 @@ const Orders = () => {
                                                         <h6 className="text-start">{selected_groupage.receiver_zipcode ? selected_groupage.receiver_zipcode : '-'}</h6>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
-                                            <div className="col-md-4 col-12">
+                                            {/* <div className="col-md-4 col-12">
                                                 <div className="d-flex align-items-start p-2 gap-2">
                                                     <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                         style={{
@@ -774,9 +791,9 @@ const Orders = () => {
                                                         <h6 className="text-start">{selected_groupage.departure_date ? selected_groupage.departure_date : '-'}</h6>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
-                                            <div className="col-md-12">
+                                            {/* <div className="col-md-12">
                                                 <div className="d-flex align-items-start p-2 gap-2">
                                                     <div className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
                                                         style={{
@@ -792,7 +809,7 @@ const Orders = () => {
                                                         <p className="text-start"><h6>{selected_groupage.receiver_description ? selected_groupage.receiver_description : '-'}</h6></p>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
