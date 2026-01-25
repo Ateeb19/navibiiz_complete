@@ -318,6 +318,10 @@
     .user-offer-width {
         width: 100% !important;
     }
+
+    .dropdown-menu-home {
+        min-width: 50%;
+    }
 }
 
 @media (max-width: 1399) {

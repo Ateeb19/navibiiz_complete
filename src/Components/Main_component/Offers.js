@@ -273,6 +273,7 @@ const Offers = () => {
         });
     };
 
+    console.log(groupage_detail)
     const [show_image, setShow_image] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(0);
@@ -764,6 +765,56 @@ const Offers = () => {
                                                             <div className="d-flex flex-column align-items-start gap-2">
                                                                 <span className="text-secondary offer-submit-sub-head">City</span>
                                                                 <h6>{groupage_detail.sender_city}</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="d-flex flex-column flex-md-row flex-md-wrap gap-3 w-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                                            <div
+                                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                                style={{
+                                                                    width: '3rem',
+                                                                    height: '3rem',
+                                                                    backgroundColor: '#E1F5FF',
+                                                                    aspectRatio: '1 / 1'
+                                                                }}
+                                                            ><SiNamemc /></div>
+                                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                                <span className="text-secondary offer-submit-sub-head">Name</span>
+                                                                <h6>{groupage_detail.sender_name}</h6>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                                            <div
+                                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                                style={{
+                                                                    width: '3rem',
+                                                                    height: '3rem',
+                                                                    backgroundColor: '#E1F5FF',
+                                                                    aspectRatio: '1 / 1'
+                                                                }}
+                                                            ><BiSolidContact /></div>
+                                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                                <span className="text-secondary offer-submit-sub-head">Contact</span>
+                                                                <h6>{groupage_detail.sender_contact}</h6>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="d-flex flex-row align-items-start justify-content-start p-2 gap-2 shipping-selection" style={{ width: '100%', maxWidth: '30%' }}>
+                                                            <div
+                                                                className="rounded-circle fs-4 d-flex justify-content-center align-items-center text-primary"
+                                                                style={{
+                                                                    width: '3rem',
+                                                                    height: '3rem',
+                                                                    backgroundColor: '#E1F5FF',
+                                                                    aspectRatio: '1 / 1'
+                                                                }}
+                                                            ><MdAttachEmail /></div>
+                                                            <div className="d-flex flex-column align-items-start gap-2">
+                                                                <span className="text-secondary offer-submit-sub-head">Email</span>
+                                                                <h6>{groupage_detail.sender_email}</h6>
                                                             </div>
                                                         </div>
                                                     </div>

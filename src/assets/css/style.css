@@ -50,7 +50,7 @@
     width: 700px;
     border-radius: 15px;
     background-color: #ffffff; */
-
+    background-color: transparent !important;
 }
 
 .pickup-wrap button {
@@ -1288,51 +1288,55 @@ svg {
 }
 
 .marquee {
-  overflow: hidden;
-  white-space: nowrap;
-  width: 97%;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 97%;
 }
 
 .marquee__track {
-  display: inline-flex;
-  animation: scrollLeft 14s linear infinite;
+    display: inline-flex;
+    animation: scrollLeft 14s linear infinite;
 }
 
 .text {
-  margin-right: 2rem;
+    margin-right: 2rem;
 
 }
 
-.text strong{
+.text strong {
     color: #c63d3d;
 }
 
-.dropdown-menu-navbar{
+.dropdown-menu-navbar {
     /* background-color: #012a52 !important; */
     margin-top: 42px !important;
     padding: 1px 0px !important;
     color: #fff !important;
 }
 
-.groupage-btn{
+.groupage-btn {
     background-color: transparent !important;
     color: #ffc31c !important;
     font-weight: 800;
 }
 
-.groupage-btn-home{
+.groupage-btn-home {
     background-color: transparent !important;
-    color: #FFC31C !important;
+    color: #012A52 !important;
     font-weight: 800;
 }
-/* Seamless loop */
-@keyframes scrollLeft {
-  from {
-    transform: translateX(-10%);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+
+.dropdown-menu-home{
+    min-width: 100%;
 }
 
+/* Seamless loop */
+@keyframes scrollLeft {
+    from {
+        transform: translateX(-10%);
+    }
 
+    to {
+        transform: translateX(-50%);
+    }
+}
