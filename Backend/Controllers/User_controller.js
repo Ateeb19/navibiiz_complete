@@ -95,6 +95,117 @@ const login = (req, res) => {
     })
 }
 
+const googleLogin = (req, res) => {
+    const { name, email } = req.body;
+
+    db.query("SELECT * FROM users WHERE email = ?", [email], async (err, result) => {
+        if (err) {
+            return res.json({ message: "DB error", err });
+        }
+
+        if (result.length > 0) {
+
+            if (result[0].user_type !== "individual") {
+                return res.json({
+                    message: "This email is registered as transporter. Use normal login.",
+                    status: false
+                });
+            }
+
+            let token = jwt.sign({
+                userid: result[0].id,
+                username: result[0].name,
+                useremail: result[0].email,
+                role: result[0].role,
+                company: result[0].company,
+                user_type: result[0].user_type
+            }, process.env.JWT_SECRET, {
+                expiresIn: "5day",
+            });
+
+            return res.json({
+                message: "Google login success",
+                status: true,
+                role: result[0].role,
+                token,
+                id: result[0].id,
+                name: result[0].name,
+                email: result[0].email,
+                company: result[0].company,
+                user_type: result[0].user_type
+            });
+        }
+
+        const hash = await bcrypt.hash("google_oauth", 8);
+
+        db.query(
+            'INSERT INTO users SET ?',
+            {
+                name: name,
+                email: email,
+                password: hash,
+                role: "user",
+                company: "no",
+                user_type: "individual"
+            },
+            (err, insertResult) => {
+                if (err) {
+                    return res.json({ message: "Insert error", err });
+                }
+
+                let token = jwt.sign({
+                    userid: insertResult.insertId,
+                    username: name,
+                    useremail: email,
+                    role: "user",
+                    company: "no",
+                    user_type: "individual"
+                }, process.env.JWT_SECRET, {
+                    expiresIn: "5day",
+                });
+
+                res.json({
+                    message: "Google signup success",
+                    status: true,
+                    role: "user",
+                    token,
+                    id: insertResult.insertId,
+                    name: name,
+                    email: email,
+                    company: "no",
+                    user_type: "individual"
+                });
+            }
+        );
+    });
+};
+
+
+
+// const googleLogin = async (req, res) => {
+//     const { name, email } = req.body;
+
+//     const [user] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+
+//     let userId;
+
+//     if (user.length > 0) {
+//         userId = user[0].id;
+//     } else {
+//         const [result] = await db.query(
+//             "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+//             [name, email, 'google_oauth']
+//         );
+//         userId = result.insertId;
+//     }
+
+//     const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+//         expiresIn: "7d",
+//     });
+
+//     res.json({ token });
+// };
+
 //display profile
 const display_profile = (req, res) => {
     const id = req.user.userid;
@@ -284,24 +395,24 @@ const user_upcoming = (req, res) => {
             res.json({ message: result[0].total, status: true });
         }
     });
-    
+
 }
 
 const comapny_details = (req, res) => {
     const id = req.params.id;
     db.query('SELECT created_by_email, office_address FROM offers WHERE offer_id = ?', [id], (err, result) => {
-        if(err){
-            res.json({message: "error in database", status: false});
-        }else{
+        if (err) {
+            res.json({ message: "error in database", status: false });
+        } else {
             // console.log(result[0].created_by_email);
             db.query('SELECT company_name, email, contact_person_name, contect_no FROM companies_info WHERE created_by = ?', [result[0].created_by_email], (err, result01) => {
-                if(err){
-                    res.json({message: "error in database", status: false});
-                }else{
+                if (err) {
+                    res.json({ message: "error in database", status: false });
+                } else {
                     console.log(result01);
-                    let data = {...result[0], ...result01[0]};
+                    let data = { ...result[0], ...result01[0] };
                     // console.log('this is data', data);
-                    res.json({message: data, status: true});
+                    res.json({ message: data, status: true });
                 }
             })
         }
@@ -319,4 +430,6 @@ const user_delete = (req, res) => {
         }
     })
 }
-module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password, total_number_orders, user_upcoming , comapny_details, user_delete};
+
+
+module.exports = { Register, login, update_user_name, update_user_password, display_profile, token_check, Send_message, payment_history, froget_password, reset_password, total_number_orders, user_upcoming, comapny_details, user_delete, googleLogin };

@@ -139,11 +139,19 @@ const Navbar = () => {
 
 
 
-        <div className="d-lg-none">
+        <div className="d-lg-none d-flex">
+          <Link to="/login" >
+            <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>
+              <FaUser /> Login
+            </button>
+          </Link>
+
           <button className="btn text-light" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <FaTimes size={25} /> : <FaBars size={25} />}
           </button>
         </div>
+
+
 
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-4 flex-grow-1 me-4">
           {/* <Translater /> */}
@@ -325,11 +333,11 @@ const Navbar = () => {
                     )}
                   </div>
                   <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
-                  <Link to="/login" >
+                  {/* <Link to="/login" >
                     <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>
                       <FaUser /> Login
                     </button>
-                  </Link>
+                  </Link> */}
                 </>
               )}
             </div>

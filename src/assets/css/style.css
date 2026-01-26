@@ -1330,6 +1330,14 @@ svg {
     min-width: 100%;
 }
 
+.login-google-btn{
+    background-color: transparent;
+    width: 30%;
+    padding: 10px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-weight: 500;
+}
 /* Seamless loop */
 @keyframes scrollLeft {
     from {

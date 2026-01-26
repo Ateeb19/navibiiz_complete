@@ -405,6 +405,7 @@ const Offers = () => {
                                             <tbody>
                                                 {offers
                                                     .filter(item => item.status !== 'rejected')
+                                                    .sort((a, b) => Number(a.accepted) - Number(b.accepted))
                                                     .map((item, index) => (
                                                         <tr
                                                             key={index}

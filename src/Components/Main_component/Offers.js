@@ -1089,10 +1089,22 @@ const Offers = () => {
 
                                                         <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4 pb-2">
                                                             <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-100">
-                                                                <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span>
+                                                                {/* <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span> */}
+                                                                <span className="text-secondary text-start">Will you pick up the goods at the Customer given Adress muss bet a check-Box and muss also be mandatory, because now it is now on Pickup automatickly , that is not good</span>
                                                             </div>
                                                             <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-25 w-sm-100">
-                                                                <ToggleButton
+                                                                <input
+                                                                    className="form-check-input"
+                                                                    type="checkbox"
+                                                                    id="yesNoCheckbox"
+                                                                    checked={toggleValue}
+                                                                    onChange={(e) => setToggleValue(e.target.checked)}
+                                                                    style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                                                />
+                                                                {/* <label className="form-check-label fw-medium" htmlFor="yesNoCheckbox">
+                                                                    {toggleValue ? 'Yes' : 'No'}
+                                                                </label> */}
+                                                                {/* <ToggleButton
                                                                     value={toggleValue}
                                                                     onToggle={(val) => setToggleValue(!val)}
                                                                     activeLabel="Yes"
@@ -1113,7 +1125,7 @@ const Offers = () => {
                                                                             hover: 'rgb(175, 175, 175)',
                                                                         },
                                                                     }}
-                                                                />
+                                                                /> */}
                                                             </div>
                                                         </div>
                                                         {!toggleValue && (

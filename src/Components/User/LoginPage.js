@@ -5,6 +5,9 @@ import { IoEyeOutline } from "react-icons/io5";
 import { useAlert } from "../alert/Alert_message";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import '../../assets/css/responsive.css'
+import { auth, provider } from "./firebase";
+import { signInWithPopup } from "firebase/auth";
+import { FcGoogle } from "react-icons/fc";
 const LoginPage = () => {
   const port = process.env.REACT_APP_SECRET;
   const { showAlert } = useAlert();
@@ -187,6 +190,30 @@ const LoginPage = () => {
     }
   }
 
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      const user = result.user;
+
+      // user contains verified data from Google
+      const res = await axios.post(
+        `${port}/user/google-login`,
+        {
+          name: user.displayName,
+          email: user.email,
+          picture: user.photoURL,
+        }
+      );
+
+      localStorage.setItem("token", res.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="login-bg-wrapper">
       <div className="d-flex align-items-center justify-content-center justify-content-md-end" style={{ minHeight: "100vh" }}>
@@ -244,6 +271,11 @@ const LoginPage = () => {
               <div className="d-flex flex-column align-items-start">
                 {isSignup ? (
                   <>
+                    {selected === 'individual' && (
+                      <button onClick={handleGoogleLogin} className="login-google-btn mb-3 mt-1">
+                        <FcGoogle className="fs-4 pb-1" /> Continue with Google
+                      </button>
+                    )}
                     <label className="input-label">Name<span className="text-danger">*</span></label>
                     <input type="text"
                       onChange={handleChange_up}
@@ -255,7 +287,11 @@ const LoginPage = () => {
                 ) : (
                   <></>
                 )}
-
+                {(selected === 'individual' && !isSignup )&& (
+                  <button onClick={handleGoogleLogin} className="login-google-btn mb-3 mt-1">
+                    <FcGoogle className="fs-4 pb-1" /> Continue with Google
+                  </button>
+                )}
                 <label className={`input-label ${isSignup ? '' : ''}`}>Email Address <span className="text-danger">*</span></label>
                 <input type="email"
                   onChange={handleChange_up}
