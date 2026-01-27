@@ -272,9 +272,17 @@ const LoginPage = () => {
                 {isSignup ? (
                   <>
                     {selected === 'individual' && (
-                      <button onClick={handleGoogleLogin} className="login-google-btn mb-3 mt-1">
-                        <FcGoogle className="fs-4 pb-1" /> Continue with Google
-                      </button>
+                      <>
+                        <button onClick={handleGoogleLogin} className="login-google-btn mb-3 mt-1">
+                          <FcGoogle className="fs-4 pb-1" /> Continue with Google
+                        </button>
+                        <div className="d-flex align-items-center login-google-line">
+                          <hr className="flex-grow-1" />
+                          <span className="mx-2">OR</span>
+                          <hr className="flex-grow-1" />
+                        </div>
+
+                      </>
                     )}
                     <label className="input-label">Name<span className="text-danger">*</span></label>
                     <input type="text"
@@ -287,10 +295,18 @@ const LoginPage = () => {
                 ) : (
                   <></>
                 )}
-                {(selected === 'individual' && !isSignup )&& (
-                  <button onClick={handleGoogleLogin} className="login-google-btn mb-3 mt-1">
-                    <FcGoogle className="fs-4 pb-1" /> Continue with Google
-                  </button>
+                {(selected === 'individual' && !isSignup) && (
+                  <>
+                    <button onClick={handleGoogleLogin} className="login-google-btn mb-3 mt-1">
+                      <FcGoogle className="fs-4 pb-1" /> Continue with Google
+                    </button>
+                    <div className="d-flex align-items-center login-google-line">
+                      <hr className="flex-grow-1" />
+                      <span className="mx-2">OR</span>
+                      <hr className="flex-grow-1" />
+                    </div>
+
+                  </>
                 )}
                 <label className={`input-label ${isSignup ? '' : ''}`}>Email Address <span className="text-danger">*</span></label>
                 <input type="email"

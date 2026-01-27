@@ -322,6 +322,14 @@
     .dropdown-menu-home {
         min-width: 50%;
     }
+
+    .login-google-btn {
+        width: 100%;
+    }
+
+    .login-google-line {
+        width: 100%;
+    }
 }
 
 @media (max-width: 1399) {

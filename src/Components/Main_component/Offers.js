@@ -39,7 +39,7 @@ const Offers = () => {
     const [bidAmount, setBidAmount] = useState('');
     const [expetedDate, setExpetedDate] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [toggleValue, setToggleValue] = useState(true);
+    const [toggleValue, setToggleValue] = useState(false);
     const [office_address, setOffice_address] = useState('');
     // const handlePickupCountrySelect = (country) => {
     //     setSelectedPickupCountry(country);
@@ -1090,7 +1090,7 @@ const Offers = () => {
                                                         <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4 pb-2">
                                                             <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-100">
                                                                 {/* <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span> */}
-                                                                <span className="text-secondary text-start">Will you pick up the goods at the Customer given Adress muss bet a check-Box and muss also be mandatory, because now it is now on Pickup automatickly , that is not good</span>
+                                                                <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span>
                                                             </div>
                                                             <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-25 w-sm-100">
                                                                 <input
