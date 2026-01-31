@@ -7,6 +7,7 @@ import { PiContactlessPaymentFill, PiHandCoinsBold } from "react-icons/pi";
 import { useAlert } from "../../alert/Alert_message";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const Payment = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -18,6 +19,7 @@ const Payment = () => {
     const [S_admin_payment, setS_admin_payment] = useState([]);
     const [payment_search, setPayment_search] = useState('');
     const [payment_date, setPayment_date] = useState('');
+    const isMobile = useIsMobile();
 
     const payment_history = () => {
         if (userRole === 'Sadmin') {
@@ -106,45 +108,92 @@ const Payment = () => {
                                 </div>
                             </div>
 
-                            <div className="table-responsive w-100">
+                            {isMobile ? (
+                                <>
+                                    <div className="d-flex flex-column w-100 align-items-center justify-content-center gap-3">
+                                        {S_admin_payment && S_admin_payment.length > 0 ? (
+                                            <>
+                                                {filteredPayments.map((item, index) => (
+                                                    <>
+                                                        <div className="orders-mobile-card w-100">
+                                                            <div className="d-flex justify-content-between w-100">
+                                                                <div className="text-start">
+                                                                    <div className="d-flex gap-2">
+                                                                        <h5>Offer Id :  </h5> <h5 className="text-primary">#{item.offer_id}</h5>
+                                                                    </div>
+                                                                    <div className="d-flex">
+                                                                        <h5>Transaction Id : {item.transaction_id}</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="d-flex align-items-center justify-content-center">
 
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col"><h6>Offer Id</h6></th>
-                                            <th scope="col"><h6>Transaction Id</h6></th>
-                                            <th scope="col"><h6>Payment Receive Date</h6></th>
-                                            <th scope="col"><h6>Amount (€)</h6></th>
-                                            <th scope="col"><h6>Commission</h6></th>
-                                        </tr>
-                                    </thead>
-                                    {S_admin_payment && S_admin_payment.length > 0 ? (
-                                        <tbody>
-                                            {filteredPayments.map((item, index) => (
-                                                <tr key={index}>
-                                                    <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => S_admin_payment_status(item)}>#{item.offer_id}</td>
-                                                    <td className="text-secondary">{item.transaction_id}</td>
-                                                    <td className="text-secondary">{item.payment_time ? new Date(item.payment_time).toISOString().split("T")[0] : ""}</td>
-                                                    <td className="text-secondary">{item.payment_info_amount}</td>
-                                                    <td className="text-secondary">
-                                                        {(() => {
-                                                            const T = parseFloat(item.payment_info_amount);
-                                                            const com = T - (T / commission_percentage);
-                                                            return com.toFixed(2);
-                                                        })()}
-                                                    </td>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="d-flex flex-column justify-content-start align-items-start">
+                                                                <h5>Payment Receive Date: {item.payment_time ? new Date(item.payment_time).toISOString().split("T")[0] : ""}</h5>
+                                                                <h5>Amount (€) : {item.payment_info_amount}</h5>
+                                                                <h5>Commission :  {(() => {
+                                                                    const T = parseFloat(item.payment_info_amount);
+                                                                    const com = T - (T / commission_percentage);
+                                                                    return com.toFixed(2);
+                                                                })()}</h5>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <>
+
+                                            </>
+                                        )}
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+
+                                    <div className="table-responsive w-100">
+
+                                        <table className="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"><h6>Offer Id</h6></th>
+                                                    <th scope="col"><h6>Transaction Id</h6></th>
+                                                    <th scope="col"><h6>Payment Receive Date</h6></th>
+                                                    <th scope="col"><h6>Amount (€)</h6></th>
+                                                    <th scope="col"><h6>Commission</h6></th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    ) : (
-                                        <tbody>
-                                            <tr>
-                                                <td colSpan="6" className="text-center text-secondary">No Data</td>
-                                            </tr>
-                                        </tbody>
-                                    )}
-                                </table>
-                            </div>
+                                            </thead>
+                                            {S_admin_payment && S_admin_payment.length > 0 ? (
+                                                <tbody>
+                                                    {filteredPayments.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => S_admin_payment_status(item)}>#{item.offer_id}</td>
+                                                            <td className="text-secondary">{item.transaction_id}</td>
+                                                            <td className="text-secondary">{item.payment_time ? new Date(item.payment_time).toISOString().split("T")[0] : ""}</td>
+                                                            <td className="text-secondary">{item.payment_info_amount}</td>
+                                                            <td className="text-secondary">
+                                                                {(() => {
+                                                                    const T = parseFloat(item.payment_info_amount);
+                                                                    const com = T - (T / commission_percentage);
+                                                                    return com.toFixed(2);
+                                                                })()}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            ) : (
+                                                <tbody>
+                                                    <tr>
+                                                        <td colSpan="6" className="text-center text-secondary">No Data</td>
+                                                    </tr>
+                                                </tbody>
+                                            )}
+                                        </table>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

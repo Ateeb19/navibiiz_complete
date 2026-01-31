@@ -14,6 +14,7 @@ import PaypalPayment from "../../Paypal/Paypal_payment";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ConfirmationModal from "../../alert/Conform_alert";
 import { IoTrashBin } from "react-icons/io5";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const Offers = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -37,7 +38,7 @@ const Offers = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [deleteAction, setDeleteAction] = useState(null);
-
+    const isMobile = useIsMobile();
 
 
 
@@ -211,8 +212,8 @@ const Offers = () => {
                                 </div> */}
                                 <div className="text-start mt-2">
                                     <span className="text">
-                                            <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
-                                        </span>
+                                        <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
+                                    </span>
                                 </div>
                             </>
                         )}
@@ -271,30 +272,13 @@ const Offers = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="table-responsive" style={{
-                                    width: "100%",
-                                    overflowX: "auto",
-                                    whiteSpace: "nowrap",
-                                }}>
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"><h6>Order Id</h6></th>
-                                                <th scope="col"><h6>Product Name / Box dimensions</h6></th>
-                                                <th scope="col"><h6>Offer To</h6></th>
-                                                <th scope="col"><h6>Price (€)</h6></th>
-                                                {/* <th scope="col"><h6>Platform fee (€)</h6></th> */}
-                                                {/* <th scope="col"><h6>Amount Receive (€)</h6></th> */}
-                                                <th scope="col"><h6>Delivery Duration</h6></th>
-                                                <th scope="col"><h6>Product Pick Up</h6></th>
-                                                <th scope="col"><h6>Offer Status</h6></th>
-                                            </tr>
-                                        </thead>
-                                        {admin_offer && admin_offer.length > 0 ? (
-                                            <tbody>
-                                                {admin_offer.map((item, index) => (
-                                                    <tr key={index}>
-                                                        <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => {
+                                {isMobile ?
+                                    <>
+                                        <div className="d-flex flex-column w-100 align-items-center justify-content-center gap-3">
+                                            {admin_offer && admin_offer.length > 0 ? (
+                                                <>
+                                                    {admin_offer.map((item, index) => (
+                                                        <div className="orders-mobile-card w-100" style={{ cursor: 'pointer' }} onClick={() => {
                                                             if (item.status === 'pending') {
                                                                 showAlert("Offer is not yet accepted by customer");
                                                             } else if (item.status === 'rejected') {
@@ -302,31 +286,100 @@ const Offers = () => {
                                                             } else {
                                                                 handle_admin_selected_offer(item.offer_id, item.groupage_id);
                                                             }
-                                                        }}>#{item.offer_id}</td>
-                                                        <td className="text-secondary">{item.product_name ? item.product_name : item.box_dimension}</td>
-                                                        <td className="text-secondary">{item.sender_name}</td>
-                                                        <td className="text-secondary">{item.amount}</td>
-                                                        {/* <td className="text-secondary">{item.commission}</td> */}
-                                                        {/* <td className="text-secondary"><Link11 title="This is the final amount you will receive from customer" id="t-1">{item.amount - item.commission}</Link11></td> */}
-                                                        <td className="text-secondary">{item.expeted_date}</td>
-                                                        <td className="text-secondary">{item.office_address ? 'No' : 'Yes'}</td>
-                                                        <td className="text-secondary"
-                                                            style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
-                                                            onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
-                                                        ><span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : 'Rejected'}{item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
-                                                        </td>
+                                                        }}>
+                                                            <div className="d-flex justify-content-between w-100">
+                                                                <div className="text-start">
+                                                                    <div className="d-flex gap-2">
+                                                                        <h5>Order Id </h5> <h5 className="text-primary">#{item.offer_id}</h5>
+                                                                    </div>
+                                                                    <div className="d-flex">
+                                                                        <h5>{item.product_name ? item.product_name : item.box_dimension}</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="d-flex align-items-center justify-content-center"
+                                                                    style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
+                                                                    onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
+                                                                >
+                                                                    <span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : 'Rejected'}{item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="d-flex flex-column justify-content-start align-items-start">
+                                                                <h6>Offer To : {item.sender_name}</h6>
+                                                                <h6>Price (€) : {item.amount}</h6>
+                                                                <h6>Delivery Duration : {item.expeted_date}</h6>
+                                                                <h6>Product Pick Up : {item.office_address ? 'No' : 'Yes'}</h6>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </>
+                                            ) : (
+                                                <>
+
+                                                </>
+                                            )}
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div className="table-responsive" style={{
+                                            width: "100%",
+                                            overflowX: "auto",
+                                            whiteSpace: "nowrap",
+                                        }}>
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col"><h6>Order Id</h6></th>
+                                                        <th scope="col"><h6>Product Name / Box dimensions</h6></th>
+                                                        <th scope="col"><h6>Offer To</h6></th>
+                                                        <th scope="col"><h6>Price (€)</h6></th>
+                                                        {/* <th scope="col"><h6>Platform fee (€)</h6></th> */}
+                                                        {/* <th scope="col"><h6>Amount Receive (€)</h6></th> */}
+                                                        <th scope="col"><h6>Delivery Duration</h6></th>
+                                                        <th scope="col"><h6>Product Pick Up</h6></th>
+                                                        <th scope="col"><h6>Offer Status</h6></th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        ) : (
-                                            <tbody>
-                                                <tr>
-                                                    <td colSpan="6" className="text-center text-secondary">No Data</td>
-                                                </tr>
-                                            </tbody>
-                                        )}
-                                    </table>
-                                </div>
+                                                </thead>
+                                                {admin_offer && admin_offer.length > 0 ? (
+                                                    <tbody>
+                                                        {admin_offer.map((item, index) => (
+                                                            <tr key={index}>
+                                                                <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => {
+                                                                    if (item.status === 'pending') {
+                                                                        showAlert("Offer is not yet accepted by customer");
+                                                                    } else if (item.status === 'rejected') {
+                                                                        showAlert("Your offer is Rejected");
+                                                                    } else {
+                                                                        handle_admin_selected_offer(item.offer_id, item.groupage_id);
+                                                                    }
+                                                                }}>#{item.offer_id}</td>
+                                                                <td className="text-secondary">{item.product_name ? item.product_name : item.box_dimension}</td>
+                                                                <td className="text-secondary">{item.sender_name}</td>
+                                                                <td className="text-secondary">{item.amount}</td>
+                                                                {/* <td className="text-secondary">{item.commission}</td> */}
+                                                                {/* <td className="text-secondary"><Link11 title="This is the final amount you will receive from customer" id="t-1">{item.amount - item.commission}</Link11></td> */}
+                                                                <td className="text-secondary">{item.expeted_date}</td>
+                                                                <td className="text-secondary">{item.office_address ? 'No' : 'Yes'}</td>
+                                                                <td className="text-secondary"
+                                                                    style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
+                                                                    onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
+                                                                ><span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : 'Rejected'}{item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                ) : (
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colSpan="6" className="text-center text-secondary">No Data</td>
+                                                        </tr>
+                                                    </tbody>
+                                                )}
+                                            </table>
+                                        </div>
+                                    </>}
+
                             </div>
                         </div>
                     </>
@@ -383,91 +436,146 @@ const Offers = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="table-responsive" style={{
-                                    width: "100%",
-                                    overflowX: "auto",
-                                    whiteSpace: "nowrap",
-                                }}>
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"><h6>Order Id</h6></th>
-                                                <th scope="col"><h6>Product Name</h6></th>
-                                                <th scope="col"><h6>Offer From</h6></th>
-                                                <th scope="col"><h6>Total Amount (€)</h6></th>
-                                                <th scope="col"><h6>Amount to pay now (€)</h6></th>
-                                                <th scope="col"><h6>Delivery Duration</h6></th>
-                                                <th scope="col"><h6>Transporter Pickup</h6></th>
-                                                <th scope="col"><h6>Actions</h6></th>
-                                            </tr>
-                                        </thead>
-                                        {offers && offers.length > 0 ? (
-                                            <tbody>
-                                                {offers
-                                                    .filter(item => item.status !== 'rejected')
-                                                    .sort((a, b) => Number(a.accepted) - Number(b.accepted))
-                                                    .map((item, index) => (
-                                                        <tr
-                                                            key={index}
-                                                            onClick={() =>
+                                {isMobile ?
+                                    <>
+                                        <div className="d-flex flex-column w-100 align-items-center justify-content-center gap-3">
+                                            {offers && offers.length > 0 ? (
+                                                <>
+                                                    {offers.filter(item => item.status !== 'rejected')
+                                                        .sort((a, b) => Number(a.accepted) - Number(b.accepted))
+                                                        .map((item, index) => (
+                                                            <div className="orders-mobile-card w-100" style={{ cursor: 'pointer' }} onClick={() =>
                                                                 item.accepted === '1'
                                                                     ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission)
-                                                                    : null
-                                                            }
-                                                            style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}
-                                                            className="justify-content-center align-items-center"
-                                                        >
-                                                            <td className="text-primary">#{item.order_id}</td>
-                                                            <td className="text-secondary">{item.product_name}</td>
-                                                            <td className="text-secondary">XXXXX-XXX</td>
-                                                            <td className="text-secondary">{parseFloat(item.price) + parseFloat(item.commission)}</td>
-                                                            {/* <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td> */}
-                                                            <td className="text-secondary">{item.commission}</td>
-                                                            <td className="text-secondary">
-                                                                {item.delivery_duration.replace(/_/g, ' ')}
-                                                            </td>
-                                                            <td className="text-secondary">{item.office_address ? <>No</> : <>Yes</>}</td>
-                                                            <td className="d-flex align-items-center justify-content-center w-100 gap-3">
-                                                                {item.accepted === '1' ? <>
-                                                                <span className='p-2 fw-bold' style={{backgroundColor: '#bcffba', color: '#0b7e01'}}>Accepted</span>
-                                                                </> : <>
-                                                                <button
-                                                                    className="btn btn-sm text-light"
-                                                                    // style={{ backgroundColor: '#31b23c' }}
-                                                                    onClick={() => handleShowOffer(item)}
-                                                                    disabled={item.accepted === '1'}
+                                                                    : handleShowOffer(item)
+                                                            }>
+                                                                <div className="d-flex justify-content-between w-100">
+                                                                    <div className="text-start">
+                                                                        <div className="d-flex gap-2">
+                                                                            <h5>Order Id </h5> <h5 className="text-primary">#{item.order_id}</h5>
+                                                                        </div>
+                                                                        <div className="d-flex">
+                                                                            <h5>{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</h5>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="d-flex align-items-center justify-content-center">
+                                                                        <button
+                                                                            className="btn btn-sm text-light"
+
+                                                                            onClick={() => handleDeleteoffer(item.offer_id)}
+                                                                            disabled={item.accepted === '1'}
+                                                                        >
+                                                                            <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="d-flex flex-column justify-content-start align-items-start">
+                                                                    <h6>Offer From : XXXXX-XXX</h6>
+                                                                    <h6>Total Amount (€) : {parseFloat(item.price) + parseFloat(item.commission)}</h6>
+                                                                    <h6>Amount to pay now (€) : {item.commission}</h6>
+                                                                    <h6>Delivery Duration : {item.delivery_duration.replace(/_/g, ' ')}</h6>
+                                                                    <h6>Transporter Pickup : {item.office_address ? <>No</> : <>Yes</>}</h6>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                </>
+                                            ) : (
+                                                <>
+
+                                                </>
+                                            )}
+
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div className="table-responsive" style={{
+                                            width: "100%",
+                                            overflowX: "auto",
+                                            whiteSpace: "nowrap",
+                                        }}>
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col"><h6>Order Id</h6></th>
+                                                        <th scope="col"><h6>Product Name</h6></th>
+                                                        <th scope="col"><h6>Offer From</h6></th>
+                                                        <th scope="col"><h6>Total Amount (€)</h6></th>
+                                                        <th scope="col"><h6>Amount to pay now (€)</h6></th>
+                                                        <th scope="col"><h6>Delivery Duration</h6></th>
+                                                        <th scope="col"><h6>Transporter Pickup</h6></th>
+                                                        <th scope="col"><h6>Actions</h6></th>
+                                                    </tr>
+                                                </thead>
+                                                {offers && offers.length > 0 ? (
+                                                    <tbody>
+                                                        {offers
+                                                            .filter(item => item.status !== 'rejected')
+                                                            .sort((a, b) => Number(a.accepted) - Number(b.accepted))
+                                                            .map((item, index) => (
+                                                                <tr
+                                                                    key={index}
+                                                                    onClick={() =>
+                                                                        item.accepted === '1'
+                                                                            ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission)
+                                                                            : null
+                                                                    }
+                                                                    style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}
+                                                                    className="justify-content-center align-items-center"
                                                                 >
-                                                                    <FaEye className="fs-4" style={{ color: 'rgb(1, 42, 82)' }} />
-                                                                </button>
-                                                                <button
-                                                                    className="btn btn-sm text-light"
-                                                                    
-                                                                    onClick={() => handleDeleteoffer(item.offer_id)}
-                                                                    disabled={item.accepted === '1'}
-                                                                >
-                                                                    <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }}/>
-                                                                </button>
-                                                                </>}
-                                                                
-                                                            </td>
+                                                                    <td className="text-primary">#{item.order_id}</td>
+                                                                    <td className="text-secondary">{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</td>
+                                                                    <td className="text-secondary">XXXXX-XXX</td>
+                                                                    <td className="text-secondary">{parseFloat(item.price) + parseFloat(item.commission)}</td>
+                                                                    {/* <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td> */}
+                                                                    <td className="text-secondary">{item.commission}</td>
+                                                                    <td className="text-secondary">
+                                                                        {item.delivery_duration.replace(/_/g, ' ')}
+                                                                    </td>
+                                                                    <td className="text-secondary">{item.office_address ? <>No</> : <>Yes</>}</td>
+                                                                    <td className="d-flex align-items-center justify-content-center w-100 gap-3">
+                                                                        {item.accepted === '1' ? <>
+                                                                            <span className='p-2 fw-bold' style={{ backgroundColor: '#bcffba', color: '#0b7e01' }}>Accepted</span>
+                                                                        </> : <>
+                                                                            <button
+                                                                                className="btn btn-sm text-light"
+                                                                                // style={{ backgroundColor: '#31b23c' }}
+                                                                                onClick={() => handleShowOffer(item)}
+                                                                                disabled={item.accepted === '1'}
+                                                                            >
+                                                                                <FaEye className="fs-4" style={{ color: 'rgb(1, 42, 82)' }} />
+                                                                            </button>
+                                                                            <button
+                                                                                className="btn btn-sm text-light"
+
+                                                                                onClick={() => handleDeleteoffer(item.offer_id)}
+                                                                                disabled={item.accepted === '1'}
+                                                                            >
+                                                                                <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
+                                                                            </button>
+                                                                        </>}
+
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                    </tbody>
+                                                ) : (
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colSpan="6" className="text-center text-secondary">No Data</td>
                                                         </tr>
-                                                    ))}
-                                            </tbody>
-                                        ) : (
-                                            <tbody>
-                                                <tr>
-                                                    <td colSpan="6" className="text-center text-secondary">No Data</td>
-                                                </tr>
-                                            </tbody>
-                                        )}
-                                    </table>
-                                </div>
+                                                    </tbody>
+                                                )}
+                                            </table>
+                                        </div>
+                                    </>}
                             </div>
                         </div>
                     </>
                 )}
 
-            </div>
+            </div >
 
             {show_admin_offer && (
                 <>
@@ -655,90 +763,99 @@ const Offers = () => {
                         </div>
                     </div>
                 </>
-            )}
+            )
+            }
 
-            {show_company_details !== null && (
-                <>
-                    <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
-                        <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: 'auto' }}>
-                            <button
-                                className="btn-close position-absolute top-0 end-0 m-2"
-                                onClick={() => setShow_company_details(null)}
-                            ></button>
+            {
+                show_company_details !== null && (
+                    <>
+                        <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+                            <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: 'auto' }}>
+                                <button
+                                    className="btn-close position-absolute top-0 end-0 m-2"
+                                    onClick={() => setShow_company_details(null)}
+                                ></button>
 
-                            <div className='d-flex flex-column align-items-start'>
-                                <div className='title-head'><h3>Transporter Details</h3></div>
+                                <div className='d-flex flex-column align-items-start'>
+                                    <div className='title-head'><h3>Transporter Details</h3></div>
 
-                                <div className='details-wrap w-100 text-start'>
-                                    <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {show_company_details?.data?.company_name}</span>
-                                </div>
+                                    <div className='details-wrap w-100 text-start'>
+                                        <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {show_company_details?.data?.company_name}</span>
+                                    </div>
 
-                                <div className='details-wrap w-100 text-start'>
-                                    <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${show_company_details?.data?.email}"`}>{show_company_details?.data?.email}</a></span>
-                                </div>
+                                    <div className='details-wrap w-100 text-start'>
+                                        <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${show_company_details?.data?.email}"`}>{show_company_details?.data?.email}</a></span>
+                                    </div>
 
-                                <div className='details-wrap w-100 text-start'>
-                                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {show_company_details?.data?.contect_no}</span>
-                                </div>
-                                {show_company_details?.data?.office_address && (
-                                    <>
-                                        <div className='details-wrap w-100 text-start'>
-                                            <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Office Address-: {show_company_details?.data?.office_address}</span>
-                                        </div>
-                                    </>
-                                )}
-                                <div className='details-wrap w-100 text-start'>
-                                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount pay to Transporter-: €{parseFloat(show_company_details?.price) + parseFloat(show_company_details?.commission)}</span>
-                                </div>
+                                    <div className='details-wrap w-100 text-start'>
+                                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {show_company_details?.data?.contect_no}</span>
+                                    </div>
+                                    {show_company_details?.data?.office_address && (
+                                        <>
+                                            <div className='details-wrap w-100 text-start'>
+                                                <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Office Address-: {show_company_details?.data?.office_address}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                    <div className='details-wrap w-100 text-start'>
+                                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount pay to Transporter-: €{parseFloat(show_company_details?.price) + parseFloat(show_company_details?.commission)}</span>
+                                    </div>
 
-                                <div className='details-wrap w-100 text-start'>
-                                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount payed-: €{show_company_details?.commission}</span>
+                                    <div className='details-wrap w-100 text-start'>
+                                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount payed-: €{show_company_details?.commission}</span>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
+                    </>
+                )
+            }
 
-                    </div>
-                </>
-            )}
-
-            {selected_offer && (
-                <>
-                    <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-                        style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                            zIndex: 9999
-                        }}
-                    >
-                        <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection"
+            {
+                selected_offer && (
+                    <>
+                        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
                             style={{
-                                width: '55%',
-                                height: '90vh',
-                                overflowY: 'auto'
+                                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                zIndex: 9999
                             }}
                         >
-                            {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX", currency: "EUR" }}> */}
-                            <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gT/PRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL", currency: "EUR" }}>
+                            <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection"
+                                style={{
+                                    width: '55%',
+                                    height: '90vh',
+                                    overflowY: 'auto'
+                                }}
+                            >
+                                {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX", currency: "EUR" }}> */}
+                                <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gT/PRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL", currency: "EUR" }}>
 
 
-                                {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY", currency: "EUR" }}> */}
-                                <div className="d-flex flex-column justify-content-start align-items-start w-100">
-                                    <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
-                                        ✕
-                                    </button>
+                                    {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY", currency: "EUR" }}> */}
+                                    <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                        <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
+                                            ✕
+                                        </button>
 
-                                    <strong className="fs-4">Offer Details</strong>
+                                        <strong className="fs-4">Offer Details</strong>
 
-                                    <h5 className="mt-3">Product Information</h5>
-                                    <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
-                                        <div className=" d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Product ID : </span>
-                                            <span>{selected_offer.id}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Product Name : </span>
-                                            <span>{selected_offer.product_name}</span>
-                                        </div>
-                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        <h5 className="mt-3">Product Information</h5>
+                                        <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                                            <div className=" d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Product ID : </span>
+                                                <span>{selected_offer.id}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                {selected_offer.box ? <>
+                                                    <span className="text-secondary">Box Dimensions : </span>
+                                                    <span>{selected_offer.box_dimension}</span>
+                                                </> : <>
+                                                    <span className="text-secondary">Product Name : </span>
+                                                    <span>{selected_offer.product_name}</span>
+                                                </>}
+                                            </div>
+                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Weight : </span>
                                             <span>{selected_offer.p_weight} {selected_offer.p_weight && "Kg"}</span>
                                         </div>
@@ -754,59 +871,59 @@ const Offers = () => {
                                             <span className="text-secondary">Width : </span>
                                             <span>{selected_offer.p_width} {selected_offer.p_width && "Cm"}</span>
                                         </div> */}
-                                    </div>
+                                        </div>
 
-                                    <h5 className="mt-3">Transporter Information</h5>
-                                    <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Transporter Name : </span>
-                                            <span>XXXX-XX</span>
+                                        <h5 className="mt-3">Transporter Information</h5>
+                                        <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Transporter Name : </span>
+                                                <span>XXXX-XX</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Price Offered : </span>
+                                                <span className="fw-bold">€{parseFloat(selected_offer.price) + parseFloat(selected_offer.commission)}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Amount to Pay Now: </span>
+                                                <span className="fw-bold">€{selected_offer.commission}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Amount pay to Transporter : </span>
+                                                <span className="fw-bold">€{selected_offer.price}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Offer Received Date : </span>
+                                                <span>{selected_offer.created_at.split("T")[0]}</span>
+                                            </div>
                                         </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Price Offered : </span>
-                                            <span className="fw-bold">€{parseFloat(selected_offer.price) + parseFloat(selected_offer.commission)}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Amount to Pay Now: </span>
-                                            <span className="fw-bold">€{selected_offer.commission}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Amount pay to Transporter : </span>
-                                            <span className="fw-bold">€{selected_offer.price}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Offer Received Date : </span>
-                                            <span>{selected_offer.created_at.split("T")[0]}</span>
-                                        </div>
-                                    </div>
 
-                                    <h5 className="mt-3">Pick Up Information</h5>
-                                    <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Full Name : </span>
-                                            <span>{selected_offer.sender_name}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Contact Number : </span>
-                                            <span>{selected_offer.sender_contact}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Email ID : </span>
-                                            <span>{selected_offer.sender_email}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Country : </span>
-                                            <span>{selected_offer.sender_country}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">State : </span>
-                                            <span>{selected_offer.sender_state}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">City : </span>
-                                            <span>{selected_offer.sender_city}</span>
-                                        </div>
-                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        <h5 className="mt-3">Pick Up Information</h5>
+                                        <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Full Name : </span>
+                                                <span>{selected_offer.sender_name}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Contact Number : </span>
+                                                <span>{selected_offer.sender_contact}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Email ID : </span>
+                                                <span>{selected_offer.sender_email}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Country : </span>
+                                                <span>{selected_offer.sender_country}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">State : </span>
+                                                <span>{selected_offer.sender_state}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">City : </span>
+                                                <span>{selected_offer.sender_city}</span>
+                                            </div>
+                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Street Address : </span>
                                             <span>{selected_offer.sender_address ? selected_offer.sender_address : '-'}</span>
                                         </div>
@@ -825,27 +942,27 @@ const Offers = () => {
                                                 // selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date
                                             }</span>
                                         </div> */}
-                                    </div>
+                                        </div>
 
-                                    <h5 className="mt-3">Delivery Information</h5>
-                                    <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Full Name : </span>
-                                            <span>{selected_offer.receiver_name}</span>
-                                        </div>
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Contact Number : </span>
-                                            <span>{selected_offer.receiver_contact}</span>
-                                        </div>
-                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        <h5 className="mt-3">Delivery Information</h5>
+                                        <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Full Name : </span>
+                                                <span>{selected_offer.receiver_name}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Contact Number : </span>
+                                                <span>{selected_offer.receiver_contact}</span>
+                                            </div>
+                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Email ID : </span>
                                             <span>{selected_offer.receiver_email ? selected_offer.receiver_email : '-'}</span>
                                         </div> */}
-                                        <div className="d-flex flex-row align-items-start justify-content-between w-100">
-                                            <span className="text-secondary">Country : </span>
-                                            <span>{selected_offer.receiver_country ? selected_offer.receiver_country : '-'}</span>
-                                        </div>
-                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Country : </span>
+                                                <span>{selected_offer.receiver_country ? selected_offer.receiver_country : '-'}</span>
+                                            </div>
+                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">State : </span>
                                             <span>{selected_offer.receiver_state ? selected_offer.receiver_state : '-'}</span>
                                         </div>
@@ -861,12 +978,12 @@ const Offers = () => {
                                             <span className="text-secondary">Zip Code : </span>
                                             <span>{selected_offer.receiver_zipcode ? selected_offer.receiver_zipcode : '-'}</span>
                                         </div> */}
-                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Delivery Duration : </span>
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
                       </div> */}
-                                        {/* {selected_offer.office_address && (
+                                            {/* {selected_offer.office_address && (
                         <>
                           <div className="d-flex flex-row align-items-start justify-content-between w-100">
                             <span className="text-secondary">Office Address : </span>
@@ -874,9 +991,9 @@ const Offers = () => {
                           </div>
                         </>
                       )} */}
-                                    </div>
+                                        </div>
 
-                                    {/* <button onClick={() => {
+                                        {/* <button onClick={() => {
                       axios.post(`${port}/paypal/api/test_api`, {
                         offerId: selected_offer.offer_id,
                         amount: selected_offer.price,
@@ -891,21 +1008,22 @@ const Offers = () => {
                       }).catch((err) => { console.log(err) });
                     }}>test payment button</button>
                      */}
-                                    <div className="d-flex flex-column w-100 justify-content-center align-items-center">
-                                        <PaypalPayment
-                                            key={selected_offer?.offer_id}
-                                            selected_offer={selected_offer}
-                                        />
+                                        <div className="d-flex flex-column w-100 justify-content-center align-items-center">
+                                            <PaypalPayment
+                                                key={selected_offer?.offer_id}
+                                                selected_offer={selected_offer}
+                                            />
 
-                                        <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
+                                            <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
+                                        </div>
                                     </div>
-                                </div>
-                            </PayPalScriptProvider>
+                                </PayPalScriptProvider>
 
+                            </div>
                         </div>
-                    </div>
-                </>
-            )}
+                    </>
+                )
+            }
         </>
     )
 }

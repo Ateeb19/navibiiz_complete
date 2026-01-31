@@ -362,7 +362,7 @@ const send_groupage_submit = (req, res) => {
 //display to the user dashboard
 const display_user_dashboard = (req, res) => {
     if (req.user.useremail) {
-        db.query('SELECT * FROM groupage WHERE groupage_created_by = ?', [req.user.useremail], (err, result) => {
+        db.query('SELECT g.*, COUNT(o.offer_id) AS offers_count FROM groupage g LEFT JOIN offers o ON g.id = o.groupage_id WHERE g.groupage_created_by = ? GROUP BY g.id ORDER BY g.id DESC;', [req.user.useremail], (err, result) => {
             if (err) {
                 res.json({ message: "error in database", status: false });
             } else {
@@ -478,10 +478,12 @@ const create_offer = (req, res) => {
 
 //show offers to the user
 const show_offers_user = (req, res) => {
+    const id = req.params.id;
     const userEmail = req.user.useremail;
 
     // Get groupage data for the user
-    db.query('SELECT * FROM groupage WHERE groupage_created_by = ?', [userEmail], (err, groupageResults) => {
+    // db.query('SELECT * FROM groupage WHERE groupage_created_by = ?', [userEmail], (err, groupageResults) => {
+    db.query('SELECT * FROM groupage WHERE id = ?', [id], (err, groupageResults) => {
         if (err) {
             console.log(err);
             return res.json({ message: 'Database error', status: false });
@@ -495,7 +497,8 @@ const show_offers_user = (req, res) => {
         const groupageIds = groupageResults.map(g => g.id);
 
         // Get offers that match the groupage IDs
-        db.query('SELECT * FROM offers WHERE groupage_id IN (?)', [groupageIds], (err, offerResults) => {
+        // db.query('SELECT * FROM offers WHERE groupage_id IN (?)', [groupageIds], (err, offerResults) => {
+        db.query('SELECT * FROM offers WHERE groupage_id = ?', [id], (err, offerResults) => {
             if (err) {
                 console.log(err);
                 return res.json({ message: 'Database error', status: false });
@@ -506,6 +509,8 @@ const show_offers_user = (req, res) => {
                 const groupage = groupageResults.find(g => g.id === offer.groupage_id);
                 return {
                     order_id: groupage.id,
+                    box: groupage.box,
+                    box_dimension: groupage.box_dimension || 'N/A',
                     product_name: groupage.product_name || "N/A",
                     offer_id: offer.offer_id,
                     created_date: offer.created_at,

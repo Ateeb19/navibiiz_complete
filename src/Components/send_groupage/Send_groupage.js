@@ -142,6 +142,8 @@ const Send_groupage = () => {
     const [senderDescription, setSenderDescription] = useState('');
     const [selectedCountry, setSelectedCountry] = useState("");
 
+    const [emailError, setEmailError] = useState(false);
+
     const Dimension = [
         { label: 'Small(S) (30 x 20 x 10 cm)' },
         { label: 'Medium(M) (40 x 30 x 20 cm)' },
@@ -156,9 +158,22 @@ const Send_groupage = () => {
             return box_dimension && box_number;
         }
     };
+    const handleEmailChange = (e) => {
+        const value = e.target.value;
+        setUserEmail(value);
+
+        if (value === "" || isValidEmail(value)) {
+            setEmailError(false);
+        } else {
+            setEmailError(true);
+        }
+    };
+    const isValidEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
     const validateStep2 = () => {
         // return userName && userNumber && userEmail && userCountry && userState && userCity && streetAddress && zipCode && state;
-        return userName && userNumber && userEmail && userCountry && userState && userCity;
+        return userName && userNumber && userEmail && isValidEmail(userEmail) && userCountry && userState && userCity;
     };
     const validateStep3 = () => {
         // return senderName && senderNumber && senderEmail && senderCountry && senderState && senderCity;
@@ -583,7 +598,16 @@ const Send_groupage = () => {
                                                         </div>
                                                         <div className="col-12 col-md-4 text-start">
                                                             <label className="shipping-input-label">Email Address<span className="text-danger">*</span></label>
-                                                            <input className="shipping-input-field" type="email" placeholder="Enter your email id" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
+                                                            <input className="shipping-input-field" type="email" placeholder="Enter your email id" value={userEmail}
+                                                                // onChange={(e) => setUserEmail(e.target.value)} 
+                                                                onChange={handleEmailChange}
+                                                                style={{ backgroundColor: 'rgb(214, 214, 214)', border: emailError ? '1px solid red' : '1px solid #b90303 !important' }} required />
+                                                            {emailError && (
+                                                                <small style={{ color: ' red' }}>
+                                                                    <i>*Please enter a valid email address</i>
+                                                                </small>
+                                                            )}
+
                                                         </div>
                                                     </div>
 

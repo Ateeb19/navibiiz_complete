@@ -210,9 +210,9 @@ const Dashboard = () => {
                                 <div className="d-flex  w-50 justify-content-start">
                                     <label className="fs-3">Hi, <strong>{userInfo.name}</strong></label>
                                 </div>
-                                <div className="w-50 pe-3 d-flex justify-content-end">
+                                {/* <div className="w-50 pe-3 d-flex justify-content-end">
                                     <label className="text-success fs-5">Updated 2 min ago</label>
-                                </div>
+                                </div> */}
                             </div>
 
 
@@ -262,9 +262,9 @@ const Dashboard = () => {
                                 <div className="d-flex  w-50 justify-content-start">
                                     <label className="fs-3">Hi, <strong>{userInfo.name}</strong></label>
                                 </div>
-                                <div className="w-50 pe-3 d-flex justify-content-end">
+                                {/* <div className="w-50 pe-3 d-flex justify-content-end">
                                     <label className="text-success fs-5">Updated 2 min ago</label>
-                                </div>
+                                </div> */}
                             </div>
 
 
@@ -294,9 +294,9 @@ const Dashboard = () => {
                                 <div className="d-flex  w-50 justify-content-start">
                                     <label className="fs-3">Hi, <strong>{userInfo.name}</strong></label>
                                 </div>
-                                <div className="w-50 pe-3 d-flex justify-content-end">
+                                {/* <div className="w-50 pe-3 d-flex justify-content-end">
                                     <label className="text-success fs-5">Updated 2 min ago</label>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="dashboard-wraper-box">

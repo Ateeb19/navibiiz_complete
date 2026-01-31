@@ -8,6 +8,7 @@ import { RiSecurePaymentFill } from "react-icons/ri";
 import { BsBuildingsFill } from "react-icons/bs";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
+import MobileBottomNav from "./MobileBottomNav";
 
 const Dashboard_layout = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -261,26 +262,29 @@ const Dashboard_layout = () => {
                                             </>
                                         ) : (
                                             <>
-                                                {userRole === 'user' && (
+                                                {userRole === 'user' ? (
                                                     <>
                                                         <li className="nav-item mb-4 text-start"
                                                             // style={activeSection === 'orders' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}
                                                             style={activeStyle("orders")}
                                                         >
                                                             <Link to="/dashboard/orders" className="nav-link text-white sidebar-links">
-                                                                <FaBoxOpen /> Orders
+                                                                <FaBoxOpen /> Shipments
+                                                            </Link>
+                                                        </li>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <li className="nav-item mb-4 text-start"
+                                                            //  style={activeSection === 'user_offers' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}
+                                                            style={activeStyle("user_offers")}
+                                                        >
+                                                            <Link to={userRole === 'user' ? "/dashboard/offers-user" : "/dashboard/offers-admin"} className="nav-link text-white sidebar-links">
+                                                                <MdPayment /> Offers
                                                             </Link>
                                                         </li>
                                                     </>
                                                 )}
-                                                <li className="nav-item mb-4 text-start"
-                                                    //  style={activeSection === 'user_offers' ? { backgroundColor: "#06536e", textAlign: 'left', borderRadius: '5px', borderRight: '4px solid white' } : { textAlign: 'left' }}
-                                                    style={activeStyle("user_offers")}
-                                                >
-                                                    <Link to="/dashboard/offers" className="nav-link text-white sidebar-links">
-                                                        <MdPayment /> Offers
-                                                    </Link>
-                                                </li>
                                                 {userRole === 'user' && (
                                                     <>
                                                         <li className="nav-item mb-4 text-start"
@@ -308,11 +312,11 @@ const Dashboard_layout = () => {
 
                 }} >
 
-                    {isMobile && (
+                    {/* {isMobile && (
                         <div className="w-100 d-flex justify-content-start">
                             <Menu />
                         </div>
-                    )}
+                    )} */}
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2" style={{ backgroundColor: '#f6f6f6' }}>
                         <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
@@ -337,6 +341,8 @@ const Dashboard_layout = () => {
                         <Outlet />
                     </div>
                 </div>
+                {isMobile && <MobileBottomNav userRole={userRole} />}
+
             </div>
         </div>
     )

@@ -9,6 +9,7 @@ import { FaBuildingFlag, FaWeightScale } from "react-icons/fa6";
 import { IoCall } from "react-icons/io5";
 import { RiExpandHeightFill, RiExpandWidthFill } from "react-icons/ri";
 import { SiAnytype } from "react-icons/si";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const Offers = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -23,6 +24,7 @@ const Offers = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [deleteAction, setDeleteAction] = useState(null);
+    const isMobile = useIsMobile();
 
 
 
@@ -109,47 +111,92 @@ const Offers = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="table-responsive w-100">
-
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col"><h6>Offer Id</h6></th>
-                                            <th scope="col"><h6>Product Name / Box Dimensions</h6></th>
-                                            <th scope="col"><h6>Date</h6></th>
-                                            <th scope="col"><h6>Offer Created By</h6></th>
-                                            <th scope="col"><h6>Price (€)</h6></th>
-                                            <th scope="col"><h6>Offer From</h6></th>
-                                            <th scope="col"><h6>Status</h6></th>
-                                            {/* <th scope="col"><h6>Payment Status ($)</h6></th> */}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            {isMobile ? (
+                                <>
+                                    <div className="d-flex flex-column w-100 align-items-center justify-content-center gap-3">
                                         {allOffers && allOffers.length > 0 ? (
-                                            filteredOffers.map((item, index) => (
-                                                <tr key={index}>
-                                                    <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => {
+                                            <>
+                                                {filteredOffers.map((item, index) => (
+                                                    <div className="orders-mobile-card w-100" style={{ cursor: 'pointer' }} onClick={() => {
                                                         if (item.status === 'rejected') {
                                                             showAlert("The offer is rejected");
                                                             return;
                                                         }
                                                         show_offer_details(item)
-                                                    }}>#{item.offer_id}</td>
-                                                    <td className="text-secondary">{item.box ? item.box_dimension : item.product_name ? item.product_name : '-'}</td>
-                                                    <td className="text-secondary">
-                                                        {item.created_at ? new Date(item.created_at).toISOString().split("T")[0] : "-"}
-                                                    </td>
-                                                    <td className="text-secondary">{item.userName ? item.userName : '-'}</td>
-                                                    <td className="text-dark"><b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></td>
-                                                    <td className="text-secondary">{item.company_name}</td>
-                                                    <td className="text-secondary"
-                                                        style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
-                                                        onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
-                                                    >
-                                                        <span className="px-3 py-2 d-flex flex-column w-100 text-center align-items-center justify-content-center" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : (<span className="d-flex flex-row text-center align-items-center justify-content-center gap-2 w-100">Rejected <AiFillDelete /></span>)}</span>
-                                                    </td>
-                                                    {/* <td className="text-secondary">
+                                                    }}>
+                                                        <div className="d-flex justify-content-between w-100">
+                                                            <div className="text-start">
+                                                                <div className="d-flex gap-2">
+                                                                    <h5>Offer Id </h5> <h5 className="text-primary">#{item.id}</h5>
+                                                                </div>
+                                                                <div className="d-flex">
+                                                                    <h5>
+                                                                        {item.box ? "Boxes" : item.product_name ? item.product_name : '-'}</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div className="d-flex align-items-center justify-content-center" onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}>
+
+                                                                <span className="px-3 py-2 d-flex flex-column w-100 text-center align-items-center justify-content-center" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : (<span className="d-flex flex-row text-center align-items-center justify-content-center gap-2 w-100">Rejected <AiFillDelete /></span>)}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="d-flex flex-column justify-content-start align-items-start">
+                                                            <h6>Date : {item.created_at ? new Date(item.created_at).toISOString().split("T")[0] : "-"}</h6>
+                                                            <h6>Offer Created By: {item.userName ? item.userName : '-'}</h6>
+                                                            <h6>Price (€) : <b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></h6>
+                                                            <h6>Offer From : {item.company_name}</h6>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <>
+
+                                            </>
+                                        )}
+
+                                    </div>
+                                </>) : (
+                                <>
+                                    <div className="table-responsive w-100">
+
+                                        <table className="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"><h6>Offer Id</h6></th>
+                                                    <th scope="col"><h6>Product Name / Box Dimensions</h6></th>
+                                                    <th scope="col"><h6>Date</h6></th>
+                                                    <th scope="col"><h6>Offer Created By</h6></th>
+                                                    <th scope="col"><h6>Price (€)</h6></th>
+                                                    <th scope="col"><h6>Offer From</h6></th>
+                                                    <th scope="col"><h6>Status</h6></th>
+                                                    {/* <th scope="col"><h6>Payment Status ($)</h6></th> */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {allOffers && allOffers.length > 0 ? (
+                                                    filteredOffers.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => {
+                                                                if (item.status === 'rejected') {
+                                                                    showAlert("The offer is rejected");
+                                                                    return;
+                                                                }
+                                                                show_offer_details(item)
+                                                            }}>#{item.offer_id}</td>
+                                                            <td className="text-secondary">{item.box ? item.box_dimension : item.product_name ? item.product_name : '-'}</td>
+                                                            <td className="text-secondary">
+                                                                {item.created_at ? new Date(item.created_at).toISOString().split("T")[0] : "-"}
+                                                            </td>
+                                                            <td className="text-secondary">{item.userName ? item.userName : '-'}</td>
+                                                            <td className="text-dark"><b>{(parseFloat(item.amount) || 0) + (item.commission === 'null' || item.commission == null ? 0 : parseFloat(item.commission))}</b></td>
+                                                            <td className="text-secondary">{item.company_name}</td>
+                                                            <td className="text-secondary"
+                                                                style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
+                                                                onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
+                                                            >
+                                                                <span className="px-3 py-2 d-flex flex-column w-100 text-center align-items-center justify-content-center" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : (<span className="d-flex flex-row text-center align-items-center justify-content-center gap-2 w-100">Rejected <AiFillDelete /></span>)}</span>
+                                                            </td>
+                                                            {/* <td className="text-secondary">
                                           <span
                                             className={`p-2 pe-4 ps-4 fw-bold ${item.status === 'pending' ? 'text-warning' : item.status === 'rejected' ? 'text-danger' : 'text-success'}`}
                                             style={{ backgroundColor: item.status === 'pending' ? 'rgb(255, 242, 128)' : item.status === 'rejected' ? 'rgb(255, 128, 128)' : 'rgb(145, 255, 128)' }}
@@ -157,16 +204,19 @@ const Offers = () => {
                                             {item.status === 'pending' ? 'Pending' : item.status === 'rejected' ? 'Rejected' : 'Success'}
                                           </span>
                                         </td> */}
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan="6" className="text-center text-secondary">No Data Available</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="6" className="text-center text-secondary">No Data Available</td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </>
+                            )
+                            }
                         </div>
                     </div>
                 </div>
@@ -599,7 +649,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Email Address</span>
-                                            <h6>{showOfferDetails.receiver_email ? showOfferDetails.receiver_email : '-' }</h6>
+                                            <h6>{showOfferDetails.receiver_email ? showOfferDetails.receiver_email : '-'}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -617,7 +667,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Country</span>
-                                            <h6>{showOfferDetails.receiver_country ? showOfferDetails.receiver_country : '-' }</h6>
+                                            <h6>{showOfferDetails.receiver_country ? showOfferDetails.receiver_country : '-'}</h6>
                                         </div>
                                     </div>
 
@@ -633,7 +683,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">State</span>
-                                            <h6>{showOfferDetails.receiver_state ? showOfferDetails.receiver_state : '-' }</h6>
+                                            <h6>{showOfferDetails.receiver_state ? showOfferDetails.receiver_state : '-'}</h6>
                                         </div>
                                     </div>
 
@@ -649,7 +699,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">City</span>
-                                            <h6>{showOfferDetails.receiver_city ? showOfferDetails.receiver_city : '-' }</h6>
+                                            <h6>{showOfferDetails.receiver_city ? showOfferDetails.receiver_city : '-'}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -668,7 +718,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Street Address</span>
-                                            <h6>{showOfferDetails.receiver_address ? showOfferDetails.receiver_address : '-' }</h6>
+                                            <h6>{showOfferDetails.receiver_address ? showOfferDetails.receiver_address : '-'}</h6>
                                         </div>
                                     </div>
 
@@ -684,7 +734,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Zip Code</span>
-                                            <h6>{showOfferDetails.receiver_zipcode ? showOfferDetails.receiver_zipcode : '-' }</h6>
+                                            <h6>{showOfferDetails.receiver_zipcode ? showOfferDetails.receiver_zipcode : '-'}</h6>
                                         </div>
                                     </div>
 
@@ -700,7 +750,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Preferred Delivery Date</span>
-                                            <h6>{showOfferDetails.departure_date ? showOfferDetails.departure_date : '-' }</h6>
+                                            <h6>{showOfferDetails.departure_date ? showOfferDetails.departure_date : '-'}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -719,7 +769,7 @@ const Offers = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start gap-2">
                                             <span className="text-secondary">Delivery Notes</span>
-                                            <h6 className="text-start">{showOfferDetails.receiver_description ? showOfferDetails.receiver_description : '-' }</h6>
+                                            <h6 className="text-start">{showOfferDetails.receiver_description ? showOfferDetails.receiver_description : '-'}</h6>
                                         </div>
                                     </div>
                                 </div>

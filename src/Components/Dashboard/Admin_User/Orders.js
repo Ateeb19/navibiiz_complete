@@ -11,9 +11,12 @@ import { format } from "date-fns";
 import CountriesSelector from "../../Selector/Countries_selector";
 import { useAlert } from "../../alert/Alert_message";
 import ConfirmationModal from '../../alert/Conform_alert';
+import useIsMobile from "../../hooks/useIsMobile";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
     const port = process.env.REACT_APP_SECRET;
+    const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const [selected_groupage, setSelected_groupage] = useState(null);
     const [groupageUser, setGroupageUser] = useState([]);
@@ -29,7 +32,7 @@ const Orders = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [deleteAction, setDeleteAction] = useState(null);
-
+    const isMobile = useIsMobile();
 
     const displayGroupageUser = () => {
         axios.get(`${port}/send_groupage/display_user_dashboard`, {
@@ -148,64 +151,121 @@ const Orders = () => {
                                 </div>
                             </div>
 
-                            <div className="table-responsive w-100 ">
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col"><h6>Order Id</h6></th>
-                                            <th scope="col"><h6>Product Name</h6></th>
-                                            <th scope="col"><h6>Pick up</h6></th>
-                                            <th scope="col"><h6>Delivery</h6></th>
-                                            <th scope="col"><h6>Pick up Date</h6></th>
-                                            <th scope="col"><h6>Payment Status</h6></th>
-                                            <th scope="col"><h6>Actions</h6></th>
-                                        </tr>
-                                    </thead>
-                                    {groupageUser && groupageUser.length > 0 ? (
-                                        <tbody>
-                                            {groupageUser.map((item, index) => (
-                                                <tr key={index}>
-                                                    <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => handle_show_groupage_details(item)}>#{item.id}</td>
-                                                    <td className="text-secondary">{item.box ? "Boxes" : item.product_name ? item.product_name : '-'}</td>
-                                                    <td className="text-secondary">{item.sender_country ? item.sender_country : '-'}</td>
-                                                    <td className="text-secondary">{item.receiver_country ? item.receiver_country : '-'}</td>
-                                                    <td className="text-secondary">{
+                            {isMobile ?
+                                <>
+                                    <div className="d-flex flex-column w-100 align-items-center justify-content-center gap-3">
+                                        {groupageUser && groupageUser.length > 0 ? (
+                                            <>
+                                                {groupageUser.map((item, index) => (
+                                                    <div className="orders-mobile-card w-100" style={{ cursor: 'pointer' }} onClick={() => handle_show_groupage_details(item)}>
+                                                        <div className="d-flex justify-content-between w-100">
+                                                            <div className="text-start">
+                                                                <div className="d-flex gap-2">
+                                                                    <h5>Order Id </h5> <h5 className="text-primary">#{item.id}</h5>
+                                                                </div>
+                                                                <div className="d-flex">
+                                                                    <h5>{item.box ? "Boxes" : item.product_name ? item.product_name : '-'}</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div className="d-flex align-items-center justify-content-center">
+                                                                {/* <button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}>
+                                                                    <FaEye />
+                                                                </button> */}
+                                                                <button className="btn btn-sm btn-primary text-white py-2 px-3 user-order-btn text-primary me-1" onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/offers-user/${item.id}`) }}>
+                                                                    View Offers
+                                                                </button>
+                                                                <button className="btn btn-sm text-danger pt-0 pb-0" onClick={(e) => { e.stopPropagation(); handle_show_groupage_delete(item) }} style={{ fontSize: '1.5rem' }}>
+                                                                    <MdDelete />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="d-flex flex-column justify-content-start align-items-start">
+                                                            <h6>Pick up : {item.sender_country ? item.sender_country : '-'}</h6>
+                                                            <h6>Delivery to : {item.receiver_country ? item.receiver_country : '-'}</h6>
+                                                            <h6>Total Offers Received : {item.offers_count ? item.offers_count : '0'}</h6>
+                                                            <h6>Payment Status : <span className="p-1 fw-bold user-offer-width" style={{
+                                                                backgroundColor: item.payment_status === 'panding' ? 'rgb(255, 191, 191)' : '#bcffba',
+                                                                color: item.payment_status === 'panding' ? 'rgb(252, 30, 30)' : '#10c200'
+                                                            }}>
+                                                                {item.payment_status === 'panding' ? 'Unpaid' : 'Paid'}
+                                                            </span></h6>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <>
+
+                                            </>
+                                        )}
+
+                                    </div>
+                                </> :
+                                <>
+                                    <div className="table-responsive w-100 ">
+                                        <table className="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"><h6>Order Id</h6></th>
+                                                    <th scope="col"><h6>Product Name</h6></th>
+                                                    <th scope="col"><h6>Pick up</h6></th>
+                                                    <th scope="col"><h6>Delivery to</h6></th>
+                                                    <th scope="col"><h6>Total Offers Received</h6></th>
+                                                    <th scope="col"><h6>Payment Status</h6></th>
+                                                    <th scope="col"><h6>Actions</h6></th>
+                                                </tr>
+                                            </thead>
+                                            {groupageUser && groupageUser.length > 0 ? (
+                                                <tbody>
+                                                    {groupageUser.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td className="text-primary" style={{ cursor: 'pointer' }} onClick={() => handle_show_groupage_details(item)}>#{item.id}</td>
+                                                            <td className="text-secondary">{item.box ? "Boxes" : item.product_name ? item.product_name : '-'}</td>
+                                                            <td className="text-secondary">{item.sender_country ? item.sender_country : '-'}</td>
+                                                            <td className="text-secondary">{item.receiver_country ? item.receiver_country : '-'}</td>
+                                                            {/* <td className="text-secondary">{
                                                         item.pickup_date && item.pickup_date !== 'null'
                                                             ? item.pickup_date.includes('Select End Date')
                                                                 ? item.pickup_date.split(' - ')[0] || '-'
                                                                 : item.pickup_date.split(' - ')[0] || '-'
                                                             : '-'
                                                     }
-                                                    </td>
-                                                    {/* <td className="text-secondary">{item.pickup_date ? item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] === 'null' ? '-' : item.pickup_date.split(' - ')[0] : item.pickup_date : '-'}</td> */}
-                                                    <td className="text-secondary d-flex align-items-center justify-content-center">
-                                                        <span className="p-2 fw-bold d-flex flex-column align-items-center justify-content-center w-75 user-offer-width" style={{
-                                                            backgroundColor: item.payment_status === 'panding' ? 'rgb(255, 191, 191)' : '#bcffba',
-                                                            color: item.payment_status === 'panding' ? 'rgb(252, 30, 30)' : '#10c200'
-                                                        }}>
-                                                            {item.payment_status === 'panding' ? 'Unpaid' : 'Paid'}
-                                                        </span>
-                                                    </td>
-                                                    <td className="text-secondary">
-                                                        <button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}>
-                                                            <FaEye />
-                                                        </button>
-                                                        <button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handle_show_groupage_delete(item)} style={{ fontSize: '1.5rem' }}>
-                                                            <MdDelete />
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    ) : (
-                                        <tbody>
-                                            <tr>
-                                                <td colSpan='7' className="text-secondary text-center">No Data Available</td>
-                                            </tr>
-                                        </tbody>
-                                    )}
-                                </table>
-                            </div>
+                                                    </td> */}
+                                                            <td className="text-secondary">
+                                                                {item.offers_count ? item.offers_count : '0'}
+                                                            </td>
+                                                            {/* <td className="text-secondary">{item.pickup_date ? item.pickup_date.includes('Select End Date') ? item.pickup_date.split(' - ')[0] === 'null' ? '-' : item.pickup_date.split(' - ')[0] : item.pickup_date : '-'}</td> */}
+                                                            <td className="text-secondary d-flex align-items-center justify-content-center">
+                                                                <span className="p-2 fw-bold d-flex flex-column align-items-center justify-content-center w-75 user-offer-width" style={{
+                                                                    backgroundColor: item.payment_status === 'panding' ? 'rgb(255, 191, 191)' : '#bcffba',
+                                                                    color: item.payment_status === 'panding' ? 'rgb(252, 30, 30)' : '#10c200'
+                                                                }}>
+                                                                    {item.payment_status === 'panding' ? 'Unpaid' : 'Paid'}
+                                                                </span>
+                                                            </td>
+                                                            <td className="text-secondary">
+                                                                <button className="btn btn-sm btn-primary text-white py-2 px-3 user-order-btn text-primary me-1" onClick={() => navigate(`/dashboard/offers-user/${item.id}`)}>
+                                                                    View Offers
+                                                                </button>
+                                                                <button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handle_show_groupage_delete(item)} style={{ fontSize: '1.5rem' }}>
+                                                                    <MdDelete />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            ) : (
+                                                <tbody>
+                                                    <tr>
+                                                        <td colSpan='7' className="text-secondary text-center">No Data Available</td>
+                                                    </tr>
+                                                </tbody>
+                                            )}
+                                        </table>
+                                    </div>
+                                </>}
+
                         </div>
                     </div>
                 </div>

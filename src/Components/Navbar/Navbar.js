@@ -140,11 +140,13 @@ const Navbar = () => {
 
 
         <div className="d-lg-none d-flex">
-          <Link to="/login" >
-            <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>
-              <FaUser /> Login
-            </button>
-          </Link>
+          {!token && (
+            <Link to="/login" >
+              <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>
+                <FaUser /> Login
+              </button>
+            </Link>
+          )}
 
           <button className="btn text-light" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <FaTimes size={25} /> : <FaBars size={25} />}

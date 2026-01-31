@@ -483,7 +483,7 @@
     background-color: #de8316;
     border: 1px solid #de8316;
     border-radius: 6px;
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 
 .sidebar-wrapper {
@@ -1343,7 +1343,60 @@ svg {
     width: 90%;
 }
 
+.btn-cancel {
+    border: 1px solid #ccc;
+    padding: 12px 30px;
+    color: #000;
+    border-radius: 6px;
+}
 
+.orders-mobile-card {
+    border: 1px solid #ccc;
+    padding: 10px 8px;
+    border-radius: 6px;
+}
+
+.orders-mobile-card h5 {
+    font-size: 16px !important;
+}
+
+.orders-mobile-card h6 {
+    font-size: 13px !important;
+}
+
+/* dashboard movile footer css */
+.mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    background: #00232f;
+    border-top: 1px solid #ddd;
+    z-index: 9999;
+}
+
+.mobile-bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.mobile-bottom-nav .nav-item.active {
+    color: #ffc31c;
+}
+
+.user-order-btn{
+    border: none;
+    /* background-color: #012a52 !important; */
+    /* padding: 6px 12px; */
+    font-size: 18px;
+    font-weight: 600 !important;
+}
 /* Seamless loop */
 @keyframes scrollLeft {
     from {

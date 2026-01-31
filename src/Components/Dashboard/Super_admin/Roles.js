@@ -5,6 +5,7 @@ import { RiPencilFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../alert/Alert_message";
 import ConfirmationModal from "../../alert/Conform_alert";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const Roles = () => {
     const port = process.env.REACT_APP_SECRET;
@@ -17,6 +18,7 @@ const Roles = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [deleteAction, setDeleteAction] = useState(null);
+    const isMobile = useIsMobile();
 
     const featchAllUsers = () => {
         if (userRole === 'Sadmin') {
@@ -104,57 +106,106 @@ const Roles = () => {
                     <div className="w-100 w-md-50 pe-3 d-flex justify-content-start justify-content-md-end mt-2 mt-md-0">
                     </div>
                 </div>
-
-
-                <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-5 rounded-1"
-                    style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
-
-                    <div className="table-responsive" style={{ width: '100%', overflowX: 'auto' }}>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col"><h6>Name</h6></th>
-                                    <th scope="col"><h6>Email ID</h6></th>
-                                    <th scope="col"><h6>Role</h6></th>
-                                    <th scope="col"><h6>Actions</h6></th>
-                                </tr>
-                            </thead>
+                {isMobile ? (
+                    <div className="p-3 mt-3 rounded-1">
+                        <div className="d-flex flex-column w-100 align-items-center justify-content-center gap-3">
                             {userData ? (
-                                <tbody>
+                                <>
                                     {userData.map((item, index) => (
-                                        <tr key={index}>
-                                            <td className="text-secondary">{item.name}</td>
-                                            <td className="text-secondary">{item.email}</td>
-                                            <td className="text-secondary">
-                                                {item.role === 'Sadmin' ? 'Super Admin' : item.role === 'admin' ? 'Admin' : 'User'}
-                                            </td>
-                                            <td className="text-secondary">
-                                                <button className="btn btn-sm btn-light text-primary pt-0 pb-0"
-                                                    onClick={() => handleEditUser(item)}
-                                                    disabled={item.role === 'Sadmin'}
-                                                    style={{ fontSize: '1.5rem' }}>
-                                                    <RiPencilFill />
-                                                </button>
-                                                <button className="btn btn-sm btn-light text-danger pt-0 pb-0"
-                                                    onClick={() => handleDeleteUser(item)}
-                                                    disabled={item.role === 'Sadmin'}
-                                                    style={{ fontSize: '1.5rem' }}>
-                                                    <MdDelete />
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        <div className="orders-mobile-card w-100" style={{ cursor: 'pointer' }} >
+                                            <div className="d-flex justify-content-between w-100">
+                                                <div className="text-start">
+                                                    <div className="d-flex gap-2">
+                                                        <h5>Name: </h5> <h5>{item.name}</h5>
+                                                    </div>
+                                                    <div className="d-flex">
+                                                        <h5>Email: </h5> <h5>{item.email}</h5>
+                                                    </div>
+                                                </div>
+                                                <div className="d-flex align-items-center justify-content-center" >
+                                                    <button className="btn btn-sm btn-light text-primary pt-0 pb-0"
+                                                        onClick={() => handleEditUser(item)}
+                                                        disabled={item.role === 'Sadmin'}
+                                                        style={{ fontSize: '1.5rem' }}>
+                                                        <RiPencilFill />
+                                                    </button>
+                                                    <button className="btn btn-sm btn-light text-danger pt-0 pb-0"
+                                                        onClick={() => handleDeleteUser(item)}
+                                                        disabled={item.role === 'Sadmin'}
+                                                        style={{ fontSize: '1.5rem' }}>
+                                                        <MdDelete />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex flex-column justify-content-start align-items-start">
+                                                <h5>Role : {item.role === 'Sadmin' ? 'Super Admin' : item.role === 'admin' ? 'Admin' : 'User'}</h5>
+                                            </div>
+                                        </div>
                                     ))}
-                                </tbody>
+                                </>
                             ) : (
-                                <tbody>
-                                    <tr>
-                                        <td colSpan="4" className="text-secondary">No Data</td>
-                                    </tr>
-                                </tbody>
+                                <>
+
+                                </>
                             )}
-                        </table>
+
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <>
+                        <div className="d-flex mt-4 p-3 flex-column justify-content-start align-items-start m-5 rounded-1"
+                            style={{ boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.5)' }}>
+
+                            <div className="table-responsive" style={{ width: '100%', overflowX: 'auto' }}>
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"><h6>Name</h6></th>
+                                            <th scope="col"><h6>Email ID</h6></th>
+                                            <th scope="col"><h6>Role</h6></th>
+                                            <th scope="col"><h6>Actions</h6></th>
+                                        </tr>
+                                    </thead>
+                                    {userData ? (
+                                        <tbody>
+                                            {userData.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td className="text-secondary">{item.name}</td>
+                                                    <td className="text-secondary">{item.email}</td>
+                                                    <td className="text-secondary">
+                                                        {item.role === 'Sadmin' ? 'Super Admin' : item.role === 'admin' ? 'Admin' : 'User'}
+                                                    </td>
+                                                    <td className="text-secondary">
+                                                        <button className="btn btn-sm btn-light text-primary pt-0 pb-0"
+                                                            onClick={() => handleEditUser(item)}
+                                                            disabled={item.role === 'Sadmin'}
+                                                            style={{ fontSize: '1.5rem' }}>
+                                                            <RiPencilFill />
+                                                        </button>
+                                                        <button className="btn btn-sm btn-light text-danger pt-0 pb-0"
+                                                            onClick={() => handleDeleteUser(item)}
+                                                            disabled={item.role === 'Sadmin'}
+                                                            style={{ fontSize: '1.5rem' }}>
+                                                            <MdDelete />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    ) : (
+                                        <tbody>
+                                            <tr>
+                                                <td colSpan="4" className="text-secondary">No Data</td>
+                                            </tr>
+                                        </tbody>
+                                    )}
+                                </table>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+
             </div>
 
             {updateUser && (

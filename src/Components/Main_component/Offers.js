@@ -39,7 +39,8 @@ const Offers = () => {
     const [bidAmount, setBidAmount] = useState('');
     const [expetedDate, setExpetedDate] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [toggleValue, setToggleValue] = useState(false);
+    // const [toggleValue, setToggleValue] = useState(false);
+    const [toggleValue, setToggleValue] = useState('');
     const [office_address, setOffice_address] = useState('');
     // const handlePickupCountrySelect = (country) => {
     //     setSelectedPickupCountry(country);
@@ -195,27 +196,29 @@ const Offers = () => {
     const [dateError, setDateError] = useState(false);
     const [offer_success, setOffer_success] = useState(false);
 
-    const [dateRange, setDateRange] = useState([
-        {
-            startDate: new Date(),
-            endDate: new Date(),
-            key: 'selection',
-        },
-    ]);
+    const [dateRange, setDateRange] = useState('');
+    // const [dateRange, setDateRange] = useState([
+    //     {
+    //         startDate: new Date(),
+    //         endDate: new Date(),
+    //         key: 'selection',
+    //     },
+    // ]);
 
-    const formattedRange = `${dateRange[0].startDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-    })} - ${dateRange[0].endDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-    })}`;
+    // const formattedRange = `${dateRange[0].startDate.toLocaleDateString('en-US', {
+    //     month: 'short',
+    //     day: 'numeric',
+    //     year: 'numeric',
+    // })} - ${dateRange[0].endDate.toLocaleDateString('en-US', {
+    //     month: 'short',
+    //     day: 'numeric',
+    //     year: 'numeric',
+    // })}`;
 
     const handleSelect = (ranges) => {
-        setDateRange([ranges.selection]);
-        console.log(formattedRange);
+        setDateRange(ranges);
+        // setDateRange([ranges.selection]);
+        // console.log(formattedRange);
     };
 
     const handleSubmit_offer = (details) => {
@@ -243,11 +246,24 @@ const Offers = () => {
             }
         }
 
+        if (toggleValue === "no") {
+            if (!office_address) {
+                showAlert("Fill the Office Address");
+                return;
+            }
+        }
+        // if (!toggleValue) {
+        //     if (!office_address) {
+        //         showAlert("Fill the Office Address");
+        //         return;
+        //     }
+        // }
+
 
         const data = {
             offer_id: details.id,
             offer_amount: integerBidAmount,
-            expected_date: formattedRange,
+            expected_date: dateRange,
             office_address: office_address,
         };
 
@@ -1050,14 +1066,26 @@ const Offers = () => {
                                                             <input type="text" className="form-control w-100 w-sm-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`€ ${bidAmount}`} />
                                                         </div>
                                                         <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-start justify-content-between w-100 gap-3 border-bottom border-2 pb-2 mt-4">
-                                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-50 w-sm-50">
+                                                            <div className="d-flex flex-column flex-sm-row justify-content-center justify-content-sm-between align-items-center w-100 gap-2">
                                                                 <span className="text-secondary text-start">How long will this product take to deliver?</span>
 
-
-                                                                <div style={{ marginTop: '1rem' }}>
+                                                                <div className="">
+                                                                    <select
+                                                                        className="form-select w-100 w-sm-75 my-1 my-sm-0"
+                                                                        value={dateRange}
+                                                                        onChange={(e) => handleSelect(e.target.value)}
+                                                                    >
+                                                                        <option value="">Please select the duration</option>
+                                                                        <option value="Within 7 days">Within 7 days</option>
+                                                                        <option value="Within 15 days">Within 15 days</option>
+                                                                        <option value="Within 30 days">Within 30 days</option>
+                                                                        <option value="More than 30 days">More than 30 days</option>
+                                                                    </select>
+                                                                </div>
+                                                                {/* <div style={{ marginTop: '1rem' }}>
                                                                     <span className="fs-6">From:</span> {dateRange[0].startDate.toDateString()}<br />
                                                                     <span className="fs-6">To:</span> {dateRange[0].endDate.toDateString()}
-                                                                </div>
+                                                                </div> */}
                                                             </div>
                                                             {/* <Form.Select
                                                                 style={{
@@ -1076,31 +1104,62 @@ const Offers = () => {
                                                                 <option value="more_than_30_days">More Than 30 Days</option>
                                                             </Form.Select> */}
 
-                                                            <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
+                                                            {/* <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
                                                                 <DateRange
                                                                     ranges={dateRange}
                                                                     onChange={handleSelect}
                                                                     moveRangeOnFirstSelection={false}
                                                                     editableDateInputs={true}
                                                                 />
-                                                            </div>
+                                                            </div> */}
 
                                                         </div>
 
-                                                        <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4 pb-2">
-                                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-100">
+                                                        <div className="d-flex flex-row align-items-start justify-content-start w-100 gap-3 mt-4 pb-2">
+                                                            <div className="d-flex flex-column align-items-start justify-content-start">
                                                                 {/* <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span> */}
                                                                 <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span>
                                                             </div>
-                                                            <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-25 w-sm-100">
-                                                                <input
+                                                            <div className="d-flex gap-4 align-items-start justify-content-start w-sm-100">
+                                                                <div className="d-flex gap-2 align-items-center justify-content-center">
+                                                                    <input
+                                                                        className="form-check-input"
+                                                                        type="radio"
+                                                                        id="yes"
+                                                                        name="radio-btn"
+                                                                        value="yes"
+                                                                        checked={toggleValue === "yes"}
+                                                                        onChange={(e) => setToggleValue(e.target.value)}
+                                                                        style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
+                                                                    />
+                                                                    <label className="form-check-label" htmlFor="yes">
+                                                                        Yes
+                                                                    </label>
+                                                                </div>
+
+                                                                <div className="d-flex gap-2 align-items-center justify-content-center">
+                                                                    <input
+                                                                        className="form-check-input"
+                                                                        type="radio"
+                                                                        id="no"
+                                                                        name="radio-btn"
+                                                                        value="no"
+                                                                        checked={toggleValue === "no"}
+                                                                        onChange={(e) => setToggleValue(e.target.value)}
+                                                                        style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
+                                                                    />
+                                                                    <label className="form-check-label" htmlFor="no">
+                                                                        No
+                                                                    </label>
+                                                                </div>
+                                                                {/* <input
                                                                     className="form-check-input"
                                                                     type="checkbox"
                                                                     id="yesNoCheckbox"
                                                                     checked={toggleValue}
                                                                     onChange={(e) => setToggleValue(e.target.checked)}
-                                                                    style={{ width: '20px', height: '20px', cursor: 'pointer' }}
-                                                                />
+                                                                    style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
+                                                                /> */}
                                                                 {/* <label className="form-check-label fw-medium" htmlFor="yesNoCheckbox">
                                                                     {toggleValue ? 'Yes' : 'No'}
                                                                 </label> */}
@@ -1128,7 +1187,7 @@ const Offers = () => {
                                                                 /> */}
                                                             </div>
                                                         </div>
-                                                        {!toggleValue && (
+                                                        {toggleValue === "no" && (
                                                             <>
                                                                 <div className="form-floating w-100">
                                                                     <textarea class="form-control" style={{ height: '100px' }} value={office_address} onChange={(e) => setOffice_address(e.target.value)} />
@@ -1143,7 +1202,16 @@ const Offers = () => {
                                                         </div> */}
                                                     </div>
                                                 </div>
-                                                <div className="d-flex w-100 justify-content-end">
+                                                <div class="mt-4 p-3 rounded border bg-primary bg-opacity-10">
+                                                    <p class="mb-0 text-primary small text-start">
+                                                        🔒 <strong>Privacy notice:</strong> Customer name and delivery
+                                                        contact details will be shared only after your bid is accepted.
+                                                    </p>
+                                                </div>
+                                                <div className="d-flex w-100 gap-3 justify-content-end py-4">
+                                                    <div>
+                                                        <button className="btn-cancel" onClick={() => setGroupage_detail(null)}>Cancel</button>
+                                                    </div>
                                                     <button className="btn-main-offer" onClick={() => handleSubmit_offer(groupage_detail)}>Submit Offer</button>
                                                 </div>
                                             </div>

@@ -46,16 +46,16 @@ const Home = () => {
     const [offers_details, setOffers_details] = useState([]);
     const [open, setOpen] = useState(false);
 
-    const displayCompany = () => {
-        axios.get(`${port}/company/display_company`)
-            .then((response) => {
-                if (response.data.status) {
-                    localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
-                } else {
-                    localStorage.setItem('companyInfo', '');
-                }
-            }).catch((err) => { console.log('error', err); localStorage.setItem('companyInfo', '') });
-    }
+    // const displayCompany = () => {
+    //     axios.get(`${port}/company/display_company`)
+    //         .then((response) => {
+    //             if (response.data.status) {
+    //                 localStorage.setItem('companyInfo', JSON.stringify(response.data.message));
+    //             } else {
+    //                 localStorage.setItem('companyInfo', '');
+    //             }
+    //         }).catch((err) => { console.log('error', err); localStorage.setItem('companyInfo', '') });
+    // }
     const offers = () => {
         axios.get(`${port}/send_groupage/show_only_grouage`)
             .then((response) => {
@@ -67,7 +67,7 @@ const Home = () => {
             }).catch((err) => { console.log(err) });
     }
     useEffect(() => {
-        displayCompany();
+        // displayCompany();
         offers();
     }, []);
 
@@ -225,7 +225,7 @@ const Home = () => {
     const [dateError, setDateError] = useState(false);
     const [offer_success, setOffer_success] = useState(false);
     const [office_address, setOffice_address] = useState('');
-    const [toggleValue, setToggleValue] = useState(true);
+    const [toggleValue, setToggleValue] = useState('no');
 
 
     const [dateRange, setDateRange] = useState([
@@ -270,12 +270,19 @@ const Home = () => {
             return;
         }
 
-        if (!toggleValue) {
+        if (toggleValue === "no") {
             if (!office_address) {
                 showAlert("Fill the Office Address");
                 return;
             }
         }
+
+        // if (!toggleValue) {
+        //     if (!office_address) {
+        //         showAlert("Fill the Office Address");
+        //         return;
+        //     }
+        // }
 
 
         const data = {
@@ -404,9 +411,8 @@ const Home = () => {
                 </div>
             </section>
 
-            <div className="container mt-5 px-3 px-md-4">
+            {/* <div className="container mt-5 px-3 px-md-4">
                 <div className="row g-5">
-                    {/* Left Content */}
                     <div className="col-12 col-lg-6 d-flex flex-column justify-content-start align-items-start p-3 p-md-4">
                         <div className="about-head-wrap">
                             <h3>About Us</h3>
@@ -422,14 +428,13 @@ const Home = () => {
                         </div>
                     </div>
 
-                    {/* Right Image */}
                     <div className="col-12 col-lg-6">
                         <div className="about-image-wrap d-flex justify-content-center align-items-center w-100 p-3 p-md-4 mt-4 mt-lg-5">
                             <img className="img-fluid" src="/Images/about_us_img.jpg" alt="About_us" />
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
 
 
@@ -477,7 +482,7 @@ const Home = () => {
             <div className="container mt-5">
                 <div className="d-flex flex-column justify-content-center align-items-center w-100">
                     <div className="d-flex align-items-start justify-content-start w-100 mb-4">
-                        <div className="home-heading text-start w-100 w-md-60">
+                        <div className="home-heading text-center w-100 w-md-60">
                             <h2>How It Works: Simple & Secure Shipping in Four Easy Steps</h2>
                         </div>
                     </div>
@@ -533,9 +538,10 @@ const Home = () => {
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
                                     <div className="d-flex flex-row gap-2">
                                         <h5 className="fw-medium" style={{ fontSize: '20px' }}>4.</h5>
-                                        <h5>Confirm Booking & Track Your Shipment</h5>
+                                        <h5>Receive the transporter information</h5>
                                     </div>
-                                    <p>Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p>
+                                    <p>Receive complete transporter details including contact information, and pickup schedule for smooth coordination.</p>
+                                    {/* <p>Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p> */}
                                 </div>
                                 <div className="step-image d-flex justify-content-center">
                                     <img src="/Images/home_img01.jpg" alt="step4" className="img-fluid" />
@@ -557,7 +563,7 @@ const Home = () => {
                 <div className="container">
                     <div className="d-flex flex-column justify-content-start align-items-start">
                         <div className="home-heading">
-                            <h2>Recent Offers Posted</h2>
+                            <h2>Recent Shipments Posted</h2>
                         </div>
 
                         <div className="row justify-content-center w-100 mt-4">
@@ -1396,36 +1402,105 @@ const Home = () => {
 
                                     </div>
 
-                                    <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between w-100 gap-3 mt-4 pb-2">
-                                        <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-100 w-sm-100">
+                                    <div className="d-flex flex-row align-items-start justify-content-start w-100 gap-3 mt-4 pb-2">
+                                        <div className="d-flex flex-column align-items-start justify-content-start">
+                                            {/* <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span> */}
                                             <span className="text-secondary text-start">Will you pick up the goods at the customer's given address?</span>
                                         </div>
-                                        <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-25 w-sm-100">
-                                            <ToggleButton
-                                                value={toggleValue}
-                                                onToggle={(val) => setToggleValue(!val)}
-                                                activeLabel="Yes"
-                                                inactiveLabel="No"
-                                                colors={{
-                                                    activeThumb: {
-                                                        base: 'rgb(0, 17, 255)',
-                                                    },
-                                                    inactiveThumb: {
-                                                        base: 'rgba(78, 155, 255, 1)',
-                                                    },
-                                                    active: {
-                                                        base: 'rgb(44, 121, 253)',
-                                                        hover: 'rgb(55, 105, 190)',
-                                                    },
-                                                    inactive: {
-                                                        base: 'rgb(75, 75, 75)',
-                                                        hover: 'rgb(175, 175, 175)',
-                                                    },
-                                                }}
-                                            />
+                                        <div className="d-flex gap-4 align-items-start justify-content-start w-sm-100">
+                                            <div className="d-flex gap-2 align-items-center justify-content-center">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="yes"
+                                                    name="radio-btn"
+                                                    value="yes"
+                                                    checked={toggleValue === "yes"}
+                                                    onChange={(e) => setToggleValue(e.target.value)}
+                                                    style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
+                                                />
+                                                <label className="form-check-label" htmlFor="yes">
+                                                    Yes
+                                                </label>
+                                            </div>
+
+                                            <div className="d-flex gap-2 align-items-center justify-content-center">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="no"
+                                                    name="radio-btn"
+                                                    value="no"
+                                                    checked={toggleValue === "no"}
+                                                    onChange={(e) => setToggleValue(e.target.value)}
+                                                    style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
+                                                />
+                                                <label className="form-check-label" htmlFor="no">
+                                                    No
+                                                </label>
+                                            </div>
+
+                                            {/* <div className="d-flex gap-2 align-items-center justify-content-center">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="yes"
+                                                    name="radio-btn"
+                                                    onclick={() => setToggleValue(true)}
+                                                    // onChange={(e) => setToggleValue(e.target.checked)}
+                                                    //  onChange={(e) => setToggleValue(e.target.checked)}
+
+                                                    style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
+                                                />
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    Yes
+                                                </label>
+                                            </div>
+                                            <div className="d-flex gap-2 align-items-center justify-content-center">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="no"
+                                                    name="radio-btn"
+                                                    onclick={() => setToggleValue(false)}
+                                                    // onChange={(e) => setToggleValue(e.target.checked)}
+                                                    //  onChange={(e) => setToggleValue(e.target.checked)}
+
+                                                    style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
+                                                />
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    No
+                                                </label>
+                                            </div> */}
+
+                                            {/* <label className="form-check-label fw-medium" htmlFor="yesNoCheckbox">
+                                                                    {toggleValue ? 'Yes' : 'No'}
+                                                                </label> */}
+                                            {/* <ToggleButton
+                                                                    value={toggleValue}
+                                                                    onToggle={(val) => setToggleValue(!val)}
+                                                                    activeLabel="Yes"
+                                                                    inactiveLabel="No"
+                                                                    colors={{
+                                                                        activeThumb: {
+                                                                            base: 'rgb(0, 17, 255)',
+                                                                        },
+                                                                        inactiveThumb: {
+                                                                            base: 'rgba(78, 155, 255, 1)',
+                                                                        },
+                                                                        active: {
+                                                                            base: 'rgb(44, 121, 253)',
+                                                                            hover: 'rgb(55, 105, 190)',
+                                                                        },
+                                                                        inactive: {
+                                                                            base: 'rgb(75, 75, 75)',
+                                                                            hover: 'rgb(175, 175, 175)',
+                                                                        },
+                                                                    }}
+                                                                /> */}
                                         </div>
                                     </div>
-                                    {!toggleValue && (
+                                    {toggleValue === "no" && (
                                         <>
                                             <div className="form-floating w-100">
                                                 <textarea class="form-control" style={{ height: '100px' }} value={office_address} onChange={(e) => setOffice_address(e.target.value)} />
@@ -1440,7 +1515,16 @@ const Home = () => {
                                                                     </div> */}
                                 </div>
                             </div>
-                            <div className="d-flex w-100 justify-content-end">
+                            <div class="mt-4 p-3 rounded border bg-primary bg-opacity-10">
+                                <p class="mb-0 text-primary small text-start">
+                                    🔒 <strong>Privacy notice:</strong> Customer name and delivery
+                                    contact details will be shared only after your bid is accepted.
+                                </p>
+                            </div>
+                            <div className="d-flex w-100 gap-3 justify-content-end py-4">
+                                <div>
+                                    <button className="btn-cancel" onClick={() => setGroupage_detail(null)}>Cancel</button>
+                                </div>
                                 <button className="btn-main-offer" onClick={() => handleSubmit_offer(groupage_detail)}>Submit Offer</button>
                             </div>
                         </div>

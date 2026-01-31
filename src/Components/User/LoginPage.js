@@ -117,9 +117,9 @@ const LoginPage = () => {
             return
           }
           if (response.data.type === 'individual') {
-            showAlert("Login as a transporter");
+            showAlert("This emailId is already registered as a transporter");
           } else {
-            showAlert("Login as an individual");
+            showAlert("This emailId is already registered as an individual");
           }
           return
         }
@@ -197,15 +197,18 @@ const LoginPage = () => {
 
       const user = result.user;
 
-      // user contains verified data from Google
       const res = await axios.post(
         `${port}/user/google-login`,
         {
           name: user.displayName,
           email: user.email,
-          picture: user.photoURL,
         }
       );
+
+      if(res.data.status === false){
+        showAlert("This emailId is already registered as a transporter");
+        return;
+      }
 
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
@@ -271,9 +274,9 @@ const LoginPage = () => {
               <div className="d-flex flex-column align-items-start">
                 {isSignup ? (
                   <>
-                    {selected === 'individual' && (
+                    {(selected === 'individual' && !forget_password) && (
                       <>
-                        <button onClick={handleGoogleLogin} className="login-google-btn mb-3 mt-1">
+                        <button onClick={handleGoogleLogin} type="button" className="login-google-btn mb-3 mt-1">
                           <FcGoogle className="fs-4 pb-1" /> Continue with Google
                         </button>
                         <div className="d-flex align-items-center login-google-line">
@@ -295,9 +298,9 @@ const LoginPage = () => {
                 ) : (
                   <></>
                 )}
-                {(selected === 'individual' && !isSignup) && (
+                {(selected === 'individual' && !isSignup  && !forget_password) && (
                   <>
-                    <button onClick={handleGoogleLogin} className="login-google-btn mb-3 mt-1">
+                    <button onClick={handleGoogleLogin} type="button" className="login-google-btn mb-3 mt-1">
                       <FcGoogle className="fs-4 pb-1" /> Continue with Google
                     </button>
                     <div className="d-flex align-items-center login-google-line">

@@ -330,6 +330,18 @@
     .login-google-line {
         width: 100%;
     }
+
+    .home-groupage-btn button {
+        width: 65% !important;
+    }
+
+    .dashbord-info-wrap {
+        padding: 0 5px;
+    }
+
+    .dashboard-wrapper-box .table-wrap {
+        margin: 25px 15px;
+    }
 }
 
 @media (max-width: 1399) {

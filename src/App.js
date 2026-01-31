@@ -29,7 +29,8 @@ import Payment from './Components/Dashboard/Super_admin/Payment';
 import Roles from './Components/Dashboard/Super_admin/Roles';
 import Profile from './Components/Dashboard/Profile/Profile';
 import Orders from './Components/Dashboard/Admin_User/Orders';
-import Offers_user from './Components/Dashboard/Admin_User/Offers';
+import Offers_admin from './Components/Dashboard/Admin_User/Offers';
+import Offers_users from './Components/Dashboard/Admin_User/User_offers';
 import Payment_user from './Components/Dashboard/Admin_User/Payment';
 import Companies_detail from './Components/Dashboard/Super_admin/Companies_detail';
 // import Test from './Components/Dashboard/Test'
@@ -50,7 +51,8 @@ const AppContent = () => {
           <Route path='admin/roles' element={<Roles />} />
           <Route path='profile' element={<Profile />} /> 
           <Route path='orders' element={<Orders />} /> 
-          <Route path='offers' element={<Offers_user />} /> 
+          <Route path='offers-admin' element={<Offers_admin />} /> 
+          <Route path='offers-user/:id' element={<Offers_users />} /> 
           <Route path='payment' element={<Payment_user />} />
         </Route>
         <Route Component={Home} path='/' />
