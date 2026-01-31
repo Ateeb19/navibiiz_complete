@@ -82,6 +82,15 @@ const Orders = () => {
 
     }
 
+    const handle_offer_navigate = (id, count) => {
+        if (count === 0) {
+            showAlert("No offer received for this shipment.");
+        } else {
+            navigate(`/dashboard/offers-user/${id}`)
+
+        }
+    }
+
     return (
         <>
             <div className="bg-light" style={{ width: '100%', overflow: 'auto', paddingBottom: '80px' }}>
@@ -171,7 +180,7 @@ const Orders = () => {
                                                                 {/* <button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}>
                                                                     <FaEye />
                                                                 </button> */}
-                                                                <button className="btn btn-sm btn-primary text-white py-2 px-3 user-order-btn text-primary me-1" onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/offers-user/${item.id}`) }}>
+                                                                <button className="btn btn-sm btn-primary text-white py-2 px-3 user-order-btn text-primary me-1" onClick={(e) => { e.stopPropagation(); handle_offer_navigate(item.id, item.offers_count) }}>
                                                                     View Offers
                                                                 </button>
                                                                 <button className="btn btn-sm text-danger pt-0 pb-0" onClick={(e) => { e.stopPropagation(); handle_show_groupage_delete(item) }} style={{ fontSize: '1.5rem' }}>
@@ -245,7 +254,7 @@ const Orders = () => {
                                                                 </span>
                                                             </td>
                                                             <td className="text-secondary">
-                                                                <button className="btn btn-sm btn-primary text-white py-2 px-3 user-order-btn text-primary me-1" onClick={() => navigate(`/dashboard/offers-user/${item.id}`)}>
+                                                                <button className="btn btn-sm btn-primary text-white py-2 px-3 user-order-btn text-primary me-1" onClick={() => handle_offer_navigate(item.id, item.offers_count)}>
                                                                     View Offers
                                                                 </button>
                                                                 <button className="btn btn-sm btn-light text-danger pt-0 pb-0" onClick={() => handle_show_groupage_delete(item)} style={{ fontSize: '1.5rem' }}>
@@ -269,7 +278,7 @@ const Orders = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
 
             {selected_groupage && (
                 <>
@@ -878,7 +887,8 @@ const Orders = () => {
                         </div>
                     </div>
                 </>
-            )}
+            )
+            }
         </>
     )
 }
