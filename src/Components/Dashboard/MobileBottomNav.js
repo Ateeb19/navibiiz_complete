@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { MdDashboard, MdPayment } from "react-icons/md";
 import { FaBoxOpen, FaUser, FaUsers } from "react-icons/fa";
-import { RiSecurePaymentFill } from "react-icons/ri";
+import { RiSecurePaymentFill, RiUserFill } from "react-icons/ri";
 import { BsBuildingsFill } from "react-icons/bs";
 import { FaUserGear } from "react-icons/fa6";
 
@@ -22,7 +22,7 @@ export default function MobileBottomNav({ userRole }) {
         >
             <Link to="/dashboard" className={`nav-item ${isActive('/dashboard', true) ? 'active' : ''}`}>
                 <MdDashboard size={22} />
-                <span>Home</span>
+                <span>Dashboard</span>
             </Link>
 
             {userRole === 'Sadmin' ? (
@@ -71,7 +71,7 @@ export default function MobileBottomNav({ userRole }) {
             )}
 
             <Link to="/dashboard/profile" className={`nav-item ${isActive('/dashboard/profile') ? 'active' : ''}`}>
-                <FaUser size={21} />
+                <RiUserFill size={22} />
                 <span>Profile</span>
             </Link>
         </div>

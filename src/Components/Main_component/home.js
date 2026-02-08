@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Form } from "react-bootstrap";
 import Navbar from "../Navbar/Navbar";
 import { BiSolidContact, BiSolidDetail, BiWorld } from "react-icons/bi";
@@ -45,7 +45,25 @@ const Home = () => {
     const userRole = localStorage.getItem('userRole');
     const [offers_details, setOffers_details] = useState([]);
     const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const location = useLocation();
+    useEffect(() => {
+        if (location.hash) {
+            const el = document.getElementById(location.hash.replace("#", ""));
+            if (el) {
+                const navbarHeight = 80; // adjust if your navbar height is different
+                const extraMargin = 30;
 
+                const y =
+                    el.getBoundingClientRect().top +
+                    window.pageYOffset -
+                    navbarHeight -
+                    extraMargin;
+
+                window.scrollTo({ top: y, behavior: "smooth" });
+            }
+        }
+    }, [location]);
     // const displayCompany = () => {
     //     axios.get(`${port}/company/display_company`)
     //         .then((response) => {
@@ -225,31 +243,38 @@ const Home = () => {
     const [dateError, setDateError] = useState(false);
     const [offer_success, setOffer_success] = useState(false);
     const [office_address, setOffice_address] = useState('');
-    const [toggleValue, setToggleValue] = useState('no');
+    const [toggleValue, setToggleValue] = useState('');
 
+    const [dateRange, setDateRange] = useState('');
 
-    const [dateRange, setDateRange] = useState([
-        {
-            startDate: new Date(),
-            endDate: new Date(),
-            key: 'selection',
-        },
-    ]);
+    // const [dateRange, setDateRange] = useState([
+    //     {
+    //         startDate: new Date(),
+    //         endDate: new Date(),
+    //         key: 'selection',
+    //     },
+    // ]);
 
-    const formattedRange = `${dateRange[0].startDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-    })} - ${dateRange[0].endDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-    })}`;
+    // const formattedRange = `${dateRange[0].startDate.toLocaleDateString('en-US', {
+    //     month: 'short',
+    //     day: 'numeric',
+    //     year: 'numeric',
+    // })} - ${dateRange[0].endDate.toLocaleDateString('en-US', {
+    //     month: 'short',
+    //     day: 'numeric',
+    //     year: 'numeric',
+    // })}`;
 
     const handleSelect = (ranges) => {
-        setDateRange([ranges.selection]);
-        console.log(formattedRange);
+        setDateRange(ranges);
+        // setDateRange([ranges.selection]);
+        // console.log(formattedRange);
     };
+
+    // const handleSelect = (ranges) => {
+    //     setDateRange([ranges.selection]);
+    //     // console.log(formattedRange);
+    // };
 
 
     const handleSubmit_offer = (details) => {
@@ -270,6 +295,13 @@ const Home = () => {
             return;
         }
 
+        if (!toggleValue) {
+            if (!office_address) {
+                showAlert("Fill the Office Address");
+                return;
+            }
+        }
+
         if (toggleValue === "no") {
             if (!office_address) {
                 showAlert("Fill the Office Address");
@@ -288,7 +320,7 @@ const Home = () => {
         const data = {
             offer_id: details.id,
             offer_amount: integerBidAmount,
-            expected_date: formattedRange,
+            expected_date: dateRange,
             office_address: office_address,
         };
 
@@ -342,6 +374,10 @@ const Home = () => {
     const toggleMenu = () => {
         setOpen(prev => !prev);
     };
+
+    const toggleMenu2 = () => {
+        setOpen2(prev => !prev);
+    };
     const sliderRef = useRef(null);
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
@@ -389,6 +425,7 @@ const Home = () => {
                                     // <div className="dropdown-menu dropdown-menu-home  d-flex flex-column align-items-center justify-content-center gap-1 text-start">
                                     <div className="dropdown-menu dropdown-menu-home d-flex flex-column align-items-center gap-1 text-start show"
                                         style={{
+                                            width: '70%',
                                             position: 'absolute',
                                             top: '100%',
                                             left: '50%',
@@ -401,11 +438,30 @@ const Home = () => {
                                     </div>
                                 )}
                             </div>
-                            <div className="">
-                                <button className="btn" style={{ padding: '12px 24px' }} onClick={() => navigate('/register_company')}>
-                                    Register Transporter
-                                </button>
-                            </div>
+                            {token ? (
+                                <>
+                                    {userRole === 'user' ? (
+                                        <>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="">
+                                                <button className="btn" style={{ padding: '12px 24px' }} onClick={() => navigate('/register_company')}>
+                                                    Register Transporter
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <div className="">
+                                        <button className="btn" style={{ padding: '12px 24px' }} onClick={() => navigate('/register_company')}>
+                                            Register Transporter
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -479,7 +535,7 @@ const Home = () => {
                 </div>
             </div> */}
 
-            <div className="container mt-5">
+            <div className="container mt-5" id="how-it-works">
                 <div className="d-flex flex-column justify-content-center align-items-center w-100">
                     <div className="d-flex align-items-start justify-content-start w-100 mb-4">
                         <div className="home-heading text-center w-100 w-md-60">
@@ -551,9 +607,44 @@ const Home = () => {
                     </div>
 
                     <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5">
-                        <button onClick={() => navigate('/send_groupage')} className="btn btn-primary px-4 py-2">
-                            Start shipping your products
-                        </button>
+                        <div
+                            className="home-groupage-btn position-relative d-inline-block"
+                            onMouseEnter={() => setOpen2(true)}
+                            onMouseLeave={() => setOpen2(false)}
+                        >
+                            <button onClick={() => setOpen2(!open2)} className="btn btn-primary px-4 py-2">
+                                Start shipping your products
+                            </button>
+
+                            {open2 && (
+                                <div
+                                    className="dropdown-menu dropdown-menu-home d-flex flex-column align-items-center gap-1 text-start show"
+                                    style={{
+                                        width: '100%',
+                                        position: 'absolute',
+                                        top: '100%',
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        zIndex: 1000
+                                    }}
+                                >
+                                    <button
+                                        onClick={() => { navigate('/send_groupage/item'); setOpen2(false); }}
+                                        className="btn groupage-btn-home w-100 m-0 p-2"
+                                    >
+                                        <HiMiniRectangleStack className="fs-5 me-1" /> Send Items
+                                    </button>
+
+                                    <button
+                                        onClick={() => { navigate('/send_groupage/box'); setOpen2(false); }}
+                                        className="btn groupage-btn-home w-100 m-0 p-2"
+                                    >
+                                        <FaBoxOpen className="fs-5 me-1" /> Send Boxes
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -1365,7 +1456,28 @@ const Home = () => {
                                         <input type="text" className="form-control w-100 w-sm-50 fs-5" onChange={(e) => { const value = e.target.value.replace(/[^0-9.]/g, ""); setBidAmount(value); }} value={`€ ${bidAmount}`} />
                                     </div>
                                     <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-start justify-content-between w-100 gap-3 border-bottom border-2 pb-2 mt-4">
-                                        <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-50 w-sm-50">
+                                        <div className="d-flex flex-column flex-sm-row justify-content-center justify-content-sm-between align-items-center w-100 gap-2">
+                                            <span className="text-secondary text-start">How long will this product take to deliver?</span>
+
+                                            <div className="">
+                                                <select
+                                                    className="form-select w-100 w-sm-75 my-1 my-sm-0"
+                                                    value={dateRange}
+                                                    onChange={(e) => handleSelect(e.target.value)}
+                                                >
+                                                    <option value="">Please select the duration</option>
+                                                    <option value="Within 7 days">Within 7 days</option>
+                                                    <option value="Within 15 days">Within 15 days</option>
+                                                    <option value="Within 30 days">Within 30 days</option>
+                                                    <option value="More than 30 days">More than 30 days</option>
+                                                </select>
+                                            </div>
+                                            {/* <div style={{ marginTop: '1rem' }}>
+                                                                    <span className="fs-6">From:</span> {dateRange[0].startDate.toDateString()}<br />
+                                                                    <span className="fs-6">To:</span> {dateRange[0].endDate.toDateString()}
+                                                                </div> */}
+                                        </div>
+                                        {/* <div className="d-flex flex-column align-items-start justify-content-start gap-2 w-50 w-sm-50">
                                             <span className="text-secondary text-start">How long will this product take to deliver?</span>
 
 
@@ -1373,7 +1485,7 @@ const Home = () => {
                                                 <span className="fs-6">From:</span> {dateRange[0].startDate.toDateString()}<br />
                                                 <span className="fs-6">To:</span> {dateRange[0].endDate.toDateString()}
                                             </div>
-                                        </div>
+                                        </div> */}
                                         {/* <Form.Select
                                                                             style={{
                                                                                 border: dateError ? '1px solid rgb(178, 0, 0)' : '',
@@ -1391,14 +1503,14 @@ const Home = () => {
                                                                             <option value="more_than_30_days">More Than 30 Days</option>
                                                                         </Form.Select> */}
 
-                                        <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
+                                        {/* <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
                                             <DateRange
                                                 ranges={dateRange}
                                                 onChange={handleSelect}
                                                 moveRangeOnFirstSelection={false}
                                                 editableDateInputs={true}
                                             />
-                                        </div>
+                                        </div> */}
 
                                     </div>
 
@@ -1439,40 +1551,14 @@ const Home = () => {
                                                     No
                                                 </label>
                                             </div>
-
-                                            {/* <div className="d-flex gap-2 align-items-center justify-content-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    id="yes"
-                                                    name="radio-btn"
-                                                    onclick={() => setToggleValue(true)}
-                                                    // onChange={(e) => setToggleValue(e.target.checked)}
-                                                    //  onChange={(e) => setToggleValue(e.target.checked)}
-
-                                                    style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
-                                                />
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    Yes
-                                                </label>
-                                            </div>
-                                            <div className="d-flex gap-2 align-items-center justify-content-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    id="no"
-                                                    name="radio-btn"
-                                                    onclick={() => setToggleValue(false)}
-                                                    // onChange={(e) => setToggleValue(e.target.checked)}
-                                                    //  onChange={(e) => setToggleValue(e.target.checked)}
-
-                                                    style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
-                                                />
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    No
-                                                </label>
-                                            </div> */}
-
+                                            {/* <input
+                                                                    className="form-check-input"
+                                                                    type="checkbox"
+                                                                    id="yesNoCheckbox"
+                                                                    checked={toggleValue}
+                                                                    onChange={(e) => setToggleValue(e.target.checked)}
+                                                                    style={{ width: '20px', height: '20px', cursor: 'pointer', border: '1px solid #6c757d' }}
+                                                                /> */}
                                             {/* <label className="form-check-label fw-medium" htmlFor="yesNoCheckbox">
                                                                     {toggleValue ? 'Yes' : 'No'}
                                                                 </label> */}
@@ -1508,6 +1594,7 @@ const Home = () => {
                                             </div>
                                         </>
                                     )}
+
 
                                     {/* <div className="d-flex w-100 flex-column align-items-start  justify-content-start">                                           
                                                                         <span className="text-secondary text-start">Office Address -:</span>
@@ -1706,7 +1793,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <section className="build-wrapper">
+            <section className="build-wrapper" >
                 <div className="container">
                     <div className="d-flex flex-column align-items-start justify-content-start w-100">
                         <div className="home-heading">

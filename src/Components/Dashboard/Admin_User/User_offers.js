@@ -62,7 +62,7 @@ const Offers = () => {
         offersForUser();
     }, [])
 
-    console.log(admin_offer);
+    // console.log(admin_offer);
     const openDeleteModal = (message, deleteFunction) => {
         setModalMessage(message);
         setDeleteAction(() => deleteFunction);
@@ -131,7 +131,7 @@ const Offers = () => {
             />
             <div className="bg-light" style={{ width: '100%', overflow: 'auto', paddingBottom: '80px' }}>
                 <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
-                    <div className="d-flex flex-column ps-4 w-100 justify-content-start align-items-start">
+                    <div className="d-flex flex-column justify-content-start align-items-start">
                         <label className="fs-3"><strong>Offers List</strong></label>
                         {userRole === 'user' && (
                             <>
@@ -228,6 +228,7 @@ const Offers = () => {
                                     {offers && offers.length > 0 ? (
                                         <>
                                             {offers.filter(item => item.status !== 'rejected')
+                                                .sort((a, b) => parseInt(b.offer_id) - parseInt(a.offer_id))
                                                 .sort((a, b) => Number(a.accepted) - Number(b.accepted))
                                                 .map((item, index) => (
                                                     <div className="orders-mobile-card w-100" style={{ cursor: 'pointer' }} onClick={() =>
@@ -238,30 +239,45 @@ const Offers = () => {
                                                         <div className="d-flex justify-content-between w-100">
                                                             <div className="text-start">
                                                                 <div className="d-flex gap-2">
-                                                                    <h5>Order Id </h5> <h5 className="text-primary">#{item.order_id}</h5>
+                                                                    {/* <h5>Order Id </h5> <h5 className="text-primary">#{item.order_id}</h5> */}
+                                                                    <h5>Transporter Name : XXXXX-XXX</h5>
                                                                 </div>
                                                                 <div className="d-flex">
-                                                                    <h5>{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</h5>
+                                                                    {/* <h5>{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</h5> */}
+                                                                    <h5>Total Amount (€) : {parseFloat(item.price) + parseFloat(item.commission)}</h5>
                                                                 </div>
                                                             </div>
                                                             <div className="d-flex align-items-center justify-content-center">
-                                                                <button
+                                                                {/* <button
                                                                     className="btn btn-sm text-light"
 
                                                                     onClick={() => handleDeleteoffer(item.offer_id)}
                                                                     disabled={item.accepted === '1'}
                                                                 >
                                                                     <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
-                                                                </button>
+                                                                </button> */}
                                                             </div>
                                                         </div>
 
                                                         <div className="d-flex flex-column justify-content-start align-items-start">
-                                                            <h6>Offer From : XXXXX-XXX</h6>
-                                                            <h6>Total Amount (€) : {parseFloat(item.price) + parseFloat(item.commission)}</h6>
+                                                            {/* <h6>Transporter Name : XXXXX-XXX</h6> */}
+                                                            {/* <h6>Total Amount (€) : {parseFloat(item.price) + parseFloat(item.commission)}</h6> */}
                                                             <h6>Amount to pay now (€) : {item.commission}</h6>
                                                             <h6>Delivery Duration : {item.delivery_duration.replace(/_/g, ' ')}</h6>
                                                             <h6>Transporter Pickup : {item.office_address ? <>No</> : <>Yes</>}</h6>
+                                                            <div className="d-flex gap-2 mt-2">
+                                                                <button className="btn btn-primary">{item.accepted === '1' ? 'View Transporter Details' : 'View Details'}</button>
+                                                                {item.accepted === '1' ? (null) : (<>
+                                                                    <button
+                                                                        className="btn btn-sm text-light"
+
+                                                                        onClick={(e) => { e.stopPropagation(); handleDeleteoffer(item.offer_id) }}
+                                                                        disabled={item.accepted === '1'}
+                                                                    >
+                                                                        <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
+                                                                    </button>
+                                                                </>)}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -284,13 +300,14 @@ const Offers = () => {
                                     <table className="table">
                                         <thead>
                                             <tr>
-                                                <th scope="col"><h6>Order Id</h6></th>
-                                                <th scope="col"><h6>Product Name</h6></th>
-                                                <th scope="col"><h6>Offer From</h6></th>
+                                                {/* <th scope="col"><h6>Order Id</h6></th> */}
+                                                {/* <th scope="col"><h6>Product Name</h6></th> */}
+                                                <th scope="col"><h6>Transporter Name</h6></th>
                                                 <th scope="col"><h6>Total Amount (€)</h6></th>
                                                 <th scope="col"><h6>Amount to pay now (€)</h6></th>
                                                 <th scope="col"><h6>Delivery Duration</h6></th>
                                                 <th scope="col"><h6>Transporter Pickup</h6></th>
+                                                {/* <th scope="col"><h6>Status</h6></th> */}
                                                 <th scope="col"><h6>Actions</h6></th>
                                             </tr>
                                         </thead>
@@ -298,6 +315,7 @@ const Offers = () => {
                                             <tbody>
                                                 {offers
                                                     .filter(item => item.status !== 'rejected')
+                                                    .sort((a, b) => parseInt(b.offer_id) - parseInt(a.offer_id))
                                                     .sort((a, b) => Number(a.accepted) - Number(b.accepted))
                                                     .map((item, index) => (
                                                         <tr
@@ -310,8 +328,8 @@ const Offers = () => {
                                                             style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}
                                                             className="justify-content-center align-items-center"
                                                         >
-                                                            <td className="text-primary">#{item.order_id}</td>
-                                                            <td className="text-secondary">{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</td>
+                                                            {/* <td className="text-primary">#{item.order_id}</td> */}
+                                                            {/* <td className="text-secondary">{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</td> */}
                                                             <td className="text-secondary">XXXXX-XXX</td>
                                                             <td className="text-secondary">{parseFloat(item.price) + parseFloat(item.commission)}</td>
                                                             {/* <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td> */}
@@ -320,7 +338,7 @@ const Offers = () => {
                                                                 {item.delivery_duration.replace(/_/g, ' ')}
                                                             </td>
                                                             <td className="text-secondary">{item.office_address ? <>No</> : <>Yes</>}</td>
-                                                            <td className="d-flex align-items-center justify-content-center w-100 gap-3">
+                                                            {/* <td className="d-flex align-items-center justify-content-center w-100 gap-3">
                                                                 {item.accepted === '1' ? <>
                                                                     <span className='p-2 fw-bold' style={{ backgroundColor: '#bcffba', color: '#0b7e01' }}>Accepted</span>
                                                                 </> : <>
@@ -341,6 +359,20 @@ const Offers = () => {
                                                                         <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
                                                                     </button>
                                                                 </>}
+
+                                                            </td> */}
+                                                            <td>
+                                                                <button className="btn btn-primary" onClick={() => { item.accepted === '1' ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission) : handleShowOffer(item) }}>{item.accepted === '1' ? 'View Transporter Details' : 'View Details'}</button>
+                                                                {item.accepted === '1' ? (null) : (<>
+                                                                    <button
+                                                                        className="btn btn-sm text-light"
+
+                                                                        onClick={() => handleDeleteoffer(item.offer_id)}
+                                                                        disabled={item.accepted === '1'}
+                                                                    >
+                                                                        <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
+                                                                    </button>
+                                                                </>)}
 
                                                             </td>
                                                         </tr>
@@ -416,10 +448,10 @@ const Offers = () => {
                                 zIndex: 9999
                             }}
                         >
-                            <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection"
+                            <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection mb-3"
                                 style={{
                                     width: '55%',
-                                    height: '90vh',
+                                    height: '75vh',
                                     overflowY: 'auto'
                                 }}
                             >
@@ -487,12 +519,16 @@ const Offers = () => {
                                                 <span className="fw-bold">€{selected_offer.price}</span>
                                             </div>
                                             <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                                <span className="text-secondary">Delivery Duration : </span>
+                                                <span>{selected_offer.delivery_duration.replace(/_/g, ' ')}</span>
+                                            </div>
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                                 <span className="text-secondary">Offer Received Date : </span>
                                                 <span>{selected_offer.created_at.split("T")[0]}</span>
                                             </div>
                                         </div>
 
-                                        <h5 className="mt-3">Pick Up Information</h5>
+                                        {/* <h5 className="mt-3">Pick Up Information</h5>
                                         <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
                                             <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                                 <span className="text-secondary">Full Name : </span>
@@ -518,7 +554,7 @@ const Offers = () => {
                                                 <span className="text-secondary">City : </span>
                                                 <span>{selected_offer.sender_city}</span>
                                             </div>
-                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Street Address : </span>
                                             <span>{selected_offer.sender_address ? selected_offer.sender_address : '-'}</span>
                                         </div>
@@ -536,10 +572,10 @@ const Offers = () => {
                                                     : '-'
                                                 // selected_offer.pickup_date.includes('Select End Date') ? selected_offer.pickup_date.split(' - ')[0] : selected_offer.pickup_date
                                             }</span>
-                                        </div> */}
                                         </div>
+                                        </div> */}
 
-                                        <h5 className="mt-3">Delivery Information</h5>
+                                        {/* <h5 className="mt-3">Delivery Information</h5>
                                         <div className="d-flex flex-column align-items-start justify-content-start mt-1 w-100 border-bottom pb-3 border-2 gap-2">
                                             <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                                 <span className="text-secondary">Full Name : </span>
@@ -549,15 +585,15 @@ const Offers = () => {
                                                 <span className="text-secondary">Contact Number : </span>
                                                 <span>{selected_offer.receiver_contact}</span>
                                             </div>
-                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">Email ID : </span>
                                             <span>{selected_offer.receiver_email ? selected_offer.receiver_email : '-'}</span>
-                                        </div> */}
+                                        </div>
                                             <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                                 <span className="text-secondary">Country : </span>
                                                 <span>{selected_offer.receiver_country ? selected_offer.receiver_country : '-'}</span>
                                             </div>
-                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                            <div className="d-flex flex-row align-items-start justify-content-between w-100">
                                             <span className="text-secondary">State : </span>
                                             <span>{selected_offer.receiver_state ? selected_offer.receiver_state : '-'}</span>
                                         </div>
@@ -573,20 +609,20 @@ const Offers = () => {
                                             <span className="text-secondary">Zip Code : </span>
                                             <span>{selected_offer.receiver_zipcode ? selected_offer.receiver_zipcode : '-'}</span>
                                         </div> */}
-                                            {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
+                                        {/* <div className="d-flex flex-row align-items-start justify-content-between w-100">
                         <span className="text-secondary">Delivery Duration : </span>
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
                         <span>{duration_calculate(selected_offer.delivery_duration, selected_offer.pickup_date)}</span>
                       </div> */}
-                                            {/* {selected_offer.office_address && (
+                                        {/* {selected_offer.office_address && (
                         <>
                           <div className="d-flex flex-row align-items-start justify-content-between w-100">
                             <span className="text-secondary">Office Address : </span>
                             <span>{selected_offer.office_address}</span>
                           </div>
                         </>
-                      )} */}
-                                        </div>
+                      )}
+                                        </div>/ */}
 
                                         {/* <button onClick={() => {
                       axios.post(`${port}/paypal/api/test_api`, {
@@ -603,7 +639,12 @@ const Offers = () => {
                       }).catch((err) => { console.log(err) });
                     }}>test payment button</button>
                      */}
-                                        <div className="d-flex flex-column w-100 justify-content-center align-items-center">
+                                        <div class="mt-4 p-3 rounded border bg-primary bg-opacity-10 w-100">
+                                            <p class="mb-0 text-primary small text-start">
+                                                🔒 <strong>Privacy notice:</strong> Transporter details will be shared once the payment has been made successfully.
+                                            </p>
+                                        </div>
+                                        <div className="d-flex flex-column w-100 justify-content-center align-items-center ">
                                             <PaypalPayment
                                                 key={selected_offer?.offer_id}
                                                 selected_offer={selected_offer}

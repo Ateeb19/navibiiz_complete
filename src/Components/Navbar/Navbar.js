@@ -140,12 +140,22 @@ const Navbar = () => {
 
 
         <div className="d-lg-none d-flex">
-          {!token && (
+          {!token ? (<div>
             <Link to="/login" >
               <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>
                 <FaUser /> Login
               </button>
             </Link>
+          </div>
+          ) : (
+            <div className="d-flex gap-4 align-items-center justify-content-center me-3">
+              <FaBell className="fs-3 " style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
+              {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
+                <Link to="/dashboard" >
+                  <MdDashboardCustomize className="fs-1" style={{ color: ' #fff' }} />
+                </Link>
+              )}
+            </div>
           )}
 
           <button className="btn text-light" onClick={() => setIsOpen(!isOpen)}>
@@ -158,6 +168,7 @@ const Navbar = () => {
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-4 flex-grow-1 me-4">
           {/* <Translater /> */}
           <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >Home</Link>
+          <Link to="/#how-it-works" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >How it Works</Link>
           <Link to="/shipments" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >Shipments</Link>
           {/* <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >{t("about_us")}</Link> */}
           <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >About</Link>
@@ -257,6 +268,7 @@ const Navbar = () => {
             <div className="d-flex flex-column text-start align-items-start py-4 text-light">
               <Link to="/" className="py-2 text-light text-decoration-none" style={{ fontSize: "1rem" }} >Home</Link>
               {/* <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About Us</Link>    */}
+              <Link to="/#how-it-works" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >How it Works</Link>
               <Link to="/shipments" className="py-2 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Shipments</Link>
               <Link to="/about_us" className="py-2 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About</Link>
               <Link to="/contact_us" className="py-2 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Contact Us</Link>
@@ -279,12 +291,12 @@ const Navbar = () => {
                       <BsSendFill /> Send Groupage
                     </button>
                   </Link> */}
-                  <div className="d-flex flex-column align-items-start justify-content-start"
+                  <div className="d-flex flex-column align-items-start justify-content-start w-100 pe-2"
                     onMouseEnter={() => setOpen(true)}
                     onMouseLeave={() => setOpen(false)}
                   >
                     <button
-                      className="btn m-1"
+                      className="btn m-1 w-100"
                       style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
                       onClick={toggleMenu}
                     >
@@ -298,14 +310,14 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
-                  <FaBell className="fs-3 me-3 ms-3 my-2" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
+                  {/* <FaBell className="fs-3 me-3 ms-3 my-2" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
                   {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                     <Link to="/dashboard" >
                       <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>
                         <MdDashboardCustomize />
                       </button>
                     </Link>
-                  )}
+                  )} */}
                 </>
               ) : (
                 <>
@@ -315,12 +327,12 @@ const Navbar = () => {
                       <BsSendFill /> Send Groupage
                     </button>
                   </Link> */}
-                  <div className="d-flex flex-column align-items-start justify-content-start"
+                  <div className="d-flex flex-column align-items-start justify-content-start w-100 pe-2"
                     onMouseEnter={() => setOpen(true)}
                     onMouseLeave={() => setOpen(false)}
                   >
                     <button
-                      className="btn m-1"
+                      className="btn m-1 w-100"
                       style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
                       onClick={toggleMenu}
                     >
@@ -334,7 +346,7 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
-                  <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
+                  {/* <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} /> */}
                   {/* <Link to="/login" >
                     <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>
                       <FaUser /> Login

@@ -678,7 +678,7 @@ ul {
 .details-wrap {
     color: #4b4b4b;
     font-weight: 500;
-    margin: 20px 0;
+    margin: 10px 0;
     font-size: 18px;
 }
 
@@ -1324,6 +1324,7 @@ svg {
     background-color: transparent !important;
     color: #012A52 !important;
     font-weight: 800;
+    border: none !important;
 }
 
 .dropdown-menu-home {

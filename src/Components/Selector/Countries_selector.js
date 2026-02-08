@@ -64,7 +64,7 @@ const Countries_selector = ({
             .then(response => response.json()) // parse JSON here
             .then(data => {
                 setCountries(data); // set the country data
-                console.log(countries);
+                // console.log(countries);
             })
             .catch(error => console.log('error', error));
     }, []);

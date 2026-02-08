@@ -179,7 +179,7 @@ const Offers = () => {
             />
             <div className="bg-light" style={{ width: '100%', overflow: 'auto', paddingBottom: '80px' }}>
                 <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
-                    <div className="d-flex flex-column ps-4 w-100 justify-content-start align-items-start">
+                    <div className="d-flex flex-column justify-content-start align-items-start">
                         <label className="fs-3"><strong>Offers List</strong></label>
                         {userRole === 'user' && (
                             <>
@@ -309,6 +309,7 @@ const Offers = () => {
                                                                 <h6>Price (€) : {item.amount}</h6>
                                                                 <h6>Delivery Duration : {item.expeted_date}</h6>
                                                                 <h6>Product Pick Up : {item.office_address ? 'No' : 'Yes'}</h6>
+                                                                
                                                             </div>
                                                         </div>
                                                     ))}
@@ -476,6 +477,7 @@ const Offers = () => {
                                                                     <h6>Amount to pay now (€) : {item.commission}</h6>
                                                                     <h6>Delivery Duration : {item.delivery_duration.replace(/_/g, ' ')}</h6>
                                                                     <h6>Transporter Pickup : {item.office_address ? <>No</> : <>Yes</>}</h6>
+
                                                                 </div>
                                                             </div>
                                                         ))}

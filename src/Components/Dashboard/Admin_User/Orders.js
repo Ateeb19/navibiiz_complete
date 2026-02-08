@@ -176,17 +176,14 @@ const Orders = () => {
                                                                     <h5>{item.box ? "Boxes" : item.product_name ? item.product_name : '-'}</h5>
                                                                 </div>
                                                             </div>
-                                                            <div className="d-flex align-items-center justify-content-center">
-                                                                {/* <button className="btn btn-sm btn-light text-primary pt-0 pb-0" onClick={() => handle_show_groupage_details(item)} style={{ fontSize: '1.5rem' }}>
-                                                                    <FaEye />
-                                                                </button> */}
+                                                            {/* <div className="d-flex align-items-center justify-content-center">
                                                                 <button className="btn btn-sm btn-primary text-white py-2 px-3 user-order-btn text-primary me-1" onClick={(e) => { e.stopPropagation(); handle_offer_navigate(item.id, item.offers_count) }}>
                                                                     View Offers
                                                                 </button>
                                                                 <button className="btn btn-sm text-danger pt-0 pb-0" onClick={(e) => { e.stopPropagation(); handle_show_groupage_delete(item) }} style={{ fontSize: '1.5rem' }}>
                                                                     <MdDelete />
                                                                 </button>
-                                                            </div>
+                                                            </div> */}
                                                         </div>
 
                                                         <div className="d-flex flex-column justify-content-start align-items-start">
@@ -199,6 +196,14 @@ const Orders = () => {
                                                             }}>
                                                                 {item.payment_status === 'panding' ? 'Unpaid' : 'Paid'}
                                                             </span></h6>
+                                                            <div className="d-flex align-items-center justify-content-center mt-2">
+                                                                <button className="btn btn-sm btn-primary text-white py-2 px-3 user-order-btn text-primary me-1" onClick={(e) => { e.stopPropagation(); handle_offer_navigate(item.id, item.offers_count) }}>
+                                                                    View Offers
+                                                                </button>
+                                                                <button className="btn btn-sm text-danger pt-0 pb-0" onClick={(e) => { e.stopPropagation(); handle_show_groupage_delete(item) }} style={{ fontSize: '1.5rem' }}>
+                                                                    <MdDelete />
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 ))}
