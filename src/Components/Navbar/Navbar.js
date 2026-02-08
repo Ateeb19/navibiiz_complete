@@ -267,8 +267,8 @@ const Navbar = () => {
 
             <div className="d-flex flex-column text-start align-items-start py-4 text-light">
               <Link to="/" className="py-2 text-light text-decoration-none" style={{ fontSize: "1rem" }} >Home</Link>
+              <Link to="/#how-it-works" className="py-2 text-light text-decoration-none" style={{ fontSize: "1rem" }} >How it Works</Link>
               {/* <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About Us</Link>    */}
-              <Link to="/#how-it-works" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >How it Works</Link>
               <Link to="/shipments" className="py-2 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Shipments</Link>
               <Link to="/about_us" className="py-2 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About</Link>
               <Link to="/contact_us" className="py-2 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Contact Us</Link>
