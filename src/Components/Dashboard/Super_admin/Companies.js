@@ -194,7 +194,7 @@ const Companies = () => {
                     <div className="bg-light px-md-3" style={{ paddingBottom: '90px', width: '100%', overflow: 'auto' }}>
 
                         <div className="d-flex justify-content-start align-items-center rounded-1">
-                            <div className="d-flex ps-4 w-50 justify-content-start">
+                            <div className="d-flex ps-4 w-100 justify-content-start">
                                 <label className="fs-3"><strong>Companies List</strong></label>
                             </div>
                         </div>

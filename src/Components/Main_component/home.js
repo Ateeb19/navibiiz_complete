@@ -38,7 +38,7 @@ import { HiMiniRectangleStack } from "react-icons/hi2";
 
 const Home = () => {
     const port = process.env.REACT_APP_SECRET;
-    console.log('this is the current port for backend api -: ', port);
+    // console.log('this is the current port for backend api -: ', port);
     const { showAlert } = useAlert();
     const { t } = useTranslation();
     const token = localStorage.getItem('token');
@@ -383,12 +383,10 @@ const Home = () => {
     const canOpenGroupage = token ? userRole !== 'admin' : true;
 
     return (
-        <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
-            {/* <div className='navbar-wrapper'> */}
-                <div className=" d-flex justify-content-center w-100">
-                    <Navbar />
-                </div>
-            {/* </div> */}
+        <div className="d-flex flex-column align-items-center justify-content-center">
+            <div className=" d-flex justify-content-center w-100">
+                <Navbar />
+            </div>
 
             <section className="hero-wrapper">
                 <div className="container">
@@ -1899,7 +1897,8 @@ const Home = () => {
                     <div className="home-heading w-100 d-flex align-items-start justify-content-start">
                         <h2>Real Stories Real Impact</h2>
                     </div>
-                    <div className="w-100 mx-auto mt-1">
+
+                    <div className="slider-fix-wrapper w-100 mx-auto mt-1">
                         <Slider {...settings}>
                             {profiles.map((profile, index) => (
                                 <div key={index} className="p-3">
@@ -1910,17 +1909,13 @@ const Home = () => {
 
                                         <div className="d-flex flex-row align-items-center justify-content-start w-100 pe-4 gap-3">
                                             <div className="testi-img-wrapper">
-                                                <img
-                                                    src={profile.img}
-                                                    alt={profile.name}
-                                                />
+                                                <img src={profile.img} alt={profile.name} />
                                             </div>
                                             <div className="d-flex flex-column align-items-start justify-content-start w-100">
                                                 <h5 className="mb-2">{profile.name}</h5>
                                                 <h5 className="mb-2">{profile.location}</h5>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             ))}
@@ -1928,6 +1923,7 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
 
             <section className="home-footer-wrapper w-100 mt-5 mb-5 pb-5">
                 <div className="container">

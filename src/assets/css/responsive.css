@@ -280,7 +280,7 @@
     }
 
     .hero-wrapper {
-        padding: 0px 0px 50px 0;
+        padding: 120px 0px 50px 0;
     }
 
     .mission-wrappr {
@@ -336,15 +336,12 @@
     }
 
     .dashbord-info-wrap {
-        padding: 0 5px;
+        padding: 0 0px;
+        margin-bottom: 90px;
     }
 
     .dashboard-wrapper-box .table-wrap {
         margin: 25px 15px;
-    }
-
-    .whatsapp-float {
-        bottom: 20px;
     }
 }
 

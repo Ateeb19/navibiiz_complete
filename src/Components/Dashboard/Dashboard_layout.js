@@ -199,11 +199,9 @@ const Dashboard_layout = () => {
             height: '91vh',
             overflow: isMobile ? 'auto' : 'hidden'
         }}>
-            <div className='navbar-wrapper'>
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
                 </div>
-            </div>
             <div className="d-flex flex-row align-items-center justify-content-end bg-light w-100" style={{ height: '100%' }}>
                 {isMobile ? (
                     <>
@@ -318,7 +316,7 @@ const Dashboard_layout = () => {
                         </div>
                     )} */}
 
-                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2" style={{ backgroundColor: '#f6f6f6' }}>
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 p-2 pt-3" style={{ backgroundColor: '#f6f6f6' }}>
                         <div className="d-flex align-items-center justify-content-end w-100 mt-2 mt-md-0">
                             <div className="p-3">
                             </div>
