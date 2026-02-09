@@ -33,6 +33,7 @@ import Offers_admin from './Components/Dashboard/Admin_User/Offers';
 import Offers_users from './Components/Dashboard/Admin_User/User_offers';
 import Payment_user from './Components/Dashboard/Admin_User/Payment';
 import Companies_detail from './Components/Dashboard/Super_admin/Companies_detail';
+import WhatsappFloat from './Components/Whatsapp';
 // import Test from './Components/Dashboard/Test'
 const AppContent = () => {
   useInactivityLogout();
@@ -72,6 +73,7 @@ const AppContent = () => {
         <Route Component={ResetPassword} path='/reset_password/:token' />
         <Route path="/transporter_details/:id" element={<CompanyDetails />} />
       </Routes>
+      <WhatsappFloat />
     </div>
   );
 };

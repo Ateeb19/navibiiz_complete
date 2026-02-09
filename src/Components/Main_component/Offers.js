@@ -323,11 +323,11 @@ const Offers = () => {
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
-            <div className='navbar-wrapper'>
+            {/* <div className='navbar-wrapper'> */}
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
                 </div>
-            </div>
+            {/* </div> */}
             <section className="search-result-wrapper w-100">
                 <div className="container">
                     <div className="d-flex flex-column flex-md-row justify-content-center align-items-start mt-3 mt-md-5 w-100">

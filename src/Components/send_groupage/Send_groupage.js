@@ -54,6 +54,7 @@ const DragAndDrop = ({ accept, onFileDrop, label, multiple = true }) => {
 
 const Send_groupage = () => {
     const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
     const { showAlert } = useAlert();
     const port = process.env.REACT_APP_SECRET;
     const navigate = useNavigate();
@@ -68,6 +69,12 @@ const Send_groupage = () => {
                 showAlert('Login first!');
                 alertShown.current = true;
                 localStorage.setItem('redirectAfterLogin', `/send_groupage/${type}`);
+                navigate('/login')
+            }
+        } else if (userRole === 'admin') {
+            if (!alertShown.current) {
+                showAlert('Login as Individual!');
+                alertShown.current = true;               
                 navigate('/login')
             }
         }

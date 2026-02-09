@@ -590,7 +590,7 @@ const Offers = () => {
                         <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection"
                             style={{
                                 width: '55%',
-                                height: '90vh',
+                                height: '80vh',
                                 overflowY: 'auto'
                             }}
                         >

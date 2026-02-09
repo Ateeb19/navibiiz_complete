@@ -342,6 +342,10 @@
     .dashboard-wrapper-box .table-wrap {
         margin: 25px 15px;
     }
+
+    .whatsapp-float {
+        bottom: 20px;
+    }
 }
 
 @media (max-width: 1399) {

@@ -191,15 +191,16 @@ const Navbar = () => {
             <>
               {/* <Link to="/send_groupage" > */}
               <div className="d-flex flex-column align-items-start justify-content-start"
-                onMouseEnter={() => setOpen(true)}
-                onMouseLeave={() => setOpen(false)}
+                onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
               >
                 <button
                   className="btn m-1"
                   style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
-                  onClick={toggleMenu}
+                  onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
                 >
-                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
+                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
                 </button>
 
                 {open && (
@@ -229,15 +230,16 @@ const Navbar = () => {
                 </button>
               </Link> */}
               <div className="d-flex flex-column align-items-start justify-content-start"
-                onMouseEnter={() => setOpen(true)}
-                onMouseLeave={() => setOpen(false)}
+                onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
               >
                 <button
                   className="btn m-1"
                   style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
-                  onClick={toggleMenu}
+                  onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
                 >
-                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
+                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
                 </button>
 
                 {open && (
@@ -292,15 +294,16 @@ const Navbar = () => {
                     </button>
                   </Link> */}
                   <div className="d-flex flex-column align-items-start justify-content-start w-100 pe-2"
-                    onMouseEnter={() => setOpen(true)}
-                    onMouseLeave={() => setOpen(false)}
+                    onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                    onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                    onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
                   >
                     <button
                       className="btn m-1 w-100"
                       style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
-                      onClick={toggleMenu}
+                      onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
                     >
-                      <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
+                      <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
                     </button>
 
                     {open && (
@@ -328,15 +331,16 @@ const Navbar = () => {
                     </button>
                   </Link> */}
                   <div className="d-flex flex-column align-items-start justify-content-start w-100 pe-2"
-                    onMouseEnter={() => setOpen(true)}
-                    onMouseLeave={() => setOpen(false)}
+                    onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                    onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                    onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
                   >
                     <button
                       className="btn m-1 w-100"
                       style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
-                      onClick={toggleMenu}
+                      onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
                     >
-                      <BsSendFill /> <span style={{ fontSize: "16px" }}>Send Groupage</span>
+                      <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
                     </button>
 
                     {open && (

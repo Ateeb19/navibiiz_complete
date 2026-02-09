@@ -379,13 +379,16 @@ const Home = () => {
         setOpen2(prev => !prev);
     };
     const sliderRef = useRef(null);
+
+    const canOpenGroupage = token ? userRole !== 'admin' : true;
+
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
-            <div className='navbar-wrapper'>
+            {/* <div className='navbar-wrapper'> */}
                 <div className=" d-flex justify-content-center w-100">
                     <Navbar />
                 </div>
-            </div>
+            {/* </div> */}
 
             <section className="hero-wrapper">
                 <div className="container">
@@ -415,29 +418,64 @@ const Home = () => {
                             </div>
                         </div> */}
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-stretch align-items-md-center px-3 pickup-wrap gap-3 mt-3">
-                            <div className="home-groupage-btn position-relative d-inline-block" onMouseEnter={() => setOpen(true)}
-                                onMouseLeave={() => setOpen(false)}>
-                                <button className="btn " style={{ padding: '12px 24px' }}
-                                    onClick={toggleMenu}>
-                                    Send Groupage
-                                </button>
-                                {open && (
-                                    // <div className="dropdown-menu dropdown-menu-home  d-flex flex-column align-items-center justify-content-center gap-1 text-start">
-                                    <div className="dropdown-menu dropdown-menu-home d-flex flex-column align-items-center gap-1 text-start show"
-                                        style={{
-                                            width: '70%',
-                                            position: 'absolute',
-                                            top: '100%',
-                                            left: '50%',
-                                            transform: 'translateX(-50%)',
-                                            zIndex: 1000
-                                        }}
-                                    >
-                                        <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn-home"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
-                                        <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn-home"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                            {token ? (
+                                <>
+                                    {userRole === 'admin' ? (null) : (<>
+                                        <div className="home-groupage-btn position-relative d-inline-block" onMouseEnter={() => setOpen(true)}
+                                            onMouseLeave={() => setOpen(false)}>
+                                            <button className="btn " style={{ padding: '12px 24px' }}
+                                                onClick={toggleMenu}>
+                                                Send Groupage
+                                            </button>
+                                            {open && (
+                                                // <div className="dropdown-menu dropdown-menu-home  d-flex flex-column align-items-center justify-content-center gap-1 text-start">
+                                                <div className="dropdown-menu dropdown-menu-home d-flex flex-column align-items-center gap-1 text-start show"
+                                                    style={{
+                                                        width: '70%',
+                                                        position: 'absolute',
+                                                        top: '100%',
+                                                        left: '50%',
+                                                        transform: 'translateX(-50%)',
+                                                        zIndex: 1000
+                                                    }}
+                                                >
+                                                    <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn-home"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                                                    <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn-home"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <div className="home-groupage-btn position-relative d-inline-block" onMouseEnter={() => setOpen(true)}
+                                        onMouseLeave={() => setOpen(false)}>
+                                        <button className="btn " style={{ padding: '12px 24px' }}
+                                            onClick={toggleMenu}>
+                                            Send Groupage
+                                        </button>
+                                        {open && (
+                                            // <div className="dropdown-menu dropdown-menu-home  d-flex flex-column align-items-center justify-content-center gap-1 text-start">
+                                            <div className="dropdown-menu dropdown-menu-home d-flex flex-column align-items-center gap-1 text-start show"
+                                                style={{
+                                                    width: '70%',
+                                                    position: 'absolute',
+                                                    top: '100%',
+                                                    left: '50%',
+                                                    transform: 'translateX(-50%)',
+                                                    zIndex: 1000
+                                                }}
+                                            >
+                                                <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn-home"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                                                <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn-home"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
+                                </>
+                            )}
+
+
                             {token ? (
                                 <>
                                     {userRole === 'user' ? (
@@ -609,14 +647,32 @@ const Home = () => {
                     <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5">
                         <div
                             className="home-groupage-btn position-relative d-inline-block"
-                            onMouseEnter={() => setOpen2(true)}
-                            onMouseLeave={() => setOpen2(false)}
+                            // onMouseEnter={() => canOpenGroupage && setOpen2(true)}
+                            // onMouseLeave={() => canOpenGroupage && setOpen2(false)}
+                            onMouseEnter={() => {
+                                if (!canOpenGroupage) return;
+                                setOpen2(true);
+                            }}
+
+                            onMouseLeave={() => {
+                                if (!canOpenGroupage) return;
+                                setOpen2(false);
+                            }}
                         >
-                            <button onClick={() => setOpen2(!open2)} className="btn btn-primary px-4 py-2">
+                            <button
+                                // onClick={() => canOpenGroupage && setOpen2(!open2)}
+                                // disabled={!canOpenGroupage}
+                                onClick={() => {
+                                    if (!canOpenGroupage) return;
+                                    setOpen2(!open2);
+                                }}
+                                disabled={!canOpenGroupage}
+                                className="btn btn-primary px-4 py-2"
+                            >
                                 Start shipping your products
                             </button>
 
-                            {open2 && (
+                            {open2 && canOpenGroupage && (
                                 <div
                                     className="dropdown-menu dropdown-menu-home d-flex flex-column align-items-center gap-1 text-start show"
                                     style={{
