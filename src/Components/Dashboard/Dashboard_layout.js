@@ -22,21 +22,46 @@ const Dashboard_layout = () => {
         return localStorage.getItem("activeSection") || "dashboard";
     });
 
-    useEffect(() => {
-        const path = location.pathname;
+    // useEffect(() => {
+    //     const path = location.pathname;
 
-        if (path === "/dashboard") setActiveSection("dashboard");
-        else if (path.startsWith("/dashboard/admin/companies")) setActiveSection("companies");
-        else if (path.startsWith("/dashboard/admin/offers")) setActiveSection("offers");
-        else if (path.startsWith("/dashboard/admin/payment")) setActiveSection("payments");
-        else if (path.startsWith("/dashboard/admin/roles")) setActiveSection("users");
-        else if (path.startsWith("/dashboard/orders")) setActiveSection("orders");
-        else if (path.startsWith("/dashboard/offers")) setActiveSection("user_offers");
-        else if (path.startsWith("/dashboard/payment")) setActiveSection("payment_history");
-    }, [location.pathname]);
+    //     if (path === "/dashboard") setActiveSection("dashboard");
+    //     else if (path.startsWith("/dashboard/admin/companies")) setActiveSection("companies");
+    //     else if (path.startsWith("/dashboard/admin/offers")) setActiveSection("offers");
+    //     else if (path.startsWith("/dashboard/admin/payment")) setActiveSection("payments");
+    //     else if (path.startsWith("/dashboard/admin/roles")) setActiveSection("users");
+    //     else if (path.startsWith("/dashboard/orders")) setActiveSection("orders");
+    //     else if (path.startsWith("/dashboard/offers")) setActiveSection("user_offers");
+    //     else if (path.startsWith("/dashboard/payment")) setActiveSection("payment_history");
+    // }, [location.pathname]);
 
-    const activeStyle = (key) =>
-        activeSection === key
+    // const activeStyle = (key) =>
+    //     activeSection === key
+    //         ? {
+    //             backgroundColor: "#06536e",
+    //             borderRadius: "5px",
+    //             borderRight: "4px solid white",
+    //             textAlign: "left",
+    //         }
+    //         : { textAlign: "left" };
+
+    const { pathname } = useLocation();
+
+    const activeStyle = (key) => {
+        const isActive =
+            (key === "dashboard" && pathname === "/dashboard") ||
+            (key === "companies" && pathname.startsWith("/dashboard/admin/companies")) ||
+            (key === "offers" && pathname.startsWith("/dashboard/admin/offers")) ||
+            (key === "payments" && pathname.startsWith("/dashboard/admin/payment")) ||
+            (key === "users" && pathname.startsWith("/dashboard/admin/roles")) ||
+            (key === "orders" && pathname.startsWith("/dashboard/orders")) ||
+            (key === "user_offers" && (
+                pathname.startsWith("/dashboard/offers-user") ||
+                pathname.startsWith("/dashboard/offers-admin")
+            )) ||
+            (key === "payment_history" && pathname.startsWith("/dashboard/payment"));
+
+        return isActive
             ? {
                 backgroundColor: "#06536e",
                 borderRadius: "5px",
@@ -44,7 +69,7 @@ const Dashboard_layout = () => {
                 textAlign: "left",
             }
             : { textAlign: "left" };
-
+    };
 
     useEffect(() => {
         const handleResize = () => {
@@ -199,9 +224,9 @@ const Dashboard_layout = () => {
             height: '91vh',
             overflow: isMobile ? 'auto' : 'hidden'
         }}>
-                <div className=" d-flex justify-content-center w-100">
-                    <Navbar />
-                </div>
+            <div className=" d-flex justify-content-center w-100">
+                <Navbar />
+            </div>
             <div className="d-flex flex-row align-items-center justify-content-end bg-light w-100" style={{ height: '100%' }}>
                 {isMobile ? (
                     <>

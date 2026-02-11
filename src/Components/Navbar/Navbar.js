@@ -149,7 +149,7 @@ const Navbar = () => {
           </div>
           ) : (
             <div className="d-flex gap-4 align-items-center justify-content-center me-3">
-              <FaBell className="fs-3 " style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
+              <FaBell className="fs-3 " style={{ color: ' #fff' }} onClick={() => { navigate('dashboard/notification') }} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard" >
                   <MdDashboardCustomize className="fs-1" style={{ color: ' #fff' }} />
@@ -190,30 +190,32 @@ const Navbar = () => {
           {token ? (
             <>
               {/* <Link to="/send_groupage" > */}
-              <div className="d-flex flex-column align-items-start justify-content-start"
-                onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
-                onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
-                onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
-              >
-                <button
-                  className="btn m-1"
-                  style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
-                  onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+              {userRole === 'admin' ? null : (<>
+                <div className="d-flex flex-column align-items-start justify-content-start"
+                  onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                  onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                  onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
                 >
-                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
-                </button>
+                  <button
+                    className="btn m-1"
+                    style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+                    onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+                  >
+                    <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
+                  </button>
 
-                {open && (
-                  <div className="dropdown-menu dropdown-menu-navbar d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
-                    <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
-                    <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
-                  </div>
-                )}
-              </div>
+                  {open && (
+                    <div className="dropdown-menu dropdown-menu-navbar d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                      <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                      <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                    </div>
+                  )}
+                </div>
+              </>)}
 
               {/* </Link> */}
 
-              <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
+              <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/dashboard/notification') }} />
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard" >
                   <button className="btn btn-light m-1" style={{ fontSize: "16px", color: "#012A52" }}>
@@ -229,26 +231,28 @@ const Navbar = () => {
                   <BsSendFill /> Send Groupage
                 </button>
               </Link> */}
-              <div className="d-flex flex-column align-items-start justify-content-start"
-                onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
-                onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
-                onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
-              >
-                <button
-                  className="btn m-1"
-                  style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
-                  onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+              {userRole === 'admin' ? null : (<>
+                <div className="d-flex flex-column align-items-start justify-content-start"
+                  onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                  onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                  onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
                 >
-                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
-                </button>
+                  <button
+                    className="btn m-1"
+                    style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+                    onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+                  >
+                    <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
+                  </button>
 
-                {open && (
-                  <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
-                    <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
-                    <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
-                  </div>
-                )}
-              </div>
+                  {open && (
+                    <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                      <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                      <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                    </div>
+                  )}
+                </div>
+              </>)}
               <Link to="/login" >
                 <button className="btn btn-light m-1" style={{ fontSize: "16px", color: "#012A52", fontWeight: '500' }}>
                   <FaUser /> Login
@@ -293,26 +297,29 @@ const Navbar = () => {
                       <BsSendFill /> Send Groupage
                     </button>
                   </Link> */}
-                  <div className="d-flex flex-column align-items-start justify-content-start w-100 pe-2"
-                    onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
-                    onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
-                    onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
-                  >
-                    <button
-                      className="btn m-1 w-100"
-                      style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
-                      onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+                  {userRole === 'admin' ? null : (<>
+                    <div className="d-flex flex-column align-items-start justify-content-start w-100 pe-2"
+                      onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                      onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                      onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
                     >
-                      <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
-                    </button>
+                      <button
+                        className="btn m-1 w-100"
+                        style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+                        onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+                      >
+                        <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
+                      </button>
 
-                    {open && (
-                      <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
-                        <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
-                        <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
-                      </div>
-                    )}
-                  </div>
+                      {open && (
+                        <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                          <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                          <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                        </div>
+                      )}
+                    </div>
+                  </>)}
+
                   {/* <FaBell className="fs-3 me-3 ms-3 my-2" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} />
                   {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                     <Link to="/dashboard" >
@@ -330,26 +337,28 @@ const Navbar = () => {
                       <BsSendFill /> Send Groupage
                     </button>
                   </Link> */}
-                  <div className="d-flex flex-column align-items-start justify-content-start w-100 pe-2"
-                    onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
-                    onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
-                    onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
-                  >
-                    <button
-                      className="btn m-1 w-100"
-                      style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
-                      onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+                  {userRole === 'admin' ? null : (<>
+                    <div className="d-flex flex-column align-items-start justify-content-start w-100 pe-2"
+                      onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                      onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                      onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
                     >
-                      <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
-                    </button>
+                      <button
+                        className="btn m-1 w-100"
+                        style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+                        onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+                      >
+                        <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
+                      </button>
 
-                    {open && (
-                      <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
-                        <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
-                        <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
-                      </div>
-                    )}
-                  </div>
+                      {open && (
+                        <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                          <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                          <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                        </div>
+                      )}
+                    </div>
+                  </>)}
                   {/* <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/notification') }} /> */}
                   {/* <Link to="/login" >
                     <button className="btn btn-light w-100 mt-2" style={{ fontSize: "1rem", color: "#012A52" }}>

@@ -12,7 +12,7 @@ import CompaniesList from './Components/Main_component/CompaniesList';
 import Send_groupage from './Components/send_groupage/Send_groupage';
 import Offers from './Components/Main_component/Offers';
 import CompanyDetails from './Components/Main_component/Companies_details';
-import Notification from './Components/Main_component/Notification';
+import Notification from './Components/Dashboard/Notification';
 import Regester_company from './Components/Regester_company/Regester_company';
 import ScrollToTop from "./ScrollToTop";
 import About_us from './Components/Main_component/About_us';
@@ -55,6 +55,7 @@ const AppContent = () => {
           <Route path='offers-admin' element={<Offers_admin />} /> 
           <Route path='offers-user/:id' element={<Offers_users />} /> 
           <Route path='payment' element={<Payment_user />} />
+          <Route path='notification' element={<Notification />} />
         </Route>
         <Route Component={Home} path='/' />
         <Route Component={Offers} path='/shipments' />
@@ -62,7 +63,7 @@ const AppContent = () => {
         {/* <Route Component={send_groupage} path='/send_groupage' /> */}
         <Route path="/send_groupage" element={<Navigate to="/send_groupage/item" />} />
         <Route path="/send_groupage/:type" element={<Send_groupage />} />
-        <Route Component={Notification} path='/notification' />
+        {/* <Route Component={Notification} path='/notification' /> */}
         <Route Component={Regester_company} path='/register_company' />
         <Route Component={About_us} path='/about_us' />
         <Route Component={LoginPage} path='/login' />

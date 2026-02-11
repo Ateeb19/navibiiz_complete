@@ -298,7 +298,7 @@ const Offers = () => {
                                                                 </div>
                                                                 <div className="d-flex align-items-center justify-content-center"
                                                                     style={item.status === 'rejected' ? { cursor: 'pointer' } : {}}
-                                                                    onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
+                                                                    onClick={(e) => { e.stopPropagation(); if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
                                                                 >
                                                                     <span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : 'Rejected'}{item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
                                                                 </div>
@@ -309,7 +309,16 @@ const Offers = () => {
                                                                 <h6>Price (€) : {item.amount}</h6>
                                                                 <h6>Delivery Duration : {item.expeted_date}</h6>
                                                                 <h6>Product Pick Up : {item.office_address ? 'No' : 'Yes'}</h6>
-                                                                
+                                                                <button className="btn btn-primary btn-sm fw-bold" onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    if (item.status === 'pending') {
+                                                                        showAlert("Offer is not yet accepted by customer");
+                                                                    } else if (item.status === 'rejected') {
+                                                                        showAlert("Your offer is Rejected");
+                                                                    } else {
+                                                                        handle_admin_selected_offer(item.offer_id, item.groupage_id);
+                                                                    }
+                                                                }}>View Details</button>
                                                             </div>
                                                         </div>
                                                     ))}
@@ -340,6 +349,7 @@ const Offers = () => {
                                                         <th scope="col"><h6>Delivery Duration</h6></th>
                                                         <th scope="col"><h6>Product Pick Up</h6></th>
                                                         <th scope="col"><h6>Offer Status</h6></th>
+                                                        <th scope="col"><h6>Action</h6></th>
                                                     </tr>
                                                 </thead>
                                                 {admin_offer && admin_offer.length > 0 ? (
@@ -367,6 +377,15 @@ const Offers = () => {
                                                                     onClick={() => { if (item.status === 'rejected') { delete_offer_admin(item.offer_id) } }}
                                                                 ><span className="px-3 py-2" style={item.status === 'pending' ? { fontWeight: '600', backgroundColor: ' #FFEF9D', color: ' #9B8100' } : item.status === 'rejected' ? { fontWeight: '600', backgroundColor: '#ffcbcb', color: 'rgb(110, 0, 0)' } : { fontWeight: '600', backgroundColor: ' #CBFFCF', color: ' #006E09' }}>{item.status === 'complete' ? 'Accepted' : item.status === 'pending' ? 'Pending' : 'Rejected'}{item.status === 'rejected' && (<span className=""><AiFillDelete /></span>)}</span>
                                                                 </td>
+                                                                <td className="text-secondary"><button className="btn btn-primary btn-sm px-3 fw-bold" onClick={() => {
+                                                                    if (item.status === 'pending') {
+                                                                        showAlert("Offer is not yet accepted by customer");
+                                                                    } else if (item.status === 'rejected') {
+                                                                        showAlert("Your offer is Rejected");
+                                                                    } else {
+                                                                        handle_admin_selected_offer(item.offer_id, item.groupage_id);
+                                                                    }
+                                                                }}>View Details</button></td>
                                                             </tr>
                                                         ))}
                                                     </tbody>

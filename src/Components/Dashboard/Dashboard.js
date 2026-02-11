@@ -15,6 +15,7 @@ const Dashboard = () => {
     const [user_upcomming, setUser_upcomming] = useState([]);
     const [user_numbers_orders, setUser_numbers_orders] = useState('');
     const [userInfo, setUserInfo] = useState('');
+    const [admin_offer_pending, setAdmin_offer_pending] = useState('');
     const [admin_offer_accecepted, setAdmin_offer_accecepted] = useState('');
     const [admin_total_offers, setAdmin_total_offers] = useState('');
     const [total_companies, setTotal_companies] = useState('');
@@ -137,6 +138,21 @@ const Dashboard = () => {
             })
         }
     }
+    const display_admin_pending_offers = () => {
+        if (userRole === 'admin') {
+            axios.get(`${port}/admin/pending_offers`, {
+                headers: {
+                    Authorization: token,
+                }
+            }).then((response) => {
+                if (response.data.status === true) {
+                    setAdmin_offer_pending(response.data.message);
+                } else {
+                    setAdmin_offer_pending('');
+                }
+            })
+        }
+    }
 
     //user
     const user_info = () => {
@@ -190,6 +206,7 @@ const Dashboard = () => {
         } else if (userRole === 'admin') {
             display_admin_total_offers();
             display_admin_accecepted_offers();
+            display_admin_pending_offers();
             user_info();
         } else if (userRole === 'user') {
             user_info();
@@ -201,7 +218,7 @@ const Dashboard = () => {
     }, [userRole]);
     return (
         <>
-            <div className="bg-light" style={{ width: '100%', height:'100%', overflow: 'auto' }}>
+            <div className="bg-light" style={{ width: '100%', height: '100%', overflow: 'auto' }}>
 
                 <div className="dashbord-info-wrap">
                     {userRole === 'Sadmin' ? (
@@ -270,9 +287,11 @@ const Dashboard = () => {
 
                             <div className="dashboard-wraper-box">
                                 <div className="row mt-3 g-3 justify-content-center">
-                                    {[{ count: '0', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
-                                    { count: admin_total_offers ? admin_total_offers : '0', change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
-                                    { count: admin_offer_accecepted ? admin_offer_accecepted : '0', change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> }
+                                    {[
+                                        // { count: '0', change: "+5%", text: "Amount Received", icon: <PiShippingContainerDuotone /> },
+                                        { count: admin_total_offers ? admin_total_offers : '0', change: "-2%", text: "Total Offers Sent", icon: <BsCarFrontFill /> },
+                                        { count: admin_offer_accecepted ? admin_offer_accecepted : '0', change: "+10%", text: "Offers Accepted ", icon: <FaTruckLoading /> },
+                                        { count: admin_offer_pending ? admin_offer_pending : '0', change: "+5%", text: "Offers pending", icon: <PiShippingContainerDuotone /> },
                                     ].map((item, index) => (
                                         <div key={index} className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
                                             <div className=" dashboard-wrap-box ">

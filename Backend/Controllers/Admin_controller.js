@@ -166,6 +166,21 @@ const total_offer_accepted = (req, res) => {
     }
 }
 
+const pending_offers = (req, res) => {
+    if (req.user.role === 'admin') {
+        db.query(`SELECT COUNT(*) as total_offers FROM offers WHERE created_by_email = ? AND status = 'pending'`, [req.user.useremail], (err, result) => {
+            if (err) {
+                console.log(err);
+                return res.json({ message: 'Error fetching total offers', status: false })
+            } else {
+                res.json({ message: result[0].total_offers, status: true });
+            }
+        })
+    } else {
+        res.json({ message: 'you are not Admin', status: false });
+    }
+}
+
 const edit_company_details = (req, res) => {
     const company_id = req.params.id;
     const editField = req.body.editField;
@@ -488,4 +503,4 @@ const delete_offer = (req, res) => {
     }
 }
 
-module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, edit_company_details, Delete_company_details_country, add_company_country, edit_logo, selected_offer, edit_company_documents, delete_offer };
+module.exports = { Display_company, Delete_company_admin, Display_offers, total_offers_sent, total_offer_accepted, pending_offers, edit_company_details, Delete_company_details_country, add_company_country, edit_logo, selected_offer, edit_company_documents, delete_offer };
