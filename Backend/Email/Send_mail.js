@@ -6,7 +6,7 @@ const transporter = nodemailer.createTransport({
     secure: false,
     auth: {
         user: "info@novibiz.com",
-        pass: "Murielle*14",
+        pass: "Murielle*14#2026",
     },
     requireTLS: true,
 });
