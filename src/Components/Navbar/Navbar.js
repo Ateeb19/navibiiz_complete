@@ -234,7 +234,7 @@ const Navbar = () => {
         </div>
 
         {token ? (
-          <>
+          <div className="d-none d-lg-block">
             {userRole === 'admin' ? null : (<>
               <div className="d-flex flex-column align-items-start justify-content-start"
                 onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
@@ -257,7 +257,7 @@ const Navbar = () => {
                 )}
               </div>
             </>)}
-          </>
+          </div>
         ) : (
           <>
 

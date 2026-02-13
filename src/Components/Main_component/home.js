@@ -415,7 +415,7 @@ const Home = () => {
                                 <div style={{ cursor: 'pointer' }}><IoSearch className="fs-5" /></div>
                             </div>
                         </div> */}
-                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-stretch align-items-md-center px-3 pickup-wrap gap-3 mt-3">
+                        <div className="d-flex flex-column flex-md-row justify-content-center align-items-stretch align-items-md-center px-3 w-100 pickup-wrap gap-3 mt-3">
                             {token ? (
                                 <>
                                     {userRole === 'admin' ? (null) : (<>
@@ -434,7 +434,7 @@ const Home = () => {
                                                         top: '100%',
                                                         left: '50%',
                                                         transform: 'translateX(-50%)',
-                                                        zIndex: 1000
+                                                        zIndex: 9999
                                                     }}
                                                 >
                                                     <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn-home"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>

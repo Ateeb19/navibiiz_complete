@@ -74,7 +74,7 @@ const Send_groupage = () => {
         } else if (userRole === 'admin') {
             if (!alertShown.current) {
                 showAlert('Login as Individual!');
-                alertShown.current = true;               
+                alertShown.current = true;
                 navigate('/login')
             }
         }
@@ -592,7 +592,7 @@ const Send_groupage = () => {
                                                             <label className="shipping-input-label">Full Name <span className="text-danger">*</span></label>
                                                             <input className="shipping-input-field" type="text" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder="Enter your full name" style={{ backgroundColor: 'rgb(214, 214, 214)' }} required />
                                                         </div>
-                                                        <div className="col-12 col-md-4 text-start ">
+                                                        <div className="col-12 col-md-4 text-start mt-4 mt-md-0 ">
                                                             <label className="shipping-input-label">Contact Number <span className="text-danger">*</span></label>
                                                             <PhoneInput
                                                                 international
@@ -603,7 +603,7 @@ const Send_groupage = () => {
                                                                 onChange={setUserNumber} />
                                                             {/* <input className="shipping-input-field" type="tel" placeholder="Enter your contact number" value={userNumber} onChange={(e) => setUserNumber(e.target.value)} style={{ backgroundColor: 'rgb(214, 214, 214)' }} required /> */}
                                                         </div>
-                                                        <div className="col-12 col-md-4 text-start">
+                                                        <div className="col-12 col-md-4 text-start mt-4 mt-md-0">
                                                             <label className="shipping-input-label">Email Address<span className="text-danger">*</span></label>
                                                             <input className="shipping-input-field" type="email" placeholder="Enter your email id" value={userEmail}
                                                                 // onChange={(e) => setUserEmail(e.target.value)} 
@@ -623,11 +623,11 @@ const Send_groupage = () => {
                                                             <label className="shipping-input-label">Country<span className="text-danger">*</span></label>
                                                             <Countries_selector onSelectCountry={(value) => { setUserCountry(value); setSelectedCountry(value) }} value={userCountry} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' required />
                                                         </div>
-                                                        <div className="col-12 col-md-4 text-start">
+                                                        <div className="col-12 col-md-4 text-start mt-4 mt-md-0">
                                                             <label className="shipping-input-label">State<span className="text-danger">*</span></label>
                                                             <State_selector selectedCountry={selectedCountry} onSelectState={(value) => setUserState(value)} value={userState} paddingcount='12px 18px' fontsizefont='15px' bgcolor='#ebebeb' bordercolor='1px solid #ebebeb' borderradiuscount='6px' required />
                                                         </div>
-                                                        <div className="col-12 col-md-4 text-start">
+                                                        <div className="col-12 col-md-4 text-start mt-4 mt-md-0">
                                                             <label className="shipping-input-label">City<span className="text-danger">*</span></label>
                                                             <input className="shipping-input-field" type="text" placeholder="Enter the city name" style={{ backgroundColor: "rgb(214, 214, 214)" }} value={userCity} onChange={(e) => setUserCity(e.target.value)} required />
                                                         </div>
@@ -690,7 +690,7 @@ const Send_groupage = () => {
                                                             style={{ backgroundColor: 'rgb(214, 214, 214)' }}
                                                         />
                                                     </div>
-                                                    <div className="col-md-6  text-start">
+                                                    <div className="col-md-6  text-start mt-4 mt-md-0">
                                                         <label className="shipping-input-label">Receiver Contact Number <span className="text-danger">*</span></label>
                                                         <PhoneInput
                                                             international

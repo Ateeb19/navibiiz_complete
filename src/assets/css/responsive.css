@@ -192,7 +192,7 @@
 
     .pickup-wrap {
         margin: 0px 0;
-        width: 370px;
+        width: 300px;
         border-radius: 15px;
         background-color: #ffffff;
     }
@@ -332,7 +332,7 @@
     }
 
     .home-groupage-btn button {
-        width: 65% !important;
+        /* width: 65% !important; */
     }
 
     .how-groupage-btn{
