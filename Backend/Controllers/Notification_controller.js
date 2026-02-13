@@ -35,23 +35,59 @@ const user_notification = (req, res) => {
     const email = req.user.useremail;
     db.query(`
     SELECT 
+        o.offer_id,   
         o.groupage_id,
         o.amount,
         o.commission,
         o.expeted_date,
         o.created_at,
         o.status,
-        o.user_read
+        o.user_read,
+        g.product_name,
+        g.box_dimension
     FROM groupage g
     JOIN offers o ON o.groupage_id = g.id
-    WHERE o.status = 'pending' AND g.groupage_created_by = ?
+    WHERE o.user_read = 0 AND o.status = 'pending' AND g.groupage_created_by = ?
 `, [email], (err, result) => {
         if (err) {
             console.log(err);
             res.json({ message: 'error in database', status: false });
         } else {
-            res.json({message: result, status: true})
+            res.json({ message: result, status: true })
         }
     });
 }
-module.exports = { admin_notificaiton, Sadmin_notificaiton, user_notification }
+
+const user_read_notificaiton = (req, res) => {
+    const email = req.user.useremail;
+    db.query(`UPDATE offers o
+                JOIN groupage g ON o.groupage_id = g.id
+                SET o.user_read = 1
+                WHERE o.status = 'pending'
+                AND g.groupage_created_by = ?`, [email], (err, result) => {
+        if (err) {
+            res.json({ message: 'error in database', status: false });
+        } else {
+            res.json({ message: 'update', status: true });
+        }
+    })
+}
+
+const notification_bell = (req, res) => {
+    const email = req.user.useremail;
+    if (req.user.role === 'user') {
+        db.query(`SELECT COUNT(*) AS unread_count
+                    FROM groupage g
+                    JOIN offers o ON o.groupage_id = g.id
+                    WHERE o.status = 'pending'
+                    AND o.user_read = 0
+                    AND g.groupage_created_by = ?`, [email], (err, result) => {
+            if (err) {
+                res.json({ message: 'error in database', status: false });
+            } else {
+                res.json({ message: result[0].unread_count, status: true });
+            }
+        })
+    }
+}
+module.exports = { admin_notificaiton, Sadmin_notificaiton, user_notification, notification_bell, user_read_notificaiton }

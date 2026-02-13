@@ -335,6 +335,10 @@
         width: 65% !important;
     }
 
+    .how-groupage-btn{
+        width: 100% !important;
+    }
+
     .dashbord-info-wrap {
         padding: 0 0px;
         margin-bottom: 90px;
@@ -342,6 +346,28 @@
 
     .dashboard-wrapper-box .table-wrap {
         margin: 25px 15px;
+    }
+
+
+    .notification-box h5 {
+        font-weight: 600;
+        font-size: 18px;
+        color: #000;
+    }
+
+    .notification-box h6 {
+        font-weight: 500;
+        font-size: 14px;
+        color: #000;
+    }
+
+    .notification-amount-green {
+        color: #0a7400 !important;
+        font-weight: 600 !important;
+    }
+
+    .notification-amount-blue {
+        color: #00232f !important;
     }
 }
 

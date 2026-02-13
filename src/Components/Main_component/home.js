@@ -571,7 +571,7 @@ const Home = () => {
                 </div>
             </div> */}
 
-            <div className="container mt-5" id="how-it-works">
+            {/* <div className="container mt-5" id="how-it-works">
                 <div className="d-flex flex-column justify-content-center align-items-center w-100">
                     <div className="d-flex align-items-start justify-content-start w-100 mb-4">
                         <div className="home-heading text-center w-100 w-md-60">
@@ -581,7 +581,6 @@ const Home = () => {
 
                     <div className="d-flex flex-column justify-content-center align-items-center w-100">
                         <div className="row w-100 mb-4 gy-4">
-                            {/* Step 1 */}
                             <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between pe-md-5">
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
                                     <div className="d-flex flex-row gap-2">
@@ -595,7 +594,6 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            {/* Step 2 */}
                             <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between ps-md-5">
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
                                     <div className="d-flex flex-row gap-2">
@@ -611,7 +609,6 @@ const Home = () => {
                         </div>
 
                         <div className="row w-100 mt-4 gy-4">
-                            {/* Step 3 */}
                             <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between pe-md-5">
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
                                     <div className="d-flex flex-row gap-2">
@@ -625,7 +622,6 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            {/* Step 4 */}
                             <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-between ps-md-5">
                                 <div className="step-text d-flex flex-column align-items-start text-start gap-3 w-100 w-md-70 mb-3 mb-md-0">
                                     <div className="d-flex flex-row gap-2">
@@ -633,7 +629,6 @@ const Home = () => {
                                         <h5>Receive the transporter information</h5>
                                     </div>
                                     <p>Receive complete transporter details including contact information, and pickup schedule for smooth coordination.</p>
-                                    {/* <p>Securely book your shipment, receive tracking details, and monitor your package from pickup to delivery.</p> */}
                                 </div>
                                 <div className="step-image d-flex justify-content-center">
                                     <img src="/Images/home_img01.jpg" alt="step4" className="img-fluid" />
@@ -642,9 +637,9 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5">
+                    <div className="about-btn d-flex w-100 align-items-center justify-content-center mt-5 w-100">
                         <div
-                            className="home-groupage-btn position-relative d-inline-block"
+                            className="how-groupage-btn position-relative d-inline-block"
                             // onMouseEnter={() => canOpenGroupage && setOpen2(true)}
                             // onMouseLeave={() => canOpenGroupage && setOpen2(false)}
                             onMouseEnter={() => {
@@ -665,7 +660,7 @@ const Home = () => {
                                     setOpen2(!open2);
                                 }}
                                 disabled={!canOpenGroupage}
-                                className="btn btn-primary px-4 py-2"
+                                className="btn btn-primary px-4 py-2 w-100"
                             >
                                 Start shipping your products
                             </button>
@@ -701,7 +696,7 @@ const Home = () => {
 
                     </div>
                 </div>
-            </div>
+            </div> */}
 
 
             <section className="new-add-company-wrapper">
@@ -1520,10 +1515,10 @@ const Home = () => {
                                                     onChange={(e) => handleSelect(e.target.value)}
                                                 >
                                                     <option value="">Please select the duration</option>
-                                                    <option value="Within 7 days">Within 7 days</option>
                                                     <option value="Within 15 days">Within 15 days</option>
                                                     <option value="Within 30 days">Within 30 days</option>
-                                                    <option value="More than 30 days">More than 30 days</option>
+                                                    <option value="Within 45 days">Within 45 days</option>
+                                                    <option value="More than 45 days">More than 45 days</option>
                                                 </select>
                                             </div>
                                             {/* <div style={{ marginTop: '1rem' }}>

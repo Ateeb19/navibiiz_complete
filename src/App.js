@@ -5,6 +5,7 @@ import '../src/assets/css/responsive.css'
 import { Route, Routes, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import LoginPage from './Components/User/LoginPage';
 import Home from './Components/Main_component/home';
+import How_it_works from './Components/Main_component/How_it_works';
 import Dashboard_layout from './Components/Dashboard/Dashboard_layout';
 import Dashboard from './Components/Dashboard/Dashboard';
 import axios from 'axios';
@@ -66,6 +67,7 @@ const AppContent = () => {
         {/* <Route Component={Notification} path='/notification' /> */}
         <Route Component={Regester_company} path='/register_company' />
         <Route Component={About_us} path='/about_us' />
+        <Route Component={How_it_works} path='/how-it-works' />
         <Route Component={LoginPage} path='/login' />
         <Route Component={Terms_conditions} path='/terms_conditions' />
         <Route Component={Privacy_policy} path='/privacy_policy' />

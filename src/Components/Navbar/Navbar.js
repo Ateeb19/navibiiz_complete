@@ -13,6 +13,7 @@ import { HiMiniRectangleStack } from "react-icons/hi2";
 
 const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
+  const location = useLocation();
   const { t } = useTranslation();
   const { showAlert } = useAlert();
   const token = localStorage.getItem('token');
@@ -75,6 +76,34 @@ const Navbar = () => {
     }
   }, [userRole]);
 
+  const [bell, setBell] = useState(false);
+  const [notification_count, setNotification_count] = useState();
+  const fetch_bell = () => {
+    axios.get(`${port}/notification/notification_bell`, {
+      headers: {
+        Authorization: token,
+      }
+    }).then((res) => {
+      if (res.data.status === true) {
+        if (res.data.message > 0) {
+          setBell(true);
+          setNotification_count(res.data.message);
+        } else {
+          setBell(false);
+        }
+      } else {
+        setBell(false);
+      }
+    }).catch((err) => {
+      console.log('No notification !');
+    })
+  }
+
+  useEffect(() => {
+    fetch_bell();
+  }, [location.pathname])
+
+
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -94,7 +123,6 @@ const Navbar = () => {
     localStorage.setItem("userType", '');
     localStorage.setItem("isVisible", "false");
   }
-  const location = useLocation();
   const isDashboardRoute = location.pathname.startsWith("/dashboard");
   const navStyle = {
     backgroundColor: isDashboardRoute ? ' #00232f' : ' #012A52',
@@ -149,7 +177,37 @@ const Navbar = () => {
           </div>
           ) : (
             <div className="d-flex gap-4 align-items-center justify-content-center me-3">
-              <FaBell className="fs-3 " style={{ color: ' #fff' }} onClick={() => { navigate('dashboard/notification') }} />
+              {/* <FaBell className="fs-3 " style={{ color: ' #fff' }} onClick={() => { navigate('/dashboard/notification') }} /> */}
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <FaBell
+                  className="fs-3 me-3 ms-3"
+                  style={{ color: "#fff", cursor: "pointer" }}
+                  onClick={() => navigate('/dashboard/notification')}
+                />
+
+                {bell && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: "0px",
+                      right: "6px",
+                      minWidth: "20px",
+                      height: "20px",
+                      backgroundColor: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "11px",
+                      fontWeight: "bold",
+                      padding: "2px"
+                    }}
+                  >
+                    {notification_count}
+                  </span>
+                )}
+              </div>
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard" >
                   <MdDashboardCustomize className="fs-1" style={{ color: ' #fff' }} />
@@ -168,14 +226,71 @@ const Navbar = () => {
         <div className="d-none d-lg-flex justify-content-end align-items-center gap-4 flex-grow-1 me-4">
           {/* <Translater /> */}
           <Link to="/" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >Home</Link>
-          <Link to="/#how-it-works" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >How it Works</Link>
+          <Link to="/how-it-works" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >How it Works</Link>
           <Link to="/shipments" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >Shipments</Link>
           {/* <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >{t("about_us")}</Link> */}
           <Link to="/about_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >About</Link>
           <Link to="/contact_us" className="text-light text-decoration-none" style={{ fontSize: "16px", fontWeight: '500' }} >Contact Us</Link>
         </div>
 
-        <div className="d-none d-lg-flex justify-content-end align-items-center gap-2">
+        {token ? (
+          <>
+            {userRole === 'admin' ? null : (<>
+              <div className="d-flex flex-column align-items-start justify-content-start"
+                onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
+              >
+                <button
+                  className="btn m-1"
+                  style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+                  onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+                >
+                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
+                </button>
+
+                {open && (
+                  <div className="dropdown-menu dropdown-menu-navbar d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                    <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                    <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                  </div>
+                )}
+              </div>
+            </>)}
+          </>
+        ) : (
+          <>
+
+          </>
+        )}
+        {!token && (
+          <div className="d-none d-lg-block">
+            {userRole === 'admin' ? null : (<>
+              <div className="d-flex flex-column align-items-start justify-content-start"
+                onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
+                onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
+                onClick={() => { if (userRole === 'admin') return; setOpen(!open) }}
+              >
+                <button
+                  className="btn m-1"
+                  style={{ backgroundColor: "#FFFFFF", color: '#012A52', fontWeight: '500' }}
+                  onClick={() => { if (userRole === 'admin') navigate('/shipments'); else toggleMenu() }}
+                >
+                  <BsSendFill /> <span style={{ fontSize: "16px" }}>Send {userRole === 'admin' ? 'Shipments' : 'Groupage'}</span>
+                </button>
+
+                {open && (
+                  <div className="dropdown-menu dropdown-menu-navbar  d-flex flex-column align-items-center justify-content-center gap-1 text-start" style={nav_drop_down}>
+                    <button onClick={() => { navigate('/send_groupage/item'); setOpen(false); }} className="btn groupage-btn"> <HiMiniRectangleStack className="fs-5 me-1" /> Send Items</button>
+                    <button onClick={() => { navigate('/send_groupage/box'); setOpen(false); }} className="btn groupage-btn"><FaBoxOpen className="fs-5 me-1" /> Send Boxes</button>
+                  </div>
+                )}
+              </div>
+            </>)}
+          </div>
+        )}
+
+        <div className="d-none d-lg-flex justify-content-end align-items-center gap-2 ms-2">
           {((!token || token.length === 0) || (userInfo && userInfo.role === 'Sadmin')) && (
             <Link to="/register_company" >
               <button className="btn m-1" style={{ fontSize: "16px", backgroundColor: " #FFFFFF", color: '#012A52', fontWeight: '500' }}>
@@ -190,7 +305,7 @@ const Navbar = () => {
           {token ? (
             <>
               {/* <Link to="/send_groupage" > */}
-              {userRole === 'admin' ? null : (<>
+              {/* {userRole === 'admin' ? null : (<>
                 <div className="d-flex flex-column align-items-start justify-content-start"
                   onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
                   onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
@@ -211,11 +326,42 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-              </>)}
+              </>)} */}
 
               {/* </Link> */}
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <FaBell
+                  className="fs-3 me-3 ms-3"
+                  style={{ color: "#fff", cursor: "pointer" }}
+                  onClick={() => navigate('/dashboard/notification')}
+                />
 
-              <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/dashboard/notification') }} />
+                {bell && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: "0px",
+                      right: "6px",
+                      minWidth: "20px",
+                      height: "20px",
+                      backgroundColor: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "11px",
+                      fontWeight: "bold",
+                      padding: "2px"
+                    }}
+                  >
+                    {notification_count}
+                  </span>
+                )}
+              </div>
+
+
+              {/* <FaBell className="fs-3 me-3 ms-3" style={{ color: ' #fff' }} onClick={() => { navigate('/dashboard/notification') }} /> */}
               {(userRole === "admin" || userRole === "Sadmin" || userRole === 'user') && (
                 <Link to="/dashboard" >
                   <button className="btn btn-light m-1" style={{ fontSize: "16px", color: "#012A52" }}>
@@ -231,7 +377,7 @@ const Navbar = () => {
                   <BsSendFill /> Send Groupage
                 </button>
               </Link> */}
-              {userRole === 'admin' ? null : (<>
+              {/* {userRole === 'admin' ? null : (<>
                 <div className="d-flex flex-column align-items-start justify-content-start"
                   onMouseEnter={() => { if (userRole === 'admin') return; setOpen(true) }}
                   onMouseLeave={() => { if (userRole === 'admin') return; setOpen(false) }}
@@ -252,7 +398,7 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-              </>)}
+              </>)} */}
               <Link to="/login" >
                 <button className="btn btn-light m-1" style={{ fontSize: "16px", color: "#012A52", fontWeight: '500' }}>
                   <FaUser /> Login
@@ -273,7 +419,7 @@ const Navbar = () => {
 
             <div className="d-flex flex-column text-start align-items-start py-4 text-light">
               <Link to="/" className="py-2 text-light text-decoration-none" style={{ fontSize: "1rem" }} >Home</Link>
-              <Link to="/#how-it-works" className="py-2 text-light text-decoration-none" style={{ fontSize: "1rem" }} >How it Works</Link>
+              <Link to="/how-it-works" className="py-2 text-light text-decoration-none" style={{ fontSize: "1rem" }} >How it Works</Link>
               {/* <Link to="/about_us" className="py-3 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About Us</Link>    */}
               <Link to="/shipments" className="py-2 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>Shipments</Link>
               <Link to="/about_us" className="py-2 text-light text-decoration-none" onClick={() => { setIsOpen(false) }}>About</Link>

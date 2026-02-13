@@ -292,7 +292,8 @@ const Send_message = (req, res) => {
 
 const payment_history = (req, res) => {
     const id = req.user.userid;
-    db.query('SELECT * FROM payment_info_customers WHERE user_id = ?', [id], (err, result) => {
+    db.query('SELECT p.transaction_id, p.offer_id, p.payment_info_amount, p.payment_time, o.groupage_id, g.product_name, g.box_dimension FROM payment_info_customers p JOIN offers o ON p.offer_id = o.offer_id JOIN groupage g ON o.groupage_id = g.id WHERE p.user_id = ?', [id], (err, result) => {
+    // db.query('SELECT * FROM payment_info_customers WHERE user_id = ?', [id], (err, result) => {
         if (err) {
             console.log(err);
             res.json({ message: 'error in database', status: false });

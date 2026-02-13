@@ -123,19 +123,24 @@ const Offers = () => {
     };
     return (
         <>
-            <ConfirmationModal
-                show={showModal}
-                message={modalMessage}
-                onConfirm={confirmDelete}
-                onCancel={cancelDelete}
-            />
-            <div className="bg-light" style={{ width: '100%', overflow: 'auto', paddingBottom: '80px' }}>
-                <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
-                    <div className="d-flex flex-column justify-content-start align-items-start">
-                        <label className="fs-3"><strong>Offers List</strong></label>
-                        {userRole === 'user' && (
-                            <>
-                                {/* <marquee behavior="scroll" direction="left" scrollamount="12">
+            {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX", currency: "EUR" }}> */}
+            <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gT/PRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL", currency: "EUR" }} deferLoading={false}>
+
+
+                {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY", currency: "EUR" }}> */}
+                <ConfirmationModal
+                    show={showModal}
+                    message={modalMessage}
+                    onConfirm={confirmDelete}
+                    onCancel={cancelDelete}
+                />
+                <div className="bg-light" style={{ width: '100%', overflow: 'auto', paddingBottom: '80px' }}>
+                    <div className="d-flex justify-content-start align-items-center mt-2 ps-3 rounded-1" >
+                        <div className="d-flex flex-column justify-content-start align-items-start">
+                            <label className="fs-3"><strong>Offers List</strong></label>
+                            {userRole === 'user' && (
+                                <>
+                                    {/* <marquee behavior="scroll" direction="left" scrollamount="12">
                         <label className="fs-6 me-4">
                           <strong>Note -: </strong> You are paying 10% of the amount now and the remaining amount you can pay directly to the company.
                         </label>
@@ -146,7 +151,7 @@ const Offers = () => {
                           <strong>Note -: </strong> You are paying 10% of the amount now and the remaining amount you can pay directly to the company.
                         </label>
                       </marquee> */}
-                                {/* <div className="marquee">
+                                    {/* <div className="marquee">
                                     <div className="marquee__track">
                                         <span className="text">
                                             <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
@@ -162,21 +167,21 @@ const Offers = () => {
                                         </span>
                                     </div>
                                 </div> */}
-                                <div className="text-start mt-2">
-                                    <span className="text">
-                                        <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
-                                    </span>
-                                </div>
-                            </>
-                        )}
+                                    <div className="text-start mt-2">
+                                        <span className="text">
+                                            <strong>Note -: </strong> You will pay €5 of the total amount now, and the remaining balance will be paid directly to the transporter.
+                                        </span>
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
-                </div>
-                <div className="dashboard-wrapper-box">
+                    <div className="dashboard-wrapper-box">
 
-                    <div className="table-wrap">
+                        <div className="table-wrap">
 
-                        <div className="table-filter-wrap">
-                            {/* <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
+                            <div className="table-filter-wrap">
+                                {/* <div className="d-flex flex-column align-items-start justify-content-start ps-2 mb-3 w-100">
                                 <h5>Filter By:</h5>
                                 <div className="row w-100 g-2 mt-1 ">
                                     <div className="col-12 col-md-6 col-lg-3">
@@ -221,34 +226,34 @@ const Offers = () => {
                                     </div>
                                 </div>
                             </div> */}
-                        </div>
-                        {isMobile ?
-                            <>
-                                <div className="d-flex flex-column w-100 align-items-center justify-content-center gap-3">
-                                    {offers && offers.length > 0 ? (
-                                        <>
-                                            {offers.filter(item => item.status !== 'rejected')
-                                                .sort((a, b) => parseInt(b.offer_id) - parseInt(a.offer_id))
-                                                .sort((a, b) => Number(a.accepted) - Number(b.accepted))
-                                                .map((item, index) => (
-                                                    <div className="orders-mobile-card w-100" style={{ cursor: 'pointer' }} onClick={() =>
-                                                        item.accepted === '1'
-                                                            ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission)
-                                                            : handleShowOffer(item)
-                                                    }>
-                                                        <div className="d-flex justify-content-between w-100">
-                                                            <div className="text-start">
-                                                                <div className="d-flex gap-2">
-                                                                    {/* <h5>Order Id </h5> <h5 className="text-primary">#{item.order_id}</h5> */}
-                                                                    <h5>Transporter Name : XXXXX-XXX</h5>
+                            </div>
+                            {isMobile ?
+                                <>
+                                    <div className="d-flex flex-column w-100 align-items-center justify-content-center gap-3">
+                                        {offers && offers.length > 0 ? (
+                                            <>
+                                                {offers.filter(item => item.status !== 'rejected')
+                                                    .sort((a, b) => parseInt(b.offer_id) - parseInt(a.offer_id))
+                                                    .sort((a, b) => Number(a.accepted) - Number(b.accepted))
+                                                    .map((item, index) => (
+                                                        <div className="orders-mobile-card w-100" style={{ cursor: 'pointer' }} onClick={() =>
+                                                            item.accepted === '1'
+                                                                ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission)
+                                                                : handleShowOffer(item)
+                                                        }>
+                                                            <div className="d-flex justify-content-between w-100">
+                                                                <div className="text-start">
+                                                                    <div className="d-flex gap-2">
+                                                                        {/* <h5>Order Id </h5> <h5 className="text-primary">#{item.order_id}</h5> */}
+                                                                        <h5>Transporter Name : XXXXX-XXX</h5>
+                                                                    </div>
+                                                                    <div className="d-flex">
+                                                                        {/* <h5>{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</h5> */}
+                                                                        <h5>Total Amount (€) : {parseFloat(item.price) + parseFloat(item.commission)}</h5>
+                                                                    </div>
                                                                 </div>
-                                                                <div className="d-flex">
-                                                                    {/* <h5>{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</h5> */}
-                                                                    <h5>Total Amount (€) : {parseFloat(item.price) + parseFloat(item.commission)}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div className="d-flex align-items-center justify-content-center">
-                                                                {/* <button
+                                                                <div className="d-flex align-items-center justify-content-center">
+                                                                    {/* <button
                                                                     className="btn btn-sm text-light"
 
                                                                     onClick={() => handleDeleteoffer(item.offer_id)}
@@ -256,89 +261,89 @@ const Offers = () => {
                                                                 >
                                                                     <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
                                                                 </button> */}
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="d-flex flex-column justify-content-start align-items-start">
+                                                                {/* <h6>Transporter Name : XXXXX-XXX</h6> */}
+                                                                {/* <h6>Total Amount (€) : {parseFloat(item.price) + parseFloat(item.commission)}</h6> */}
+                                                                <h6>Amount to pay now (€) : {item.commission}</h6>
+                                                                <h6>Delivery Duration : {item.delivery_duration.replace(/_/g, ' ')}</h6>
+                                                                <h6>Transporter Pickup : {item.office_address ? <>No</> : <>Yes</>}</h6>
+                                                                <div className="d-flex gap-2 mt-2">
+                                                                    <button className="btn btn-primary">{item.accepted === '1' ? 'View Transporter Details' : 'View Details'}</button>
+                                                                    {item.accepted === '1' ? (null) : (<>
+                                                                        <button
+                                                                            className="btn btn-sm text-light"
+
+                                                                            onClick={(e) => { e.stopPropagation(); handleDeleteoffer(item.offer_id) }}
+                                                                            disabled={item.accepted === '1'}
+                                                                        >
+                                                                            <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
+                                                                        </button>
+                                                                    </>)}
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    ))}
+                                            </>
+                                        ) : (
+                                            <>
 
-                                                        <div className="d-flex flex-column justify-content-start align-items-start">
-                                                            {/* <h6>Transporter Name : XXXXX-XXX</h6> */}
-                                                            {/* <h6>Total Amount (€) : {parseFloat(item.price) + parseFloat(item.commission)}</h6> */}
-                                                            <h6>Amount to pay now (€) : {item.commission}</h6>
-                                                            <h6>Delivery Duration : {item.delivery_duration.replace(/_/g, ' ')}</h6>
-                                                            <h6>Transporter Pickup : {item.office_address ? <>No</> : <>Yes</>}</h6>
-                                                            <div className="d-flex gap-2 mt-2">
-                                                                <button className="btn btn-primary">{item.accepted === '1' ? 'View Transporter Details' : 'View Details'}</button>
-                                                                {item.accepted === '1' ? (null) : (<>
-                                                                    <button
-                                                                        className="btn btn-sm text-light"
+                                            </>
+                                        )}
 
-                                                                        onClick={(e) => { e.stopPropagation(); handleDeleteoffer(item.offer_id) }}
-                                                                        disabled={item.accepted === '1'}
-                                                                    >
-                                                                        <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
-                                                                    </button>
-                                                                </>)}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                        </>
-                                    ) : (
-                                        <>
-
-                                        </>
-                                    )}
-
-                                </div>
-                            </>
-                            :
-                            <>
-                                <div className="table-responsive" style={{
-                                    width: "100%",
-                                    overflowX: "auto",
-                                    whiteSpace: "nowrap",
-                                }}>
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                {/* <th scope="col"><h6>Order Id</h6></th> */}
-                                                {/* <th scope="col"><h6>Product Name</h6></th> */}
-                                                <th scope="col"><h6>Transporter Name</h6></th>
-                                                <th scope="col"><h6>Total Amount (€)</h6></th>
-                                                <th scope="col"><h6>Amount to pay now (€)</h6></th>
-                                                <th scope="col"><h6>Delivery Duration</h6></th>
-                                                <th scope="col"><h6>Transporter Pickup</h6></th>
-                                                {/* <th scope="col"><h6>Status</h6></th> */}
-                                                <th scope="col"><h6>Actions</h6></th>
-                                            </tr>
-                                        </thead>
-                                        {offers && offers.length > 0 ? (
-                                            <tbody>
-                                                {offers
-                                                    .filter(item => item.status !== 'rejected')
-                                                    .sort((a, b) => parseInt(b.offer_id) - parseInt(a.offer_id))
-                                                    .sort((a, b) => Number(a.accepted) - Number(b.accepted))
-                                                    .map((item, index) => (
-                                                        <tr
-                                                            key={index}
-                                                            onClick={() =>
-                                                                item.accepted === '1'
-                                                                    ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission)
-                                                                    : null
-                                                            }
-                                                            style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}
-                                                            className="justify-content-center align-items-center"
-                                                        >
-                                                            {/* <td className="text-primary">#{item.order_id}</td> */}
-                                                            {/* <td className="text-secondary">{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</td> */}
-                                                            <td className="text-secondary">XXXXX-XXX</td>
-                                                            <td className="text-secondary">{parseFloat(item.price) + parseFloat(item.commission)}</td>
-                                                            {/* <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td> */}
-                                                            <td className="text-secondary">{item.commission}</td>
-                                                            <td className="text-secondary">
-                                                                {item.delivery_duration.replace(/_/g, ' ')}
-                                                            </td>
-                                                            <td className="text-secondary">{item.office_address ? <>No</> : <>Yes</>}</td>
-                                                            {/* <td className="d-flex align-items-center justify-content-center w-100 gap-3">
+                                    </div>
+                                </>
+                                :
+                                <>
+                                    <div className="table-responsive" style={{
+                                        width: "100%",
+                                        overflowX: "auto",
+                                        whiteSpace: "nowrap",
+                                    }}>
+                                        <table className="table">
+                                            <thead>
+                                                <tr>
+                                                    {/* <th scope="col"><h6>Order Id</h6></th> */}
+                                                    {/* <th scope="col"><h6>Product Name</h6></th> */}
+                                                    <th scope="col"><h6>Transporter Name</h6></th>
+                                                    <th scope="col"><h6>Total Amount (€)</h6></th>
+                                                    <th scope="col"><h6>Amount to pay now (€)</h6></th>
+                                                    <th scope="col"><h6>Delivery Duration</h6></th>
+                                                    <th scope="col"><h6>Transporter Pickup</h6></th>
+                                                    {/* <th scope="col"><h6>Status</h6></th> */}
+                                                    <th scope="col"><h6>Actions</h6></th>
+                                                </tr>
+                                            </thead>
+                                            {offers && offers.length > 0 ? (
+                                                <tbody>
+                                                    {offers
+                                                        .filter(item => item.status !== 'rejected')
+                                                        .sort((a, b) => parseInt(b.offer_id) - parseInt(a.offer_id))
+                                                        .sort((a, b) => Number(a.accepted) - Number(b.accepted))
+                                                        .map((item, index) => (
+                                                            <tr
+                                                                key={index}
+                                                                onClick={() =>
+                                                                    item.accepted === '1'
+                                                                        ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission)
+                                                                        : null
+                                                                }
+                                                                style={{ cursor: item.accepted === '1' ? 'pointer' : 'default' }}
+                                                                className="justify-content-center align-items-center"
+                                                            >
+                                                                {/* <td className="text-primary">#{item.order_id}</td> */}
+                                                                {/* <td className="text-secondary">{item.box ? "Boxes" : item.product_name !== 'N/A' ? item.product_name : '-'}</td> */}
+                                                                <td className="text-secondary">XXXXX-XXX</td>
+                                                                <td className="text-secondary">{parseFloat(item.price) + parseFloat(item.commission)}</td>
+                                                                {/* <td className="text-secondary"><Link11 title="You are paying 10% of the amount now and the remaining amount you can pay directly to the company" id="t-1">{item.commission}</Link11></td> */}
+                                                                <td className="text-secondary">{item.commission}</td>
+                                                                <td className="text-secondary">
+                                                                    {item.delivery_duration.replace(/_/g, ' ')}
+                                                                </td>
+                                                                <td className="text-secondary">{item.office_address ? <>No</> : <>Yes</>}</td>
+                                                                {/* <td className="d-flex align-items-center justify-content-center w-100 gap-3">
                                                                 {item.accepted === '1' ? <>
                                                                     <span className='p-2 fw-bold' style={{ backgroundColor: '#bcffba', color: '#0b7e01' }}>Accepted</span>
                                                                 </> : <>
@@ -361,105 +366,101 @@ const Offers = () => {
                                                                 </>}
 
                                                             </td> */}
-                                                            <td>
-                                                                <button className="btn btn-primary" onClick={() => { item.accepted === '1' ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission) : handleShowOffer(item) }}>{item.accepted === '1' ? 'View Transporter Details' : 'View Details'}</button>
-                                                                {item.accepted === '1' ? (null) : (<>
-                                                                    <button
-                                                                        className="btn btn-sm text-light"
+                                                                <td>
+                                                                    <button className="btn btn-primary" onClick={() => { item.accepted === '1' ? handle_user_offer_details(item.offer_id, item.groupage_id, item.price, item.commission) : handleShowOffer(item) }}>{item.accepted === '1' ? 'View Transporter Details' : 'View Details'}</button>
+                                                                    {item.accepted === '1' ? (null) : (<>
+                                                                        <button
+                                                                            className="btn btn-sm text-light"
 
-                                                                        onClick={() => handleDeleteoffer(item.offer_id)}
-                                                                        disabled={item.accepted === '1'}
-                                                                    >
-                                                                        <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
-                                                                    </button>
-                                                                </>)}
+                                                                            onClick={() => handleDeleteoffer(item.offer_id)}
+                                                                            disabled={item.accepted === '1'}
+                                                                        >
+                                                                            <IoTrashBin className="fs-4" style={{ color: '#c63d3d' }} />
+                                                                        </button>
+                                                                    </>)}
 
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                            </tbody>
-                                        ) : (
-                                            <tbody>
-                                                <tr>
-                                                    <td colSpan="6" className="text-center text-secondary">No Data</td>
-                                                </tr>
-                                            </tbody>
-                                        )}
-                                    </table>
-                                </div>
-                            </>}
-                    </div>
-                </div>
-
-            </div >
-
-            {
-                show_company_details !== null && (
-                    <>
-                        <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
-                            <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: 'auto' }}>
-                                <button
-                                    className="btn-close position-absolute top-0 end-0 m-2"
-                                    onClick={() => setShow_company_details(null)}
-                                ></button>
-
-                                <div className='d-flex flex-column align-items-start'>
-                                    <div className='title-head'><h3>Transporter Details</h3></div>
-
-                                    <div className='details-wrap w-100 text-start'>
-                                        <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {show_company_details?.data?.company_name}</span>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                </tbody>
+                                            ) : (
+                                                <tbody>
+                                                    <tr>
+                                                        <td colSpan="6" className="text-center text-secondary">No Data</td>
+                                                    </tr>
+                                                </tbody>
+                                            )}
+                                        </table>
                                     </div>
-
-                                    <div className='details-wrap w-100 text-start'>
-                                        <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${show_company_details?.data?.email}"`}>{show_company_details?.data?.email}</a></span>
-                                    </div>
-
-                                    <div className='details-wrap w-100 text-start'>
-                                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {show_company_details?.data?.contect_no}</span>
-                                    </div>
-                                    {show_company_details?.data?.office_address && (
-                                        <>
-                                            <div className='details-wrap w-100 text-start'>
-                                                <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Office Address-: {show_company_details?.data?.office_address}</span>
-                                            </div>
-                                        </>
-                                    )}
-                                    <div className='details-wrap w-100 text-start'>
-                                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount pay to Transporter-: €{parseFloat(show_company_details?.price) + parseFloat(show_company_details?.commission)}</span>
-                                    </div>
-
-                                    <div className='details-wrap w-100 text-start'>
-                                        <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount payed-: €{show_company_details?.commission}</span>
-                                    </div>
-                                </div>
-                            </div>
-
+                                </>}
                         </div>
-                    </>
-                )
-            }
+                    </div>
 
-            {
-                selected_offer && (
-                    <>
-                        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-                            style={{
-                                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                                zIndex: 9999
-                            }}
-                        >
-                            <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection mb-3"
+                </div >
+
+                {
+                    show_company_details !== null && (
+                        <>
+                            <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
+                                <div className="position-relative bg-white p-4 rounded shadow-lg" style={{ width: '580px', height: 'auto' }}>
+                                    <button
+                                        className="btn-close position-absolute top-0 end-0 m-2"
+                                        onClick={() => setShow_company_details(null)}
+                                    ></button>
+
+                                    <div className='d-flex flex-column align-items-start'>
+                                        <div className='title-head'><h3>Transporter Details</h3></div>
+
+                                        <div className='details-wrap w-100 text-start'>
+                                            <span>< FaBuilding className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Name -: {show_company_details?.data?.company_name}</span>
+                                        </div>
+
+                                        <div className='details-wrap w-100 text-start'>
+                                            <span>< IoIosMailOpen className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />E-mail -: <a href={`mailto:"${show_company_details?.data?.email}"`}>{show_company_details?.data?.email}</a></span>
+                                        </div>
+
+                                        <div className='details-wrap w-100 text-start'>
+                                            <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Contact Number-: {show_company_details?.data?.contect_no}</span>
+                                        </div>
+                                        {show_company_details?.data?.office_address && (
+                                            <>
+                                                <div className='details-wrap w-100 text-start'>
+                                                    <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Office Address-: {show_company_details?.data?.office_address}</span>
+                                                </div>
+                                            </>
+                                        )}
+                                        <div className='details-wrap w-100 text-start'>
+                                            <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount pay to Transporter-: €{parseFloat(show_company_details?.price) + parseFloat(show_company_details?.commission)}</span>
+                                        </div>
+
+                                        <div className='details-wrap w-100 text-start'>
+                                            <span>< RiContactsBook3Fill className='fs-4 me-2' style={{ color: '#de8316', width: '20px' }} />Amount payed-: €{show_company_details?.commission}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </>
+                    )
+                }
+
+                {
+                    selected_offer && (
+                        <>
+                            <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
                                 style={{
-                                    width: '55%',
-                                    height: '75vh',
-                                    overflowY: 'auto'
+                                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                    zIndex: 9999
                                 }}
                             >
-                                {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX", currency: "EUR" }}> */}
-                                <PayPalScriptProvider options={{ "client-id": "AVNh59zTvpqrmnQPV_gT/PRJiduXU4Fdp8_y2ESR-XhvYWEZflyR8TEpE8zA3-IE2UZR1SOhxGYgepYGL", currency: "EUR" }}>
+                                <div className="bg-light rounded shadow p-4 position-relative border border-2 border-dark dashboard-offer-selection mb-3"
+                                    style={{
+                                        width: '55%',
+                                        height: '75vh',
+                                        overflowY: 'auto'
+                                    }}
+                                >
 
-
-                                    {/* <PayPalScriptProvider options={{ "client-id": "AZOcns1edlBV838gnlQgdp25SJW-RXc8Kle0FL3dTj0t289XKg2W7hXOJFG9zngWOko3VQqERais4-aY", currency: "EUR" }}> */}
                                     <div className="d-flex flex-column justify-content-start align-items-start w-100">
                                         <button className="btn btn-danger position-absolute top-0 end-0 m-2" onClick={() => setSelected_offer(null)}>
                                             ✕
@@ -653,13 +654,18 @@ const Offers = () => {
                                             <button className="btn btn-danger mt-3  w-100" onClick={() => handleDeleteoffer(selected_offer.offer_id)}>Reject</button>
                                         </div>
                                     </div>
-                                </PayPalScriptProvider>
 
+                                </div>
                             </div>
-                        </div>
-                    </>
-                )
-            }
+                        </>
+                    )
+                }
+                <div style={{ display: "none" }}>
+                    <PaypalPayment selected_offer={{ offer_id: "preload" }} />
+                </div>
+
+            </PayPalScriptProvider>
+
         </>
     )
 }

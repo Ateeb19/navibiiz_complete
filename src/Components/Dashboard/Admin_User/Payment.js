@@ -17,7 +17,7 @@ const Payment = () => {
         }).then((response) => {
             if (response.data.status === true) {
                 setUser_payment_history(response.data.message);
-
+                console.log(response.data.message);
             } else {
                 setUser_payment_history('');
             }
@@ -56,10 +56,10 @@ const Payment = () => {
                                                     <div className="d-flex justify-content-between w-100">
                                                         <div className="text-start">
                                                             <div className="d-flex gap-2">
-                                                                <h5>Order Id :  </h5> <h5>{item.order_id}</h5>
+                                                                <h5>Offer Id :  </h5> <h5>{item.groupage_id}</h5>
                                                             </div>
                                                             <div className="d-flex">
-                                                                <h5>Transaction Id : {item.transaction_id}</h5>
+                                                                <h5>Product Name : {item.product_name ? item.product_name : item.box_dimension}</h5>
                                                             </div>
                                                         </div>
                                                         <div className="d-flex align-items-center justify-content-center">
@@ -67,10 +67,14 @@ const Payment = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="d-flex flex-column justify-content-start align-items-start">
-                                                        <h5>Paypal Id : {item.paypal_id}</h5>
-                                                        <h5>Offer Id : {item.offer_id}</h5>
-                                                        <h5>Amount (€) : {item.payment_info_amount}</h5>
+                                                    <div className="d-flex flex-column justify-content-start align-items-start text-start">
+                                                        <h5>Transaction Id : {item.transaction_id}</h5>
+                                                        <h5 className="fw-bold">Amount (€) : {item.payment_info_amount}</h5>
+                                                        <h5>Payment Date : {new Date(item.payment_time).toLocaleDateString("en-GB", {
+                                                            day: "2-digit",
+                                                            month: "short",
+                                                            year: "numeric"
+                                                        })}</h5>
                                                     </div>
                                                 </div>
                                             </>
@@ -91,22 +95,26 @@ const Payment = () => {
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th scope="col"><h6>Order Id</h6></th>
-                                            <th scope="col"><h6>Transaction Id</h6></th>
-                                            <th scope="col"><h6>Paypal Id</h6></th>
                                             <th scope="col"><h6>Offer Id</h6></th>
+                                            <th scope="col"><h6>Product Name</h6></th>
+                                            <th scope="col"><h6>Transaction Id</h6></th>
                                             <th scope="col"><h6>Amount (€)</h6></th>
+                                            <th scope="col"><h6>Payment Date</h6></th>
                                         </tr>
                                     </thead>
                                     {user_payment_history && user_payment_history.length > 0 ? (
                                         <tbody>
                                             {user_payment_history.map((item, index) => (
                                                 <tr key={index}>
-                                                    <td className="text-secondary">{item.order_id}</td>
+                                                    <td className="text-secondary">{item.groupage_id}</td>
+                                                    <td className="text-secondary">{item.product_name ? item.product_name : item.box_dimension}</td>
                                                     <td className="text-secondary">{item.transaction_id}</td>
-                                                    <td className="text-secondary">{item.paypal_id}</td>
-                                                    <td className="text-secondary">{item.offer_id}</td>
-                                                    <td className="text-secondary">{item.payment_info_amount}</td>
+                                                    <td className="text-secondary fw-bold">{item.payment_info_amount}</td>
+                                                    <td className="text-secondary">{new Date(item.payment_time).toLocaleDateString("en-GB", {
+                                                        day: "2-digit",
+                                                        month: "short",
+                                                        year: "numeric"
+                                                    })}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

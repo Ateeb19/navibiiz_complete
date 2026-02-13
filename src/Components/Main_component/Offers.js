@@ -324,9 +324,9 @@ const Offers = () => {
     return (
         <div className="d-flex flex-column align-items-center justify-content-center mt-5 pt-5">
             {/* <div className='navbar-wrapper'> */}
-                <div className=" d-flex justify-content-center w-100">
-                    <Navbar />
-                </div>
+            <div className=" d-flex justify-content-center w-100">
+                <Navbar />
+            </div>
             {/* </div> */}
             <section className="search-result-wrapper w-100">
                 <div className="container">
@@ -1076,10 +1076,10 @@ const Offers = () => {
                                                                         onChange={(e) => handleSelect(e.target.value)}
                                                                     >
                                                                         <option value="">Please select the duration</option>
-                                                                        <option value="Within 7 days">Within 7 days</option>
                                                                         <option value="Within 15 days">Within 15 days</option>
                                                                         <option value="Within 30 days">Within 30 days</option>
-                                                                        <option value="More than 30 days">More than 30 days</option>
+                                                                        <option value="Within 45 days">Within 45 days</option>
+                                                                        <option value="More than 45 days">More than 45 days</option>
                                                                     </select>
                                                                 </div>
                                                                 {/* <div style={{ marginTop: '1rem' }}>

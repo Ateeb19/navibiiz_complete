@@ -50,11 +50,9 @@ const Contact_us = () => {
     return (
         <>
             <div className="d-flex flex-column align-items-center justify-content-center  mt-5 pt-5">
-                <div className='navbar-wrapper'>
                     <div className=" d-flex justify-content-center w-100">
                         <Navbar />
                     </div>
-                </div>
 
                 <div className="container w-100 mt-5 mb-5">
                     <section className="contact-form-wrapper">
