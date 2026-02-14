@@ -1464,32 +1464,44 @@ svg {
     will-change: transform;
 }
 
-.notification-box{
+.notification-box {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 10px 10px;
     box-shadow: 0 0 5px 2px #ccc;
 }
 
-.notification-box h5{
+.notification-box h5 {
     font-weight: 600;
     font-size: 22px;
     color: #000;
 }
 
-.notification-box h6{
+.notification-box h6 {
     font-weight: 500;
     font-size: 18px;
     color: #000;
 }
 
-.notification-amount-green{
+.notification-amount-green {
     color: #0a7400 !important;
     font-weight: 600 !important;
 }
 
-.notification-amount-blue{
+.notification-amount-blue {
     color: #00232f !important;
+}
+
+.paypal-button-container {
+    max-width: 100% !important;
+    min-width: 100% !important;
+}
+
+@media only screen and (min-width: 500px) {
+    .paypal-button-container {
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
 }
 
 /* Seamless loop */

@@ -65,17 +65,19 @@ function OfferDetails({ selected_offer }) {
 
     return (
         <div className="d-flex flex-column w-100 align-items-center justify-content-center">
-            {showPayPalButton && (
-                <div className="mt-3 w-100">
-                    {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}> */}
-                    <PayPalButtons
-                        createOrder={createOrder}
-                        onApprove={onApprove}
-                        style={{ layout: "horizontal", color: "gold", shape: "pill", label: "pay" }}
-                    />
-                    {/* </PayPalScriptProvider> */}
-                </div>
-            )}
+            {/* {showPayPalButton && ( */}
+            <div className="mt-3 w-100">
+                {/* <PayPalScriptProvider options={{ "client-id": "AabacLi27CRoLZCcaHTYgUesly35TFDCyoMmm3Vep3pSPbHrLuBNL7-LYbdvtNsFVnWNHoK1Nyq5dDSX" }}> */}
+                <PayPalButtons
+                    key={selected_offer.offer_id}
+                    forceReRender={[selected_offer.commission]}
+                    createOrder={createOrder}
+                    onApprove={onApprove}
+                    style={{ layout: "horizontal", color: "gold", shape: "pill", label: "pay", width: '100%' }}
+                />
+                {/* </PayPalScriptProvider> */}
+            </div>
+            {/* )} */}
             {transactionId && (
                 <>
                     <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center" style={{ zIndex: 1050 }}>
