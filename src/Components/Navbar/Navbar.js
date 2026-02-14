@@ -76,32 +76,64 @@ const Navbar = () => {
     }
   }, [userRole]);
 
-  const [bell, setBell] = useState(false);
   const [notification_count, setNotification_count] = useState();
-  const fetch_bell = () => {
-    axios.get(`${port}/notification/notification_bell`, {
-      headers: {
-        Authorization: token,
-      }
-    }).then((res) => {
-      if (res.data.status === true) {
-        if (res.data.message > 0) {
-          setBell(true);
-          setNotification_count(res.data.message);
-        } else {
-          setBell(false);
+  // const fetch_bell = () => {
+  //   axios.get(`${port}/notification/notification_bell`, {
+  //     headers: {
+  //       Authorization: token,
+  //     }
+  //   }).then((res) => {
+  //     console.log(res);
+  //     if (res.data.status === true) {
+  //       if (res.data.message > 0) {
+  //         setBell(true);
+  //         setNotification_count(res.data.message);
+  //       } else {
+  //         setBell(false);
+  //       }
+  //     } else {
+  //       setBell(false);
+  //     }
+  //   }).catch((err) => {
+  //     console.log('No notification !', err);
+  //   })
+  // }
+  const fetch_bell = async () => {
+    try {
+      const res = await axios.get(
+        `${port}/notification/notification_bell`,
+        {
+          headers: { Authorization: token }
         }
+      );
+      // console.log(res.data);
+      if (res.data.status) {
+        setNotification_count(res.data.message || 0);
       } else {
-        setBell(false);
+        setNotification_count(0);
       }
-    }).catch((err) => {
-      console.log('No notification !');
-    })
-  }
 
+    } catch (err) {
+      if (err.code !== "ERR_CANCELED") {
+      }
+    }
+  };
   useEffect(() => {
+    if (!token) return;
+
     fetch_bell();
-  }, [location.pathname])
+
+    const interval = setInterval(() => {
+      fetch_bell();
+    }, 2000);
+
+    return () => clearInterval(interval);
+
+  }, [token]);
+
+  // useEffect(() => {
+  //   fetch_bell();
+  // }, [location.pathname])
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -185,7 +217,7 @@ const Navbar = () => {
                   onClick={() => navigate('/dashboard/notification')}
                 />
 
-                {bell && (
+                {notification_count > 0 && (
                   <span
                     style={{
                       position: "absolute",
@@ -336,7 +368,7 @@ const Navbar = () => {
                   onClick={() => navigate('/dashboard/notification')}
                 />
 
-                {bell && (
+                {notification_count > 0 && (
                   <span
                     style={{
                       position: "absolute",
